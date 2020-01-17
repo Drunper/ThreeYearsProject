@@ -30,4 +30,10 @@ public class HomeActuatorCategory extends HomeCategory{
 		return(this.elements.size());
 	}
 	
+	@Override
+	public void addElementToCategory(Element e) {
+		this.elements.add(e);
+		
+	}
+	
 }

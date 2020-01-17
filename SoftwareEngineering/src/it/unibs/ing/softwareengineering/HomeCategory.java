@@ -16,6 +16,7 @@ public abstract class HomeCategory {
 	public abstract String getDescr();
 	public abstract Element getElementFromList(int index);
 	public abstract int getListSize();
+	public abstract void addElementToCategory(Element e);
 
 	
 	
