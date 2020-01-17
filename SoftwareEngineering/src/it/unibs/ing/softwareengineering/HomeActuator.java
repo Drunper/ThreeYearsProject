@@ -1,13 +1,13 @@
 package it.unibs.ing.softwareengineering;
 
-public class HomeSensor extends HomeElement{
-	private int value;
+public class HomeActuator extends HomeElement{
+	private boolean state;
 	
 	//Default constructor
 	
 	
-	public int getValue() {
-		return this.value;
+	public boolean getState() {
+		return this.state;
 	}
 	
 	@Override

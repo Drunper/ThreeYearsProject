@@ -1,8 +1,9 @@
 package it.unibs.ing.softwareengineering;
 
 public abstract class HomeElement {
-	private String name;
-	private String descr;
+	protected String name;
+	protected String descr;
+	
 	
 	public abstract void setName(String name);
 	public abstract void setDescr(String descr);
