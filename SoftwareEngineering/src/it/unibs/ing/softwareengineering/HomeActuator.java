@@ -1,10 +1,14 @@
 package it.unibs.ing.softwareengineering;
 
-public class HomeActuator extends HomeElement{
+public class HomeActuator extends Element{
 	private boolean state;
 	
-	//Default constructor
 	
+	public HomeActuator(String name, String descr) {
+		super(name, descr);
+		// TODO Auto-generated constructor stub
+	}
+
 	
 	public boolean getState() {
 		return this.state;

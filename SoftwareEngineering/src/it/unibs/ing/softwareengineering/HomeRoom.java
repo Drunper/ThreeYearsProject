@@ -1,27 +1,27 @@
 package it.unibs.ing.softwareengineering;
 
-public class HomeSensor extends Element{
-	private int value;
+import java.util.*;
+
+public class HomeRoom extends Element{
+
+	private ArrayList<HomeSensorCategory> sensorCategories= new ArrayList<>();
+	private ArrayList<HomeActuatorCategory> actuatorCategories= new ArrayList<>();
+	private ArrayList<HomeArtifact> artifactList = new ArrayList<>();
 	
-	
-	
-	public HomeSensor(String name, String descr) {
+	public HomeRoom(String name, String descr) {
 		super(name, descr);
 	}
 
-	
-	public int getValue() {
-		return this.value;
-	}
-	
 	@Override
 	public void setName(String name) {
 		this.name = name;
+		
 	}
 
 	@Override
 	public void setDescr(String descr) {
 		this.descr = descr;
+		
 	}
 
 	@Override
@@ -33,4 +33,5 @@ public class HomeSensor extends Element{
 	public String getDescr() {
 		return this.descr;
 	}
+
 }

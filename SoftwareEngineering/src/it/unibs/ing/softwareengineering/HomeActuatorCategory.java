@@ -2,10 +2,10 @@ package it.unibs.ing.softwareengineering;
 
 import java.util.*;
 
-public class HomeSensorCategory extends HomeCategory{
+public class HomeActuatorCategory extends HomeCategory{
 
 	
-	public HomeSensorCategory(String name, String descr) {
+	public HomeActuatorCategory(String name, String descr) {
 		super(name, descr);
 		elements = new ArrayList<>();
 	}
