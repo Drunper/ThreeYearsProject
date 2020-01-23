@@ -35,6 +35,7 @@ public class HomeMain {
 		
 		MyMenu loginMenu = new MyMenu(Strings.LOGINTITLE, loginChoices);
 		MyMenu userMenu = new MyMenu(Strings.USER_MENU, userChoices);
+		
 		do {
 			int choice = loginMenu.scegli();
 			switch(choice) {
@@ -42,6 +43,7 @@ public class HomeMain {
 					System.out.println(Strings.INSERT_NAME);
 					HomeLogin user = new HomeLogin(s.nextLine());
 					System.out.println("OK");
+					showUserMenu(userMenu);
 					break;
 				case 2:
 					System.out.println(Strings.INSERT_NAME);
@@ -53,5 +55,17 @@ public class HomeMain {
 		}
 		while(true);	
 		
+	}
+	
+	private static void showUserMenu(MyMenu userMenu) {
+		boolean exitFlag = false;
+		do {
+			int choice = userMenu.scegli();
+			switch(choice) {
+			case 0:
+				exitFlag = true;
+			}
+		}
+		while(exitFlag!=true);
 	}
 }
