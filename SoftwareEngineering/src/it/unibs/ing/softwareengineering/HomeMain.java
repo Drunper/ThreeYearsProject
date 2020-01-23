@@ -5,12 +5,18 @@ import java.util.*;
 public class HomeMain {
 	
 	private static String[] loginChoices = {Strings.USER, Strings.MAINTAINER};
+	private static String[] userChoices = {Strings.HOUSE_VIEW};
 	private static Scanner s = new Scanner(System.in);
 	
+	//TEST OBJECTS (will be deleted and loaded from files)
+	private HousingUnit casetta = new HousingUnit("")
+	
+	//THE BIG MAIN (it's fu***ng huge)
 	public static void main(String[] args) {
-		MyMenu login = new MyMenu(Strings.LOGINTITLE, loginChoices);
+		MyMenu loginMenu = new MyMenu(Strings.LOGINTITLE, loginChoices);
+		MyMenu userMenu = new MyMenu(Strings.USER_MENU, userChoices);
 		do {
-			int choice = login.scegli();
+			int choice = loginMenu.scegli();
 			switch(choice) {
 				case 1:
 					System.out.println(Strings.INSERT_NAME);
@@ -26,5 +32,6 @@ public class HomeMain {
 				}
 		}
 		while(true);	
+		
 	}
 }
