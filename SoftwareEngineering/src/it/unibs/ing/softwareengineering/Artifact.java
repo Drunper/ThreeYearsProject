@@ -18,6 +18,14 @@ public class Artifact {
 		return this.text;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setDesc(String text) {
+		this.text = text;
+	}
+	
 	public double getMeasure(String measuredVariable) {
 		return 0;
 	}

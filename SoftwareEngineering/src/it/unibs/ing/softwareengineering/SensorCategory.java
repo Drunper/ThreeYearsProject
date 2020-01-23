@@ -51,7 +51,7 @@ public class SensorCategory {
 		double [] bounds = new double[2];
 		return bounds;
 	}
-	
+
 	private static Predicate<String> isEqual(String toCompare) {
         return s -> s.equalsIgnoreCase(toCompare);
     }

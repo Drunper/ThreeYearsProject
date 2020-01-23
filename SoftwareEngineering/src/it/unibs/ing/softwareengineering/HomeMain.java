@@ -8,11 +8,31 @@ public class HomeMain {
 	private static String[] userChoices = {Strings.HOUSE_VIEW};
 	private static Scanner s = new Scanner(System.in);
 	
-	//TEST OBJECTS (will be deleted and loaded from files)
-	private HousingUnit casetta = new HousingUnit("")
+
 	
 	//THE BIG MAIN (it's fu***ng huge)
 	public static void main(String[] args) {
+		//REMOVING ZONE
+		
+		//TEST OBJECTS (will be deleted and loaded from files)
+		SensorCategory temperatura = new SensorCategory("sensori di temperatura", "misurano la temperatura", null);
+		ActuatorCategory interruttori = new ActuatorCategory("interruttori di accensione", "accendono qualcosa");
+		ArrayList<Sensor> sensorListSoggiorno = new ArrayList<>();
+		ArrayList<Actuator> actuatorListSoggiorno = new ArrayList<>();
+		Artifact lampadario = new Artifact("lampadario", "un bel lampa-dario");
+		ArrayList<Artifact> artiList = new ArrayList<>();
+		artiList.add(lampadario);
+		Room soggiorno = new Room("soggiorno", "il salotto", sensorListSoggiorno, actuatorListSoggiorno, artiList);
+		ArrayList<Room> testRooms = new ArrayList<>();
+		testRooms.add(soggiorno);
+		HousingUnit casetta = new HousingUnit("casetta", "una casetta", testRooms);
+		NumericActuator interruttore = new NumericActuator("i1_interruttore", "accende la luce", interruttori, lampadario);
+		NumericSensor termometro = new NumericSensor("t1_temperatura", "il termometro del soggiorno", temperatura, soggiorno);
+		sensorListSoggiorno.add(termometro);
+		actuatorListSoggiorno.add(interruttore);
+		//END OF REMOVING ZONE
+		
+		
 		MyMenu loginMenu = new MyMenu(Strings.LOGINTITLE, loginChoices);
 		MyMenu userMenu = new MyMenu(Strings.USER_MENU, userChoices);
 		do {

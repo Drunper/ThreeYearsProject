@@ -14,12 +14,11 @@ public class NumericSensor extends Sensor {
 	private boolean roomMeasurement;
 	private boolean state;
 	
-	public NumericSensor(String name, String text, SensorCategory category, double detectedValue, Artifact artif) {
+	public NumericSensor(String name, String text, SensorCategory category, Artifact artif) {
 		super();
 		this.name = name;
 		this.text = text;
 		this.category = category;
-		this.detectedValue = detectedValue;
 		this.attachedArtif = artif;
 		lowerBound = category.getBounds()[0]; // togliere magic numbers
 		upperBound = category.getBounds()[1];
@@ -27,12 +26,11 @@ public class NumericSensor extends Sensor {
 		state = true;
 	}
 
-	public NumericSensor(String name, String text, SensorCategory category, double detectedValue, Room room) {
+	public NumericSensor(String name, String text, SensorCategory category, Room room) {
 		super();
 		this.name = name;
 		this.text = text;
 		this.category = category;
-		this.detectedValue = detectedValue;
 		this.room = room;
 		roomMeasurement = true;
 		state = true;
