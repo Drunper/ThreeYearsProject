@@ -23,6 +23,7 @@ public class Strings {
 	public static final String EDIT_ELEMENT_MENU = "Modifica un singolo elemento o una categoria";
 	public static final String EDIT_ELEMENT_CATEGORY = "Modifica una categoria di elementi presente";
 	public static final String EDIT_SINGLE_ELEMENT = "Modifica un elemento presente";
+	public static final String EDIT_CATEGORY = "Modifica una categoria (globale)";
 	//ACTUATOR MENU
 	public static final String ACTUATOR_MENU = "Lista degli attuatori nella stanza";
 	//ARTIFACT MENU

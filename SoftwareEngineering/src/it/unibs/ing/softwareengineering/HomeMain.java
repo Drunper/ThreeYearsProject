@@ -30,6 +30,13 @@ public class HomeMain {
 	private static MyMenu roomEditMenu;
 	private static MyMenu nameDescrMenu = new MyMenu(Strings.EDIT_NAME_DESCR_MENU, nameDescrChoices);
 	private static MyMenu elementCategoryEditMenu = new MyMenu(Strings.EDIT_ELEMENT_MENU, categoryElementChoices);
+	private static MyMenu sensorCategoryMenu;
+	private static MyMenu actuatorCategoryMenu;
+	
+	
+	//test categories
+	private static ArrayList<SensorCategory> sc = new ArrayList<>();
+	private static ArrayList<ActuatorCategory> ac = new ArrayList<>();
 	
 
 	
@@ -53,6 +60,14 @@ public class HomeMain {
 		NumericSensor termometro = new NumericSensor("t1_temperatura", "il termometro del soggiorno", temperatura, soggiorno);
 		sensorListSoggiorno.add(termometro);
 		actuatorListSoggiorno.add(interruttore);
+		
+		//CATEGORY STRUCTURES (from files after this)
+		
+		sc.add(temperatura);
+		
+		ac.add(interruttori);
+		
+		
 		//END OF REMOVING ZONE
 		
 		
@@ -60,6 +75,8 @@ public class HomeMain {
 		roomChoices = home.getRoomNames();
 		roomMenu = new MyMenu(Strings.ROOM_MENU, roomChoices);
 		roomEditMenu = new MyMenu(Strings.ROOM_EDIT_MENU, roomChoices);
+		sensorCategoryMenu = new MyMenu(Strings.EDIT_CATEGORY, getSensorCategoryNames());
+		actuatorCategoryMenu = new MyMenu(Strings.EDIT_CATEGORY, getActuatorCategoryNames());
 		
 		do {
 			int choice = loginMenu.scegli();
@@ -270,11 +287,114 @@ public class HomeMain {
 				exitFlag=true;
 				break;
 			case 1:
+				showSensorCategoryMenu();
 				break;
 			case 2:
+				showSingleSensorMenu();
 				break;
 			}
 		}
 		while(exitFlag!=true);
+	}
+	
+	private static void showActuatorEditMenu() {
+		boolean exitFlag = false;
+		do {
+			int choice = elementCategoryEditMenu.scegli();
+			switch(choice) {
+			case 0:
+				exitFlag=true;
+				break;
+			case 1:
+				showActuatorCategoryMenu();
+				break;
+			case 2:
+				showSingleActuatorMenu();
+				break;
+			}
+		}
+		while(exitFlag!=true);
+	}
+	
+	private static void showSensorCategoryMenu() {
+		boolean exitFlag = false;
+		do {
+			int choice = sensorCategoryMenu.scegli();
+			if(choice==0) exitFlag=true;
+			else if (choice <= sc.size()) {
+				boolean exitSubFlag = false;
+				do {
+					int subChoice = nameDescrMenu.scegli();
+					switch(subChoice) {
+					case 0:
+						exitSubFlag = true;
+						break;
+					case 1:
+						System.out.println(Strings.INSERT_NAME);
+						String newName = s.nextLine();
+						sc.get(choice-1).setName(newName);
+						System.out.println("OK");
+						break;
+					case 2:
+						System.out.println(Strings.INSERT_DESCR);
+						String newDescr = s.nextLine();
+						sc.get(choice-1).setDescr(newDescr);
+						System.out.println("OK");
+						break;
+					}
+				}
+				while(exitSubFlag!=true);
+			}
+		}
+		while(exitFlag!=true);
+	}
+	
+	private static void showActuatorCategoryMenu() {
+		boolean exitFlag = false;
+		do {
+			int choice = actuatorCategoryMenu.scegli();
+			if(choice==0) exitFlag=true;
+			else if (choice <= ac.size()) {
+				boolean exitSubFlag = false;
+				do {
+					int subChoice = nameDescrMenu.scegli();
+					switch(subChoice) {
+					case 0:
+						exitSubFlag = true;
+						break;
+					case 1:
+						System.out.println(Strings.INSERT_NAME);
+						String newName = s.nextLine();
+						ac.get(choice-1).setName(newName);
+						System.out.println("OK");
+						break;
+					case 2:
+						System.out.println(Strings.INSERT_DESCR);
+						String newDescr = s.nextLine();
+						ac.get(choice-1).setDescr(newDescr);
+						System.out.println("OK");
+						break;
+					}
+				}
+				while(exitSubFlag!=true);
+			}
+		}
+		while(exitFlag!=true);
+	}
+	
+	private static String[] getSensorCategoryNames() {
+		String[] categoryNames = new String[sc.size()];
+		for(int i=0; i<sc.size();i++) {
+			categoryNames[i] = sc.get(i).getName();
+		}
+		return categoryNames;
+	}
+	
+	private static String[] getActuatorCategoryNames() {
+		String[] categoryNames = new String[ac.size()];
+		for(int i=0; i<ac.size();i++) {
+			categoryNames[i] = ac.get(i).getName();
+		}
+		return categoryNames;
 	}
 }

@@ -31,7 +31,7 @@ public class SensorCategory {
 		return text;
 	}
 
-	public void setText(String text) {
+	public void setDescr(String text) {
 		this.text = text;
 	}
 	
