@@ -23,6 +23,7 @@ public class NumericActuator extends Actuator {
 		return this.name;
 	}
 	
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -32,6 +33,7 @@ public class NumericActuator extends Actuator {
 		return this.text;
 	}
 	
+	@Override
 	public void setDescr(String text) {
 		this.text = text;
 	}

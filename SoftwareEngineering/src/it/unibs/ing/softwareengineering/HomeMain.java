@@ -16,6 +16,9 @@ public class HomeMain {
 			Strings.ACTUATOR_EDIT, Strings.ARTIFACT_EDIT};
 	private static String[] nameDescrChoices = {Strings.EDIT_NAME, Strings.EDIT_DESCR};
 	private static String[] categoryElementChoices = {Strings.EDIT_ELEMENT_CATEGORY, Strings.EDIT_SINGLE_ELEMENT};
+	private static String[] singleSensorMenuChoices;
+	private static String[] singleActuatorMenuChoices;
+	private static String[] artifactEditMenuChoices;
 	private static Scanner s = new Scanner(System.in);
 	private static HousingUnit home;
 	private static MyMenu loginMenu = new MyMenu(Strings.LOGINTITLE, loginChoices);
@@ -32,6 +35,10 @@ public class HomeMain {
 	private static MyMenu elementCategoryEditMenu = new MyMenu(Strings.EDIT_ELEMENT_MENU, categoryElementChoices);
 	private static MyMenu sensorCategoryMenu;
 	private static MyMenu actuatorCategoryMenu;
+	
+	private static MyMenu singleSensorMenu;
+	private static MyMenu singleActuatorMenu;
+	private static MyMenu artifactEditMenu;
 	
 	
 	//test categories
@@ -53,13 +60,14 @@ public class HomeMain {
 		ArrayList<Artifact> artiList = new ArrayList<>();
 		artiList.add(lampadario);
 		Room soggiorno = new Room("soggiorno", "il salotto", sensorListSoggiorno, actuatorListSoggiorno, artiList);
-		ArrayList<Room> testRooms = new ArrayList<>();
-		testRooms.add(soggiorno);
-		home = new HousingUnit("casetta", "una casetta", testRooms);
 		NumericActuator interruttore = new NumericActuator("i1_interruttore", "accende la luce", interruttori, lampadario);
 		NumericSensor termometro = new NumericSensor("t1_temperatura", "il termometro del soggiorno", temperatura, soggiorno);
 		sensorListSoggiorno.add(termometro);
 		actuatorListSoggiorno.add(interruttore);
+		ArrayList<Room> testRooms = new ArrayList<>();
+		testRooms.add(soggiorno);
+		
+		home = new HousingUnit("casetta", "una casetta", testRooms);
 		
 		//CATEGORY STRUCTURES (from files after this)
 		
@@ -70,28 +78,24 @@ public class HomeMain {
 		
 		//END OF REMOVING ZONE
 		
-		
-		
-		roomChoices = home.getRoomNames();
-		roomMenu = new MyMenu(Strings.ROOM_MENU, roomChoices);
-		roomEditMenu = new MyMenu(Strings.ROOM_EDIT_MENU, roomChoices);
-		sensorCategoryMenu = new MyMenu(Strings.EDIT_CATEGORY, getSensorCategoryNames());
-		actuatorCategoryMenu = new MyMenu(Strings.EDIT_CATEGORY, getActuatorCategoryNames());
-		
+		refreshMenu();//GO TO LINE 501
+				
 		do {
 			int choice = loginMenu.scegli();
 			switch(choice) {
 				case 1:
 					System.out.println(Strings.INSERT_USER_NAME);
 					HomeLogin user = new HomeLogin(s.nextLine());
-					System.out.println("OK");
+					System.out.println(Strings.WELCOME + user.getUserName());
 					showUserMenu();
 					break;
 				case 2:
 					System.out.println(Strings.INSERT_USER_NAME);
+					String name = s.nextLine();
 					System.out.println(Strings.INSERT_MANPASS);
-					HomeLogin maintainer = new HomeLogin(s.nextLine(), s.nextLine());
-					System.out.println("OK");
+					String pass = s.nextLine();
+					HomeLogin maintainer = new HomeLogin(name, pass);
+					System.out.println(Strings.WELCOME + maintainer.getUserName());
 					showMaintainerMenu();
 					break;
 				}
@@ -135,6 +139,7 @@ public class HomeMain {
 	}
 	
 	private static void showRoomMenu() {
+		refreshMenu();
 		boolean exitFlag = false;
 		do {
 			int choice = roomMenu.scegli();
@@ -212,8 +217,10 @@ public class HomeMain {
 				showSensorEditMenu();
 				break;
 			case 4:
+				showActuatorEditMenu();
 				break;
 			case 5:
+				showArtifactEditMenu();
 				break;
 			}
 		}
@@ -221,6 +228,7 @@ public class HomeMain {
 	}
 	
 	private static void showHouseEditMenu() {
+		refreshMenu();
 		boolean exitSubFlag = false;
 		do {
 			int subChoice = nameDescrMenu.scegli();
@@ -246,6 +254,7 @@ public class HomeMain {
 	private static void showRoomEditMenu() {
 		boolean exitFlag = false;
 		do {
+			refreshMenu();
 			int choice = roomEditMenu.scegli();
 			if(choice == 0)
 				exitFlag= true;
@@ -281,6 +290,7 @@ public class HomeMain {
 	private static void showSensorEditMenu() {
 		boolean exitFlag = false;
 		do {
+			refreshMenu();
 			int choice = elementCategoryEditMenu.scegli();
 			switch(choice) {
 			case 0:
@@ -297,9 +307,80 @@ public class HomeMain {
 		while(exitFlag!=true);
 	}
 	
+	private static void showSingleSensorMenu() {
+		boolean exitFlag = false;
+		do {
+			refreshMenu();
+			int choice = singleSensorMenu.scegli();
+			if(choice==0) {
+				exitFlag = true;
+			}else if(choice <= home.getAllSensorListSize()) {
+				boolean exitSubFlag = false;
+				do {
+					int subChoice = nameDescrMenu.scegli();
+					switch(subChoice) {
+					case 0:
+						exitSubFlag = true;
+						break;
+					case 1:
+						System.out.println(Strings.INSERT_NAME);
+						String newName = s.nextLine();
+						home.getSensorFromHomeSensorList(choice-1).setName(newName);
+						System.out.println("OK");
+						break;
+					case 2:
+						System.out.println(Strings.INSERT_DESCR);
+						String newDescr = s.nextLine();
+						home.getSensorFromHomeSensorList(choice-1).setDescr(newDescr);
+						System.out.println("OK");
+						break;
+					}
+				}
+				while(exitSubFlag!=true);
+			}
+				
+			}while(exitFlag!=true);		
+	}
+	
+	private static void showSingleActuatorMenu() {
+		boolean exitFlag = false;
+		do {
+			refreshMenu();
+			int choice = singleActuatorMenu.scegli();
+			if(choice==0) {
+				exitFlag = true;
+			}else if(choice <= home.getAllActuatorListSize()) {
+				boolean exitSubFlag = false;
+				do {
+					int subChoice = nameDescrMenu.scegli();
+					switch(subChoice) {
+					case 0:
+						exitSubFlag = true;
+						break;
+					case 1:
+						System.out.println(Strings.INSERT_NAME);
+						String newName = s.nextLine();
+						home.getActuatorFromHomeActuatorList(choice-1).setName(newName);
+						System.out.println("OK");
+						break;
+					case 2:
+						System.out.println(Strings.INSERT_DESCR);
+						String newDescr = s.nextLine();
+						home.getActuatorFromHomeActuatorList(choice-1).setDescr(newDescr);
+						System.out.println("OK");
+						break;
+					}
+				}
+				while(exitSubFlag!=true);
+			}
+				
+			}while(exitFlag!=true);		
+	}
+
 	private static void showActuatorEditMenu() {
 		boolean exitFlag = false;
 		do {
+			refreshMenu();
 			int choice = elementCategoryEditMenu.scegli();
 			switch(choice) {
 			case 0:
@@ -319,6 +400,7 @@ public class HomeMain {
 	private static void showSensorCategoryMenu() {
 		boolean exitFlag = false;
 		do {
+			refreshMenu();
 			int choice = sensorCategoryMenu.scegli();
 			if(choice==0) exitFlag=true;
 			else if (choice <= sc.size()) {
@@ -352,6 +434,7 @@ public class HomeMain {
 	private static void showActuatorCategoryMenu() {
 		boolean exitFlag = false;
 		do {
+			refreshMenu();
 			int choice = actuatorCategoryMenu.scegli();
 			if(choice==0) exitFlag=true;
 			else if (choice <= ac.size()) {
@@ -382,6 +465,60 @@ public class HomeMain {
 		while(exitFlag!=true);
 	}
 	
+	private static void showArtifactEditMenu() {
+		boolean exitFlag = false;
+		do {
+			refreshMenu();
+			int choice = artifactEditMenu.scegli();
+			if(choice == 0) {
+				exitFlag = true;
+			}else if(choice <= home.getAllArtifactListSize()) {
+				boolean exitSubFlag = false;
+				do {
+					int subChoice = nameDescrMenu.scegli();
+					switch(subChoice) {
+					case 0:
+						exitSubFlag = true;
+						break;
+					case 1:
+						System.out.println(Strings.INSERT_NAME);
+						String newName = s.nextLine();
+						home.getArtifactFromHomeArtifactList(choice-1).setName(newName);
+						System.out.println("OK");
+						break;
+					case 2:
+						System.out.println(Strings.INSERT_DESCR);
+						String newDescr = s.nextLine();
+						home.getArtifactFromHomeArtifactList(choice-1).setDescr(newDescr);
+						System.out.println("OK");
+						break;
+					}
+				}while(exitSubFlag!=true);
+			}	
+		}while(exitFlag!=true);
+	}
+	
+	/*
+	 * Questo metodo si occupa di modificare runtime le voci dei menu in caso di modifica
+	 * da parte del manutentore.
+	 * L'errore era dovuto al fatto che non c'è un collegamento diretto tra i menu e i vari elementi della casa (stanze, sensori..)
+	 * Forse non la soluzione migliore ma per ora la più efficiente!
+	 * Good Job Patrick! 
+	 */
+	private static void refreshMenu() {
+		roomChoices = home.getRoomNames();
+		singleSensorMenuChoices = home.getSensorNames();
+		singleActuatorMenuChoices = home.getActuatorNames();
+		artifactEditMenuChoices = home.getArtifactNames();
+		roomMenu = new MyMenu(Strings.ROOM_MENU, roomChoices);
+		roomEditMenu = new MyMenu(Strings.ROOM_EDIT_MENU, roomChoices);
+		sensorCategoryMenu = new MyMenu(Strings.EDIT_CATEGORY, getSensorCategoryNames());
+		actuatorCategoryMenu = new MyMenu(Strings.EDIT_CATEGORY, getActuatorCategoryNames());
+		singleSensorMenu = new MyMenu(Strings.SENSOR_EDIT, singleSensorMenuChoices);
+		singleSensorMenu = new MyMenu(Strings.ACTUATOR_EDIT, singleSensorMenuChoices);
+		artifactEditMenu = new MyMenu(Strings.ARTIFACT_EDIT, artifactEditMenuChoices);
+	}
+	
 	private static String[] getSensorCategoryNames() {
 		String[] categoryNames = new String[sc.size()];
 		for(int i=0; i<sc.size();i++) {
@@ -398,3 +535,4 @@ public class HomeMain {
 		return categoryNames;
 	}
 }
+

@@ -11,7 +11,6 @@ public class HomeLogin {
 	private String userName;
 	private int loginType;
 	
-	
 	public HomeLogin(String user) {
 		this.userName = user;
 		loginType = 0;
@@ -47,3 +46,4 @@ public class HomeLogin {
 	}
 	
 }
+

@@ -22,7 +22,7 @@ public class Artifact {
 		this.name = name;
 	}
 	
-	public void setDesc(String text) {
+	public void setDescr(String text) {
 		this.text = text;
 	}
 	

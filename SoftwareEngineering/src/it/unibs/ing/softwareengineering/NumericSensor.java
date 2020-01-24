@@ -41,6 +41,7 @@ public class NumericSensor extends Sensor {
 		return this.name;
 	}
 	
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -50,6 +51,7 @@ public class NumericSensor extends Sensor {
 		return this.text;
 	}
 	
+	@Override
 	public void setDescr(String text) {
 		this.text = text;
 	}

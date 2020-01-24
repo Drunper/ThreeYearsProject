@@ -15,6 +15,9 @@ public class HousingUnit {
 		this.name = name;
 		this.text = text;
 		this.roomList = rooms;
+		this.allSensorList = new ArrayList<>();
+		this.allActuatorList = new ArrayList<>();
+		this.allArtifactList = new ArrayList<>();
 		gatherAllSensors();
 		gatherAllActuators();
 		gatherAllArtifacts();
@@ -123,6 +126,5 @@ public class HousingUnit {
 	public Artifact getArtifactFromHomeArtifactList(int i) {
 		return this.allArtifactList.get(i);
 	}
-	
-	
+		
 }
