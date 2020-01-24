@@ -12,8 +12,10 @@ public class HomeMain {
 	private static String[] sensorChoices;
 	private static String[] actuatorChoices;
 	private static String[] artifactChoices;
-	private static String[] editChoices = {Strings.HOUSE_EDIT_DESCR, Strings.ROOM_EDIT, Strings.SENSOR_EDIT, 
+	private static String[] editChoices = {Strings.HOUSE_EDIT_NAMEDESCR, Strings.ROOM_EDIT, Strings.SENSOR_EDIT, 
 			Strings.ACTUATOR_EDIT, Strings.ARTIFACT_EDIT};
+	private static String[] nameDescrChoices = {Strings.EDIT_NAME, Strings.EDIT_DESCR};
+	private static String[] categoryElementChoices = {Strings.EDIT_ELEMENT_CATEGORY, Strings.EDIT_SINGLE_ELEMENT};
 	private static Scanner s = new Scanner(System.in);
 	private static HousingUnit home;
 	private static MyMenu loginMenu = new MyMenu(Strings.LOGINTITLE, loginChoices);
@@ -25,7 +27,9 @@ public class HomeMain {
 	private static MyMenu actuatorMenu;
 	private static MyMenu artifactMenu;
 	private static MyMenu editMenu = new MyMenu(Strings.EDIT_MENU, editChoices);
-	
+	private static MyMenu roomEditMenu;
+	private static MyMenu nameDescrMenu = new MyMenu(Strings.EDIT_NAME_DESCR_MENU, nameDescrChoices);
+	private static MyMenu elementCategoryEditMenu = new MyMenu(Strings.EDIT_ELEMENT_MENU, categoryElementChoices);
 	
 
 	
@@ -55,18 +59,19 @@ public class HomeMain {
 		
 		roomChoices = home.getRoomNames();
 		roomMenu = new MyMenu(Strings.ROOM_MENU, roomChoices);
+		roomEditMenu = new MyMenu(Strings.ROOM_EDIT_MENU, roomChoices);
 		
 		do {
 			int choice = loginMenu.scegli();
 			switch(choice) {
 				case 1:
-					System.out.println(Strings.INSERT_NAME);
+					System.out.println(Strings.INSERT_USER_NAME);
 					HomeLogin user = new HomeLogin(s.nextLine());
 					System.out.println("OK");
 					showUserMenu();
 					break;
 				case 2:
-					System.out.println(Strings.INSERT_NAME);
+					System.out.println(Strings.INSERT_USER_NAME);
 					System.out.println(Strings.INSERT_MANPASS);
 					HomeLogin maintainer = new HomeLogin(s.nextLine(), s.nextLine());
 					System.out.println("OK");
@@ -105,7 +110,7 @@ public class HomeMain {
 				showUserMenu();
 				break;
 			case 2:
-				
+				showEditMenu();
 				break;
 			}
 		}
@@ -118,7 +123,7 @@ public class HomeMain {
 			int choice = roomMenu.scegli();
 			if(choice == 0)
 				exitFlag= true;
-			else {
+			else if (choice <= home.getRoomListSize()){
 				System.out.println(Strings.CHOOSE);
 				Room selected = home.getRoomFromIndex(choice-1);
 				System.out.println(selected.getRoomName() + ": " + selected.getDescr());
@@ -173,7 +178,103 @@ public class HomeMain {
 		}
 	
 	private static void showEditMenu() {
-		
+		boolean exitFlag = false;
+		do {
+			int choice = editMenu.scegli();
+			switch(choice) {
+			case 0:
+				exitFlag = true;
+				break;
+			case 1:
+				showHouseEditMenu();
+				break;
+			case 2:
+				showRoomEditMenu();
+				break;
+			case 3:
+				showSensorEditMenu();
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			}
+		}
+		while(exitFlag!=true);
 	}
 	
+	private static void showHouseEditMenu() {
+		boolean exitSubFlag = false;
+		do {
+			int subChoice = nameDescrMenu.scegli();
+			switch(subChoice) {
+			case 0:
+				exitSubFlag = true;
+				break;
+			case 1:
+				System.out.println(Strings.INSERT_NAME);
+				String newName = s.nextLine();
+				home.setName(newName);
+				break;
+			case 2:
+				System.out.println(Strings.INSERT_DESCR);
+				String newDescr = s.nextLine();
+				home.setDescr(newDescr);
+				break;
+			}
+		}
+		while(exitSubFlag!=true);
+	}
+	
+	private static void showRoomEditMenu() {
+		boolean exitFlag = false;
+		do {
+			int choice = roomEditMenu.scegli();
+			if(choice == 0)
+				exitFlag= true;
+			else if(choice <= home.getRoomListSize()){
+				System.out.println(Strings.CHOOSE);
+				Room selected = home.getRoomFromIndex(choice-1);
+				boolean exitSubFlag = false;
+				do {
+					int subChoice = nameDescrMenu.scegli();
+					switch(subChoice) {
+					case 0:
+						exitSubFlag = true;
+						break;
+					case 1:
+						System.out.println(Strings.INSERT_NAME);
+						String newName = s.nextLine();
+						selected.setName(newName);
+						break;
+					case 2:
+						System.out.println(Strings.INSERT_DESCR);
+						String newDescr = s.nextLine();
+						selected.setDescr(newDescr);
+						break;
+					}
+				}
+				while(exitSubFlag!=true);
+				
+			}	
+		}
+		while(exitFlag!=true);
+	}
+	
+	private static void showSensorEditMenu() {
+		boolean exitFlag = false;
+		do {
+			int choice = elementCategoryEditMenu.scegli();
+			switch(choice) {
+			case 0:
+				exitFlag=true;
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			}
+		}
+		while(exitFlag!=true);
+	}
 }

@@ -45,4 +45,5 @@ public class HousingUnit {
 	public int getRoomListSize() {
 		return this.roomList.size();
 	}
+	
 }
