@@ -36,6 +36,7 @@ public class NumericSensor extends Sensor {
 		state = true;
 	}
 	
+	@Override
 	public String getName() {
 		return this.name;
 	}
@@ -44,6 +45,7 @@ public class NumericSensor extends Sensor {
 		this.name = name;
 	}
 	
+	@Override
 	public String getDescr() {
 		return this.text;
 	}
@@ -52,6 +54,7 @@ public class NumericSensor extends Sensor {
 		this.text = text;
 	}
 	
+	@Override
 	public SensorCategory getCategory() {
 		return this.category;
 	}

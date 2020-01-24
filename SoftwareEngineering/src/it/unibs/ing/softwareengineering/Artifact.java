@@ -14,7 +14,7 @@ public class Artifact {
 		return this.name;
 	}
 	
-	public String getText() {
+	public String getDescr() {
 		return this.text;
 	}
 	

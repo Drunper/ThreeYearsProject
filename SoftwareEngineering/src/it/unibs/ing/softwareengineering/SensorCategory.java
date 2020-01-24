@@ -27,7 +27,7 @@ public class SensorCategory {
 		this.name = name;
 	}
 
-	public String getText() {
+	public String getDescr() {
 		return text;
 	}
 

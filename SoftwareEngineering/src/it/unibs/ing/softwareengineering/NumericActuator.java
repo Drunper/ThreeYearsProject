@@ -18,6 +18,7 @@ public class NumericActuator extends Actuator {
 		state = true;
 	}
 	
+	@Override
 	public String getName() {
 		return this.name;
 	}
@@ -26,6 +27,7 @@ public class NumericActuator extends Actuator {
 		this.name = name;
 	}
 	
+	@Override
 	public String getDescr() {
 		return this.text;
 	}
@@ -34,6 +36,7 @@ public class NumericActuator extends Actuator {
 		this.text = text;
 	}
 	
+	@Override
 	public ActuatorCategory getCategory() {
 		return this.category;
 	}

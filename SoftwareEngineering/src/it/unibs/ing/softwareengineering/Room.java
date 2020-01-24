@@ -28,5 +28,60 @@ public class Room {
 	public String getDescr() {
 		return this.text;
 	}
+	
+	public void setName(String roomName) {
+		this.roomName = roomName;
+	}
 
+	public void setDescr(String text) {
+		this.text = text;
+	}
+	
+	public Sensor getSensorFromIndex(int i) {
+		return this.sensorList.get(i);
+	}
+	
+	public int getSensorListSize() {
+		return this.sensorList.size();
+	}
+	
+	public String[] getSensorNames() {
+		String[] sensorNames = new String[sensorList.size()];
+		for(int i=0; i<sensorList.size();i++) {
+			sensorNames[i] = sensorList.get(i).getName();
+		}
+		return sensorNames;
+	}
+	
+	public Actuator getActuatorFromIndex(int i) {
+		return this.actuatorList.get(i);
+	}
+	
+	public int getActuatorListSize() {
+		return this.actuatorList.size();
+	}
+	
+	public String[] getActuatorNames() {
+		String[] actuatorNames = new String[actuatorList.size()];
+		for(int i=0; i<actuatorList.size();i++) {
+			actuatorNames[i] = actuatorList.get(i).getName();
+		}
+		return actuatorNames;
+	}
+	
+	public Artifact getArtifactFromIndex(int i) {
+		return this.artifactList.get(i);
+	}
+	
+	public int getArtifactListSize() {
+		return this.artifactList.size();
+	}
+	
+	public String[] getArtifactNames() {
+		String[] artifactNames = new String[artifactList.size()];
+		for(int i=0; i<artifactList.size();i++) {
+			artifactNames[i] = artifactList.get(i).getName();
+		}
+		return artifactNames;
+	}
 }
