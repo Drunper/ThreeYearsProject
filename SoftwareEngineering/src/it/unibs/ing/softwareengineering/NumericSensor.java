@@ -2,82 +2,72 @@ package it.unibs.ing.softwareengineering;
 
 public class NumericSensor extends Sensor {
 
-	private String name;
-	private String text;
-	private SensorCategory category;
-	private String measuredVariable;
-	private double detectedValue;
 	private double lowerBound;
 	private double upperBound;
-	private Artifact attachedArtif; // serve un nome migliore
-	private Room room; // anche qui se possibile
-	private boolean roomMeasurement;
-	private boolean state;
 	
-	public NumericSensor(String name, String text, SensorCategory category, Artifact artif) {
-		super();
-		this.name = name;
-		this.text = text;
-		this.category = category;
-		this.attachedArtif = artif;
-		lowerBound = category.getBounds()[0]; // togliere magic numbers
-		upperBound = category.getBounds()[1];
-		roomMeasurement = false;
-		state = true;
-	}
-
-	public NumericSensor(String name, String text, SensorCategory category, Room room) {
-		super();
-		this.name = name;
-		this.text = text;
-		this.category = category;
-		this.room = room;
-		roomMeasurement = true;
-		state = true;
+	public NumericSensor(String name, SensorCategory category) {
+		super(name, category);
 	}
 	
-	@Override
-	public String getName() {
-		return this.name;
+	private void setBounds(String variableName) {
+		double [] bounds = category.getDomain(variableName);
+		lowerBound = bounds[0];
+		upperBound = bounds[1];		
 	}
 	
-	@Override
-	public void setName(String name) {
-		this.name = name;
+	public String [] getMeasurements() {
+		String [] infos = category.getDetectableInfoList();
+		int size = infos.length;
+		String [] measurements = new String[size];
+		for (int i = 0; i < size; i++)
+		{
+			measurements[i] = addMeasurementUnit(getMeasurementOf(infos[i]), infos[i]);
+		}
+		return measurements;
 	}
 	
-	@Override
-	public String getDescr() {
-		return this.text;
+	private double getMeasurementOf(String variableName) {
+		setBounds(variableName);
+		double measure = 0;
+		double valueFromObject;
+		String [] objectNames = namesList();
+		for (String name : objectNames)
+		{
+			Gettable element = (Gettable)getElementByName(name);
+			valueFromObject = element.getNumericProperty(variableName);
+			if(valueFromObject > upperBound)
+				valueFromObject = upperBound;
+			else if(valueFromObject < lowerBound)
+				valueFromObject = lowerBound;
+			measure += valueFromObject;
+		}
+		// faccio la media perché non ho altre idee su come ottenere un valore che non sia completamente scorrelato da tutti gli altri
+		measure = measure / objectNames.length; 
+		return measure;
 	}
 	
-	@Override
-	public void setDescr(String text) {
-		this.text = text;
+	private String addMeasurementUnit(double value, String variableName) {
+		String valueWithUnit = value + " " + category.getMeasurementUnit(variableName);
+		return valueWithUnit;
 	}
 	
-	@Override
-	public SensorCategory getCategory() {
-		return this.category;
-	}
-	
-	public Artifact getControlledArtifact() {
-		return this.attachedArtif;
-	}
-	
-	public boolean isOn() {
-		return this.state;
-	}
-	
-	
-	/*
-	 * Serve un check per verificare che la misura sia nell'intervallo specificato
-	 * 
-	 */
-	public double getMeasurement() {
-		if (roomMeasurement)
-			return room.getMeasure(measuredVariable);
+	public String toString() {
+		String unformattedText;
+		String status;
+		if (isState()) 
+			status = "acceso";
 		else
-			return attachedArtif.getMeasure(measuredVariable);
+			status = "spento";
+		unformattedText = getName()+':'+category.getName()+':';
+		for(String measuredObject : namesList())
+		{
+			unformattedText = unformattedText+"om:"+measuredObject+':';
+		}
+		for(String value : getMeasurements())
+		{
+			unformattedText = unformattedText+"vm:"+value+':';
+		}
+		unformattedText = unformattedText+':'+status;
+		return unformattedText;
 	}
 }

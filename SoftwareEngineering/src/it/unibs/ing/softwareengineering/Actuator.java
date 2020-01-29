@@ -1,10 +1,37 @@
 package it.unibs.ing.softwareengineering;
 
-public abstract class Actuator {
+public class Actuator implements Manageable {
 
-	public abstract String getName();
-	public abstract String getDescr();
-	public abstract ActuatorCategory getCategory();
-	public abstract void setName(String newName);
-	public abstract void setDescr(String newDescr);
+	private String name;
+	private Artifact controlledArtif;
+	private ActuatorCategory category;
+	private String operatingMode;
+	private boolean state;
+
+	public Actuator(String name, ActuatorCategory category) {
+		super();
+		this.name = name;
+		this.category = category;
+		operatingMode = "idle";
+		state = true;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String toString() {
+		String unformattedText;
+		String status;
+		if (state) 
+			status = "acceso";
+		else
+			status = "spento";
+		unformattedText = name+':'+category.getName()+':'+controlledArtif.getName()+':'+operatingMode+':'+status;
+		return unformattedText;
+	}
 }

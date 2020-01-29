@@ -25,7 +25,7 @@ public class MyMenu
   public int scegli ()
   {
 	stampaMenu();
-	System.out.println(Strings.CHOOSE);
+	System.out.println("Effettua la scelta desiderata: ");
 	Scanner in = new Scanner(System.in);
 	int num = in.nextInt();
 	return num;
@@ -34,15 +34,15 @@ public class MyMenu
 		
   public void stampaMenu ()
   {
-	System.out.println(Strings.CORNICE);
+	System.out.println("--------------------------------");
 	System.out.println(titolo);
-	System.out.println(Strings.CORNICE);
+	System.out.println("--------------------------------");
     for (int i=0; i<voci.length; i++)
 	 {
 	  System.out.println( (i+1) + "\t" + voci[i]);
 	 }
     System.out.println();
-	System.out.println(Strings.VOCE_USCITA);
+	System.out.println("0\tEsci");
     System.out.println();
   }
   	

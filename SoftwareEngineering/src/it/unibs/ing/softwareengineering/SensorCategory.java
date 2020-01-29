@@ -1,22 +1,21 @@
 package it.unibs.ing.softwareengineering;
 
-import java.util.ArrayList;
-import java.util.function.Predicate;
+import java.util.HashMap;
 
-public class SensorCategory {
+public class SensorCategory implements Manageable {
 	
 	private String name;
 	private String text;
-	private ArrayList<String> detectableInfos;
+	private HashMap<String, String> infoDomainMap;
 	
 	/*
 	 * invariante di classe: detectableInfos.size() > 0 && name != null && text != null
 	 * ancora da implementare
 	 */
-	public SensorCategory(String name, String text, ArrayList<String> detectableInfos) {
+	public SensorCategory(String name, String text) {
 		this.name = name;
 		this.text = text;
-		this.detectableInfos = detectableInfos;
+		infoDomainMap = new HashMap<>();
 	}
 
 	public String getName() {
@@ -35,24 +34,33 @@ public class SensorCategory {
 		this.text = text;
 	}
 	
-	public void addDetectableInfo (String toAdd) {
-		detectableInfos.add(toAdd);
+	public double [] getDomain(String info) {
+		String domain = infoDomainMap.get(info);
+		String [] bounds = domain.split("(")[0].split("-");
+		double [] numericBounds = new double[2];
+		numericBounds[0] = Double.parseDouble(bounds[0]);
+		numericBounds[1] = Double.parseDouble(bounds[1]);
+		return numericBounds;
 	}
 	
-	public void removeDetectableInfo (String toRemove) {
-		detectableInfos.removeIf(isEqual(toRemove));
-	}
-	
-	/*
-	 * Da implementare.
-	 * Il metodo restituisce l'estremo inferiore e quello superiore, ovvero gli estremi del range di rilevazione del sensore
-	 */
-	public double [] getBounds() {
-		double [] bounds = new double[2];
-		return bounds;
+	// daAdattare nel caso di più informazioni rilevabili
+	public void putInfo(String detectableInfo) {
+		String [] splitted = text.split(":");
+		String domain = splitted[2];
+		infoDomainMap.put(detectableInfo, domain);
 	}
 
-	private static Predicate<String> isEqual(String toCompare) {
-        return s -> s.equalsIgnoreCase(toCompare);
-    }
+	public String getMeasurementUnit(String info) {
+		String domain = infoDomainMap.get(info);
+		String measurementUnit = domain.split("()")[0];
+		return measurementUnit;
+	}
+	
+	public String [] getDetectableInfoList() {
+		return infoDomainMap.keySet().toArray(new String[0]);
+	}
+
+	public String toString() {
+		return name+':'+text+':'+String.join(":", getDetectableInfoList());
+	}
 }

@@ -2,27 +2,27 @@ package it.unibs.ing.softwareengineering;
 
 import java.util.*;
 
-public class Room {
-	private String roomName;
+public class Room implements Gettable {
+	private String name;
 	private String text;
-	private ArrayList<Sensor> sensorList = new ArrayList<>();
-	private ArrayList<Actuator> actuatorList = new ArrayList<>();
-	private ArrayList<Artifact> artifactList = new ArrayList<>();
+	private Manager sensorManager;
+	private Manager actuatorManager;
+	private Manager artifactManager;
+	private TreeMap<String, Double> numericPropertiesMap; //treemap per contenere i valori numerici tipo temperatura
+	private TreeMap<String, String> nonNumericPropertiesMap; //treemap per contenere i valori string tipo "presenza persone"
 	
-	public Room (String roomName, String text, ArrayList<Sensor> sensorList, ArrayList<Actuator> actuatorList, ArrayList<Artifact> artifactList) {
-		this.roomName = roomName;
+	public Room (String name, String text) {
+		this.name = name;
 		this.text = text;
-		this.sensorList = sensorList;
-		this.actuatorList = actuatorList;
-		this.artifactList = artifactList;
+		sensorManager = new Manager();
+		actuatorManager = new Manager();
+		artifactManager = new Manager();
+		numericPropertiesMap = new TreeMap<>();
+		nonNumericPropertiesMap = new TreeMap<>();
 	}
 
-	public double getMeasure(String measuredVariable) {
-		return 0;
-	}
-	
-	public String getRoomName() {
-		return this.roomName;
+	public String getName() {
+		return this.name;
 	}
 	
 	public String getDescr() {
@@ -30,58 +30,122 @@ public class Room {
 	}
 	
 	public void setName(String roomName) {
-		this.roomName = roomName;
+		this.name = roomName;
 	}
 
 	public void setDescr(String text) {
 		this.text = text;
 	}
 	
-	public Sensor getSensorFromIndex(int i) {
-		return this.sensorList.get(i);
+	public void addActuator(Actuator toAdd) {
+		actuatorManager.addEntry(toAdd);
 	}
 	
-	public int getSensorListSize() {
-		return this.sensorList.size();
+	public void removeActuator(String toRemove) {
+		actuatorManager.remove(toRemove);
 	}
 	
-	public String[] getSensorNames() {
-		String[] sensorNames = new String[sensorList.size()];
-		for(int i=0; i<sensorList.size();i++) {
-			sensorNames[i] = sensorList.get(i).getName();
+	public Actuator getActuatorByName(String toGet) {
+		return (Actuator)actuatorManager.getElementByName(toGet);
+	}
+	
+	public void changeActuatorName(String oldName, String newName) {
+		actuatorManager.changeElementName(oldName, newName);
+	}
+	
+	public boolean hasActuator(String name) {
+		return actuatorManager.hasEntry(name);
+	}
+	
+	public String [] getActuatorsNames() {
+		return actuatorManager.namesList();
+	}
+	
+	public void addSensor(Sensor toAdd) {
+		sensorManager.addEntry(toAdd);
+	}
+	
+	public void removeSensor(String toRemove) {
+		sensorManager.remove(toRemove);
+	}
+	
+	public Sensor getSensorByName(String toGet) {
+		return (Sensor)sensorManager.getElementByName(toGet);
+	}
+	
+	public void changeSensorName(String oldName, String newName) {
+		sensorManager.changeElementName(oldName, newName);
+	}
+	
+	public boolean hasSensor(String name) {
+		return sensorManager.hasEntry(name);
+	}
+	
+	public String [] getSensorsNames() {
+		return sensorManager.namesList();
+	}
+	
+	public void addArtifact(Artifact toAdd) {
+		artifactManager.addEntry(toAdd);
+	}
+	
+	public void removeArtifact(String toRemove) {
+		artifactManager.remove(toRemove);
+	}
+	
+	public Artifact getArtifactByName(String toGet) {
+		return (Artifact)artifactManager.getElementByName(toGet);
+	}
+	
+	public void changeArtifactName(String oldName, String newName) {
+		artifactManager.changeElementName(oldName, newName);
+	}
+	
+	public boolean hasArtifact(String name) {
+		return artifactManager.hasEntry(name);
+	}
+	
+	public String [] getArtifactsNames() {
+		return artifactManager.namesList();
+	}
+	
+	public double getNumericProperty(String variableName) {
+		return numericPropertiesMap.get(variableName);
+	}
+	
+	public String getNonNumericProperty(String variableName) {
+		return nonNumericPropertiesMap.get(variableName);
+	}
+	
+	public void setNumericProperty (String variableName, double newValue) {
+		numericPropertiesMap.put(variableName, newValue);
+	}
+	
+	public void setNonNumericProperty (String variableName, String newValue) {
+		nonNumericPropertiesMap.put(variableName, newValue);
+	}
+	
+	public String toString() {
+		String [] sensorNames = getSensorsNames();
+		String [] actuatorNames = getActuatorsNames();
+		String [] artifactNames = getArtifactsNames();
+		String [] elementNames = new String[sensorNames.length+actuatorNames.length+artifactNames.length];
+		int i;
+		for(i = 0; i < sensorNames.length; i++)
+		{
+			elementNames[i] = sensorNames[i] + " - Sensore";
 		}
-		return sensorNames;
-	}
-	
-	public Actuator getActuatorFromIndex(int i) {
-		return this.actuatorList.get(i);
-	}
-	
-	public int getActuatorListSize() {
-		return this.actuatorList.size();
-	}
-	
-	public String[] getActuatorNames() {
-		String[] actuatorNames = new String[actuatorList.size()];
-		for(int i=0; i<actuatorList.size();i++) {
-			actuatorNames[i] = actuatorList.get(i).getName();
+		int j = i + actuatorNames.length;
+		for(i = sensorNames.length; i < j; i++)
+		{
+			elementNames[i] = actuatorNames[i-sensorNames.length] + " - Attuatore";
 		}
-		return actuatorNames;
-	}
-	
-	public Artifact getArtifactFromIndex(int i) {
-		return this.artifactList.get(i);
-	}
-	
-	public int getArtifactListSize() {
-		return this.artifactList.size();
-	}
-	
-	public String[] getArtifactNames() {
-		String[] artifactNames = new String[artifactList.size()];
-		for(int i=0; i<artifactList.size();i++) {
-			artifactNames[i] = artifactList.get(i).getName();
+		int k = j + artifactNames.length;
+		for(i = j; i < k; i++)
+		{
+			elementNames[i] = artifactNames[i-j] + " - Artefatto";
 		}
-		return artifactNames;
+		String compactNames = String.join(":", elementNames);
+		return name+':'+text+':'+compactNames;
 	}
 }

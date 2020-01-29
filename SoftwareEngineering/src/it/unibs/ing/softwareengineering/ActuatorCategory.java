@@ -1,10 +1,12 @@
 package it.unibs.ing.softwareengineering;
 
-public class ActuatorCategory {
+import java.util.ArrayList;
+
+public class ActuatorCategory implements Manageable {
 
 	private String name;
 	private String text;
-	private String [] operatingModes;
+	private ArrayList<String> operatingModes;
 	
 	public ActuatorCategory(String name, String text) {
 		this.name = name;
@@ -25,5 +27,9 @@ public class ActuatorCategory {
 	
 	public void setDescr(String text) {
 		this.text = text;
+	}
+	
+	public String toString() {
+		return name+':'+text+':'+String.join(":", operatingModes.toArray(new String[0]));
 	}
 }
