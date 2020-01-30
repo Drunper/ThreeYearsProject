@@ -5,6 +5,8 @@ public class HomeMain {
 	private static MyMenu menu;
 	private static MyMenu userMenu;
 	private static MyMenu roomMenu;
+	private static MyMenu maintainerMenu;
+	private static MyMenu maintainerRoomMenu;
 	private static HousingUnit home;
 	private static Manager sensorCategoryManager;
 	private static Manager actuatorCategoryManager;
@@ -17,7 +19,7 @@ public class HomeMain {
 		SensorCategory temperatura = new SensorCategory("sensori di temperatura", "misurano la temperatura");
 		ActuatorCategory interruttori = new ActuatorCategory("interruttori di accensione", "accendono qualcosa");
 		home = new HousingUnit("Casa di Ivan", "Boh");
-		Room soggiorno = new Room("Soggiorno", "Dove le persone si drogano");
+		Room soggiorno = new Room("Soggiorno", "Sala in cui si vive penso");
 		home.addEntry(soggiorno);
 		Artifact lampadario = new Artifact("lampadarioMurano", "Sono un lampa-dario");
 		Artifact portaOmbrelli = new Artifact("portaOmbrelli", "servo solo per far numero e non ho molto senso");
@@ -44,12 +46,22 @@ public class HomeMain {
 		
 		HomeLogin login = new HomeLogin();
 		login.addEntry("paolino", "6fcb473c563dc49628a187d2a590ff2c000da215d8cd914f7901df3bc2a2c626"); //pippo123456
-		String [] voci = {"Fruitore", "Manutentore"};
-		String [] userVoices = {"Visualizzare descrizione unità immobiliare", "Visualizza stanza"};
+		String [] loginVoices = {"Fruitore", "Manutentore"};
+		
+		String [] userVoices = {"Visualizzare descrizione unità immobiliare", "Visualizza stanza", 
+				"Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
 		String [] roomVoices = {"Visualizzare descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto"};
-		menu = new MyMenu("Login", voci);
+		
+		String [] maintainerVoices = {"Visualizzare descrizione unità immobiliare", "Modifica descrizione unità immobilare", "Visualizza stanza", 
+				"Inserisci stanza", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Inserisci categoria di sensori", 
+				"Inserisci categoria di attuatori"};
+		String [] maintainerRoomVoices = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto", 
+				"Modifica descrizione stanza", "Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto"};
+		menu = new MyMenu("Login", loginVoices);
 		userMenu = new MyMenu("Scegli cosa fare", userVoices);
-		roomMenu = new MyMenu("Scegli un opzione", roomVoices);
+		roomMenu = new MyMenu("Scegli un'opzione", roomVoices);
+		maintainerMenu = new MyMenu("Scegli un'opzione", maintainerVoices);
+		maintainerRoomMenu = new MyMenu("Scegli un'opzione", maintainerRoomVoices);
 		String user;
 		int scelta;
 		do
@@ -59,7 +71,7 @@ public class HomeMain {
 			{
 				case 1: 
 					user = RawDataInput.readNotVoidString("Inserisci il nome utente");
-					System.out.println("Benvenuto" + user);
+					System.out.println("Benvenuto " + user);
 					showUserMenu();
 					break;
 					
@@ -69,8 +81,8 @@ public class HomeMain {
 					do
 					{
 						ok = false;
-						user = RawDataInput.readNotVoidString("Inserisci il nome utente (0 per tornare indietro)");
-						if(!user.equalsIgnoreCase("0"))
+						user = RawDataInput.readNotVoidString("Inserisci il nome utente (^ per tornare indietro)");
+						if(!user.equalsIgnoreCase("^"))
 						{	
 							password = RawDataInput.readNotVoidString("Inserisci la password");
 							ok = login.checkPassword(user, password);
@@ -78,7 +90,7 @@ public class HomeMain {
 								System.out.println("Nome utente o password errati");
 						}
 					}
-					while (!user.equalsIgnoreCase("0") && !ok);
+					while (!user.equalsIgnoreCase("^") && !ok);
 					if (ok)
 						showMaintainerMenu();
 					break;
@@ -86,9 +98,63 @@ public class HomeMain {
 		}
 		while (scelta != 0);
 	}
-
+	
 	private static void showMaintainerMenu() {
-		
+		boolean exitFlag = false;
+		do
+		{
+			int choice = maintainerMenu.scegli();
+			switch(choice) {
+				case 0:
+					exitFlag = true;
+					break;
+				case 1:
+					DataOutput.printHousingUnit(home.toString());
+					break;
+				case 2:
+					//CookedDataInput.changeHouseDescription(home);
+					break;
+				case 3:
+					DataOutput.printListOfString(home.namesList());
+					System.out.println();
+					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
+					System.out.println();
+					
+					String selectedRoom = RawDataInput.readNotVoidString("Inserisci il nome della stanza su cui vuoi operare");
+					showMaintainerRoomMenu(selectedRoom);
+					break;
+				case 4:
+					//CookedDataInput.readRoomFromUser(home);
+					break;
+				case 5:
+					DataOutput.printListOfString(sensorCategoryManager.namesList());
+					System.out.println();
+					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
+					System.out.println();
+					
+					String selectedSensCategory = RawDataInput.readNotVoidString("Inserisci la categoria di sensori che vuoi visualizzare");
+					DataOutput.printSensorCategory(sensorCategoryManager.getElementByName(selectedSensCategory).toString());
+					// Da valutare se castare o meno
+					break;
+				case 6:
+					DataOutput.printListOfString(sensorCategoryManager.namesList());
+					System.out.println();
+					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
+					System.out.println();
+					
+					String selectedActuCategory = RawDataInput.readNotVoidString("Inserisci la categoria di attuatori che vuoi visualizzare");
+					DataOutput.printSensorCategory(actuatorCategoryManager.getElementByName(selectedActuCategory).toString());
+					// Da valutare se castare o meno
+					break;
+				case 7:
+					//CookedDataInput.readSensorCategoryFromUser();
+					break;
+				case 8:
+					//CookedDataInput.readActuatorCategoryFromUser();
+					break;
+			}
+		}
+		while(exitFlag != true);
 	}
 
 	private static void showUserMenu() {
@@ -131,7 +197,6 @@ public class HomeMain {
 					DataOutput.printSensorCategory(actuatorCategoryManager.getElementByName(selectedActuCategory).toString());
 					// Da valutare se castare o meno
 					break;
-					
 			}
 		}
 		while(exitFlag!=true);
@@ -179,5 +244,61 @@ public class HomeMain {
 			}
 		}
 		while(exitFlag!=true);		
+	}
+	
+	private static void showMaintainerRoomMenu(String selectedRoom) {
+		Room toWorkOn = (Room)home.getElementByName(selectedRoom);
+		boolean exitFlag = false;
+		do {
+			int choice = roomMenu.scegli();
+			switch(choice) {
+				case 0:
+					exitFlag = true;
+					break;
+				case 1:
+					DataOutput.printRoom(toWorkOn.toString());
+					break;
+				case 2:
+					DataOutput.printListOfString(toWorkOn.getSensorsNames());
+					System.out.println();
+					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
+					System.out.println();
+					
+					String selectedSensor = RawDataInput.readNotVoidString("Inserisci il nome del sensore che vuoi visualizzare");
+					DataOutput.printSensor(toWorkOn.getSensorByName(selectedSensor).toString());
+					break;
+				case 3:
+					DataOutput.printListOfString(toWorkOn.getActuatorsNames());
+					System.out.println();
+					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
+					System.out.println();
+					
+					String selectedActuator = RawDataInput.readNotVoidString("Inserisci il nome dell'attuatore che vuoi visualizzare");
+					DataOutput.printSensor(toWorkOn.getActuatorByName(selectedActuator).toString());
+					break;
+				case 4:
+					DataOutput.printListOfString(toWorkOn.getArtifactsNames());
+					System.out.println();
+					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
+					System.out.println();
+					
+					String selectedArtifact = RawDataInput.readNotVoidString("Inserisci il nome dell'artefatto che vuoi visualizzare");
+					DataOutput.printSensor(toWorkOn.getArtifactByName(selectedArtifact).toString());
+					break;	
+				case 5:
+					//CookedDataInput.changeRoomDescription(toWorkOn);
+					break;
+				case 6:
+					//CookedDataInput.readSensorFromUser(toWorkOn);
+					break;
+				case 7:
+					//CookedDataInput.readActuatorFromUser(toWorkOn);
+					break;
+				case 8:
+					//CookedDataInput.readArtifactFromUser(toWorkOn);
+					break;
+			}
+		}
+		while(exitFlag!=true);	
 	}
 }
