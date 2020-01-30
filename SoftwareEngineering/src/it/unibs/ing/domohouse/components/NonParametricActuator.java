@@ -1,4 +1,4 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.components;
 
 public class NonParametricActuator extends Actuator {
 

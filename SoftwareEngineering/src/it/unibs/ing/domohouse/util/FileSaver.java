@@ -1,4 +1,4 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.util;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;

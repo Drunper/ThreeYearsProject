@@ -1,4 +1,4 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

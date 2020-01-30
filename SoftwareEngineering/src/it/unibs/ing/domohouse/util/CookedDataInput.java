@@ -1,6 +1,14 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.util;
 
 import java.util.ArrayList;
+
+import it.unibs.ing.domohouse.components.ActuatorCategory;
+import it.unibs.ing.domohouse.components.Artifact;
+import it.unibs.ing.domohouse.components.HousingUnit;
+import it.unibs.ing.domohouse.components.NonParametricActuator;
+import it.unibs.ing.domohouse.components.NumericSensor;
+import it.unibs.ing.domohouse.components.Room;
+import it.unibs.ing.domohouse.components.SensorCategory;
 
 public class CookedDataInput {
 

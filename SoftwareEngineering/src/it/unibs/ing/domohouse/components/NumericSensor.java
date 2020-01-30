@@ -1,4 +1,6 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.components;
+
+import it.unibs.ing.domohouse.interfaces.Gettable;
 
 public class NumericSensor extends Sensor {
 

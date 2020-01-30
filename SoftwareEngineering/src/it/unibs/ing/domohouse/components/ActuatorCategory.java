@@ -1,6 +1,8 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.components;
 
 import java.util.ArrayList;
+
+import it.unibs.ing.domohouse.interfaces.Manageable;
 
 public class ActuatorCategory implements Manageable {
 

@@ -1,6 +1,9 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.util;
 
 import java.util.TreeMap;
+
+import it.unibs.ing.domohouse.interfaces.Manageable;
+
 import java.util.Set;
 
 public class Manager {

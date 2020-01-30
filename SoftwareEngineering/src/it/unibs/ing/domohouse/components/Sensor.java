@@ -1,5 +1,7 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.components;
 
+import it.unibs.ing.domohouse.interfaces.Manageable;
+import it.unibs.ing.domohouse.util.Manager;
 
 public class Sensor extends Manager implements Manageable {
 	

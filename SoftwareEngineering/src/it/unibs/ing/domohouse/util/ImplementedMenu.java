@@ -1,4 +1,7 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.util;
+
+import it.unibs.ing.domohouse.HomeMain;
+import it.unibs.ing.domohouse.components.Room;
 
 public class ImplementedMenu {
 	

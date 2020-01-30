@@ -1,6 +1,9 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.components;
 
 import java.util.*;
+
+import it.unibs.ing.domohouse.interfaces.Gettable;
+import it.unibs.ing.domohouse.util.Manager;
 
 public class Room implements Gettable {
 	private String name;

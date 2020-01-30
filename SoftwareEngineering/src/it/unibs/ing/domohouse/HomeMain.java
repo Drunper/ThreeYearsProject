@@ -1,4 +1,15 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse;
+
+import it.unibs.ing.domohouse.components.Actuator;
+import it.unibs.ing.domohouse.components.ActuatorCategory;
+import it.unibs.ing.domohouse.components.Artifact;
+import it.unibs.ing.domohouse.components.HousingUnit;
+import it.unibs.ing.domohouse.components.Room;
+import it.unibs.ing.domohouse.components.Sensor;
+import it.unibs.ing.domohouse.components.SensorCategory;
+import it.unibs.ing.domohouse.util.FileSaver;
+import it.unibs.ing.domohouse.util.ImplementedMenu;
+import it.unibs.ing.domohouse.util.Manager;
 
 public class HomeMain {
 	

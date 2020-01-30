@@ -1,6 +1,8 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.components;
 
 import java.util.HashMap;
+
+import it.unibs.ing.domohouse.interfaces.Manageable;
 
 public class SensorCategory implements Manageable {
 	

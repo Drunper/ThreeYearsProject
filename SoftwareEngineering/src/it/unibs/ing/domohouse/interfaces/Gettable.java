@@ -1,4 +1,4 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.interfaces;
 
 public interface Gettable extends Manageable {
 

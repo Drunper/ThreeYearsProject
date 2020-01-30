@@ -1,6 +1,8 @@
-package it.unibs.ing.softwareengineering;
+package it.unibs.ing.domohouse.components;
 
 import java.util.TreeMap;
+
+import it.unibs.ing.domohouse.interfaces.Gettable;
 
 public class Artifact implements Gettable {
 
