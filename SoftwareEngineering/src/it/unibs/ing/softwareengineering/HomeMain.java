@@ -8,7 +8,7 @@ public class HomeMain {
 	public static Manager actuatorCategoryManager; //change to public
 	
 	public static void main(String[] args) {
-
+		//
 		//work in progress
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
