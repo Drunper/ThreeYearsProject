@@ -1,9 +1,11 @@
 package it.unibs.ing.domohouse.components;
 
+import java.io.Serializable;
+
 import it.unibs.ing.domohouse.interfaces.Manageable;
 import it.unibs.ing.domohouse.util.Manager;
 
-public class Sensor extends Manager implements Manageable {
+public class Sensor extends Manager implements Manageable, Serializable{
 	
 	private String name;
 	protected SensorCategory category;

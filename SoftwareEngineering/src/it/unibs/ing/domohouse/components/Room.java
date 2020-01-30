@@ -1,11 +1,12 @@
 package it.unibs.ing.domohouse.components;
 
+import java.io.Serializable;
 import java.util.*;
 
 import it.unibs.ing.domohouse.interfaces.Gettable;
 import it.unibs.ing.domohouse.util.Manager;
 
-public class Room implements Gettable {
+public class Room implements Gettable, Serializable {
 	private String name;
 	private String text;
 	private Manager sensorManager;

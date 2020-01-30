@@ -1,8 +1,10 @@
 package it.unibs.ing.domohouse.components;
 
+import java.io.Serializable;
+
 import it.unibs.ing.domohouse.util.Manager;
 
-public class HousingUnit extends Manager {
+public class HousingUnit extends Manager implements Serializable {
 	
 	private String name;
 	private String descr;

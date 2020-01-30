@@ -1,10 +1,11 @@
 package it.unibs.ing.domohouse.components;
 
+import java.io.Serializable;
 import java.util.TreeMap;
 
 import it.unibs.ing.domohouse.interfaces.Gettable;
 
-public class Artifact implements Gettable {
+public class Artifact implements Gettable, Serializable {
 
 	private String name;
 	private String text;

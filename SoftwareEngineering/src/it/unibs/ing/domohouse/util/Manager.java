@@ -4,9 +4,10 @@ import java.util.TreeMap;
 
 import it.unibs.ing.domohouse.interfaces.Manageable;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public class Manager {
+public class Manager implements Serializable{
 
 	private TreeMap<String, Manageable> elementMap;
 	

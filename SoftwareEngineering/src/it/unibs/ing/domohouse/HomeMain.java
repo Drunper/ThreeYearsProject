@@ -12,7 +12,7 @@ import it.unibs.ing.domohouse.util.ImplementedMenu;
 import it.unibs.ing.domohouse.util.Manager;
 
 public class HomeMain {
-	
+	//
 	public static HomeLogin login;
 	public static HousingUnit home; //change home to public 
 	public static Manager sensorCategoryManager; //change to public

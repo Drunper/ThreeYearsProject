@@ -1,10 +1,11 @@
 package it.unibs.ing.domohouse.components;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import it.unibs.ing.domohouse.interfaces.Manageable;
 
-public class ActuatorCategory implements Manageable {
+public class ActuatorCategory implements Manageable, Serializable {
 
 	private String name;
 	private String text;

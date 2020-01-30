@@ -1,8 +1,10 @@
 package it.unibs.ing.domohouse.components;
 
+import java.io.Serializable;
+
 import it.unibs.ing.domohouse.interfaces.Manageable;
 
-public class Actuator implements Manageable {
+public class Actuator implements Manageable, Serializable {
 
 	private String name;
 	private Artifact controlledArtif;
