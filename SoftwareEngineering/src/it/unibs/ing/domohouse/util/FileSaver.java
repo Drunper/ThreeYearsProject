@@ -15,11 +15,18 @@ public class FileSaver {
 	public static final String actuatorCategoryFilepath="data\\categories\\actuator";
 		
 	public void writeObjectToFile(String directory, String fileName, Object obj) {
+		
 		String filePath = directory+"\\"+fileName + ".dat";
-		try (ObjectOutputStream objectOut = new ObjectOutputStream(new FileOutputStream(new File(filePath)))){ 			
+		
+		try (ObjectOutputStream objectOut = new ObjectOutputStream(new FileOutputStream(filePath))){ 			
 			objectOut.writeObject(obj);
+			objectOut.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public static void makeDir() {
+		
 	}
 }

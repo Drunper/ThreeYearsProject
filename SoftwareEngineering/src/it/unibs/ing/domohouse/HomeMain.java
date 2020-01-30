@@ -7,6 +7,7 @@ import it.unibs.ing.domohouse.components.HousingUnit;
 import it.unibs.ing.domohouse.components.Room;
 import it.unibs.ing.domohouse.components.Sensor;
 import it.unibs.ing.domohouse.components.SensorCategory;
+import it.unibs.ing.domohouse.util.FileLoader;
 import it.unibs.ing.domohouse.util.FileSaver;
 import it.unibs.ing.domohouse.util.ImplementedMenu;
 import it.unibs.ing.domohouse.util.Manager;
@@ -19,8 +20,6 @@ public class HomeMain {
 	public static Manager actuatorCategoryManager; //change to public
 	
 	public static void main(String[] args) {
-		//
-		//work in progress
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
 		
@@ -47,6 +46,11 @@ public class HomeMain {
 		soggiorno.addSensor(temperino);
 		soggiorno.addSensor(temperino2);
 		
+		/* **ESEMPIO DI CARICAMENTE DA FILE ATTRAVERSO FILE LOADER**
+		FileLoader fl = new FileLoader();
+		SensorCategory temperatura = (SensorCategory) fl.ReadObjectFromFile("data\\categories\\sensor\\categoria_temperatura.dat");
+		*/ 
+		
 		
 		System.out.println("PROVIAMO A SALVARE");
 		FileSaver fs = new FileSaver();
@@ -60,7 +64,7 @@ public class HomeMain {
 		fs.writeObjectToFile(FileSaver.actuatorFilepath,"portaOmbrelli" , portaOmbrelli);
 		fs.writeObjectToFile(FileSaver.sensorFilepath, "temperino", temperino);
 		fs.writeObjectToFile(FileSaver.sensorFilepath, "temperino2", temperino);
-		System.out.println("SI E' SALVATO MA NON SO COME GIURO");
+		System.out.println("SALVATAGGIO EFFETTUATO");
 		
 		//CATEGORY STRUCTURES (from files after this)
 		
