@@ -11,7 +11,7 @@ public class Strings {
 	public static final String WELCOME = "Benvenuto ";
 	public static final String INCORRECT_PASSWORD = "ATTENZIONE! Password errata";
 	//USER MENU
-	public static final String USER_MENU = "Menu Utente";
+	public static final String USER_MENU = "ImplementedMenu Utente";
 	public static final String HOUSE_VIEW = "Visualizza descrizione dell'unità \nimmobiliare e la lista delle stanze";
 	//ROOM MENU
 	public static final String ROOM_MENU = "Lista delle Stanze";
@@ -33,7 +33,7 @@ public class Strings {
 	//ARTIFACT MENU
 	public static final String ARTIFACT_MENU = "Lista degli artefatti nella stanza";
 	//MAINTAINER MENU
-	public static final String MAINTAINER_MENU = "Menu Manutentore";
+	public static final String MAINTAINER_MENU = "ImplementedMenu Manutentore";
 	public static final String USER_SEC = "Sezione Utente";
 	public static final String HOUSE_EDIT = "Modifica unità immobiliare";
 	public static final String EDIT_MENU = "Esegui una modifica";
@@ -52,5 +52,16 @@ public class Strings {
 	public static final String CORNICE = "--------------------------------";
 	public static final String VOCE_USCITA = "0\tEsci";
 	public static final String RICHIESTA_INSERIMENTO = "Digita il numero dell'opzione desiderata > ";
+	
+	//STATIC MENU VOICES STRINGS
+	public static final String [] LOGIN_VOICES = {"Fruitore", "Manutentore"};
+	public static final String [] USER_VOICES = {"Visualizzare descrizione unità immobiliare", "Visualizza stanza", 
+			"Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
+	public static final String [] ROOM_VOICES = {"Visualizzare descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto"};
+	public static final String [] MAINTAINER_VOICES = {"Visualizzare descrizione unità immobiliare", "Modifica descrizione unità immobilare", "Visualizza stanza", 
+			"Inserisci stanza", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Inserisci categoria di sensori", 
+			"Inserisci categoria di attuatori"};
+	public static final String [] MAINTAINER_ROOM_VOICES = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto", 
+			"Modifica descrizione stanza", "Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto"};
 	
 }
