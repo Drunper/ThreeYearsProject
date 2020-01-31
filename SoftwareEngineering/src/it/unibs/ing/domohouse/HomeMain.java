@@ -24,7 +24,7 @@ public class HomeMain {
 		actuatorCategoryManager = new Manager();
 		
 		SensorCategory temperatura = new SensorCategory("sensori di temperatura", "misurano la temperatura"); //saved
-		ActuatorCategory interruttori = new ActuatorCategory("interruttori di accensione", "accendono qualcosa"); //saved
+		ActuatorCategory interruttori = new ActuatorCategory("interruttori di accensione", "sigla:costruttore:modalità di default"); //saved
 		home = new HousingUnit("Casa di Ivan", "Boh"); //saved
 		Room soggiorno = new Room("Soggiorno", "Sala in cui si vive penso");
 		home.addEntry(soggiorno);
