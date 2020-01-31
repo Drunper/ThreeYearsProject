@@ -14,6 +14,7 @@ public class ImplementedMenu {
 	
 	
 	public static void show() {
+		DataOutput.clearOutput();
 		String user;
 		int scelta;
 		do
@@ -52,6 +53,7 @@ public class ImplementedMenu {
 	}
 	
 	private static void showMaintainerMenu() {
+		DataOutput.clearOutput();
 		boolean exitFlag = false;
 		do
 		{
@@ -61,12 +63,14 @@ public class ImplementedMenu {
 					exitFlag = true;
 					break;
 				case 1:
+					DataOutput.clearOutput();
 					DataOutput.printHousingUnit(HomeMain.home.toString());
 					break;
 				case 2:
 					//CookedDataInput.changeHouseDescription(home);
 					break;
 				case 3:
+					DataOutput.clearOutput();
 					DataOutput.printListOfString(HomeMain.home.namesList());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -79,6 +83,7 @@ public class ImplementedMenu {
 					//CookedDataInput.readRoomFromUser(home);
 					break;
 				case 5:
+					DataOutput.clearOutput();
 					DataOutput.printListOfString(HomeMain.sensorCategoryManager.namesList());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -89,6 +94,7 @@ public class ImplementedMenu {
 					// Da valutare se castare o meno
 					break;
 				case 6:
+					DataOutput.clearOutput();
 					DataOutput.printListOfString(HomeMain.sensorCategoryManager.namesList());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -110,6 +116,7 @@ public class ImplementedMenu {
 	}
 
 	private static void showUserMenu() {
+		DataOutput.clearOutput();
 		boolean exitFlag = false;
 		do {
 			int choice = ImplementedMenu.userMenu.scegli();
@@ -118,9 +125,11 @@ public class ImplementedMenu {
 					exitFlag = true;
 					break;
 				case 1:
+					DataOutput.clearOutput();
 					DataOutput.printHousingUnit(HomeMain.home.toString());
 					break;
 				case 2:
+					DataOutput.clearOutput();
 					DataOutput.printListOfString(HomeMain.home.namesList());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -130,6 +139,7 @@ public class ImplementedMenu {
 					showRoomMenu(selectedRoom);
 					break;
 				case 3:
+					DataOutput.clearOutput();
 					DataOutput.printListOfString(HomeMain.sensorCategoryManager.namesList());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -140,6 +150,7 @@ public class ImplementedMenu {
 					// Da valutare se castare o meno
 					break;
 				case 4:
+					DataOutput.clearOutput();
 					DataOutput.printListOfString(HomeMain.sensorCategoryManager.namesList());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -155,6 +166,7 @@ public class ImplementedMenu {
 	}
 
 	private static void showRoomMenu(String selectedRoom) {
+		DataOutput.clearOutput();
 		Room toWorkOn = (Room)HomeMain.home.getElementByName(selectedRoom);
 		boolean exitFlag = false;
 		do {
@@ -164,9 +176,11 @@ public class ImplementedMenu {
 				exitFlag = true;
 				break;
 			case 1:
+				DataOutput.clearOutput();
 				DataOutput.printRoom(toWorkOn.toString());
 				break;
 			case 2:
+				DataOutput.clearOutput();
 				DataOutput.printListOfString(toWorkOn.getSensorsNames());
 				System.out.println();
 				System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -176,6 +190,7 @@ public class ImplementedMenu {
 				DataOutput.printSensor(toWorkOn.getSensorByName(selectedSensor).toString());
 				break;
 			case 3:
+				DataOutput.clearOutput();
 				DataOutput.printListOfString(toWorkOn.getActuatorsNames());
 				System.out.println();
 				System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -185,6 +200,7 @@ public class ImplementedMenu {
 				DataOutput.printSensor(toWorkOn.getActuatorByName(selectedActuator).toString());
 				break;
 			case 4:
+				DataOutput.clearOutput();
 				DataOutput.printListOfString(toWorkOn.getArtifactsNames());
 				System.out.println();
 				System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -199,6 +215,7 @@ public class ImplementedMenu {
 	}
 	
 	private static void showMaintainerRoomMenu(String selectedRoom) {
+		DataOutput.clearOutput();
 		Room toWorkOn = (Room)HomeMain.home.getElementByName(selectedRoom);
 		boolean exitFlag = false;
 		do {
@@ -208,9 +225,11 @@ public class ImplementedMenu {
 					exitFlag = true;
 					break;
 				case 1:
+					DataOutput.clearOutput();
 					DataOutput.printRoom(toWorkOn.toString());
 					break;
 				case 2:
+					DataOutput.clearOutput();
 					DataOutput.printListOfString(toWorkOn.getSensorsNames());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -220,6 +239,7 @@ public class ImplementedMenu {
 					DataOutput.printSensor(toWorkOn.getSensorByName(selectedSensor).toString());
 					break;
 				case 3:
+					DataOutput.clearOutput();
 					DataOutput.printListOfString(toWorkOn.getActuatorsNames());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
@@ -229,6 +249,7 @@ public class ImplementedMenu {
 					DataOutput.printSensor(toWorkOn.getActuatorByName(selectedActuator).toString());
 					break;
 				case 4:
+					DataOutput.clearOutput();
 					DataOutput.printListOfString(toWorkOn.getArtifactsNames());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
