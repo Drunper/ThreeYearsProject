@@ -231,10 +231,6 @@ public class CookedDataInput {
 		return new NumericSensor(name, (SensorCategory)sensCatManager.getElementByName(category));
 	}
 	
-	private NonParametricActuator createNonParametricActuator(String name, String category) {
-		return new NonParametricActuator(name, (ActuatorCategory)actCatManager.getElementByName(category));
-	}
-	
 	private Room createRoom(String name, String descr) {
 		return new Room(name, descr);
 	}
