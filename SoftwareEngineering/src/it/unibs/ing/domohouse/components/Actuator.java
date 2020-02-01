@@ -22,6 +22,7 @@ public class Actuator implements Manageable, Serializable {
 		this.category = category;
 		defaultMode = category.getDefaultMode();
 		operatingMode = defaultMode;
+		controlledObjects = new Manager();
 		state = true;
 	}
 	
@@ -33,6 +34,10 @@ public class Actuator implements Manageable, Serializable {
 		this.name = name;
 	}
 	
+	public void addEntry(Manageable toAdd) {
+		controlledObjects.addEntry(toAdd);
+	}
+
 	public void setOperatingMode(String operatingMode) {
 		this.operatingMode = operatingMode;
 		Consumer<Gettable> mode = category.getOperatingMode(operatingMode);

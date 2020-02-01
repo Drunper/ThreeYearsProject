@@ -2,12 +2,13 @@ package it.unibs.ing.domohouse.util;
 
 import java.util.ArrayList;
 
+import it.unibs.ing.domohouse.components.Actuator;
 import it.unibs.ing.domohouse.components.ActuatorCategory;
 import it.unibs.ing.domohouse.components.Artifact;
 import it.unibs.ing.domohouse.components.HousingUnit;
-import it.unibs.ing.domohouse.components.NonParametricActuator;
 import it.unibs.ing.domohouse.components.NumericSensor;
 import it.unibs.ing.domohouse.components.Room;
+import it.unibs.ing.domohouse.components.Sensor;
 import it.unibs.ing.domohouse.components.SensorCategory;
 
 public class CookedDataInput {
@@ -18,6 +19,8 @@ public class CookedDataInput {
 	private Manager actCatManager;
 	private Manager sensorManager;
 	private Manager actuatorManager;
+	private Manager roomManager;
+	private Manager artifactManager;
 	
 	public CookedDataInput() {
 		associationManager = new AssociationManager();
@@ -25,6 +28,8 @@ public class CookedDataInput {
 		actCatManager = new Manager();
 		sensorManager = new Manager();
 		actuatorManager = new Manager();
+		roomManager = new Manager();
+		artifactManager = new Manager();
 	}
 	
 	public void readArtifactFromUser(Room location) {
@@ -40,13 +45,14 @@ public class CookedDataInput {
 		if (RawDataInput.yesOrNo("Procedere con la creazione e salvataggio?"))
 		{
 			Association assoc = new Association(name);
+			Artifact artifact = createArtifact(name, descr);
 			assoc.setIsElementARoom(false);
-			location.addArtifact(createArtifact(name, descr));
+			location.addArtifact(artifact);
+			artifactManager.addEntry(artifact);
 			associationManager.addAssociation(assoc);
 		}
 	}
 	
-	//work in progress
 	public void readNumericSensorFromUser(Room location) {
 		String name;
 		do
@@ -56,15 +62,26 @@ public class CookedDataInput {
 				System.out.println("Nome già assegnato a un sensore, prego reinserire altro nome");
 		}
 		while(sensorManager.hasEntry(name));
-		ArrayList<Association> associationList = new ArrayList<>();
+		String category;
+		do
+		{
+			category = RawDataInput.readNotVoidString("Inserisci il nome della categoria");
+			if (!sensCatManager.hasEntry(category))
+				System.out.println("Categoria non esistente, prego reinserire altro nome");
+		}
+		while(!sensCatManager.hasEntry(name));
 		boolean roomOrArtifact = RawDataInput.yesOrNo("Vuoi associare il sensore a stanze?(No assocerà il sensore ad artefatti)");
+		ArrayList<String> objectList = new ArrayList<>();
 		do
 		{
 			String toAssoc;
-			Association temp;
+			Association temp = null;
 			do
 			{
-				toAssoc = RawDataInput.readNotVoidString("Inserisci il nome dell'artefatto/stanza da associare al sensore");
+				if (roomOrArtifact)
+					toAssoc = RawDataInput.readNotVoidString("Inserisci il nome della stanza da associare al sensore");
+				else
+					toAssoc = RawDataInput.readNotVoidString("Inserisci il nome dell'artefatto da associare al sensore");
 				if (!associationManager.hasEntry(toAssoc))
 					System.out.println("Artefatto/stanza non presente, prego reinserire");
 				else
@@ -73,50 +90,32 @@ public class CookedDataInput {
 					if (roomOrArtifact && !temp.isElementARoom())
 						System.out.println("L'elemento a cui si vuole associare il sensore non è una stanza!");
 					else if (!roomOrArtifact && temp.isElementARoom())
-						System.out.println("L'elemtno a cui si vuole associare il sensore non è un artefatto!");
-						
+						System.out.println("L'elemento a cui si vuole associare il sensore non è un artefatto!");
+					else if (temp.isAssociated(category))
+						System.out.println("Un sensore di questa categoria è già associato all'artefatto in questione");
 				}
 			}
-			while(!associationManager.hasEntry(toAssoc));
-			objToAssoc.add(toAssoc);
+			while(!associationManager.hasEntry(toAssoc) || (roomOrArtifact && !temp.isElementARoom()) || 
+					(!roomOrArtifact && temp.isElementARoom()) || temp.isAssociated(category));
+			objectList.add(toAssoc);
 		}
 		while(RawDataInput.yesOrNo("Associare sensore ad altro oggetto?"));
-		String category;
-		Association objectAssoc = null;
-		boolean stopOperation = false;
-		do
-		{
-			category = RawDataInput.readNotVoidString("Inserisci il nome della categoria");
-			if (!sensCatManager.hasEntry(category))
-				System.out.println("Categoria non esistente, prego reinserire altro nome");
-			else
-			{
-				for(String toAssoc : objToAssoc)
-				{
-					objectAssoc = associationManager.getAssociation(toAssoc);
-					if (objectAssoc.isAssociated(category))
-					{
-						System.out.println("L'artefatto/stanza è già associato con un sensore di tale categoria, inserimento sensore annullato");
-						stopOperation = true;
-					}
-				}
-			}
-		}
-		while(!sensCatManager.hasEntry(name));
-		if(stopOperation) {
-			return;
-		}
 		if (RawDataInput.yesOrNo("Procedere con la creazione e salvataggio?"))
 		{
-			NumericSensor sens = createNumericSensor(name, category); 
-			sensorManager.addEntry(sens);
-			location.addSensor(sens);
-			objectAssoc.addAssociation(category);
+			Sensor sensor = createNumericSensor(name, category);
+			location.addSensor(sensor);
+			for(String object : objectList)
+			{
+				associationManager.getAssociation(object).addAssociation(category);
+				if (roomOrArtifact)
+					sensor.addEntry((Room)roomManager.getElementByName(object));
+				else
+					sensor.addEntry((Artifact)artifactManager.getElementByName(object));
+			}
 		}
 	}
 	
-	//work in progress
-	public void readNonParametricActuatorFromUser(Room location) {
+	public void readActuatorFromUser(Room location) {
 		String name;
 		do
 		{
@@ -125,31 +124,56 @@ public class CookedDataInput {
 				System.out.println("Nome già assegnato a un attuatore, prego reinserire altro nome");
 		}
 		while(actuatorManager.hasEntry(name));
-		String toAssoc;
-		do
-		{
-			toAssoc = RawDataInput.readNotVoidString("Inserisci il nome dell'artefatto/stanza da associare all'attuatore");
-			if (!associationManager.hasEntry(toAssoc))
-				System.out.println("Artefatto/stanza non presente, prego reinserire");
-		}
-		while(!associationManager.hasEntry(toAssoc));
 		String category;
-		Association objectAssoc = associationManager.getAssociation(toAssoc);
 		do
 		{
 			category = RawDataInput.readNotVoidString("Inserisci il nome della categoria");
 			if (!actCatManager.hasEntry(category))
 				System.out.println("Categoria non esistente, prego reinserire altro nome");
-			if (objectAssoc.isAssociated(category))
-				System.out.println("L'artefatto/stanza è già associato con un attuatore di tale categoria, prego reinserire altro nome");
 		}
-		while(!sensCatManager.hasEntry(name) || objectAssoc.isAssociated(category));
+		while(!actCatManager.hasEntry(name));
+		boolean roomOrArtifact = RawDataInput.yesOrNo("Vuoi associare l'attuatore a stanze?(No assocerà l'attuatore ad artefatti)");
+		ArrayList<String> objectList = new ArrayList<>();
+		do
+		{
+			String toAssoc;
+			Association temp = null;
+			do
+			{
+				if (roomOrArtifact)
+					toAssoc = RawDataInput.readNotVoidString("Inserisci il nome della stanza da associare all'attuatore");
+				else
+					toAssoc = RawDataInput.readNotVoidString("Inserisci il nome dell'artefatto da associare all'attuatore");
+				if (!associationManager.hasEntry(toAssoc))
+					System.out.println("Artefatto/stanza non presente, prego reinserire");
+				else
+				{
+					temp = associationManager.getAssociation(toAssoc);
+					if (roomOrArtifact && !temp.isElementARoom())
+						System.out.println("L'elemento a cui si vuole associare l'attuatore non è una stanza!");
+					else if (!roomOrArtifact && temp.isElementARoom())
+						System.out.println("L'elemento a cui si vuole associare l'attuatore non è un artefatto!");
+					else if (temp.isAssociated(category))
+						System.out.println("Un attuatore di questa categoria è già associato all'artefatto in questione");
+				}
+			}
+			while(!associationManager.hasEntry(toAssoc) || (roomOrArtifact && !temp.isElementARoom()) || 
+					(!roomOrArtifact && temp.isElementARoom()) || temp.isAssociated(category));
+			objectList.add(toAssoc);
+		}
+		while(RawDataInput.yesOrNo("Associare sensore ad altro oggetto?"));
 		if (RawDataInput.yesOrNo("Procedere con la creazione e salvataggio?"))
 		{
-			NonParametricActuator actuator = createNonParametricActuator(name, category); 
-			actuatorManager.addEntry(actuator);
+			Actuator actuator = createActuator(name, category);
 			location.addActuator(actuator);
-			objectAssoc.addAssociation(category);
+			for(String object : objectList)
+			{
+				associationManager.getAssociation(object).addAssociation(category);
+				if (roomOrArtifact)
+					actuator.addEntry(roomManager.getElementByName(object));
+				else
+					actuator.addEntry(artifactManager.getElementByName(object));
+			}
 		}
 	}
 	
@@ -166,9 +190,11 @@ public class CookedDataInput {
 		if (RawDataInput.yesOrNo("Procedere con la creazione e salvataggio?"))
 		{
 			Association assoc = new Association(name);
+			Room room = createRoom(name, descr);
 			assoc.setIsElementARoom(true);
-			house.addEntry(createRoom(name, descr));
+			house.addEntry(room);
 			associationManager.addAssociation(assoc);
+			roomManager.addEntry(room);
 		}
 	}
 	
@@ -223,12 +249,31 @@ public class CookedDataInput {
 		}
 	}
 
+	public void changeHouseDescription(HousingUnit home) {
+		String descr = RawDataInput.readNotVoidString("Inserisci la descrizione dell'unità immobiliare");
+		if (RawDataInput.yesOrNo("Salvare le modifiche?"))
+		{
+			home.setDescr(descr);
+		}
+	}
+
+	public void changeRoomDescription(Room room) {
+		String descr = RawDataInput.readNotVoidString("Inserisci la descrizione della stanza");
+		if (RawDataInput.yesOrNo("Salvare le modifiche?"))
+		{
+			room.setDescr(descr);
+		}
+	}
 	private Artifact createArtifact(String name, String descr) {
 		return new Artifact(name, descr);
 	}
 	
 	private NumericSensor createNumericSensor(String name, String category) {
 		return new NumericSensor(name, (SensorCategory)sensCatManager.getElementByName(category));
+	}
+	
+	private Actuator createActuator(String name, String category) {
+		return new Actuator(name, (ActuatorCategory)actCatManager.getElementByName(category));
 	}
 	
 	private Room createRoom(String name, String descr) {

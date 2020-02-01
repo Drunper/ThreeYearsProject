@@ -1,31 +1,33 @@
 package it.unibs.ing.domohouse.util;
 
+import it.unibs.ing.domohouse.HomeLogin;
 import it.unibs.ing.domohouse.HomeMain;
+import it.unibs.ing.domohouse.components.HousingUnit;
 import it.unibs.ing.domohouse.components.Room;
 
 public class ImplementedMenu {
 	
-	public static final MyMenu menu = new MyMenu("Login", Strings.LOGIN_VOICES);
-	public static final MyMenu userMenu = new MyMenu("Scegli cosa fare", Strings.USER_VOICES);
-	public static final MyMenu roomMenu  = new MyMenu("Scegli un'opzione", Strings.ROOM_VOICES);
-	public static final MyMenu maintainerMenu = new MyMenu("Scegli un'opzione", Strings.MAINTAINER_VOICES);
-	public static final MyMenu maintainerRoomMenu = new MyMenu("Scegli un'opzione", Strings.MAINTAINER_ROOM_VOICES);
+	private static final MyMenu menu = new MyMenu("Login", Strings.LOGIN_VOICES);
+	private static final MyMenu userMenu = new MyMenu("Scegli cosa fare", Strings.USER_VOICES);
+	private static final MyMenu roomMenu  = new MyMenu("Scegli un'opzione", Strings.ROOM_VOICES);
+	private static final MyMenu maintainerMenu = new MyMenu("Scegli un'opzione", Strings.MAINTAINER_VOICES);
+	private static final MyMenu maintainerRoomMenu = new MyMenu("Scegli un'opzione", Strings.MAINTAINER_ROOM_VOICES);
+	private static CookedDataInput inputHandler = new CookedDataInput();
 	
 	
-	
-	public static void show() {
+	public static void show(HousingUnit home, HomeLogin login) {
 		DataOutput.clearOutput();
 		String user;
 		int scelta;
 		do
 		{
-			scelta = ImplementedMenu.menu.scegli();
+			scelta = menu.scegli();
 			switch(scelta)
 			{
 				case 1: 
 					user = RawDataInput.readNotVoidString("Inserisci il nome utente");
 					System.out.println("Benvenuto " + user);
-					showUserMenu();
+					showUserMenu(home);
 					break;
 					
 				case 2:
@@ -38,21 +40,21 @@ public class ImplementedMenu {
 						if(!user.equalsIgnoreCase("^"))
 						{	
 							password = RawDataInput.readNotVoidString("Inserisci la password");
-							ok = HomeMain.login.checkPassword(user, password);
+							ok = login.checkPassword(user, password);
 							if(!ok)
 								System.out.println("Nome utente o password errati");
 						}
 					}
 					while (!user.equalsIgnoreCase("^") && !ok);
 					if (ok)
-						showMaintainerMenu();
+						showMaintainerMenu(home);
 					break;
 			}
 		}
 		while (scelta != 0);
 	}
 	
-	private static void showMaintainerMenu() {
+	private static void showMaintainerMenu(HousingUnit home) {
 		DataOutput.clearOutput();
 		boolean exitFlag = false;
 		do
@@ -64,23 +66,23 @@ public class ImplementedMenu {
 					break;
 				case 1:
 					DataOutput.clearOutput();
-					DataOutput.printHousingUnit(HomeMain.home.toString());
+					DataOutput.printHousingUnit(home.toString());
 					break;
 				case 2:
-					//CookedDataInput.changeHouseDescription(home);
+					inputHandler.changeHouseDescription(home);
 					break;
 				case 3:
 					DataOutput.clearOutput();
-					DataOutput.printListOfString(HomeMain.home.namesList());
+					DataOutput.printListOfString(home.namesList());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
 					String selectedRoom = RawDataInput.readNotVoidString("Inserisci il nome della stanza su cui vuoi operare");
-					showMaintainerRoomMenu(selectedRoom);
+					showMaintainerRoomMenu(selectedRoom, home);
 					break;
 				case 4:
-					//CookedDataInput.readRoomFromUser(home);
+					inputHandler.readRoomFromUser(home);
 					break;
 				case 5:
 					DataOutput.clearOutput();
@@ -105,38 +107,38 @@ public class ImplementedMenu {
 					// Da valutare se castare o meno
 					break;
 				case 7:
-					//CookedDataInput.readSensorCategoryFromUser();
+					inputHandler.readSensorCategoryFromUser();
 					break;
 				case 8:
-					//CookedDataInput.readActuatorCategoryFromUser();
+					inputHandler.readActuatorCategoryFromUser();
 					break;
 			}
 		}
 		while(exitFlag != true);
 	}
 
-	private static void showUserMenu() {
+	private static void showUserMenu(HousingUnit home) {
 		DataOutput.clearOutput();
 		boolean exitFlag = false;
 		do {
-			int choice = ImplementedMenu.userMenu.scegli();
+			int choice = userMenu.scegli();
 			switch(choice) {
 				case 0:
 					exitFlag = true;
 					break;
 				case 1:
 					DataOutput.clearOutput();
-					DataOutput.printHousingUnit(HomeMain.home.toString());
+					DataOutput.printHousingUnit(home.toString());
 					break;
 				case 2:
 					DataOutput.clearOutput();
-					DataOutput.printListOfString(HomeMain.home.namesList());
+					DataOutput.printListOfString(home.namesList());
 					System.out.println();
 					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
 					String selectedRoom = RawDataInput.readNotVoidString("Inserisci il nome della stanza su cui vuoi operare");
-					showRoomMenu(selectedRoom);
+					showRoomMenu(selectedRoom, home);
 					break;
 				case 3:
 					DataOutput.clearOutput();
@@ -165,12 +167,12 @@ public class ImplementedMenu {
 		while(exitFlag!=true);
 	}
 
-	private static void showRoomMenu(String selectedRoom) {
+	private static void showRoomMenu(String selectedRoom, HousingUnit home) {
 		DataOutput.clearOutput();
-		Room toWorkOn = (Room)HomeMain.home.getElementByName(selectedRoom);
+		Room toWorkOn = (Room)home.getElementByName(selectedRoom);
 		boolean exitFlag = false;
 		do {
-			int choice = ImplementedMenu.roomMenu.scegli();
+			int choice = roomMenu.scegli();
 			switch(choice) {
 			case 0:
 				exitFlag = true;
@@ -214,12 +216,12 @@ public class ImplementedMenu {
 		while(exitFlag!=true);		
 	}
 	
-	private static void showMaintainerRoomMenu(String selectedRoom) {
+	private static void showMaintainerRoomMenu(String selectedRoom, HousingUnit home) {
 		DataOutput.clearOutput();
-		Room toWorkOn = (Room)HomeMain.home.getElementByName(selectedRoom);
+		Room toWorkOn = (Room)home.getElementByName(selectedRoom);
 		boolean exitFlag = false;
 		do {
-			int choice = ImplementedMenu.roomMenu.scegli();
+			int choice = roomMenu.scegli();
 			switch(choice) {
 				case 0:
 					exitFlag = true;
@@ -259,16 +261,16 @@ public class ImplementedMenu {
 					DataOutput.printSensor(toWorkOn.getArtifactByName(selectedArtifact).toString());
 					break;	
 				case 5:
-					//CookedDataInput.changeRoomDescription(toWorkOn);
+					inputHandler.changeRoomDescription(toWorkOn);
 					break;
 				case 6:
-					//CookedDataInput.readSensorFromUser(toWorkOn);
+					inputHandler.readNumericSensorFromUser(toWorkOn);
 					break;
 				case 7:
-					//CookedDataInput.readActuatorFromUser(toWorkOn);
+					inputHandler.readActuatorFromUser(toWorkOn);
 					break;
 				case 8:
-					//CookedDataInput.readArtifactFromUser(toWorkOn);
+					inputHandler.readArtifactFromUser(toWorkOn);
 					break;
 			}
 		}

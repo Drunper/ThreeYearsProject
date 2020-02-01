@@ -13,11 +13,11 @@ import it.unibs.ing.domohouse.util.ImplementedMenu;
 import it.unibs.ing.domohouse.util.Manager;
 
 public class HomeMain {
-	//
-	public static HomeLogin login;
-	public static HousingUnit home; //change home to public 
-	public static Manager sensorCategoryManager; //change to public
-	public static Manager actuatorCategoryManager; //change to public
+	
+	private static HomeLogin login;
+	private static HousingUnit home; 
+	public static Manager sensorCategoryManager; 
+	public static Manager actuatorCategoryManager; 
 	
 	public static void main(String[] args) {
 		sensorCategoryManager = new Manager();
@@ -71,6 +71,6 @@ public class HomeMain {
 		login = new HomeLogin();
 		login.addEntry("paolino", "6fcb473c563dc49628a187d2a590ff2c000da215d8cd914f7901df3bc2a2c626"); //pippo123456
 		
-		ImplementedMenu.show();
+		ImplementedMenu.show(home, login);
 	}
 }
