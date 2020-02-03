@@ -79,6 +79,43 @@ public class Strings {
 	public static final String ACTUATOR_CATEGORY_INPUT_OPERATING_MODE = "Inserisci una modalità operativa (^ per terminare)";
 	public static final String ACTUATOR_CATEGORY_INPUT_DEFAULT_MODE = "Inserisci la modalità di default (tra quelle già inserite)";
 	
+	//DATA OUTPUT
+	public static final String SEPARATOR = ":";
+	public static final String NAME = "Nome: ";
+	public static final String HOUSING_UNIT = "Unità immobiliare";
+	public static final String ROOM = "Stanza";
+	public static final String ARTIFACT = "Artefatto";
+	public static final String ACTUATOR = "Attuatore";
+	public static final String SENSOR = "Sensore";
+	public static final String ACTUATOR_CATEGORY = "Categoria di attuatori";
+	public static final String SENSOR_CATEGORY = "Categoria di sensori";
+	public static final String CATEGORY = "Categoria: ";
+	public static final String DESCRIPTION = "Descrizione: ";
+	public static final String ROOMS_AVAILABLE = "Sono presenti le seguenti stanze:";
+	public static final String ELEMENTS_AVAILABLE = "Nella stanza sono presenti i seguenti elementi:";
+	public static final String CONTROLLED_ELEMENTS = "Lista delle stanze o artefatti controllati:";
+	public static final String MEASURED_ELEMENTS = "Lista delle stanze o artefatti misurati:";
+	public static final String OPERATING_MODE = "Modalità operativa: ";
+	public static final String STATUS = "Stato: ";
+	public static final String CONTROLLED_ELEMENT_TAG = "ce";
+	public static final String MEASURED_ELEMENT_TAG = "me";
+	public static final String MEASURED_VALUE_TAG = "mv";
+	public static final String LAST_MEASURED_VALUE = "Ultimo valore rilevato: ";
+	public static final String ABBREVATION = "Sigla: ";
+	public static final String MANUFACTURER = "Costruttore: ";
+	public static final String INFO_DOMAIN = "Dominio_info_";
+	public static final String END_DOMAIN_TAG = "endD";
+	public static final String DETECTABLE_INFOS = "Informazioni rilevabili:";
+	public static final String DEFAULT_MODE = "Modalità di default: ";
+	public static final String OPERATING_MODES = "Modalità operative:";
+	
+	public static int FIRST_TOKEN = 0;
+	public static int SECOND_TOKEN = 1;
+	public static int THIRD_TOKEN = 2;
+	public static int FOURTH_TOKEN = 3;
+	public static int FIFTH_TOKEN = 4;
+	public static int SPACING_COSTANT = 50;
+	
 	//UTILS
 	public static final String BACK_CHARACTER = "^";
 	public static final String WELCOME = "Benvenuto ";

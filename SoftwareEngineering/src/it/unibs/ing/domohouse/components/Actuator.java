@@ -49,13 +49,17 @@ public class Actuator implements Manageable, Serializable {
 	}
 	
 	public String toString() {
-		String unformattedText;
+		String unformattedText = name+':'+category.getName()+':';
 		String status;
 		if (state) 
 			status = "acceso";
 		else
 			status = "spento";
-		unformattedText = name+':'+category.getName()+':'+String.join(":", controlledObjects.namesList())+':'+operatingMode+':'+status;
+		for(String measuredObject : controlledObjects.namesList())
+		{
+			unformattedText = unformattedText+"ce:"+measuredObject+':';
+		}
+		unformattedText = unformattedText+operatingMode+':'+status;
 		return unformattedText;
 	}
 }

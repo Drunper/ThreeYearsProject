@@ -63,11 +63,11 @@ public class NumericSensor extends Sensor {
 		unformattedText = getName()+':'+category.getName()+':';
 		for(String measuredObject : namesList())
 		{
-			unformattedText = unformattedText+"om:"+measuredObject+':';
+			unformattedText = unformattedText+"me:"+measuredObject+':';
 		}
 		for(String value : getMeasurements())
 		{
-			unformattedText = unformattedText+"vm:"+value+':';
+			unformattedText = unformattedText+"mv:"+value+':';
 		}
 		unformattedText = unformattedText+':'+status;
 		return unformattedText;

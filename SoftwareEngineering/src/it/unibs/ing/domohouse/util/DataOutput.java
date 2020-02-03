@@ -3,69 +3,71 @@ package it.unibs.ing.domohouse.util;
 public class DataOutput {
 
 	public static void printHousingUnit(String housingUnitText) {
-		String [] splitted = housingUnitText.split(":");
-		System.out.println("Unità immobiliare");
-		System.out.println("Nome: "+splitted[0]);
-		System.out.println("Descrizione: "+splitted[1]);
-		System.out.println("Sono presenti le seguenti stanze:");
-		for(int i = 2; i < splitted.length; i++) {
+		String [] splitted = housingUnitText.split(Strings.SEPARATOR);
+		System.out.println(Strings.HOUSING_UNIT);
+		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
+		System.out.println(Strings.DESCRIPTION+splitted[Strings.SECOND_TOKEN]);
+		System.out.println(Strings.ROOMS_AVAILABLE);
+		for(int i = Strings.THIRD_TOKEN; i < splitted.length; i++) {
 			System.out.println(splitted[i]);
 		}
 	}
 	
 	public static void printRoom(String roomText) {
-		String [] splitted = roomText.split(":");
-		System.out.println("Stanza");
-		System.out.println("Nome: "+splitted[0]);
-		System.out.println("Descrizione: "+splitted[1]);
-		System.out.println("Nella stanza sono presenti i seguenti elementi:");
-		for(int i = 2; i < splitted.length; i++) {
+		String [] splitted = roomText.split(Strings.SEPARATOR);
+		System.out.println(Strings.ROOM);
+		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
+		System.out.println(Strings.DESCRIPTION+splitted[Strings.SECOND_TOKEN]);
+		System.out.println(Strings.ELEMENTS_AVAILABLE);
+		for(int i = Strings.THIRD_TOKEN; i < splitted.length; i++) {
 			System.out.println(splitted[i]);
 		}
 	}
 	
 	public static void printArtifact(String artifactText) {
-		String [] splitted = artifactText.split(":");
-		System.out.println("Artefatto");
-		System.out.println("Nome: "+splitted[0]);
-		System.out.println("Descrizione: "+splitted[1]);
+		String [] splitted = artifactText.split(Strings.SEPARATOR);
+		System.out.println(Strings.ARTIFACT);
+		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
+		System.out.println(Strings.DESCRIPTION+splitted[Strings.SECOND_TOKEN]);
 	}
 	
 	public static void printActuator(String actuatorText) {
-		String [] splitted = actuatorText.split(":");
-		System.out.println("Attuatore");
-		System.out.println("Nome: "+splitted[0]);
-		System.out.println("Categoria: "+splitted[1]);
-		System.out.println("Artefatto controllato/i:");
-		int i = 2;
-		while(splitted[i].equalsIgnoreCase("ac"))
+		String [] splitted = actuatorText.split(Strings.SEPARATOR);
+		System.out.println(Strings.ACTUATOR);
+		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
+		System.out.println(Strings.CATEGORY+splitted[Strings.SECOND_TOKEN]);
+		System.out.println(Strings.CONTROLLED_ELEMENTS);
+		int i = Strings.THIRD_TOKEN;
+		while(splitted[i].equalsIgnoreCase(Strings.CONTROLLED_ELEMENT_TAG))
 		{
 			i++;
 			System.out.println(splitted[i++]);
 		}
 		i++;
-		System.out.println("Modalità operativa: "+splitted[i++]);
-		System.out.println("Stato: "+splitted[i]);
+		System.out.println(Strings.OPERATING_MODE+splitted[i++]);
+		System.out.println(Strings.STATUS+splitted[i]);
 	}
 	
 	public static void printSensor(String sensorText) {
-		String [] splitted = sensorText.split(":");
-		System.out.println("Sensore");
-		System.out.println("Nome: "+splitted[0]);
-		System.out.println("Categoria: "+splitted[1]);
-		System.out.println("Oggetto misurato/i:");
-		int i = 2;
-		while(splitted[i].equalsIgnoreCase("om"))
+		String [] splitted = sensorText.split(Strings.SEPARATOR);
+		System.out.println(Strings.SENSOR);
+		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
+		System.out.println(Strings.CATEGORY+splitted[Strings.SECOND_TOKEN]);
+		System.out.println(Strings.MEASURED_ELEMENTS);
+		int i = Strings.THIRD_TOKEN;
+		while(splitted[i].equalsIgnoreCase(Strings.MEASURED_ELEMENT_TAG))
 		{
 			i++;
 			System.out.println(splitted[i++]);
 		}
 		i++;
-		while(splitted[i].equalsIgnoreCase("vm"))
+		while(splitted[i].equalsIgnoreCase(Strings.MEASURED_VALUE_TAG))
 		{
 			i++;
-			System.out.println("Ultimo valore misurato: "+splitted[i++]);
+			System.out.println(Strings.LAST_MEASURED_VALUE+splitted[i++]);
 		}
+		i++;
+		System.out.println(splitted[i]);
 	}
 	
 	public static void printListOfString(String [] list) {
@@ -74,19 +76,20 @@ public class DataOutput {
 	}
 	
 	public static void printSensorCategory(String sensorCategoryText) {
-		String [] splitted = sensorCategoryText.split(":");
-		System.out.println("Nome: "+splitted[0]);
-		System.out.println("Sigla: "+splitted[1]);
-		System.out.println("Costruttore: "+splitted[2]);
-		int i = 3;
+		String [] splitted = sensorCategoryText.split(Strings.SEPARATOR);
+		System.out.println(Strings.SENSOR_CATEGORY);
+		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
+		System.out.println(Strings.ABBREVATION+splitted[Strings.SECOND_TOKEN]);
+		System.out.println(Strings.MANUFACTURER+splitted[Strings.THIRD_TOKEN]);
+		int i = Strings.FOURTH_TOKEN;
 		do
 		{
-			int k = i - 2;
-			System.out.println("Dominio_info_"+k+": "+splitted[i]);
+			int k = i - 2; // we are starting from the fourth token but it's the first information
+			System.out.println(Strings.INFO_DOMAIN+k+": "+splitted[i]);
 			i++;
 		}
-		while(!splitted[i].equalsIgnoreCase("endD"));
-		System.out.println("Informazioni rilevabili:");
+		while(!splitted[i].equalsIgnoreCase(Strings.END_DOMAIN_TAG));
+		System.out.println(Strings.DETECTABLE_INFOS);
 		for(i++; i < splitted.length; i++)
 		{
 			System.out.println(splitted[i]);
@@ -94,12 +97,14 @@ public class DataOutput {
 	}
 	
 	public static void printActuatorCategory(String actuatorCategoryText) {
-		String [] splitted = actuatorCategoryText.split(":");
-		System.out.println("Sigla: "+splitted[0]);
-		System.out.println("Costruttore: "+splitted[1]);
-		System.out.println("Modalità di default: "+splitted[2]);
-		System.out.println("Modalità operative:");
-		for(int i = 3; i < splitted.length; i++)
+		String [] splitted = actuatorCategoryText.split(Strings.SEPARATOR);
+		System.out.println(Strings.ACTUATOR_CATEGORY);
+		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
+		System.out.println(Strings.ABBREVATION+splitted[Strings.SECOND_TOKEN]);
+		System.out.println(Strings.MANUFACTURER+splitted[Strings.THIRD_TOKEN]);
+		System.out.println(Strings.DEFAULT_MODE+splitted[Strings.FOURTH_TOKEN]);
+		System.out.println(Strings.OPERATING_MODES);
+		for(int i = Strings.FIFTH_TOKEN; i < splitted.length; i++)
 		{
 			System.out.println(splitted[i]);
 		}
@@ -111,6 +116,6 @@ public class DataOutput {
 	but since we run it in Eclipse this is the best way to do it.*/
 	public final static void clearOutput()
 	{
-		for (int i = 0; i < 50; ++i) System.out.println();
+		for (int i = 0; i < Strings.SPACING_COSTANT; ++i) System.out.println();
 	}
 }
