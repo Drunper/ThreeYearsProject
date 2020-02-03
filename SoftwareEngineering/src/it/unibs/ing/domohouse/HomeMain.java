@@ -23,9 +23,9 @@ public class HomeMain {
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
 		
-		SensorCategory temperatura = new SensorCategory("sensori di temperatura", "misurano la temperatura"); //saved
-		ActuatorCategory interruttori = new ActuatorCategory("interruttori di accensione", "sigla:costruttore:modalità di default"); //saved
-		home = new HousingUnit("Casa di Ivan", "Boh"); //saved
+		SensorCategory temperatura = new SensorCategory("sensori di temperatura", "misurano la temperatura"); 
+		ActuatorCategory interruttori = new ActuatorCategory("interruttori di accensione", "sigla:costruttore:modalità di default"); 
+		home = new HousingUnit("Casa di Ivan", "Boh"); 
 		Room soggiorno = new Room("Soggiorno", "Sala in cui si vive penso");
 		home.addEntry(soggiorno);
 		Artifact lampadario = new Artifact("lampadarioMurano", "Sono un lampa-dario");
@@ -46,25 +46,13 @@ public class HomeMain {
 		soggiorno.addSensor(temperino);
 		soggiorno.addSensor(temperino2);
 		
+		FileSaver fs = new FileSaver();
+		fs.createDirs();
+		
 		/* **ESEMPIO DI CARICAMENTE DA FILE ATTRAVERSO FILE LOADER**
 		FileLoader fl = new FileLoader();
 		SensorCategory temperatura = (SensorCategory) fl.ReadObjectFromFile("data\\categories\\sensor\\categoria_temperatura.dat");
 		*/ 
-		
-		
-		System.out.println("PROVIAMO A SALVARE");
-		FileSaver fs = new FileSaver();
-		fs.writeObjectToFile(FileSaver.houseFilepath, "casa_di_ivan", home);
-		fs.writeObjectToFile(FileSaver.sensorCategoryFilepath, "categoria_temperatura", temperatura);
-		fs.writeObjectToFile(FileSaver.actuatorCategoryFilepath, "categoria_interruttori", interruttori);
-		fs.writeObjectToFile(FileSaver.roomFilepath, "soggiorno", soggiorno);
-		fs.writeObjectToFile(FileSaver.actuatorFilepath,"lampadario" , lampadario);
-		fs.writeObjectToFile(FileSaver.actuatorFilepath,"attuatorino1" , attuatorino1);
-		fs.writeObjectToFile(FileSaver.actuatorFilepath,"attuatorino2" , attuatorino2);
-		fs.writeObjectToFile(FileSaver.actuatorFilepath,"portaOmbrelli" , portaOmbrelli);
-		fs.writeObjectToFile(FileSaver.sensorFilepath, "temperino", temperino);
-		fs.writeObjectToFile(FileSaver.sensorFilepath, "temperino2", temperino);
-		System.out.println("SALVATAGGIO EFFETTUATO");
 		
 		//CATEGORY STRUCTURES (from files after this)
 		

@@ -57,7 +57,7 @@ public class CookedDataInput {
 		String name;
 		do
 		{
-			name = RawDataInput.readNotVoidString("Inserisci il nome del sensore");
+			name = RawDataInput.readNotVoidString("Inserisci il nome del sensore (senza la categoria)");
 			if (sensorManager.hasEntry(name))
 				System.out.println("Nome già assegnato a un sensore, prego reinserire altro nome");
 		}
@@ -119,7 +119,7 @@ public class CookedDataInput {
 		String name;
 		do
 		{
-			name = RawDataInput.readNotVoidString("Inserisci il nome dell'attuatore");
+			name = RawDataInput.readNotVoidString("Inserisci il nome dell'attuatore (senza la categoria)");
 			if (actuatorManager.hasEntry(name))
 				System.out.println("Nome già assegnato a un attuatore, prego reinserire altro nome");
 		}
@@ -269,11 +269,13 @@ public class CookedDataInput {
 	}
 	
 	private NumericSensor createNumericSensor(String name, String category) {
-		return new NumericSensor(name, (SensorCategory)sensCatManager.getElementByName(category));
+		String realName = name + "_" + category;
+		return new NumericSensor(realName, (SensorCategory)sensCatManager.getElementByName(category));
 	}
 	
 	private Actuator createActuator(String name, String category) {
-		return new Actuator(name, (ActuatorCategory)actCatManager.getElementByName(category));
+		String realName = name + "_" + category;
+		return new Actuator(realName, (ActuatorCategory)actCatManager.getElementByName(category));
 	}
 	
 	private Room createRoom(String name, String descr) {
