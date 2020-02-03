@@ -14,12 +14,13 @@ import it.unibs.ing.domohouse.util.Manager;
 
 public class HomeMain {
 	
-	private static HomeLogin login;
+	private static ImplementedMenu allMenu;
 	private static HousingUnit home; 
 	public static Manager sensorCategoryManager; 
 	public static Manager actuatorCategoryManager; 
 	
 	public static void main(String[] args) {
+		allMenu = new ImplementedMenu();
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
 		
@@ -46,19 +47,13 @@ public class HomeMain {
 		soggiorno.addSensor(temperino);
 		soggiorno.addSensor(temperino2);
 		
-		FileSaver fs = new FileSaver();
-		fs.createDirs();
-		
 		/* **ESEMPIO DI CARICAMENTE DA FILE ATTRAVERSO FILE LOADER**
 		FileLoader fl = new FileLoader();
 		SensorCategory temperatura = (SensorCategory) fl.ReadObjectFromFile("data\\categories\\sensor\\categoria_temperatura.dat");
 		*/ 
 		
 		//CATEGORY STRUCTURES (from files after this)
-		
-		login = new HomeLogin();
-		login.addEntry("paolino", "6fcb473c563dc49628a187d2a590ff2c000da215d8cd914f7901df3bc2a2c626"); //pippo123456
-		
-		ImplementedMenu.show(home, login);
+			
+		allMenu.show(home);
 	}
 }

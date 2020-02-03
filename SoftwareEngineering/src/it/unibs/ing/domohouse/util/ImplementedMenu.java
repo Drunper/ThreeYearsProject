@@ -7,27 +7,37 @@ import it.unibs.ing.domohouse.components.Room;
 
 public class ImplementedMenu {
 	
-	private static final MyMenu menu = new MyMenu("Login", Strings.LOGIN_VOICES);
-	private static final MyMenu userMenu = new MyMenu("Scegli cosa fare", Strings.USER_VOICES);
-	private static final MyMenu roomMenu  = new MyMenu("Scegli un'opzione", Strings.ROOM_VOICES);
-	private static final MyMenu maintainerMenu = new MyMenu("Scegli un'opzione", Strings.MAINTAINER_VOICES);
-	private static final MyMenu maintainerRoomMenu = new MyMenu("Scegli un'opzione", Strings.MAINTAINER_ROOM_VOICES);
-	private static CookedDataInput inputHandler = new CookedDataInput();
+	private HomeLogin login;
+	private InputHandler inputHandler;
+
+	private final MyMenu menu = new MyMenu(Strings.LOGIN_MENU_TITLE, Strings.LOGIN_VOICES);
+	private final MyMenu userMenu = new MyMenu(Strings.USER_MENU_TITLE, Strings.USER_VOICES);
+	private final MyMenu roomMenu  = new MyMenu(Strings.USER_ROOM_MENU_TITLE, Strings.ROOM_VOICES);
+	private final MyMenu maintainerMenu = new MyMenu(Strings.MAINTAINER_MENU_TITLE, Strings.MAINTAINER_VOICES);
+	private final MyMenu maintainerRoomMenu = new MyMenu(Strings.MAINTAINER_ROOM_MENU_TITLE, Strings.MAINTAINER_ROOM_VOICES);	
 	
+	public ImplementedMenu() {
+		login = new HomeLogin();
+		inputHandler = new InputHandler();
+		login.addEntry(Strings.MAINTAINER_USER, Strings.PASSWORD); 
+	}
 	
-	public static void show(HousingUnit home, HomeLogin login) {
+	public void show(HousingUnit home) {
 		DataOutput.clearOutput();
 		String user;
 		int scelta;
 		do
 		{
-			scelta = menu.scegli();
+			scelta = menu.select();
 			switch(scelta)
 			{
 				case 1: 
-					user = RawDataInput.readNotVoidString("Inserisci il nome utente");
-					System.out.println("Benvenuto " + user);
-					showUserMenu(home);
+					user = RawDataInput.readNotVoidString(Strings.INSERT_USER);
+					if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
+					{
+						System.out.println(Strings.WELCOME + user);
+						showUserMenu(home);
+					}
 					break;
 					
 				case 2:
@@ -36,16 +46,16 @@ public class ImplementedMenu {
 					do
 					{
 						ok = false;
-						user = RawDataInput.readNotVoidString("Inserisci il nome utente (^ per tornare indietro)");
-						if(!user.equalsIgnoreCase("^"))
+						user = RawDataInput.readNotVoidString(Strings.INSERT_USER);
+						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
 						{	
-							password = RawDataInput.readNotVoidString("Inserisci la password");
+							password = RawDataInput.readNotVoidString(Strings.INSERT_PASSWORD);
 							ok = login.checkPassword(user, password);
 							if(!ok)
-								System.out.println("Nome utente o password errati");
+								System.out.println(Strings.USER_OR_PASSWORD_ERROR);
 						}
 					}
-					while (!user.equalsIgnoreCase("^") && !ok);
+					while (!user.equalsIgnoreCase(Strings.BACK_CHARACTER) && !ok);
 					if (ok)
 						showMaintainerMenu(home);
 					break;
@@ -54,12 +64,12 @@ public class ImplementedMenu {
 		while (scelta != 0);
 	}
 	
-	private static void showMaintainerMenu(HousingUnit home) {
+	private void showMaintainerMenu(HousingUnit home) {
 		DataOutput.clearOutput();
 		boolean exitFlag = false;
 		do
 		{
-			int choice = ImplementedMenu.maintainerMenu.scegli();
+			int choice = maintainerMenu.select();
 			switch(choice) {
 				case 0:
 					exitFlag = true;
@@ -75,10 +85,9 @@ public class ImplementedMenu {
 					DataOutput.clearOutput();
 					DataOutput.printListOfString(home.namesList());
 					System.out.println();
-					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
-					String selectedRoom = RawDataInput.readNotVoidString("Inserisci il nome della stanza su cui vuoi operare");
+					String selectedRoom = RawDataInput.readNotVoidString(Strings.INSERT_ROOM);
 					showMaintainerRoomMenu(selectedRoom, home);
 					break;
 				case 4:
@@ -88,10 +97,9 @@ public class ImplementedMenu {
 					DataOutput.clearOutput();
 					DataOutput.printListOfString(HomeMain.sensorCategoryManager.namesList());
 					System.out.println();
-					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
-					String selectedSensCategory = RawDataInput.readNotVoidString("Inserisci la categoria di sensori che vuoi visualizzare");
+					String selectedSensCategory = RawDataInput.readNotVoidString(Strings.INSERT_SENSOR_CATEGORY);
 					DataOutput.printSensorCategory(HomeMain.sensorCategoryManager.getElementByName(selectedSensCategory).toString());
 					// Da valutare se castare o meno
 					break;
@@ -99,10 +107,9 @@ public class ImplementedMenu {
 					DataOutput.clearOutput();
 					DataOutput.printListOfString(HomeMain.sensorCategoryManager.namesList());
 					System.out.println();
-					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
-					String selectedActuCategory = RawDataInput.readNotVoidString("Inserisci la categoria di attuatori che vuoi visualizzare");
+					String selectedActuCategory = RawDataInput.readNotVoidString(Strings.INSERT_ACTUATOR_CATEGORY);
 					DataOutput.printSensorCategory(HomeMain.actuatorCategoryManager.getElementByName(selectedActuCategory).toString());
 					// Da valutare se castare o meno
 					break;
@@ -117,11 +124,11 @@ public class ImplementedMenu {
 		while(exitFlag != true);
 	}
 
-	private static void showUserMenu(HousingUnit home) {
+	private void showUserMenu(HousingUnit home) {
 		DataOutput.clearOutput();
 		boolean exitFlag = false;
 		do {
-			int choice = userMenu.scegli();
+			int choice = userMenu.select();
 			switch(choice) {
 				case 0:
 					exitFlag = true;
@@ -134,20 +141,18 @@ public class ImplementedMenu {
 					DataOutput.clearOutput();
 					DataOutput.printListOfString(home.namesList());
 					System.out.println();
-					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
-					String selectedRoom = RawDataInput.readNotVoidString("Inserisci il nome della stanza su cui vuoi operare");
-					showRoomMenu(selectedRoom, home);
+					String selectedRoom = RawDataInput.readNotVoidString(Strings.INSERT_ROOM);
+					showUserRoomMenu(selectedRoom, home);
 					break;
 				case 3:
 					DataOutput.clearOutput();
 					DataOutput.printListOfString(HomeMain.sensorCategoryManager.namesList());
 					System.out.println();
-					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
-					String selectedSensCategory = RawDataInput.readNotVoidString("Inserisci la categoria di sensori che vuoi visualizzare");
+					String selectedSensCategory = RawDataInput.readNotVoidString(Strings.INSERT_SENSOR_CATEGORY);
 					DataOutput.printSensorCategory(HomeMain.sensorCategoryManager.getElementByName(selectedSensCategory).toString());
 					// Da valutare se castare o meno
 					break;
@@ -155,10 +160,9 @@ public class ImplementedMenu {
 					DataOutput.clearOutput();
 					DataOutput.printListOfString(HomeMain.sensorCategoryManager.namesList());
 					System.out.println();
-					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
-					String selectedActuCategory = RawDataInput.readNotVoidString("Inserisci la categoria di attuatori che vuoi visualizzare");
+					String selectedActuCategory = RawDataInput.readNotVoidString(Strings.INSERT_ACTUATOR_CATEGORY);
 					DataOutput.printSensorCategory(HomeMain.actuatorCategoryManager.getElementByName(selectedActuCategory).toString());
 					// Da valutare se castare o meno
 					break;
@@ -167,12 +171,12 @@ public class ImplementedMenu {
 		while(exitFlag!=true);
 	}
 
-	private static void showRoomMenu(String selectedRoom, HousingUnit home) {
+	private void showUserRoomMenu(String selectedRoom, HousingUnit home) {
 		DataOutput.clearOutput();
 		Room toWorkOn = (Room)home.getElementByName(selectedRoom);
 		boolean exitFlag = false;
 		do {
-			int choice = roomMenu.scegli();
+			int choice = roomMenu.select();
 			switch(choice) {
 			case 0:
 				exitFlag = true;
@@ -185,30 +189,27 @@ public class ImplementedMenu {
 				DataOutput.clearOutput();
 				DataOutput.printListOfString(toWorkOn.getSensorsNames());
 				System.out.println();
-				System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 				System.out.println();
 				
-				String selectedSensor = RawDataInput.readNotVoidString("Inserisci il nome del sensore che vuoi visualizzare");
+				String selectedSensor = RawDataInput.readNotVoidString(Strings.INSERT_SENSOR);
 				DataOutput.printSensor(toWorkOn.getSensorByName(selectedSensor).toString());
 				break;
 			case 3:
 				DataOutput.clearOutput();
 				DataOutput.printListOfString(toWorkOn.getActuatorsNames());
 				System.out.println();
-				System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 				System.out.println();
 				
-				String selectedActuator = RawDataInput.readNotVoidString("Inserisci il nome dell'attuatore che vuoi visualizzare");
+				String selectedActuator = RawDataInput.readNotVoidString(Strings.INSERT_ACTUATOR);
 				DataOutput.printSensor(toWorkOn.getActuatorByName(selectedActuator).toString());
 				break;
 			case 4:
 				DataOutput.clearOutput();
 				DataOutput.printListOfString(toWorkOn.getArtifactsNames());
 				System.out.println();
-				System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 				System.out.println();
 				
-				String selectedArtifact = RawDataInput.readNotVoidString("Inserisci il nome dell'artefatto che vuoi visualizzare");
+				String selectedArtifact = RawDataInput.readNotVoidString(Strings.INSERT_ARTIFACT);
 				DataOutput.printSensor(toWorkOn.getArtifactByName(selectedArtifact).toString());
 				break;	
 			}
@@ -216,12 +217,12 @@ public class ImplementedMenu {
 		while(exitFlag!=true);		
 	}
 	
-	private static void showMaintainerRoomMenu(String selectedRoom, HousingUnit home) {
+	private void showMaintainerRoomMenu(String selectedRoom, HousingUnit home) {
 		DataOutput.clearOutput();
 		Room toWorkOn = (Room)home.getElementByName(selectedRoom);
 		boolean exitFlag = false;
 		do {
-			int choice = roomMenu.scegli();
+			int choice = maintainerRoomMenu.select();
 			switch(choice) {
 				case 0:
 					exitFlag = true;
@@ -234,30 +235,27 @@ public class ImplementedMenu {
 					DataOutput.clearOutput();
 					DataOutput.printListOfString(toWorkOn.getSensorsNames());
 					System.out.println();
-					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
-					String selectedSensor = RawDataInput.readNotVoidString("Inserisci il nome del sensore che vuoi visualizzare");
+					String selectedSensor = RawDataInput.readNotVoidString(Strings.INSERT_SENSOR);
 					DataOutput.printSensor(toWorkOn.getSensorByName(selectedSensor).toString());
 					break;
 				case 3:
 					DataOutput.clearOutput();
 					DataOutput.printListOfString(toWorkOn.getActuatorsNames());
 					System.out.println();
-					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
-					String selectedActuator = RawDataInput.readNotVoidString("Inserisci il nome dell'attuatore che vuoi visualizzare");
+					String selectedActuator = RawDataInput.readNotVoidString(Strings.INSERT_ACTUATOR);
 					DataOutput.printSensor(toWorkOn.getActuatorByName(selectedActuator).toString());
 					break;
 				case 4:
 					DataOutput.clearOutput();
 					DataOutput.printListOfString(toWorkOn.getArtifactsNames());
 					System.out.println();
-					System.out.println("---------DEVO FORMATTARE MEGLIO---------");
 					System.out.println();
 					
-					String selectedArtifact = RawDataInput.readNotVoidString("Inserisci il nome dell'artefatto che vuoi visualizzare");
+					String selectedArtifact = RawDataInput.readNotVoidString(Strings.INSERT_ARTIFACT);
 					DataOutput.printSensor(toWorkOn.getArtifactByName(selectedArtifact).toString());
 					break;	
 				case 5:
@@ -275,8 +273,6 @@ public class ImplementedMenu {
 			}
 		}
 		while(exitFlag!=true);	
-	}
-		
-	
+	}	
 }
 

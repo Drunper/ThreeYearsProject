@@ -22,7 +22,7 @@ public class MyMenu
 	this.voci = voci;
   }
 
-  public int scegli ()
+  public int select ()
   {
 	stampaMenu();
 	System.out.println("Effettua la scelta desiderata: ");

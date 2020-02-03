@@ -27,7 +27,7 @@ public class Actuator implements Manageable, Serializable {
 	}
 	
 	public String getName() {
-		return name;
+		return name.split("_")[0];
 	}
 
 	public void setName(String name) {

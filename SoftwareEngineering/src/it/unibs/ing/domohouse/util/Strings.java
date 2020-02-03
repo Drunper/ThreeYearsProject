@@ -1,57 +1,87 @@
 package it.unibs.ing.domohouse.util;
 
 public class Strings {
-	//LOGIN MENU
-	public static final String LOGINTITLE = "Login:";
-	public static final String USER = "Fruitore";
-	public static final String MAINTAINER = "Manutentore";
-	public static final String INSERT_USER_NAME = "Inserisci il nome utente: ";
-	public static final String INSERT_MANPASS = "Inserisci la password manutentore: ";
-	public static final String CHOOSE = "Effettua la scelta desiderata: ";
-	public static final String WELCOME = "Benvenuto ";
-	public static final String INCORRECT_PASSWORD = "ATTENZIONE! Password errata";
-	//USER MENU
-	public static final String USER_MENU = "ImplementedMenu Utente";
-	public static final String HOUSE_VIEW = "Visualizza descrizione dell'unità \nimmobiliare e la lista delle stanze";
+	//TITLES
+	public static final String LOGIN_MENU_TITLE = "Login:";
+	public static final String USER_MENU_TITLE = "Menu unità immobiliare";
+	public static final String USER_ROOM_MENU_TITLE = "Menu stanza";
+	public static final String MAINTAINER_MENU_TITLE = "Menu unità immobiliare (manutentore)";
+	public static final String MAINTAINER_ROOM_MENU_TITLE = "Menu stanza (manutentore)";
+	
+	//LOGIN
+	public static final String INSERT_PASSWORD = "Inserisci la password";
+	public static final String USER_OR_PASSWORD_ERROR = "Nome utente o password errati";
+	public static final String INSERT_USER = "Inserisci il nome utente (^ per tornare indietro)";
+	public static final String PASSWORD = "6fcb473c563dc49628a187d2a590ff2c000da215d8cd914f7901df3bc2a2c626"; //pippo123456
+	public static final String MAINTAINER_USER = "prova";
+	
+	//HOUSE MENU
+	public static final String INSERT_ROOM = "Inserisci il nome della stanza su cui vuoi operare";
+	public static final String INSERT_SENSOR_CATEGORY = "Inserisci la categoria di sensori che vuoi visualizzare";
+	public static final String INSERT_ACTUATOR_CATEGORY = "Inserisci la categoria di attuatori che vuoi visualizzare";
+	
 	//ROOM MENU
-	public static final String ROOM_MENU = "Lista delle Stanze";
-	//ROOM ELEMENT MENU
-	public static final String ELEMENT_CHOICE = "Scegli l'elemento desiderato";
-	public static final String SENSOR = "Sensori";
-	public static final String ACTUATOR = "Attuatori";
-	public static final String ARTIFACT = "Artefatti";
-	//SENSOR MENU
-	public static final String SENSOR_MENU = "Lista dei sensori nella stanza";
-	public static final String EDIT_ELEMENT_MENU = "Modifica un singolo elemento o una categoria";
-	public static final String EDIT_ELEMENT_CATEGORY = "Modifica una categoria di elementi presente";
-	public static final String EDIT_SINGLE_ELEMENT = "Modifica un elemento presente";
-	public static final String EDIT_CATEGORY = "Modifica una categoria (globale)";
-
-	//ACTUATOR MENU
-	public static final String ACTUATOR_MENU = "Lista degli attuatori nella stanza";
-
-	//ARTIFACT MENU
-	public static final String ARTIFACT_MENU = "Lista degli artefatti nella stanza";
-	//MAINTAINER MENU
-	public static final String MAINTAINER_MENU = "ImplementedMenu Manutentore";
-	public static final String USER_SEC = "Sezione Utente";
-	public static final String HOUSE_EDIT = "Modifica unità immobiliare";
-	public static final String EDIT_MENU = "Esegui una modifica";
-	public static final String HOUSE_EDIT_NAMEDESCR = "Modifica nome o descrizione unità immobiliare";
-	public static final String ROOM_EDIT = "Modifica Stanza";
-	public static final String SENSOR_EDIT = "Modifica Sensore";
-	public static final String ACTUATOR_EDIT = "Modifica Attuatore";
-	public static final String ARTIFACT_EDIT = "Modifica Artefatti";
-	public static final String INSERT_DESCR = "Inserisci la nuova descrizione: ";
-	public static final String ROOM_EDIT_MENU = "Modifica una stanza";
-	public static final String EDIT_NAME_DESCR_MENU = "Inserisci un nuovo nome o una nuova descrizione";
-	public static final String INSERT_NAME = "Inserisci il nuovo nome: ";
-	public static final String EDIT_NAME = "Modifica il nome";
-	public static final String EDIT_DESCR = "Modifica la descrizione";
-	//GENERICS
-	public static final String CORNICE = "--------------------------------";
-	public static final String VOCE_USCITA = "0\tEsci";
-	public static final String RICHIESTA_INSERIMENTO = "Digita il numero dell'opzione desiderata > ";
+	public static final String INSERT_SENSOR = "Inserisci il nome del sensore che vuoi visualizzare";
+	public static final String INSERT_ACTUATOR = "Inserisci il nome dell'attuatore che vuoi visualizzare";
+	public static final String INSERT_ARTIFACT = "Inserisci il nome dell'artefatto che vuoi visualizzare";
+	
+	//INPUTHANDLER
+	public static final String PROCEED_WITH_CREATION = "Procedere con la creazione e salvataggio?";
+	public static final String NAME_ALREADY_EXISTENT = "Nome già inserito, prego reinserire altro nome";
+	public static final String PROCEED_WITH_SAVING = "Salvare le modifiche?";
+	public static final String INSERT_CATEGORY = "Inserisci il nome della categoria";
+	public static final String CATEGORY_NON_EXISTENT = "Categoria non esistente, prego reinserire altro nome";
+	public static final String INPUT_CATEGORY_ABBREVIATION = "Inserisci la sigla della categoria";
+	public static final String INPUT_CATEGORY_MANUFACTURER = "Inserisci il costruttore";
+	
+	//HOUSE
+	public static final String HOUSE_INPUT_DESCRIPTION = "Inserisci la descrizione dell'unità immobiliare";
+	
+	//ROOM
+	public static final String ROOM_INPUT_NAME = "Inserisci il nome della stanza";
+	public static final String ROOM_INPUT_DESCRIPTION = "Inserisci la descrizione della stanza";
+	
+	//ARTIFACT
+	public static final String ARTIFACT_INPUT_NAME = "Inserisci il nome dell'artefatto";
+	public static final String ARTIFACT_ROOM_NAME_ASSIGNED = "Nome già assegnato a stanza/artefatto, prego reinserire altro nome";
+	public static final String ARTIFACT_INPUT_DESCRIPTION = "Inserisci la descrizione dell'artefatto";
+	public static final String ROOM_OR_ARTIFACT_NON_EXISTENT = "Artefatto/stanza non presente, prego reinserire";
+	
+	//SENSOR
+	public static final String SENSOR_INPUT_NAME = "Inserisci il nome del sensore (senza la categoria)";
+	public static final String SENSOR_NAME_ASSIGNED = "Nome già assegnato a un sensore, prego reinserire altro nome";
+	public static final String SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION = "Vuoi associare il sensore a stanze?(No assocerà il sensore ad artefatti)";
+	public static final String SENSOR_ROOM_ASSOCIATION = "Inserisci il nome della stanza da associare al sensore";
+	public static final String SENSOR_ARTIFACT_ASSOCIATION = "Inserisci il nome dell'artefatto da associare al sensore";
+	public static final String SENSOR_WRONG_ASSOCIATION_ROOM = "L'elemento a cui si vuole associare il sensore non è una stanza!";
+	public static final String SENSOR_WRONG_ASSOCIATION_ARTIFACT = "L'elemento a cui si vuole associare il sensore non è un artefatto!";
+	public static final String SENSOR_WRONG_ASSOCIATION_CATEGORY = "Un sensore di questa categoria è già associato all'artefatto/stanza in questione";
+	public static final String SENSOR_ANOTHER_ASSOCIATION = "Associare sensore ad altro oggetto?";
+	
+	//ACTUATOR
+	public static final String ACTUATOR_INPUT_NAME = "Inserisci il nome dell'attuatore (senza la categoria)";
+	public static final String ACTUATOR_NAME_ASSIGNED = "Nome già assegnato a un attuatore, prego reinserire altro nome";
+	public static final String ACTUATOR_ARTIFACT_OR_ROOM_ASSOCIATION = "Vuoi associare l'attuatore a stanze?(No assocerà il sensore ad artefatti)";
+	public static final String ACTUATOR_ROOM_ASSOCIATION = "Inserisci il nome della stanza da associare all'attuatore";
+	public static final String ACTUATOR_ARTIFACT_ASSOCIATION = "Inserisci il nome dell'artefatto da associare all'attuatore";
+	public static final String ACTUATOR_WRONG_ASSOCIATION_ROOM = "L'elemento a cui si vuole associare l'attuatore non è una stanza!";
+	public static final String ACTUATOR_WRONG_ASSOCIATION_ARTIFACT = "L'elemento a cui si vuole associare l'attautore non è un artefatto!";
+	public static final String ACTUATOR_WRONG_ASSOCIATION_CATEGORY = "Un attuatore di questa categoria è già associato all'artefatto/stanza in questione";
+	public static final String ACTUATOR_ANOTHER_ASSOCIATION = "Associare attuatore ad altro oggetto?";
+	
+	//SENSOR CATEGORY
+	public static final String SENSOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di sensori";
+	public static final String SENSOR_CATEGORY_INPUT_INFO_DOMAIN = "Inserisci il dominio dell'informazione";
+	public static final String SENSOR_CATEGORY_INPUT_INFO ="Inserisci l'informazione rilevabile dalla categoria";
+	
+	//ACTUATOR CATEGORY
+	public static final String ACTUATOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di attuatori";
+	public static final String ACTUATOR_CATEGORY_INPUT_OPERATING_MODE = "Inserisci una modalità operativa (^ per terminare)";
+	public static final String ACTUATOR_CATEGORY_INPUT_DEFAULT_MODE = "Inserisci la modalità di default (tra quelle già inserite)";
+	
+	//UTILS
+	public static final String BACK_CHARACTER = "^";
+	public static final String WELCOME = "Benvenuto ";
 	
 	//STATIC MENU VOICES STRINGS
 	public static final String [] LOGIN_VOICES = {"Fruitore", "Manutentore"};
