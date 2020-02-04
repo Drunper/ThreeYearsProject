@@ -42,4 +42,9 @@ public class Manager implements Serializable{
 		Set<String> namesSet = elementMap.keySet();
 		return namesSet.toArray(new String[0]);
 	}
+	
+	public String getElementString(String name) {
+		Manageable element = elementMap.get(name);
+		return element.toString();
+	}
 }

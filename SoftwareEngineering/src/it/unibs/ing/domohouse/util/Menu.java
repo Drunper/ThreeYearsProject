@@ -6,7 +6,7 @@ import java.util.*;
  * Classe utilizzata nel corso di Fondamenti di Programmazione. Autore sconosciuto. Utilizzata solamente a fini didattici.
  * 
  */
-public class MyMenu
+public class Menu
 {
 	private String titolo;
 	private String [] voci;
@@ -15,7 +15,7 @@ public class MyMenu
 	private final static String EXIT_VOICE = "0\tEsci";
 	private final static String INSERT_REQUEST = "Digita il numero dell'opzione desiderata > ";
 	
-	public MyMenu (String titolo, String [] voci)
+	public Menu (String titolo, String [] voci)
 	{
 		this.titolo = titolo;
 		this.voci = voci;
@@ -24,7 +24,7 @@ public class MyMenu
 	public int select ()
 	{
 		stampaMenu();
-		return RawDataInput.readIntWithBounds(INSERT_REQUEST, 0, voci.length);
+		return RawInputHandler.readIntWithBounds(INSERT_REQUEST, 0, voci.length);
 	}
 			
 	public void stampaMenu ()

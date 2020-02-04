@@ -2,12 +2,12 @@ package it.unibs.ing.domohouse.util;
 
 import java.util.ArrayList;
 
-public class AssociationManager {
+public class AssociationHandler {
 
 	//Forse si può usare la classe Manager, valuterò
 	private ArrayList<Association> associationList;
 	
-	public AssociationManager() {
+	public AssociationHandler() {
 		associationList = new ArrayList<>();
 	}
 	
@@ -43,4 +43,21 @@ public class AssociationManager {
 		}
 		return nameList;
 	}
+
+	public boolean isElementARoom(String name) {
+		Association element = getAssociation(name);
+		return element.isElementARoom();
+	}
+
+	public boolean isAssociated(String name, String category) {
+		Association element = getAssociation(name);
+		return element.isAssociated(category);
+	}
+
+	public void addAssociation(String name, String category) {
+		Association element = getAssociation(name);
+		element.addAssociation(category);
+	}
+	
+	
 }

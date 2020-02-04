@@ -1,6 +1,6 @@
 package it.unibs.ing.domohouse.util;
 
-public class DataOutput {
+public class OutputHandler {
 
 	public static void printHousingUnit(String housingUnitText) {
 		String [] splitted = housingUnitText.split(Strings.SEPARATOR);

@@ -13,189 +13,169 @@ import it.unibs.ing.domohouse.components.SensorCategory;
 
 public class InputHandler {
 
+	private DataHandler dataHandler;
 	//work in progress
-	private AssociationManager associationManager;
-	private Manager sensCatManager;
-	private Manager actCatManager;
-	private Manager sensorManager;
-	private Manager actuatorManager;
-	private Manager roomManager;
-	private Manager artifactManager;
 	
-	public InputHandler() {
-		associationManager = new AssociationManager();
-		sensCatManager = new Manager();
-		actCatManager = new Manager();
-		sensorManager = new Manager();
-		actuatorManager = new Manager();
-		roomManager = new Manager();
-		artifactManager = new Manager();
+	public InputHandler(DataHandler dataHandler) {
+		this.dataHandler = dataHandler;
 	}
 	
-	public void readArtifactFromUser(Room location) {
+	public void readHouseFromUser() {
+		String name = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_NAME);
+		String descr = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_DESCRIPTION);
+		dataHandler.addHouse(createHouse(name, descr));
+	}
+	
+	public void readArtifactFromUser(String location) {
 		String name;
 		do
 		{
-			name = RawDataInput.readNotVoidString(Strings.ARTIFACT_INPUT_NAME);
-			if (associationManager.hasEntry(name))
+			name = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_NAME);
+			if (dataHandler.hasRoomOrArtifact(name))
 				System.out.println(Strings.ARTIFACT_ROOM_NAME_ASSIGNED);
 		}
-		while(associationManager.hasEntry(name));
-		String descr = RawDataInput.readNotVoidString(Strings.ARTIFACT_INPUT_DESCRIPTION);
-		if (RawDataInput.yesOrNo(Strings.PROCEED_WITH_CREATION))
+		while(dataHandler.hasRoomOrArtifact(name));
+		String descr = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_DESCRIPTION);
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			Association assoc = new Association(name);
-			Artifact artifact = createArtifact(name, descr);
-			assoc.setIsElementARoom(false);
-			location.addArtifact(artifact);
-			artifactManager.addEntry(artifact);
-			associationManager.addAssociation(assoc);
+			dataHandler.addArtifact(location, createArtifact(name, descr));
 		}
 	}
 	
-	public void readNumericSensorFromUser(Room location) {
+	public void readNumericSensorFromUser(String location) {
 		String name;
 		do
 		{
-			name = RawDataInput.readNotVoidString(Strings.SENSOR_INPUT_NAME);
-			if (sensorManager.hasEntry(name))
+			name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
+			if (dataHandler.hasSensor(name))
 				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
 		}
-		while(sensorManager.hasEntry(name));
+		while(dataHandler.hasSensor(name));
 		String category;
 		do
 		{
-			category = RawDataInput.readNotVoidString(Strings.INSERT_CATEGORY);
-			if (!sensCatManager.hasEntry(category))
+			category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
+			if (!dataHandler.hasSensorCategory(category))
 				System.out.println(Strings.CATEGORY_NON_EXISTENT);
 		}
-		while(!sensCatManager.hasEntry(name));
-		boolean roomOrArtifact = RawDataInput.yesOrNo(Strings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
+		while(!dataHandler.hasSensorCategory(category));
+		boolean roomOrArtifact = RawInputHandler.yesOrNo(Strings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
 		ArrayList<String> objectList = new ArrayList<>();
 		do
 		{
 			String toAssoc;
-			Association temp = null;
 			do
 			{
 				if (roomOrArtifact)
-					toAssoc = RawDataInput.readNotVoidString(Strings.SENSOR_ROOM_ASSOCIATION);
+					toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ROOM_ASSOCIATION);
 				else
-					toAssoc = RawDataInput.readNotVoidString(Strings.SENSOR_ARTIFACT_ASSOCIATION);
-				if (!associationManager.hasEntry(toAssoc))
+					toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ARTIFACT_ASSOCIATION);
+				if (!dataHandler.hasRoomOrArtifact(toAssoc))
 					System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
 				else
 				{
-					temp = associationManager.getAssociation(toAssoc);
-					if (roomOrArtifact && !temp.isElementARoom())
+					if (roomOrArtifact && !dataHandler.isElementARoom(toAssoc))
 						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ROOM);
-					else if (!roomOrArtifact && temp.isElementARoom())
+					else if (!roomOrArtifact && dataHandler.isElementARoom(toAssoc))
 						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ARTIFACT);
-					else if (temp.isAssociated(category))
+					else if (dataHandler.isAssociated(toAssoc, category))
 						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_CATEGORY);
 				}
 			}
-			while(!associationManager.hasEntry(toAssoc) || (roomOrArtifact && !temp.isElementARoom()) || 
-					(!roomOrArtifact && temp.isElementARoom()) || temp.isAssociated(category));
+			while(!dataHandler.hasRoomOrArtifact(toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(toAssoc)) 
+					|| (!roomOrArtifact && dataHandler.isElementARoom(toAssoc)) || dataHandler.isAssociated(toAssoc, category));
 			objectList.add(toAssoc);
 		}
-		while(RawDataInput.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
-		if (RawDataInput.yesOrNo(Strings.PROCEED_WITH_CREATION))
+		while(RawInputHandler.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
 			Sensor sensor = createNumericSensor(name, category);
 			sensor.setMeasuringRoom(roomOrArtifact);
-			location.addSensor(sensor);
+			dataHandler.addSensor(location, sensor);
 			for(String object : objectList)
 			{
-				associationManager.getAssociation(object).addAssociation(category);
+				dataHandler.addAssociation(object, category);
 				if (roomOrArtifact)
-					sensor.addEntry((Room)roomManager.getElementByName(object));
+					sensor.addEntry(dataHandler.getRoom(object));
 				else
-					sensor.addEntry((Artifact)artifactManager.getElementByName(object));
+					sensor.addEntry(dataHandler.getArtifact(object));
 			}
 		}
 	}
 	
-	public void readActuatorFromUser(Room location) {
+	public void readActuatorFromUser(String location) {
 		String name;
 		do
 		{
-			name = RawDataInput.readNotVoidString(Strings.ACTUATOR_INPUT_NAME);
-			if (actuatorManager.hasEntry(name))
+			name = RawInputHandler.readNotVoidString(Strings.ACTUATOR_INPUT_NAME);
+			if (dataHandler.hasActuator(name))
 				System.out.println(Strings.ACTUATOR_NAME_ASSIGNED);
 		}
-		while(actuatorManager.hasEntry(name));
+		while(dataHandler.hasActuator(name));
 		String category;
 		do
 		{
-			category = RawDataInput.readNotVoidString(Strings.INSERT_CATEGORY);
-			if (!actCatManager.hasEntry(category))
+			category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
+			if (!dataHandler.hasActuatorCategory(category))
 				System.out.println(Strings.CATEGORY_NON_EXISTENT);
 		}
-		while(!actCatManager.hasEntry(name));
-		boolean roomOrArtifact = RawDataInput.yesOrNo(Strings.ACTUATOR_ARTIFACT_OR_ROOM_ASSOCIATION);
+		while(!dataHandler.hasActuatorCategory(name));
+		boolean roomOrArtifact = RawInputHandler.yesOrNo(Strings.ACTUATOR_ARTIFACT_OR_ROOM_ASSOCIATION);
 		ArrayList<String> objectList = new ArrayList<>();
 		do
 		{
 			String toAssoc;
-			Association temp = null;
 			do
 			{
 				if (roomOrArtifact)
-					toAssoc = RawDataInput.readNotVoidString(Strings.ACTUATOR_ROOM_ASSOCIATION);
+					toAssoc = RawInputHandler.readNotVoidString(Strings.ACTUATOR_ROOM_ASSOCIATION);
 				else
-					toAssoc = RawDataInput.readNotVoidString(Strings.ACTUATOR_ARTIFACT_ASSOCIATION);
-				if (!associationManager.hasEntry(toAssoc))
+					toAssoc = RawInputHandler.readNotVoidString(Strings.ACTUATOR_ARTIFACT_ASSOCIATION);
+				if (!dataHandler.hasRoomOrArtifact(toAssoc))
 					System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
 				else
 				{
-					temp = associationManager.getAssociation(toAssoc);
-					if (roomOrArtifact && !temp.isElementARoom())
+					if (roomOrArtifact && !dataHandler.isElementARoom(toAssoc))
 						System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_ROOM);
-					else if (!roomOrArtifact && temp.isElementARoom())
+					else if (!roomOrArtifact && dataHandler.isElementARoom(toAssoc))
 						System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_ARTIFACT);
-					else if (temp.isAssociated(category))
+					else if (dataHandler.isAssociated(toAssoc, category))
 						System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_CATEGORY);
 				}
 			}
-			while(!associationManager.hasEntry(toAssoc) || (roomOrArtifact && !temp.isElementARoom()) || 
-					(!roomOrArtifact && temp.isElementARoom()) || temp.isAssociated(category));
+			while(!dataHandler.hasRoomOrArtifact(toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(toAssoc)) 
+					|| (!roomOrArtifact && dataHandler.isElementARoom(toAssoc)) || dataHandler.isAssociated(toAssoc, category));
 			objectList.add(toAssoc);
 		}
-		while(RawDataInput.yesOrNo(Strings.ACTUATOR_ANOTHER_ASSOCIATION));
-		if (RawDataInput.yesOrNo(Strings.PROCEED_WITH_CREATION))
+		while(RawInputHandler.yesOrNo(Strings.ACTUATOR_ANOTHER_ASSOCIATION));
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
 			Actuator actuator = createActuator(name, category);
-			location.addActuator(actuator);
+			dataHandler.addActuator(actuator, location);
 			for(String object : objectList)
 			{
-				associationManager.getAssociation(object).addAssociation(category);
+				dataHandler.addAssociation(object, category);
 				if (roomOrArtifact)
-					actuator.addEntry((Room)roomManager.getElementByName(object));
+					actuator.addEntry(dataHandler.getRoom(object));
 				else
-					actuator.addEntry((Artifact)artifactManager.getElementByName(object));
+					actuator.addEntry(dataHandler.getArtifact(object));
 			}
 		}
 	}
 	
-	public void readRoomFromUser(HousingUnit house) {
+	public void readRoomFromUser() {
 		String name;
 		do
 		{
-			name = RawDataInput.readNotVoidString(Strings.ROOM_INPUT_NAME);
-			if (house.hasRoom(name) || associationManager.hasEntry(name))
+			name = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_NAME);
+			if (dataHandler.hasRoomOrArtifact(name))
 				System.out.println(Strings.NAME_ALREADY_EXISTENT);
 		}
-		while(house.hasRoom(name));
-		String descr = RawDataInput.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
-		if (RawDataInput.yesOrNo(Strings.PROCEED_WITH_CREATION))
+		while(dataHandler.hasRoomOrArtifact(name));
+		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			Association assoc = new Association(name);
-			Room room = createRoom(name, descr);
-			assoc.setIsElementARoom(true);
-			house.addRoom(room);
-			associationManager.addAssociation(assoc);
-			roomManager.addEntry(room);
+			dataHandler.addRoom(createRoom(name, descr));
 		}
 	}
 	
@@ -203,20 +183,20 @@ public class InputHandler {
 		String name;
 		do
 		{
-			name = RawDataInput.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_NAME);
-			if (sensCatManager.hasEntry(name))
+			name = RawInputHandler.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_NAME);
+			if (dataHandler.hasSensorCategory(name))
 				System.out.println(Strings.NAME_ALREADY_EXISTENT);
 		}
-		while(sensCatManager.hasEntry(name));
-		String abbreviation = RawDataInput.readNotVoidString(Strings.INPUT_CATEGORY_ABBREVIATION);
-		String constructor = RawDataInput.readNotVoidString(Strings.INPUT_CATEGORY_MANUFACTURER);
-		String domain = RawDataInput.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_INFO_DOMAIN);
-		String detectableInfo = RawDataInput.readNotVoidString("Inserisci l'informazione rilevabile dalla categoria");
+		while(dataHandler.hasSensorCategory(name));
+		String abbreviation = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_ABBREVIATION);
+		String constructor = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_MANUFACTURER);
+		String domain = RawInputHandler.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_INFO_DOMAIN);
+		String detectableInfo = RawInputHandler.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_INFO);
 		
-		if (RawDataInput.yesOrNo(Strings.PROCEED_WITH_CREATION))
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
 			SensorCategory cat = createSensorCategory(name, abbreviation, constructor, domain);
-			sensCatManager.addEntry(cat);
+			dataHandler.addSensorCategory(cat);
 			cat.putInfo(detectableInfo);
 		}
 	}
@@ -225,58 +205,63 @@ public class InputHandler {
 		String name;
 		do
 		{
-			name = RawDataInput.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_NAME);
-			if (actCatManager.hasEntry(name))
+			name = RawInputHandler.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_NAME);
+			if (dataHandler.hasActuatorCategory(name))
 				System.out.println(Strings.NAME_ALREADY_EXISTENT);
 		}
-		while(actCatManager.hasEntry(name));
-		String abbreviation = RawDataInput.readNotVoidString(Strings.INPUT_CATEGORY_ABBREVIATION);
-		String constructor = RawDataInput.readNotVoidString(Strings.INPUT_CATEGORY_MANUFACTURER);
+		while(dataHandler.hasActuatorCategory(name));
+		String abbreviation = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_ABBREVIATION);
+		String constructor = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_MANUFACTURER);
 		ArrayList<String> listOfModes = new ArrayList<>();
 		String temp;
 		do
 		{
-			temp = RawDataInput.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_OPERATING_MODE);
+			temp = RawInputHandler.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_OPERATING_MODE);
 			if(!temp.equalsIgnoreCase(Strings.BACK_CHARACTER))
 				listOfModes.add(temp);
 		}
 		while(!temp.equalsIgnoreCase(Strings.BACK_CHARACTER));
-		String defaultMode = RawDataInput.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_DEFAULT_MODE);
+		String defaultMode = RawInputHandler.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_DEFAULT_MODE);
 		
-		if (RawDataInput.yesOrNo(Strings.PROCEED_WITH_CREATION))
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
 			ActuatorCategory cat = createActuatorCategory(name, abbreviation, constructor, listOfModes, defaultMode);
-			actCatManager.addEntry(cat);
+			dataHandler.addActuatorCategory(cat);
 		}
 	}
 
-	public void changeHouseDescription(HousingUnit home) {
-		String descr = RawDataInput.readNotVoidString(Strings.HOUSE_INPUT_DESCRIPTION);
-		if (RawDataInput.yesOrNo(Strings.PROCEED_WITH_SAVING))
+	public void changeHouseDescription() {
+		String descr = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_DESCRIPTION);
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_SAVING))
 		{
-			home.setDescr(descr);
+			dataHandler.changeHouseDescription(descr);
 		}
 	}
 
-	public void changeRoomDescription(Room room) {
-		String descr = RawDataInput.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
-		if (RawDataInput.yesOrNo(Strings.PROCEED_WITH_SAVING))
+	public void changeRoomDescription(String selectedRoom) {
+		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_SAVING))
 		{
-			room.setDescr(descr);
+			dataHandler.changeRoomDescription(selectedRoom, descr);
 		}
 	}
+	
+	private HousingUnit createHouse(String name, String descr) {
+		return new HousingUnit(name, descr);
+	}
+	
 	private Artifact createArtifact(String name, String descr) {
 		return new Artifact(name, descr);
 	}
 	
 	private NumericSensor createNumericSensor(String name, String category) {
 		String realName = name + "_" + category;
-		return new NumericSensor(realName, (SensorCategory)sensCatManager.getElementByName(category));
+		return new NumericSensor(realName, dataHandler.getSensorCategory(category));
 	}
 	
 	private Actuator createActuator(String name, String category) {
 		String realName = name + "_" + category;
-		return new Actuator(realName, (ActuatorCategory)actCatManager.getElementByName(category));
+		return new Actuator(realName, dataHandler.getActuatorCategory(category));
 	}
 	
 	private Room createRoom(String name, String descr) {

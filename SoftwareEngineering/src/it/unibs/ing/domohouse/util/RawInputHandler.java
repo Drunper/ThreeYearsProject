@@ -7,7 +7,7 @@ import java.util.Scanner;
  * Utilizzata nel corso Fondamenti di Programmazione. Autore sconosciuto, utilizzata solo a fini didattici.
  * Classe per la gestione basilare di input da tastiera per leggere interi, double e stringhe con alcuni vincoli.
  */
-public class RawDataInput {
+public class RawInputHandler {
 
 	private static Scanner reader = createScanner();
 	

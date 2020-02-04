@@ -131,5 +131,5 @@ public class Strings {
 			"Inserisci categoria di attuatori"};
 	public static final String [] MAINTAINER_ROOM_VOICES = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto", 
 			"Modifica descrizione stanza", "Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto"};
-	
+
 }
