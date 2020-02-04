@@ -83,7 +83,7 @@ public class ImplementedMenu {
 					break;
 				case 3:
 					DataOutput.clearOutput();
-					DataOutput.printListOfString(home.namesList());
+					DataOutput.printListOfString(home.roomList());
 					System.out.println();
 					System.out.println();
 					
@@ -139,7 +139,7 @@ public class ImplementedMenu {
 					break;
 				case 2:
 					DataOutput.clearOutput();
-					DataOutput.printListOfString(home.namesList());
+					DataOutput.printListOfString(home.roomList());
 					System.out.println();
 					System.out.println();
 					
@@ -173,7 +173,7 @@ public class ImplementedMenu {
 
 	private void showUserRoomMenu(String selectedRoom, HousingUnit home) {
 		DataOutput.clearOutput();
-		Room toWorkOn = (Room)home.getElementByName(selectedRoom);
+		Room toWorkOn = home.getRoomByName(selectedRoom);
 		boolean exitFlag = false;
 		do {
 			int choice = roomMenu.select();
@@ -219,7 +219,7 @@ public class ImplementedMenu {
 	
 	private void showMaintainerRoomMenu(String selectedRoom, HousingUnit home) {
 		DataOutput.clearOutput();
-		Room toWorkOn = (Room)home.getElementByName(selectedRoom);
+		Room toWorkOn = home.getRoomByName(selectedRoom);
 		boolean exitFlag = false;
 		do {
 			int choice = maintainerRoomMenu.select();

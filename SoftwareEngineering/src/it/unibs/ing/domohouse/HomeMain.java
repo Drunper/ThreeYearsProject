@@ -7,8 +7,6 @@ import it.unibs.ing.domohouse.components.HousingUnit;
 import it.unibs.ing.domohouse.components.Room;
 import it.unibs.ing.domohouse.components.Sensor;
 import it.unibs.ing.domohouse.components.SensorCategory;
-import it.unibs.ing.domohouse.util.FileLoader;
-import it.unibs.ing.domohouse.util.FileSaver;
 import it.unibs.ing.domohouse.util.ImplementedMenu;
 import it.unibs.ing.domohouse.util.Manager;
 
@@ -28,7 +26,7 @@ public class HomeMain {
 		ActuatorCategory interruttori = new ActuatorCategory("interruttori di accensione", "sigla:costruttore:modalità di default"); 
 		home = new HousingUnit("Casa di Ivan", "Boh"); 
 		Room soggiorno = new Room("Soggiorno", "Sala in cui si vive penso");
-		home.addEntry(soggiorno);
+		home.addRoom(soggiorno);
 		Artifact lampadario = new Artifact("lampadarioMurano", "Sono un lampa-dario");
 		Artifact portaOmbrelli = new Artifact("portaOmbrelli", "servo solo per far numero e non ho molto senso");
 		Sensor temperino = new Sensor("t1_temperatura", temperatura);

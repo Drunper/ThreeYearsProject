@@ -110,7 +110,6 @@ public class DataOutput {
 		}
 	}
 	
-	
 	/*I know it sucks, but there's no known way to clear the output inside an IDE
 	I could have a better way if we ran natively the app into a Windows command prompt,
 	but since we run it in Eclipse this is the best way to do it.*/

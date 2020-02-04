@@ -34,10 +34,15 @@ public class Actuator implements Manageable, Serializable {
 		this.name = name;
 	}
 	
-	public void addEntry(Manageable toAdd) {
+	//Fatto per chiarezza, solo un artefatto o una stanza può essere controllato dall'attuatore
+	public void addEntry(Room toAdd) {
 		controlledObjects.addEntry(toAdd);
 	}
-
+	
+	public void addEntry(Artifact toAdd) {
+		controlledObjects.addEntry(toAdd);
+	}
+	
 	public void setOperatingMode(String operatingMode) {
 		this.operatingMode = operatingMode;
 		Consumer<Gettable> mode = category.getOperatingMode(operatingMode);

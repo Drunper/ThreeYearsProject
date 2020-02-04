@@ -103,6 +103,7 @@ public class InputHandler {
 		if (RawDataInput.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
 			Sensor sensor = createNumericSensor(name, category);
+			sensor.setMeasuringRoom(roomOrArtifact);
 			location.addSensor(sensor);
 			for(String object : objectList)
 			{
@@ -170,9 +171,9 @@ public class InputHandler {
 			{
 				associationManager.getAssociation(object).addAssociation(category);
 				if (roomOrArtifact)
-					actuator.addEntry(roomManager.getElementByName(object));
+					actuator.addEntry((Room)roomManager.getElementByName(object));
 				else
-					actuator.addEntry(artifactManager.getElementByName(object));
+					actuator.addEntry((Artifact)artifactManager.getElementByName(object));
 			}
 		}
 	}
@@ -182,17 +183,17 @@ public class InputHandler {
 		do
 		{
 			name = RawDataInput.readNotVoidString(Strings.ROOM_INPUT_NAME);
-			if (house.hasEntry(name) || associationManager.hasEntry(name))
+			if (house.hasRoom(name) || associationManager.hasEntry(name))
 				System.out.println(Strings.NAME_ALREADY_EXISTENT);
 		}
-		while(house.hasEntry(name));
+		while(house.hasRoom(name));
 		String descr = RawDataInput.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
 		if (RawDataInput.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
 			Association assoc = new Association(name);
 			Room room = createRoom(name, descr);
 			assoc.setIsElementARoom(true);
-			house.addEntry(room);
+			house.addRoom(room);
 			associationManager.addAssociation(assoc);
 			roomManager.addEntry(room);
 		}

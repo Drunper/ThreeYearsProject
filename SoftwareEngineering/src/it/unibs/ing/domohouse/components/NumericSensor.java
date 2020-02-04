@@ -32,10 +32,10 @@ public class NumericSensor extends Sensor {
 		setBounds(variableName);
 		double measure = 0;
 		double valueFromObject;
-		String [] objectNames = namesList();
+		String [] objectNames = measuredObjectsList();
 		for (String name : objectNames)
 		{
-			Gettable element = (Gettable)getElementByName(name);
+			Gettable element = getElementByName(name);
 			valueFromObject = element.getNumericProperty(variableName);
 			if(valueFromObject > upperBound)
 				valueFromObject = upperBound;
@@ -61,7 +61,7 @@ public class NumericSensor extends Sensor {
 		else
 			status = "spento";
 		unformattedText = getName()+':'+category.getName()+':';
-		for(String measuredObject : namesList())
+		for(String measuredObject : measuredObjectsList())
 		{
 			unformattedText = unformattedText+"me:"+measuredObject+':';
 		}
