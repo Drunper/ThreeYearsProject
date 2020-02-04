@@ -85,7 +85,7 @@ public class DataOutput {
 		do
 		{
 			int k = i - 2; // we are starting from the fourth token but it's the first information
-			System.out.println(Strings.INFO_DOMAIN+k+": "+splitted[i]);
+			System.out.println(Strings.INFO_DOMAIN+k+Strings.SEPARATOR_WITH_SPACE+splitted[i]);
 			i++;
 		}
 		while(!splitted[i].equalsIgnoreCase(Strings.END_DOMAIN_TAG));

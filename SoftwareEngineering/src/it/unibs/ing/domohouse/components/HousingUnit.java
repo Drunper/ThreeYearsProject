@@ -13,6 +13,7 @@ public class HousingUnit implements Serializable {
 	public HousingUnit(String name, String descr) {
 		this.name = name;
 		this.descr = descr;
+		roomManager = new Manager();
 	}
 	
 	public String getName() {

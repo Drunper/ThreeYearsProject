@@ -3,48 +3,43 @@ package it.unibs.ing.domohouse.util;
 import java.util.*;
 
 /*
-Questa classe rappresenta un menu testuale generico a piu' voci
-Si suppone che la voce per uscire sia sempre associata alla scelta 0 
-e sia presentata in fondo al menu
-
-*/
+ * Classe utilizzata nel corso di Fondamenti di Programmazione. Autore sconosciuto. Utilizzata solamente a fini didattici.
+ * 
+ */
 public class MyMenu
 {
-
-
-  private String titolo;
-  private String [] voci;
-
+	private String titolo;
+	private String [] voci;
 	
-  public MyMenu (String titolo, String [] voci)
-  {
-	this.titolo = titolo;
-	this.voci = voci;
-  }
-
-  public int select ()
-  {
-	stampaMenu();
-	System.out.println("Effettua la scelta desiderata: ");
-	Scanner in = new Scanner(System.in);
-	int num = in.nextInt();
-	return num;
+	private final static String FRAME = "--------------------------------";
+	private final static String EXIT_VOICE = "0\tEsci";
+	private final static String INSERT_REQUEST = "Digita il numero dell'opzione desiderata > ";
 	
-  }
-		
-  public void stampaMenu ()
-  {
-	System.out.println("--------------------------------");
-	System.out.println(titolo);
-	System.out.println("--------------------------------");
-    for (int i=0; i<voci.length; i++)
-	 {
-	  System.out.println( (i+1) + "\t" + voci[i]);
-	 }
-    System.out.println();
-	System.out.println("0\tEsci");
-    System.out.println();
-  }
-  	
+	public MyMenu (String titolo, String [] voci)
+	{
+		this.titolo = titolo;
+		this.voci = voci;
+	}
+	
+	public int select ()
+	{
+		stampaMenu();
+		return RawDataInput.readIntWithBounds(INSERT_REQUEST, 0, voci.length);
+	}
+			
+	public void stampaMenu ()
+	{
+		System.out.println(FRAME);
+		System.out.println(titolo);
+		System.out.println(FRAME);
+	    for (int i=0; i<voci.length; i++)
+	    {
+	    	System.out.println( (i+1) + "\t" + voci[i]);
+	    }
+	    System.out.println();
+	    System.out.println(EXIT_VOICE);
+		System.out.println();
+	}
+	  	
 }
-
+	

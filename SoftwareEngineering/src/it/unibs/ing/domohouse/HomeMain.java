@@ -49,8 +49,6 @@ public class HomeMain {
 		FileLoader fl = new FileLoader();
 		SensorCategory temperatura = (SensorCategory) fl.ReadObjectFromFile("data\\categories\\sensor\\categoria_temperatura.dat");
 		*/ 
-		
-		//CATEGORY STRUCTURES (from files after this)
 			
 		allMenu.show(home);
 	}

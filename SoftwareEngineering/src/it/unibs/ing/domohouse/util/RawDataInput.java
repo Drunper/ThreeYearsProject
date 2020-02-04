@@ -11,17 +11,19 @@ public class RawDataInput {
 
 	private static Scanner reader = createScanner();
 	
-	private final static String FORMAT_ERROR = "Attenzione: il dato inserito non e' nel formato corretto";
-	private final static String MINIMUM_VALUE_ERROR = "Attenzione: e' richiesto un valore maggiore o uguale a ";
-	private final static String VOID_STRING_ERROR = "Attenzione: non hai inserito alcun carattere";
-	private final static String MAXIMUM_VALUE_ERROR = "Attenzione: e' richiesto un valore minore o uguale a ";
-	private final static String USABLE_CHARACTERS = "Attenzione: i caratteri ammissibili sono: ";
+	private static final String FORMAT_ERROR = "Attenzione: il dato inserito non e' nel formato corretto";
+	private static final String MINIMUM_VALUE_ERROR = "Attenzione: e' richiesto un valore maggiore o uguale a ";
+	private static final String VOID_STRING_ERROR = "Attenzione: non hai inserito alcun carattere";
+	private static final String MAXIMUM_VALUE_ERROR = "Attenzione: e' richiesto un valore minore o uguale a ";
+	private static final String USABLE_CHARACTERS = "Attenzione: i caratteri ammissibili sono: ";
+	private static final String MAX_LENGTH_STRING_ERROR = "Attenzione: il numero massimo di caratteri ammessi è: ";
 	
 	private final static char ANSWER_YES ='S';
 	private final static char ANSWER_NO ='N';
 	
 	private static final int POSITIVE_NUMBER_MINIMUM_VALUE = 1;
 	private static final int NON_NEGATIVE_MINIMUM_VALUE = 0;
+
 	
 	public static Scanner createScanner() {
 		Scanner createdScan = new Scanner(System.in);
@@ -35,18 +37,33 @@ public class RawDataInput {
 	}
 	
 	public static String readNotVoidString(String message) {
-		boolean endFlag=false;
+		boolean endFlag = false;
 		String rdString = null;
 		do
 		{
 			rdString = readString(message);
 			rdString = rdString.trim();
 			if (rdString.length() > 0)
-				endFlag=true;
+				endFlag = true;
 			else
 				System.out.println(VOID_STRING_ERROR);
 		} 
-		while (!endFlag);
+		while(!endFlag);
+		return rdString;
+	}
+	
+	public static String readStringWithMaximumLength(String message, int maxLength) {
+		boolean endFlag = false;
+		String rdString = null;
+		do
+		{
+			rdString = readNotVoidString(message);
+			if (rdString.length() < maxLength)
+				endFlag = true;
+			else
+				System.out.println(MAX_LENGTH_STRING_ERROR + maxLength);
+		}
+		while(!endFlag);
 		return rdString;
 	}
 	  

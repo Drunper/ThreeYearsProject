@@ -81,6 +81,7 @@ public class Strings {
 	
 	//DATA OUTPUT
 	public static final String SEPARATOR = ":";
+	public static final String SEPARATOR_WITH_SPACE = ": ";
 	public static final String NAME = "Nome: ";
 	public static final String HOUSING_UNIT = "Unità immobiliare";
 	public static final String ROOM = "Stanza";

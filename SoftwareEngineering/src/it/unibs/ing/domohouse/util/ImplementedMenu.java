@@ -10,6 +10,7 @@ public class ImplementedMenu {
 	private HomeLogin login;
 	private InputHandler inputHandler;
 
+	//MENU
 	private final MyMenu menu = new MyMenu(Strings.LOGIN_MENU_TITLE, Strings.LOGIN_VOICES);
 	private final MyMenu userMenu = new MyMenu(Strings.USER_MENU_TITLE, Strings.USER_VOICES);
 	private final MyMenu roomMenu  = new MyMenu(Strings.USER_ROOM_MENU_TITLE, Strings.ROOM_VOICES);
@@ -88,7 +89,7 @@ public class ImplementedMenu {
 					System.out.println();
 					
 					String selectedRoom = RawDataInput.readNotVoidString(Strings.INSERT_ROOM);
-					showMaintainerRoomMenu(selectedRoom, home);
+					showMaintainerRoomMenu(home.getRoomByName(selectedRoom));
 					break;
 				case 4:
 					inputHandler.readRoomFromUser(home);
@@ -144,7 +145,7 @@ public class ImplementedMenu {
 					System.out.println();
 					
 					String selectedRoom = RawDataInput.readNotVoidString(Strings.INSERT_ROOM);
-					showUserRoomMenu(selectedRoom, home);
+					showUserRoomMenu(home.getRoomByName(selectedRoom));
 					break;
 				case 3:
 					DataOutput.clearOutput();
@@ -171,9 +172,8 @@ public class ImplementedMenu {
 		while(exitFlag!=true);
 	}
 
-	private void showUserRoomMenu(String selectedRoom, HousingUnit home) {
+	private void showUserRoomMenu(Room toWorkOn) {
 		DataOutput.clearOutput();
-		Room toWorkOn = home.getRoomByName(selectedRoom);
 		boolean exitFlag = false;
 		do {
 			int choice = roomMenu.select();
@@ -217,9 +217,8 @@ public class ImplementedMenu {
 		while(exitFlag!=true);		
 	}
 	
-	private void showMaintainerRoomMenu(String selectedRoom, HousingUnit home) {
+	private void showMaintainerRoomMenu(Room toWorkOn) {
 		DataOutput.clearOutput();
-		Room toWorkOn = home.getRoomByName(selectedRoom);
 		boolean exitFlag = false;
 		do {
 			int choice = maintainerRoomMenu.select();
