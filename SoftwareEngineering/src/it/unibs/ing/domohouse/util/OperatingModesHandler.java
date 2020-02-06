@@ -26,4 +26,8 @@ public class OperatingModesHandler {
 	public static Consumer<Gettable> getOperatingMode(String name) {
 		return operatingModesMap.get(name);
 	}
+	
+	public static boolean hasOperatingMode(String name) {
+		return operatingModesMap.containsKey(name);
+	}
 }

@@ -183,4 +183,8 @@ public class DataHandler {
 	public void addActuator(Actuator actuator, String location) {
 		housingUnit.addActuator(actuator, location);
 	}
+
+	public boolean hasOperatingMode(String name) {
+		return OperatingModesHandler.hasOperatingMode(name);
+	}
 }

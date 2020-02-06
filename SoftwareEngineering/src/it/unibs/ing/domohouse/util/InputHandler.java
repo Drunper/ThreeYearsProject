@@ -218,7 +218,12 @@ public class InputHandler {
 		{
 			temp = RawInputHandler.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_OPERATING_MODE);
 			if(!temp.equalsIgnoreCase(Strings.BACK_CHARACTER))
-				listOfModes.add(temp);
+			{
+				if (dataHandler.hasOperatingMode(temp))
+					listOfModes.add(temp);
+				else
+					System.out.println(Strings.OPERATING_MODE_NOT_SUPPORTED);
+			}
 		}
 		while(!temp.equalsIgnoreCase(Strings.BACK_CHARACTER));
 		String defaultMode = RawInputHandler.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_DEFAULT_MODE);
@@ -280,6 +285,11 @@ public class InputHandler {
 		{
 			descr = descr+':'+toConcat;
 		}
-		return new ActuatorCategory(name, descr);
+		ActuatorCategory cat = new ActuatorCategory(name, descr);
+		for(String toAdd : listOfModes)
+		{
+			cat.putOperatingMode(toAdd, OperatingModesHandler.getOperatingMode(toAdd));
+		}
+		return cat;
 	}
 }

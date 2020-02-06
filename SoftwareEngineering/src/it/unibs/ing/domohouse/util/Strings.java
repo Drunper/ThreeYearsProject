@@ -78,6 +78,7 @@ public class Strings {
 	public static final String ACTUATOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di attuatori";
 	public static final String ACTUATOR_CATEGORY_INPUT_OPERATING_MODE = "Inserisci una modalità operativa (^ per terminare)";
 	public static final String ACTUATOR_CATEGORY_INPUT_DEFAULT_MODE = "Inserisci la modalità di default (tra quelle già inserite)";
+	public static final String OPERATING_MODE_NOT_SUPPORTED = "La modalità operativa richiesta non è supportata dal sistema";
 	
 	//DATA OUTPUT
 	public static final String SEPARATOR = ":";

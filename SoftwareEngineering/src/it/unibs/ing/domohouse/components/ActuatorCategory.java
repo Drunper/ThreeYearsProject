@@ -39,8 +39,8 @@ public class ActuatorCategory implements Manageable, Serializable {
 		return operatingModesMap.keySet().toArray(new String[0]);
 	}
 	
-	public void putOperatingMode(String name) {
-		operatingModesMap.put(name, OperatingModesHandler.getOperatingMode(name));
+	public void putOperatingMode(String name, Consumer<Gettable> operatingMode) {
+		operatingModesMap.put(name, operatingMode);
 	}
 	
 	public Consumer<Gettable >getOperatingMode(String name) {
