@@ -1,13 +1,15 @@
 package it.unibs.ing.domohouse.util;
 
+import java.io.Serializable;
+
 import it.unibs.ing.domohouse.components.*;
 
-public class DataHandler {
+public class DataHandler implements Serializable {
 
 	private Manager sensorCategoryManager;
 	private Manager actuatorCategoryManager;
 	private HousingUnit housingUnit;
-	
+		
 	public DataHandler () {
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();

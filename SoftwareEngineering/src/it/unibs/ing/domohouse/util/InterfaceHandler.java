@@ -10,6 +10,8 @@ public class InterfaceHandler {
 	private HomeLogin login;
 	private InputHandler inputHandler;
 	private DataHandler dataHandler;
+	private FileLoader loader;
+	private FileSaver saver;
 
 	//MENU
 	private final Menu menu = new Menu(Strings.LOGIN_MENU_TITLE, Strings.LOGIN_VOICES);
@@ -22,6 +24,8 @@ public class InterfaceHandler {
 		login = new HomeLogin();
 		dataHandler = new DataHandler();
 		inputHandler = new InputHandler(dataHandler);
+		loader = new FileLoader(dataHandler);
+		saver = new FileSaver();
 		login.addEntry(Strings.MAINTAINER_USER, Strings.PASSWORD); 
 	}
 	
@@ -65,6 +69,7 @@ public class InterfaceHandler {
 			}
 		}
 		while (scelta != 0);
+		saver.writeDataHandlerToFile(dataHandler);
 	}
 	
 	private void showMaintainerMenu() {
@@ -119,7 +124,7 @@ public class InterfaceHandler {
 					break;
 				case 8:
 					inputHandler.readActuatorCategoryFromUser();
-					break;
+					break;					
 			}
 		}
 		while(exitFlag != true);
