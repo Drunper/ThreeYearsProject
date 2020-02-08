@@ -124,7 +124,10 @@ public class InterfaceHandler {
 					break;
 				case 8:
 					inputHandler.readActuatorCategoryFromUser();
-					break;					
+					break;		
+				case 9:
+					loader.createBasicFiles();
+					break;
 			}
 		}
 		while(exitFlag != true);
@@ -169,6 +172,9 @@ public class InterfaceHandler {
 					
 					String selectedActuCategory = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR_CATEGORY);
 					OutputHandler.printSensorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
+					break;
+				case 5:
+					loader.createBasicFiles();
 					break;
 			}
 		}

@@ -38,7 +38,7 @@ public class FileLoader {
 	 * Ottiene la lista dei file presenti in una data cartella
 	 */
 	private List<File> getFiles(String path) {
-		try(Stream<Path> files = Files.walk(Paths.get("/path/to/folder"))){
+		try(Stream<Path> files = Files.walk(Paths.get(path))){
 			return files
 	                .filter(Files::isRegularFile)
 	                .map(Path::toFile)
