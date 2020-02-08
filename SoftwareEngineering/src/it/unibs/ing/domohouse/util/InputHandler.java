@@ -195,9 +195,7 @@ public class InputHandler {
 		
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			SensorCategory cat = createSensorCategory(name, abbreviation, constructor, domain);
-			dataHandler.addSensorCategory(cat);
-			cat.putInfo(detectableInfo);
+			createSensorCategory(name, abbreviation, constructor, domain, detectableInfo);
 		}
 	}
 	
@@ -273,9 +271,11 @@ public class InputHandler {
 		return new Room(name, descr);
 	}
 	
-	private SensorCategory createSensorCategory(String name, String abbreviation, String constructor, String domain) {
+	public void createSensorCategory(String name, String abbreviation, String constructor, String domain, String detectableInfo) {
 		String descr = abbreviation+':'+constructor+':'+domain;
-		return new SensorCategory(name, descr);
+		SensorCategory cat = new SensorCategory(name, descr);
+		dataHandler.addSensorCategory(cat);
+		cat.putInfo(detectableInfo);
 	}
 	
 	private ActuatorCategory createActuatorCategory(String name, String abbreviation, String constructor,

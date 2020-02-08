@@ -24,7 +24,7 @@ public class InterfaceHandler {
 		login = new HomeLogin();
 		dataHandler = new DataHandler();
 		inputHandler = new InputHandler(dataHandler);
-		loader = new FileLoader(dataHandler);
+		loader = new FileLoader(inputHandler);
 		saver = new FileSaver();
 		login.addEntry(Strings.MAINTAINER_USER, Strings.PASSWORD); 
 	}
