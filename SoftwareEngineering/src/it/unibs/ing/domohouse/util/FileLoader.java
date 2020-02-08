@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,13 +22,13 @@ public class FileLoader {
 	 * ottenendo il separatore usato dal file system. A quel punto non saranno più costanti. Bisogna informarsi su questo
 	 * ambito.
 	 */
-	private static final String SENSOR_CATEGORIES_PATH = "C:\\test\\data\\categories\\sensor";
-	private static final String ACTUATOR_CATEGORIES_PATH = "C:\\test\\data\\categories\\actuator";
-	private static final String HOUSES_PATH = "C:\\test\\data\\houses";
-	private static final String ROOMS_PATH = "C:\\test\\data\\rooms";
-	private static final String SENSOR_PATH = "C:\\test\\data\\sensors";
-	private static final String ACTUATOR_PATH = "C:\\test\\data\\actuators";
-	private static final String ARTIFACT_PATH = "C:\\test\\data\\artifacts";
+	private static final String SENSOR_CATEGORIES_PATH = "inizialization\\categories\\sensor";
+	private static final String ACTUATOR_CATEGORIES_PATH = "inizialization\\categories\\actuator";
+	private static final String HOUSES_PATH = "inizialization\\houses";
+	private static final String ROOMS_PATH = "inizialization\\rooms";
+	private static final String SENSOR_PATH = "inizialization\\sensors";
+	private static final String ACTUATOR_PATH = "inizialization\\actuators";
+	private static final String ARTIFACT_PATH = "inizialization\\artifacts";
 
 	
 	public FileLoader(InputHandler inputHandler) {
@@ -119,28 +120,232 @@ public class FileLoader {
 
 	private void readActuatorCategories() {
 		List<File> filesInFolder = getFiles(ACTUATOR_CATEGORIES_PATH);
+		for(File file : filesInFolder)
+		{
+			String name = null;
+			String abbreviation = null;
+			String manufacturer = null;
+			String defaultMode = null;
+			ArrayList<String> listOfModes = new ArrayList<>();
+			try (BufferedReader bReader = new BufferedReader(new FileReader(file))) {
+				String line;
+				
+			    while ((line = bReader.readLine()) != null) 
+			    {
+			    	String [] splitLine = line.split(":");
+			    	switch(splitLine[Strings.FIRST_TOKEN])
+			    	{
+			    		case "Nome":
+			    			name = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Sigla":
+			    			abbreviation = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Costruttore":
+			    			manufacturer = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Modalità_di_default":
+			    			defaultMode = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Modalità_operative":
+			    			String [] modes = splitLine[Strings.SECOND_TOKEN].split(",");
+			    			for(String mode : modes)
+			    				listOfModes.add(mode);
+			    			break;
+			    	}
+			    }
+			 
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			inputHandler.createActuatorCategory(name, abbreviation, manufacturer, listOfModes, defaultMode);
+		}
 	}
 	
 	private void readHouse() {
-		// TODO legge nome, descrizione della casa
+		List<File> filesInFolder = getFiles(HOUSES_PATH);
+		for(File file : filesInFolder)
+		{
+			String name = null;
+			String descr = null;
+			try (BufferedReader bReader = new BufferedReader(new FileReader(file))) {
+				String line;
+				
+			    while ((line = bReader.readLine()) != null) 
+			    {
+			    	String [] splitLine = line.split(":");
+			    	switch(splitLine[Strings.FIRST_TOKEN])
+			    	{
+			    		case "Nome":
+			    			name = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Descrizione":
+			    			descr = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    	}
+			    }
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			inputHandler.createHouse(name, descr);
+		}
 	}
 	
 	private void readRooms() {
-		// TODO legge tutte le stanze e le mette nella casa
+		List<File> filesInFolder = getFiles(ROOMS_PATH);
+		for(File file : filesInFolder)
+		{
+			String name = null;
+			String descr = null;
+			try (BufferedReader bReader = new BufferedReader(new FileReader(file))) {
+				String line;
+				
+			    while ((line = bReader.readLine()) != null) 
+			    {
+			    	String [] splitLine = line.split(":");
+			    	switch(splitLine[Strings.FIRST_TOKEN])
+			    	{
+			    		case "Nome":
+			    			name = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Descrizione":
+			    			descr = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    	}
+			    }
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			inputHandler.createRoom(name, descr);
+		}
 	}
 
 	private void readSensors() {
-		// TODO Auto-generated method stub
+		List<File> filesInFolder = getFiles(SENSOR_PATH);
+		for(File file : filesInFolder)
+		{
+			String name = null;
+			String category = null;
+			String location = null;
+			boolean roomOrArtifact = false;
+			ArrayList<String> controlledObjects = new ArrayList<>();
+			try (BufferedReader bReader = new BufferedReader(new FileReader(file))) {
+				String line;
+				
+			    while ((line = bReader.readLine()) != null) 
+			    {
+			    	String [] splitLine = line.split(":");
+			    	switch(splitLine[Strings.FIRST_TOKEN])
+			    	{
+			    		case "Nome":
+			    			name = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Categoria":
+			    			category = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Stanza":
+			    			location = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Stanze_o_artefatti":
+			    			if(splitLine[Strings.SECOND_TOKEN].equalsIgnoreCase("stanze"))
+			    				roomOrArtifact = true;
+			    			else
+			    				roomOrArtifact = false;
+			    			break;
+			    		case "Oggetti_controllati":
+			    			String [] listOfObjects = splitLine[Strings.SECOND_TOKEN].split(",");
+			    			for(String object : listOfObjects)
+			    				controlledObjects.add(object);
+			    			break;
+			    	}
+			    }
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			inputHandler.createNumericSensor(name, category, roomOrArtifact, controlledObjects, location);
+		}
 	}
 
 	private void readActuators() {
-		// TODO vedi sopra
+		List<File> filesInFolder = getFiles(ACTUATOR_PATH);
+		for(File file : filesInFolder)
+		{
+			String name = null;
+			String category = null;
+			String location = null;
+			boolean roomOrArtifact = false;
+			ArrayList<String> controlledObjects = new ArrayList<>();
+			try (BufferedReader bReader = new BufferedReader(new FileReader(file))) {
+				String line;
+				
+			    while ((line = bReader.readLine()) != null) 
+			    {
+			    	String [] splitLine = line.split(":");
+			    	switch(splitLine[Strings.FIRST_TOKEN])
+			    	{
+			    		case "Nome":
+			    			name = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Categoria":
+			    			category = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Stanza":
+			    			location = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Stanze_o_artefatti":
+			    			if(splitLine[Strings.SECOND_TOKEN].equalsIgnoreCase("stanze"))
+			    				roomOrArtifact = true;
+			    			else
+			    				roomOrArtifact = false;
+			    			break;
+			    		case "Oggetti_controllati":
+			    			String [] listOfObjects = splitLine[Strings.SECOND_TOKEN].split(",");
+			    			for(String object : listOfObjects)
+			    				controlledObjects.add(object);
+			    			break;
+			    	}
+			    }
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			inputHandler.createNumericSensor(name, category, roomOrArtifact, controlledObjects, location);
+		}
 	}
 	
 	private void readArtifacts() {
-		// TODO legge tutti gli artefatti e li mette nelle stanze corrette
+		List<File> filesInFolder = getFiles(ARTIFACT_PATH);
+		for(File file : filesInFolder)
+		{
+			String name = null;
+			String descr = null;
+			String location = null;
+			try (BufferedReader bReader = new BufferedReader(new FileReader(file))) {
+				String line;
+				
+			    while ((line = bReader.readLine()) != null) 
+			    {
+			    	String [] splitLine = line.split(":");
+			    	switch(splitLine[Strings.FIRST_TOKEN])
+			    	{
+			    		case "Nome":
+			    			name = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Descrizione":
+			    			descr = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    		case "Stanza":
+			    			location = splitLine[Strings.SECOND_TOKEN];
+			    			break;
+			    	}
+			    }
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			inputHandler.createArtifact(name, descr, location);
+		}
 	}
 	
+	/*
 	private Object ReadObjectFromFile(String filepath) {
         try (ObjectInputStream objectIn = new ObjectInputStream(new FileInputStream(filepath))){
             return objectIn.readObject();
@@ -149,4 +354,5 @@ public class FileLoader {
             return null;
         }
     }
+    */
 }

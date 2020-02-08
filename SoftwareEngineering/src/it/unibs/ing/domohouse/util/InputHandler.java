@@ -23,7 +23,10 @@ public class InputHandler {
 	public void readHouseFromUser() {
 		String name = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_NAME);
 		String descr = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_DESCRIPTION);
-		dataHandler.addHouse(createHouse(name, descr));
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
+		{
+			createHouse(name, descr);
+		}
 	}
 	
 	public void readArtifactFromUser(String location) {
@@ -38,7 +41,7 @@ public class InputHandler {
 		String descr = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			dataHandler.addArtifact(location, createArtifact(name, descr));
+			createArtifact(name, descr, location);
 		}
 	}
 	
@@ -89,17 +92,7 @@ public class InputHandler {
 		while(RawInputHandler.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			Sensor sensor = createNumericSensor(name, category);
-			sensor.setMeasuringRoom(roomOrArtifact);
-			dataHandler.addSensor(location, sensor);
-			for(String object : objectList)
-			{
-				dataHandler.addAssociation(object, category);
-				if (roomOrArtifact)
-					sensor.addEntry(dataHandler.getRoom(object));
-				else
-					sensor.addEntry(dataHandler.getArtifact(object));
-			}
+			createNumericSensor(name, category, roomOrArtifact, objectList, location);
 		}
 	}
 	
@@ -150,16 +143,7 @@ public class InputHandler {
 		while(RawInputHandler.yesOrNo(Strings.ACTUATOR_ANOTHER_ASSOCIATION));
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			Actuator actuator = createActuator(name, category);
-			dataHandler.addActuator(actuator, location);
-			for(String object : objectList)
-			{
-				dataHandler.addAssociation(object, category);
-				if (roomOrArtifact)
-					actuator.addEntry(dataHandler.getRoom(object));
-				else
-					actuator.addEntry(dataHandler.getArtifact(object));
-			}
+			createActuator(name, category, roomOrArtifact, objectList, location);
 		}
 	}
 	
@@ -175,7 +159,7 @@ public class InputHandler {
 		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			dataHandler.addRoom(createRoom(name, descr));
+			createRoom(name, descr);
 		}
 	}
 	
@@ -228,8 +212,7 @@ public class InputHandler {
 		
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			ActuatorCategory cat = createActuatorCategory(name, abbreviation, constructor, listOfModes, defaultMode);
-			dataHandler.addActuatorCategory(cat);
+			createActuatorCategory(name, abbreviation, constructor, listOfModes, defaultMode);
 		}
 	}
 
@@ -249,26 +232,49 @@ public class InputHandler {
 		}
 	}
 	
-	private HousingUnit createHouse(String name, String descr) {
-		return new HousingUnit(name, descr);
+	public void createHouse(String name, String descr) {
+		HousingUnit house = new HousingUnit(name, descr);
+		dataHandler.addHouse(house);
 	}
 	
-	private Artifact createArtifact(String name, String descr) {
-		return new Artifact(name, descr);
+	public void createArtifact(String name, String descr, String location) {
+		Artifact arti = new Artifact(name, descr);
+		dataHandler.addArtifact(location, arti);
 	}
 	
-	private NumericSensor createNumericSensor(String name, String category) {
+	public void createNumericSensor(String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
 		String realName = name + "_" + category;
-		return new NumericSensor(realName, dataHandler.getSensorCategory(category));
+		Sensor sensor = new NumericSensor(realName, dataHandler.getSensorCategory(category));
+		sensor.setMeasuringRoom(roomOrArtifact);
+		dataHandler.addSensor(location, sensor);
+		for(String object : objectList)
+		{
+			dataHandler.addAssociation(object, category);
+			if (roomOrArtifact)
+				sensor.addEntry(dataHandler.getRoom(object));
+			else
+				sensor.addEntry(dataHandler.getArtifact(object));
+		}
 	}
 	
-	private Actuator createActuator(String name, String category) {
+	public void createActuator(String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
 		String realName = name + "_" + category;
-		return new Actuator(realName, dataHandler.getActuatorCategory(category));
+		Actuator actuator = new Actuator(realName, dataHandler.getActuatorCategory(category));
+		actuator.setControllingRoom(roomOrArtifact);
+		dataHandler.addActuator(location, actuator);
+		for(String object : objectList)
+		{
+			dataHandler.addAssociation(object, category);
+			if (roomOrArtifact)
+				actuator.addEntry(dataHandler.getRoom(object));
+			else
+				actuator.addEntry(dataHandler.getArtifact(object));
+		}
 	}
 	
-	private Room createRoom(String name, String descr) {
-		return new Room(name, descr);
+	public void createRoom(String name, String descr) {
+		Room room = new Room(name, descr);
+		dataHandler.addRoom(room);
 	}
 	
 	public void createSensorCategory(String name, String abbreviation, String constructor, String domain, String detectableInfo) {
@@ -278,9 +284,9 @@ public class InputHandler {
 		cat.putInfo(detectableInfo);
 	}
 	
-	private ActuatorCategory createActuatorCategory(String name, String abbreviation, String constructor,
+	public void createActuatorCategory(String name, String abbreviation, String manufacturer,
 			ArrayList<String> listOfModes, String defaultMode) {
-		String descr = abbreviation+':'+constructor+':'+defaultMode;
+		String descr = abbreviation+':'+manufacturer+':'+defaultMode;
 		for(String toConcat : listOfModes)
 		{
 			descr = descr+':'+toConcat;
@@ -290,6 +296,6 @@ public class InputHandler {
 		{
 			cat.putOperatingMode(toAdd, OperatingModesHandler.getOperatingMode(toAdd));
 		}
-		return cat;
+		dataHandler.addActuatorCategory(cat);
 	}
 }

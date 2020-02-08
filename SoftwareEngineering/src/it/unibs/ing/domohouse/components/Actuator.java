@@ -15,6 +15,8 @@ public class Actuator implements Manageable, Serializable {
 	private String operatingMode;
 	private String defaultMode;
 	private boolean state;
+	private boolean controllingRoom;
+
 
 	public Actuator(String name, ActuatorCategory category) {
 		super();
@@ -41,6 +43,14 @@ public class Actuator implements Manageable, Serializable {
 	
 	public void addEntry(Artifact toAdd) {
 		controlledObjects.addEntry(toAdd);
+	}
+	
+	public boolean isControllingRoom() {
+		return controllingRoom;
+	}
+
+	public void setControllingRoom(boolean controllingRoom) {
+		this.controllingRoom = controllingRoom;
 	}
 	
 	public void setOperatingMode(String operatingMode) {

@@ -1,6 +1,5 @@
 package it.unibs.ing.domohouse.util;
 
-import java.util.*;
 
 /*
  * Classe utilizzata nel corso di Fondamenti di Programmazione. Autore sconosciuto. Utilizzata solamente a fini didattici.

@@ -182,8 +182,8 @@ public class DataHandler implements Serializable {
 		housingUnit.addArtifact(toAdd, location);
 	}
 	
-	public void addActuator(Actuator actuator, String location) {
-		housingUnit.addActuator(actuator, location);
+	public void addActuator(String location, Actuator toAdd) {
+		housingUnit.addActuator(toAdd, location);
 	}
 
 	public boolean hasOperatingMode(String name) {
