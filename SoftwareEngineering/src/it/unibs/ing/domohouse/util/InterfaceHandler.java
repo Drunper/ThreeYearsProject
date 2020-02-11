@@ -151,7 +151,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getRoomList());
 					System.out.println();
 					System.out.println();
-					
+
 					String selectedRoom = RawInputHandler.readNotVoidString(Strings.INSERT_ROOM);
 					showUserRoomMenu(selectedRoom);
 					break;
@@ -201,7 +201,7 @@ public class InterfaceHandler {
 				System.out.println();
 				
 				String selectedSensor = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR);
-				OutputHandler.printSensor(dataHandler.getSensorString(selectedSensor));
+				OutputHandler.printSensor(dataHandler.getSensorString((selectedSensor)));
 				break;
 			case 3:
 				OutputHandler.clearOutput();
@@ -210,7 +210,7 @@ public class InterfaceHandler {
 				System.out.println();
 				
 				String selectedActuator = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR);
-				OutputHandler.printSensor(dataHandler.getActuatorString(selectedActuator));
+				OutputHandler.printActuator(dataHandler.getActuatorString(selectedActuator));
 				break;
 			case 4:
 				OutputHandler.clearOutput();
@@ -219,7 +219,7 @@ public class InterfaceHandler {
 				System.out.println();
 				
 				String selectedArtifact = RawInputHandler.readNotVoidString(Strings.INSERT_ARTIFACT);
-				OutputHandler.printSensor(dataHandler.getArtifactString(selectedArtifact));
+				OutputHandler.printArtifact(dataHandler.getArtifactString(selectedArtifact));
 				break;	
 			}
 		}

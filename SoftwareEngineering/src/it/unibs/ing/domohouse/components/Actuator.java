@@ -77,4 +77,5 @@ public class Actuator implements Manageable, Serializable {
 		unformattedText = unformattedText+operatingMode+':'+status;
 		return unformattedText;
 	}
+
 }

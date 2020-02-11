@@ -43,7 +43,6 @@ public class OutputHandler {
 			i++;
 			System.out.println(splitted[i++]);
 		}
-		i++;
 		System.out.println(Strings.OPERATING_MODE+splitted[i++]);
 		System.out.println(Strings.STATUS+splitted[i]);
 	}
@@ -60,13 +59,13 @@ public class OutputHandler {
 			i++;
 			System.out.println(splitted[i++]);
 		}
-		i++;
+
 		while(splitted[i].equalsIgnoreCase(Strings.MEASURED_VALUE_TAG))
 		{
 			i++;
 			System.out.println(Strings.LAST_MEASURED_VALUE+splitted[i++]);
 		}
-		i++;
+
 		System.out.println(splitted[i]);
 	}
 	
