@@ -95,7 +95,8 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					
-					String selectedRoom = RawInputHandler.readNotVoidString(Strings.INSERT_ROOM);
+					String selectedRoom = safeInsertRoom();
+					
 					showMaintainerRoomMenu(selectedRoom);
 					break;
 				case 4:
@@ -107,7 +108,8 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					
-					String selectedSensCategory = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR_CATEGORY);
+					String selectedSensCategory = safeInsertSensorCategory();
+					
 					OutputHandler.printSensorCategory(dataHandler.getSensorCategoryString(selectedSensCategory));
 					break;
 				case 6:
@@ -116,7 +118,7 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					
-					String selectedActuCategory = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR_CATEGORY);
+					String selectedActuCategory = safeInsertActuatorCategory();
 					OutputHandler.printSensorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
 				case 7:
@@ -151,8 +153,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getRoomList());
 					System.out.println();
 					System.out.println();
-
-					String selectedRoom = RawInputHandler.readNotVoidString(Strings.INSERT_ROOM);
+					String selectedRoom = safeInsertRoom();
 					showUserRoomMenu(selectedRoom);
 					break;
 				case 3:
@@ -160,8 +161,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getSensorCategoryList());
 					System.out.println();
 					System.out.println();
-					
-					String selectedSensCategory = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR_CATEGORY);
+					String selectedSensCategory = safeInsertSensorCategory();			
 					OutputHandler.printSensorCategory(dataHandler.getSensorCategoryString(selectedSensCategory));
 					break;
 				case 4:
@@ -170,7 +170,7 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					
-					String selectedActuCategory = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR_CATEGORY);
+					String selectedActuCategory = safeInsertActuatorCategory();
 					OutputHandler.printSensorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
 				case 5:
@@ -199,8 +199,7 @@ public class InterfaceHandler {
 				OutputHandler.printListOfString(dataHandler.getSensorNames(selectedRoom));
 				System.out.println();
 				System.out.println();
-				
-				String selectedSensor = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR);
+				String selectedSensor = safeInsertSensor();
 				OutputHandler.printSensor(dataHandler.getSensorString((selectedSensor)));
 				break;
 			case 3:
@@ -208,17 +207,15 @@ public class InterfaceHandler {
 				OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedRoom));
 				System.out.println();
 				System.out.println();
-				
-				String selectedActuator = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR);
+				String selectedActuator = safeInsertActuator();
 				OutputHandler.printActuator(dataHandler.getActuatorString(selectedActuator));
 				break;
 			case 4:
 				OutputHandler.clearOutput();
 				OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedRoom));
 				System.out.println();
-				System.out.println();
-				
-				String selectedArtifact = RawInputHandler.readNotVoidString(Strings.INSERT_ARTIFACT);
+				System.out.println();			
+				String selectedArtifact = safeInsertArtifact();
 				OutputHandler.printArtifact(dataHandler.getArtifactString(selectedArtifact));
 				break;	
 			}
@@ -243,9 +240,8 @@ public class InterfaceHandler {
 					OutputHandler.clearOutput();
 					OutputHandler.printListOfString(dataHandler.getSensorNames(selectedRoom));
 					System.out.println();
-					System.out.println();
-					
-					String selectedSensor = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR);
+					System.out.println();			
+					String selectedSensor = safeInsertSensor();
 					OutputHandler.printSensor(dataHandler.getSensorString(selectedSensor));
 					break;
 				case 3:
@@ -253,8 +249,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedRoom));
 					System.out.println();
 					System.out.println();
-					
-					String selectedActuator = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR);
+					String selectedActuator = safeInsertActuator();
 					OutputHandler.printSensor(dataHandler.getActuatorString(selectedActuator));
 					break;
 				case 4:
@@ -262,8 +257,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedRoom));
 					System.out.println();
 					System.out.println();
-					
-					String selectedArtifact = RawInputHandler.readNotVoidString(Strings.INSERT_ARTIFACT);
+					String selectedArtifact = safeInsertArtifact();
 					OutputHandler.printSensor(dataHandler.getArtifactString(selectedArtifact));
 					break;	
 				case 5:
@@ -281,6 +275,60 @@ public class InterfaceHandler {
 			}
 		}
 		while(exitFlag!=true);	
-	}	
+	}
+	
+	private String safeInsertSensorCategory() {
+		String selectedSensCategory = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR_CATEGORY);
+		if(dataHandler.hasSensorCategory(selectedSensCategory)) return selectedSensCategory;
+		else do {
+				selectedSensCategory = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_SENSOR_CATEGORY + " " + Strings.INSERT_SENSOR_CATEGORY);
+		}while(!dataHandler.hasSensorCategory(selectedSensCategory));
+		return selectedSensCategory;
+	}
+	
+	private String safeInsertActuatorCategory() {
+		String selectedActuCategory = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR_CATEGORY);
+		if(dataHandler.hasActuatorCategory(selectedActuCategory)) return selectedActuCategory;
+		else do {	
+				selectedActuCategory = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ACTUATOR_CATEGORY + " " + Strings.INSERT_SENSOR_CATEGORY);
+		}while(!dataHandler.hasActuatorCategory(selectedActuCategory));
+		return selectedActuCategory;
+	}
+	
+	private String safeInsertRoom() {
+		String selectedRoom = RawInputHandler.readNotVoidString(Strings.INSERT_ROOM);
+		if(dataHandler.hasRoom(selectedRoom)) return selectedRoom;
+		else do{
+				selectedRoom = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ROOM + " " + Strings.INSERT_ROOM);	
+		}while(!dataHandler.hasRoom(selectedRoom));
+		return selectedRoom;
+	}
+
+	private String safeInsertSensor() {
+		String selectedSensor = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR);
+		if(dataHandler.hasSensor(selectedSensor)) return selectedSensor;
+		else do {
+				selectedSensor = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_SENSOR+ " " + Strings.INSERT_SENSOR);
+		}while(!dataHandler.hasSensor(selectedSensor));
+		return selectedSensor;
+	}
+	
+	private String safeInsertActuator() {
+		String selectedActuator = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR);
+		if(dataHandler.hasActuator(selectedActuator)) return selectedActuator;
+		else do {		
+				selectedActuator = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ACTUATOR + " " + Strings.INSERT_ACTUATOR);
+		}while(!dataHandler.hasActuator(selectedActuator));
+		return selectedActuator;
+	}
+	
+	private String safeInsertArtifact() {
+		String selectedArtifact = RawInputHandler.readNotVoidString(Strings.INSERT_ARTIFACT);
+		if(dataHandler.hasActuator(selectedArtifact)) return selectedArtifact;
+		do {
+				selectedArtifact = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ARTIFACT + " " + Strings.INSERT_ARTIFACT);
+		}while(!dataHandler.hasActuator(selectedArtifact));
+		return selectedArtifact;
+	}
 }
 

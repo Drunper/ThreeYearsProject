@@ -298,4 +298,5 @@ public class InputHandler {
 		}
 		dataHandler.addActuatorCategory(cat);
 	}
+	
 }
