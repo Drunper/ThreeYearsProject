@@ -46,6 +46,7 @@ public class HousingUnit implements Serializable {
 		assert !roomManager.hasEntry(toAdd.getName()) : "E' già presente una stanza con il nome "+toAdd.getName()+" in questa casa";
 		roomManager.addEntry(toAdd);
 		associationManager.addAssociation(new Association(toAdd.getName()));
+		associationManager.getAssociation(toAdd.getName()).setIsElementARoom(true);
 	}
 	
 	public String [] roomList() {

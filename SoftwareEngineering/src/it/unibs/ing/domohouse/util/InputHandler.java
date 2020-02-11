@@ -112,7 +112,7 @@ public class InputHandler {
 			if (!dataHandler.hasActuatorCategory(category))
 				System.out.println(Strings.CATEGORY_NON_EXISTENT);
 		}
-		while(!dataHandler.hasActuatorCategory(name));
+		while(!dataHandler.hasActuatorCategory(category));
 		boolean roomOrArtifact = RawInputHandler.yesOrNo(Strings.ACTUATOR_ARTIFACT_OR_ROOM_ASSOCIATION);
 		ArrayList<String> objectList = new ArrayList<>();
 		do

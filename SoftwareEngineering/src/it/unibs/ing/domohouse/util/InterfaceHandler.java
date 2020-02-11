@@ -250,7 +250,7 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					String selectedActuator = safeInsertActuator();
-					OutputHandler.printSensor(dataHandler.getActuatorString(selectedActuator));
+					OutputHandler.printActuator(dataHandler.getActuatorString(selectedActuator));
 					break;
 				case 4:
 					OutputHandler.clearOutput();
@@ -258,7 +258,7 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					String selectedArtifact = safeInsertArtifact();
-					OutputHandler.printSensor(dataHandler.getArtifactString(selectedArtifact));
+					OutputHandler.printArtifact(dataHandler.getArtifactString(selectedArtifact));
 					break;	
 				case 5:
 					inputHandler.changeRoomDescription(selectedRoom);
@@ -277,6 +277,7 @@ public class InterfaceHandler {
 		while(exitFlag!=true);	
 	}
 	
+	//FORSE DA SPOSTARE IN INPUTHANDLER QUESTI METODI QUA SOTTO 
 	private String safeInsertSensorCategory() {
 		String selectedSensCategory = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR_CATEGORY);
 		if(dataHandler.hasSensorCategory(selectedSensCategory)) return selectedSensCategory;
