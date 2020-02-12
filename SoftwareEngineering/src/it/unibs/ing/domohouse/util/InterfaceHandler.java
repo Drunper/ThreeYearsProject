@@ -1,5 +1,10 @@
 package it.unibs.ing.domohouse.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import it.unibs.ing.domohouse.HomeLogin;
 import it.unibs.ing.domohouse.HomeMain;
 import it.unibs.ing.domohouse.components.HousingUnit;
@@ -22,14 +27,15 @@ public class InterfaceHandler {
 	
 	public InterfaceHandler() {
 		login = new HomeLogin();
-		dataHandler = new DataHandler();
+		dataHandler = getDataHandler();
 		inputHandler = new InputHandler(dataHandler);
 		loader = new FileLoader(inputHandler);
 		saver = new FileSaver();
-		login.addEntry(Strings.MAINTAINER_USER, Strings.PASSWORD); 
+		login.addEntry(Strings.MAINTAINER_USER, Strings.PASSWORD);
 	}
 	
 	public void show() {
+		
 		OutputHandler.clearOutput();
 		String user;
 		int scelta;
@@ -129,6 +135,10 @@ public class InterfaceHandler {
 					break;		
 				case 9:
 					loader.createBasicFiles();
+					break;
+				case 10:
+					saver.createDirs();
+					saver.writeDataHandlerToFile(dataHandler);
 					break;
 			}
 		}
@@ -330,6 +340,37 @@ public class InterfaceHandler {
 				selectedArtifact = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ARTIFACT + " " + Strings.INSERT_ARTIFACT);
 		}while(!dataHandler.hasActuator(selectedArtifact));
 		return selectedArtifact;
+	}
+	
+	/*
+	 * Questi metodi di caricamento dataHandler sono stati messi qui perchè se li avessi messi in FileLoader avrei avuto
+	 * problemi ciclici. Cioè per caricare il dataHandler mi serviva FileLoader, per fare FileLoader mi serviva InputLoader
+	 * per fare InputLoader mi serviva dataHandler. 
+	 * Forse non la soluzione migliore ma sicuramente la più veloce.
+	 */
+	public DataHandler getDataHandler() {
+	if(safeReadDataHandler() == null) {
+		System.out.println("Attenzione! Non è presente nessun file di salvataggio o non è stato possibile caricarlo");
+		System.out.println("Verranno utilizzati i dati presenti nel programma");
+		return new DataHandler();
+	} else {
+		System.out.println("Caricamento dati da file");
+		return safeReadDataHandler();
+		}
+	}
+	public DataHandler safeReadDataHandler() {
+		String filePath = Strings.dataHandlerPath+"\\dataHandler.dat";
+		File f = new File(filePath);
+		if(f.isFile() && f.canRead()) {
+			try {
+			FileInputStream in = new FileInputStream(f);
+			ObjectInputStream objectIn = new ObjectInputStream(in);
+			return (DataHandler) objectIn.readObject();
+			}catch(IOException | ClassNotFoundException ex) {
+				ex.printStackTrace();
+			} 
+		}
+		return null;
 	}
 }
 

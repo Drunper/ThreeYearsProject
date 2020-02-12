@@ -10,10 +10,11 @@ public class DataHandler implements Serializable {
 	private Manager actuatorCategoryManager;
 	private HousingUnit housingUnit;
 		
-	public DataHandler () {
+	public DataHandler () {				
+		//momentaneamente
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
-		//momentaneamente
+		
 		housingUnit = new HousingUnit("Casa di Ivan", "Boh"); 
 		
 		SensorCategory temperatura = new SensorCategory("sensori di temperatura", "TEMP:Tommaso Ebhardt:idle:endD");
@@ -121,6 +122,7 @@ public class DataHandler implements Serializable {
 		sensore_antifumo.addEntry(cucina);
 		sprinkler1.addEntry(cucina);
 		allarme2.addEntry(cucina);
+
 	}
 
 	public void addHouse(HousingUnit toAdd) {

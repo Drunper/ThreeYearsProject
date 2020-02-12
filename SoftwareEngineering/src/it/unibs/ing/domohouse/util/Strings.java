@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.util;
 
 public class Strings {
+	public static final String dataHandlerPath = "C:\\test\\data";
 	//TITLES
 	public static final String LOGIN_MENU_TITLE = "Login:";
 	public static final String USER_MENU_TITLE = "Menu unità immobiliare";
@@ -135,7 +136,7 @@ public class Strings {
 	public static final String [] ROOM_VOICES = {"Visualizzare descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto"};
 	public static final String [] MAINTAINER_VOICES = {"Visualizzare descrizione unità immobiliare", "Modifica descrizione unità immobilare", "Visualizza stanza", 
 			"Inserisci stanza", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Inserisci categoria di sensori", 
-			"Inserisci categoria di attuatori", "Inizializzazione da file"};
+			"Inserisci categoria di attuatori", "Inizializzazione da file", "Salva dati"};
 	public static final String [] MAINTAINER_ROOM_VOICES = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto", 
 			"Modifica descrizione stanza", "Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto"};
 

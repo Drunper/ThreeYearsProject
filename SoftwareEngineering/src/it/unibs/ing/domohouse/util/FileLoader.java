@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FileLoader {
-
+	
 	private InputHandler inputHandler;
 	/*
 	 * Cartelle in cui mettere i file txt. SE vogliamo usare l'applicazione su altri OS dobbiamo adattare queste stringhe
@@ -348,11 +348,13 @@ public class FileLoader {
 	/*
 	private Object ReadObjectFromFile(String filepath) {
         try (ObjectInputStream objectIn = new ObjectInputStream(new FileInputStream(filepath))){
+
             return objectIn.readObject();
         } catch (IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
             return null;
         }
-    }
-    */
+    }*/
+	
+
 }

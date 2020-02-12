@@ -6,14 +6,12 @@ import java.io.ObjectOutputStream;
 
 public class FileSaver {
 
-	private static final String dataHandlerPath = "C:\\test\\data";
-
 	/*
 	 * Salvare solo il DataHandler che contiene tutto. Salvare altre cose in maniera separata diventa complicato.
 	 * La fase di caricamento diventerebbe estremamente complicata, ed è ciò che dovremo fare (più o meno) nella versione 5.
 	 */
 	public void writeDataHandlerToFile(DataHandler data) {
-		String filePath = dataHandlerPath+"\\dataHandler.dat";
+		String filePath = Strings.dataHandlerPath+"\\dataHandler.dat";
 		try (ObjectOutputStream objectOut = new ObjectOutputStream(new FileOutputStream(filePath))){ 			
 			objectOut.writeObject(data);
 		} catch (Exception ex) {
@@ -22,7 +20,7 @@ public class FileSaver {
 	}
 		
 	public void createDirs() {
-		File file = new File(dataHandlerPath);
+		File file = new File(Strings.dataHandlerPath);
 		file.mkdirs();
 	}
 }

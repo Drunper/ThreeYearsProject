@@ -1,8 +1,9 @@
 package it.unibs.ing.domohouse.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AssociationHandler {
+public class AssociationHandler implements Serializable{
 
 	//Forse si può usare la classe Manager, valuterò
 	private ArrayList<Association> associationList;

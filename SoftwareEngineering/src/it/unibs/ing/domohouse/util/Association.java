@@ -1,8 +1,9 @@
 package it.unibs.ing.domohouse.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Association {
+public class Association implements Serializable{
 
 	private String element;
 	private boolean elementIsARoom;
