@@ -9,12 +9,11 @@ public class DataHandler implements Serializable {
 	private Manager sensorCategoryManager;
 	private Manager actuatorCategoryManager;
 	private HousingUnit housingUnit;
-		
-	public DataHandler () {				
-		//momentaneamente
+	
+	public DataHandler () {
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
-		
+		/*
 		housingUnit = new HousingUnit("Casa di Ivan", "Boh"); 
 		
 		SensorCategory temperatura = new SensorCategory("sensori di temperatura", "TEMP:Tommaso Ebhardt:idle:endD");
@@ -29,6 +28,18 @@ public class DataHandler implements Serializable {
 		Room soggiorno = new Room("Soggiorno", "Sala in cui si vive penso");
 		Room cucina = new Room("Cucina", "Sala in cui di solito si cucina ma ognuno può vivere come gli pare, se si mette a dormire li dentro a me non frega niente");
 		Room camera = new Room("Camera", "Si dorme");
+		soggiorno.setNumericProperty("temperatura", 20);
+		soggiorno.setNumericProperty("umidità", 53);
+		soggiorno.setNumericProperty("pressione", 872);
+		soggiorno.setNumericProperty("vento", 0);
+		cucina.setNumericProperty("temperatura", 20);
+		cucina.setNumericProperty("umidità", 53);
+		cucina.setNumericProperty("pressione", 872);
+		cucina.setNumericProperty("vento", 0);
+		camera.setNumericProperty("temperatura", 20);
+		camera.setNumericProperty("umidità", 53);
+		camera.setNumericProperty("pressione", 872);
+		camera.setNumericProperty("vento", 0);
 		
 		housingUnit.addRoom(soggiorno);
 		housingUnit.addRoom(cucina);
@@ -122,8 +133,9 @@ public class DataHandler implements Serializable {
 		sensore_antifumo.addEntry(cucina);
 		sprinkler1.addEntry(cucina);
 		allarme2.addEntry(cucina);
-
+*/
 	}
+
 
 	public void addHouse(HousingUnit toAdd) {
 		housingUnit = toAdd;

@@ -15,13 +15,32 @@ public class Room implements Gettable, Serializable {
 	private TreeMap<String, Double> numericPropertiesMap; //treemap per contenere i valori numerici tipo temperatura
 	private TreeMap<String, String> nonNumericPropertiesMap; //treemap per contenere i valori string tipo "presenza persone"
 	
-	public Room (String name, String text) {
+	/*
+	 * Room ha 2 costruttori, uno semplice senza numericProperties per la creazione veloce per effettuare test
+	 * e un costruttore dove bisogna inserire anche le proprietà numeriche della stanza come temperatura, umidita, 
+	 * pressione, vento. Il manutentore per inserire una nuova stanza dovrà fornire tutte le informazioni numeriche
+	 * necessarie.
+	 */
+	public Room(String name, String text) {
 		this.name = name;
 		this.text = text;
 		sensorManager = new Manager();
 		actuatorManager = new Manager();
 		artifactManager = new Manager();
 		numericPropertiesMap = new TreeMap<>();
+		nonNumericPropertiesMap = new TreeMap<>();
+	}
+	public Room (String name, String text, double temp, double umidita, double pressione, double vento) {
+		this.name = name;
+		this.text = text;
+		sensorManager = new Manager();
+		actuatorManager = new Manager();
+		artifactManager = new Manager();
+		numericPropertiesMap = new TreeMap<>();
+		numericPropertiesMap.put("temperatura", temp);
+		numericPropertiesMap.put("umidità", umidita);
+		numericPropertiesMap.put("pressione", pressione);
+		numericPropertiesMap.put("vento", vento);
 		nonNumericPropertiesMap = new TreeMap<>();
 	}
 

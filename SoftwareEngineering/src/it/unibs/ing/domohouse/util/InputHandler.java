@@ -157,9 +157,13 @@ public class InputHandler {
 		}
 		while(dataHandler.hasRoomOrArtifact(name));
 		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
+		double temp = RawInputHandler.readDouble("Inserisci valore temperatura della stanza (gradi)");
+		double umidita = RawInputHandler.readDouble("Inserisci valore umidita della stanza della stanza");
+		double pressione = RawInputHandler.readDouble("Inserisci valore pressione della stanza della stanza (pascal)");
+		double vento = RawInputHandler.readDouble("Inserisci valore velocità del vento (km/h");
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			createRoom(name, descr);
+			createRoom(name, descr, temp, umidita, pressione, vento);
 		}
 	}
 	
@@ -272,16 +276,18 @@ public class InputHandler {
 		}
 	}
 	
-	public void createRoom(String name, String descr) {
-		Room room = new Room(name, descr);
+	public void createRoom(String name, String descr, double temp, double umidita, double pressione, double vento) {
+		Room room = new Room(name, descr, temp, umidita, pressione, vento);
 		dataHandler.addRoom(room);
 	}
+
+
 	
 	public void createSensorCategory(String name, String abbreviation, String constructor, String domain, String detectableInfo) {
 		String descr = abbreviation+':'+constructor+':'+domain;
 		SensorCategory cat = new SensorCategory(name, descr);
 		dataHandler.addSensorCategory(cat);
-		cat.putInfo(detectableInfo);
+		cat.putInfo(detectableInfo, domain);
 	}
 	
 	public void createActuatorCategory(String name, String abbreviation, String manufacturer,
@@ -297,6 +303,60 @@ public class InputHandler {
 			cat.putOperatingMode(toAdd, OperatingModesHandler.getOperatingMode(toAdd));
 		}
 		dataHandler.addActuatorCategory(cat);
+	}
+	
+	public String safeInsertSensorCategory() {
+		String selectedSensCategory = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR_CATEGORY);
+		if(dataHandler.hasSensorCategory(selectedSensCategory)) return selectedSensCategory;
+		else do {
+				selectedSensCategory = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_SENSOR_CATEGORY + " " + Strings.INSERT_SENSOR_CATEGORY);
+		}while(!dataHandler.hasSensorCategory(selectedSensCategory));
+		return selectedSensCategory;
+	}
+	
+	public String safeInsertActuatorCategory() {
+		String selectedActuCategory = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR_CATEGORY);
+		if(dataHandler.hasActuatorCategory(selectedActuCategory)) return selectedActuCategory;
+		else do {	
+				selectedActuCategory = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ACTUATOR_CATEGORY + " " + Strings.INSERT_SENSOR_CATEGORY);
+		}while(!dataHandler.hasActuatorCategory(selectedActuCategory));
+		return selectedActuCategory;
+	}
+	
+	public String safeInsertRoom() {
+		String selectedRoom = RawInputHandler.readNotVoidString(Strings.INSERT_ROOM);
+		if(dataHandler.hasRoom(selectedRoom)) return selectedRoom;
+		else do{
+				selectedRoom = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ROOM + " " + Strings.INSERT_ROOM);	
+		}while(!dataHandler.hasRoom(selectedRoom));
+		return selectedRoom;
+	}
+
+	public String safeInsertSensor() {
+		String selectedSensor = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR);
+		if(dataHandler.hasSensor(selectedSensor)) return selectedSensor;
+		else do {
+				selectedSensor = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_SENSOR+ " " + Strings.INSERT_SENSOR);
+		}while(!dataHandler.hasSensor(selectedSensor));
+		return selectedSensor;
+	}
+	
+	public String safeInsertActuator() {
+		String selectedActuator = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR);
+		if(dataHandler.hasActuator(selectedActuator)) return selectedActuator;
+		else do {		
+				selectedActuator = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ACTUATOR + " " + Strings.INSERT_ACTUATOR);
+		}while(!dataHandler.hasActuator(selectedActuator));
+		return selectedActuator;
+	}
+	
+	public String safeInsertArtifact() {
+		String selectedArtifact = RawInputHandler.readNotVoidString(Strings.INSERT_ARTIFACT);
+		if(dataHandler.hasArtifact(selectedArtifact)) return selectedArtifact;
+		do {
+				selectedArtifact = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ARTIFACT + " " + Strings.INSERT_ARTIFACT);
+		}while(!dataHandler.hasArtifact(selectedArtifact));
+		return selectedArtifact;
 	}
 	
 }

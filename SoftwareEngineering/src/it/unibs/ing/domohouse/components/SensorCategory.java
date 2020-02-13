@@ -38,8 +38,9 @@ public class SensorCategory implements Manageable, Serializable {
 	}
 	
 	public double [] getDomain(String info) {
+		//PatternSyntaxException
 		String domain = infoDomainMap.get(info);
-		String [] bounds = domain.split("(")[0].split("-");
+		String [] bounds = domain.split("-");
 		double [] numericBounds = new double[2];
 		numericBounds[0] = Double.parseDouble(bounds[0]);
 		numericBounds[1] = Double.parseDouble(bounds[1]);
@@ -47,15 +48,13 @@ public class SensorCategory implements Manageable, Serializable {
 	}
 	
 	// daAdattare nel caso di più informazioni rilevabili
-	public void putInfo(String detectableInfo) {
-		String [] splitted = text.split(":");
-		String domain = splitted[2];
+	public void putInfo(String detectableInfo, String domain) {
 		infoDomainMap.put(detectableInfo, domain);
 	}
 
 	public String getMeasurementUnit(String info) {
 		String domain = infoDomainMap.get(info);
-		String measurementUnit = domain.split("()")[0];
+		String measurementUnit = domain.split("(")[1].split(")")[0];
 		return measurementUnit;
 	}
 	

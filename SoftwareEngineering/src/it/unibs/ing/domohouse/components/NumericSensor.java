@@ -69,7 +69,7 @@ public class NumericSensor extends Sensor {
 		{
 			unformattedText = unformattedText+"mv:"+value+':';
 		}
-		unformattedText = unformattedText+':'+status;
+		unformattedText = unformattedText+status;
 		return unformattedText;
 	}
 }

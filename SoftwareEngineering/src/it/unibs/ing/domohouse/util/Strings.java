@@ -78,8 +78,8 @@ public class Strings {
 	
 	//SENSOR CATEGORY
 	public static final String SENSOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di sensori";
-	public static final String SENSOR_CATEGORY_INPUT_INFO_DOMAIN = "Inserisci il dominio dell'informazione";
-	public static final String SENSOR_CATEGORY_INPUT_INFO ="Inserisci l'informazione rilevabile dalla categoria";
+	public static final String SENSOR_CATEGORY_INPUT_INFO_DOMAIN = "Inserisci il dominio dell'informazione (del tipo \"min-max\" esempio: \"1-20\" (unita di misura) )";
+	public static final String SENSOR_CATEGORY_INPUT_INFO ="Inserisci l'informazione rilevabile dalla categoria (scegli tra temperatura, pressione, umidità e vento)";
 	
 	//ACTUATOR CATEGORY
 	public static final String ACTUATOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di attuatori";
@@ -132,11 +132,11 @@ public class Strings {
 	//STATIC MENU VOICES STRINGS
 	public static final String [] LOGIN_VOICES = {"Fruitore", "Manutentore"};
 	public static final String [] USER_VOICES = {"Visualizzare descrizione unità immobiliare", "Visualizza stanza", 
-			"Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Inizializzazione da file"};
+			"Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
 	public static final String [] ROOM_VOICES = {"Visualizzare descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto"};
 	public static final String [] MAINTAINER_VOICES = {"Visualizzare descrizione unità immobiliare", "Modifica descrizione unità immobilare", "Visualizza stanza", 
 			"Inserisci stanza", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Inserisci categoria di sensori", 
-			"Inserisci categoria di attuatori", "Inizializzazione da file", "Salva dati"};
+			"Inserisci categoria di attuatori", "Salva dati"};
 	public static final String [] MAINTAINER_ROOM_VOICES = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto", 
 			"Modifica descrizione stanza", "Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto"};
 

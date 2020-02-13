@@ -35,9 +35,9 @@ public class FileLoader {
 		this.inputHandler = inputHandler;
 	}
 
+
 	/*
 	 * Ottiene la lista dei file presenti in una data cartella
-	 */
 	private List<File> getFiles(String path) {
 		try(Stream<Path> files = Files.walk(Paths.get(path))){
 			return files
@@ -51,9 +51,9 @@ public class FileLoader {
 		}
 	}
 
-	/*
+	
 	 * Lettura da file (txt) per l'inizializzazione del programma. Utile a fini di test e in fase di presentazione.
-	 */
+	 
 	public void createBasicFiles() {
 		readSensorCategories();
 		readActuatorCategories();
@@ -67,7 +67,7 @@ public class FileLoader {
 	private void readSensorCategories() {
 		List<File> filesInFolder = getFiles(SENSOR_CATEGORIES_PATH);
 		
-		/*
+		
 		 * Possibile soluzione del problema di inizializzazione del programma da file.
 		 * I file di testo devono essere formattati in un formato specifico. In questo caso:
 		 * Nome:xxxx
@@ -77,7 +77,7 @@ public class FileLoader {
 		 * Info:uuuu
 		 * 
 		 * Nel caso della versione 2 (in cui ci possono essere più informazioni rilevabili è necessario ripensare tutto.
-		 */
+		 
 		for(File file : filesInFolder)
 		{
 			String name = null;
@@ -219,6 +219,7 @@ public class FileLoader {
 			inputHandler.createRoom(name, descr);
 		}
 	}
+	
 
 	private void readSensors() {
 		List<File> filesInFolder = getFiles(SENSOR_PATH);
@@ -344,6 +345,29 @@ public class FileLoader {
 			inputHandler.createArtifact(name, descr, location);
 		}
 	}
+*/
+	
+	public DataHandler getDataHandler() {
+		if(safeReadDataHandler() == null) {
+			return null;
+		} else {
+			return safeReadDataHandler();
+			}
+		}
+	private DataHandler safeReadDataHandler() {
+			String filePath = Strings.dataHandlerPath+"\\dataHandler.dat";
+			File f = new File(filePath);
+			if(f.isFile() && f.canRead()) {
+				try {
+				FileInputStream in = new FileInputStream(f);
+				ObjectInputStream objectIn = new ObjectInputStream(in);
+				return (DataHandler) objectIn.readObject();
+				}catch(IOException | ClassNotFoundException ex) {
+					ex.printStackTrace();
+				} 
+			}
+			return null;
+		}
 	
 	/*
 	private Object ReadObjectFromFile(String filepath) {

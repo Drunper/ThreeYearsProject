@@ -17,6 +17,7 @@ public class InterfaceHandler {
 	private DataHandler dataHandler;
 	private FileLoader loader;
 	private FileSaver saver;
+	private boolean firstStart;
 
 	//MENU
 	private final Menu menu = new Menu(Strings.LOGIN_MENU_TITLE, Strings.LOGIN_VOICES);
@@ -27,15 +28,30 @@ public class InterfaceHandler {
 	
 	public InterfaceHandler() {
 		login = new HomeLogin();
-		dataHandler = getDataHandler();
+		dataHandler = new DataHandler();
 		inputHandler = new InputHandler(dataHandler);
 		loader = new FileLoader(inputHandler);
 		saver = new FileSaver();
 		login.addEntry(Strings.MAINTAINER_USER, Strings.PASSWORD);
+		checkExistenceDataHandler();
+	}
+	
+	private void checkExistenceDataHandler() {
+		
+		if(loader.getDataHandler() !=null) { //Se è presente un file dataHandler lo carico
+			System.out.println("Caricamento file...");
+			dataHandler = loader.getDataHandler();
+			inputHandler = new InputHandler(dataHandler);
+			loader = new FileLoader(inputHandler);
+			firstStart = false;
+			System.out.println("Caricamento da file effettuato!");
+		}else { //Se non è presente		
+			System.out.println("Attenzione! Non è stato trovato alcun file di salvataggio. Chiamare un manutentore per configurare il sistema!");
+			firstStart = true;
+		}
 	}
 	
 	public void show() {
-		
 		OutputHandler.clearOutput();
 		String user;
 		int scelta;
@@ -45,11 +61,14 @@ public class InterfaceHandler {
 			switch(scelta)
 			{
 				case 1: 
-					user = RawInputHandler.readNotVoidString(Strings.INSERT_USER);
-					if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
-					{
-						System.out.println(Strings.WELCOME + user);
-						showUserMenu();
+					if(firstStart) {System.out.println("Accesso vietato! Per il primo avvio chiamare un manutentore per configurare il sistema");}
+					else {
+						user = RawInputHandler.readNotVoidString(Strings.INSERT_USER);
+						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
+						{
+							System.out.println(Strings.WELCOME + user);
+							showUserMenu();
+						}
 					}
 					break;
 					
@@ -69,8 +88,13 @@ public class InterfaceHandler {
 						}
 					}
 					while (!user.equalsIgnoreCase(Strings.BACK_CHARACTER) && !ok);
-					if (ok)
+					if (ok) {
+						if(firstStart) {
+							System.out.println("Creazione dati di base per la prima configurazione...");
+							dataHandler.addHouse(new HousingUnit("Casa","Inserire una descrizione.."));
+						}
 						showMaintainerMenu();
+					}
 					break;
 			}
 		}
@@ -101,7 +125,7 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					
-					String selectedRoom = safeInsertRoom();
+					String selectedRoom = inputHandler.safeInsertRoom();
 					
 					showMaintainerRoomMenu(selectedRoom);
 					break;
@@ -114,7 +138,7 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					
-					String selectedSensCategory = safeInsertSensorCategory();
+					String selectedSensCategory = inputHandler.safeInsertSensorCategory();
 					
 					OutputHandler.printSensorCategory(dataHandler.getSensorCategoryString(selectedSensCategory));
 					break;
@@ -124,7 +148,7 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					
-					String selectedActuCategory = safeInsertActuatorCategory();
+					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
 					OutputHandler.printSensorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
 				case 7:
@@ -134,9 +158,6 @@ public class InterfaceHandler {
 					inputHandler.readActuatorCategoryFromUser();
 					break;		
 				case 9:
-					loader.createBasicFiles();
-					break;
-				case 10:
 					saver.createDirs();
 					saver.writeDataHandlerToFile(dataHandler);
 					break;
@@ -163,7 +184,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getRoomList());
 					System.out.println();
 					System.out.println();
-					String selectedRoom = safeInsertRoom();
+					String selectedRoom = inputHandler.safeInsertRoom();
 					showUserRoomMenu(selectedRoom);
 					break;
 				case 3:
@@ -171,7 +192,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getSensorCategoryList());
 					System.out.println();
 					System.out.println();
-					String selectedSensCategory = safeInsertSensorCategory();			
+					String selectedSensCategory = inputHandler.safeInsertSensorCategory();			
 					OutputHandler.printSensorCategory(dataHandler.getSensorCategoryString(selectedSensCategory));
 					break;
 				case 4:
@@ -180,11 +201,8 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					
-					String selectedActuCategory = safeInsertActuatorCategory();
+					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
 					OutputHandler.printSensorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
-					break;
-				case 5:
-					loader.createBasicFiles();
 					break;
 			}
 		}
@@ -209,7 +227,7 @@ public class InterfaceHandler {
 				OutputHandler.printListOfString(dataHandler.getSensorNames(selectedRoom));
 				System.out.println();
 				System.out.println();
-				String selectedSensor = safeInsertSensor();
+				String selectedSensor = inputHandler.safeInsertSensor();
 				OutputHandler.printSensor(dataHandler.getSensorString((selectedSensor)));
 				break;
 			case 3:
@@ -217,7 +235,7 @@ public class InterfaceHandler {
 				OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedRoom));
 				System.out.println();
 				System.out.println();
-				String selectedActuator = safeInsertActuator();
+				String selectedActuator = inputHandler.safeInsertActuator();
 				OutputHandler.printActuator(dataHandler.getActuatorString(selectedActuator));
 				break;
 			case 4:
@@ -225,7 +243,7 @@ public class InterfaceHandler {
 				OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedRoom));
 				System.out.println();
 				System.out.println();			
-				String selectedArtifact = safeInsertArtifact();
+				String selectedArtifact = inputHandler.safeInsertArtifact();
 				OutputHandler.printArtifact(dataHandler.getArtifactString(selectedArtifact));
 				break;	
 			}
@@ -251,7 +269,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getSensorNames(selectedRoom));
 					System.out.println();
 					System.out.println();			
-					String selectedSensor = safeInsertSensor();
+					String selectedSensor = inputHandler.safeInsertSensor();
 					OutputHandler.printSensor(dataHandler.getSensorString(selectedSensor));
 					break;
 				case 3:
@@ -259,7 +277,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedRoom));
 					System.out.println();
 					System.out.println();
-					String selectedActuator = safeInsertActuator();
+					String selectedActuator = inputHandler.safeInsertActuator();
 					OutputHandler.printActuator(dataHandler.getActuatorString(selectedActuator));
 					break;
 				case 4:
@@ -267,7 +285,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedRoom));
 					System.out.println();
 					System.out.println();
-					String selectedArtifact = safeInsertArtifact();
+					String selectedArtifact = inputHandler.safeInsertArtifact();
 					OutputHandler.printArtifact(dataHandler.getArtifactString(selectedArtifact));
 					break;	
 				case 5:
@@ -286,91 +304,13 @@ public class InterfaceHandler {
 		}
 		while(exitFlag!=true);	
 	}
-	
-	//FORSE DA SPOSTARE IN INPUTHANDLER QUESTI METODI QUA SOTTO 
-	private String safeInsertSensorCategory() {
-		String selectedSensCategory = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR_CATEGORY);
-		if(dataHandler.hasSensorCategory(selectedSensCategory)) return selectedSensCategory;
-		else do {
-				selectedSensCategory = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_SENSOR_CATEGORY + " " + Strings.INSERT_SENSOR_CATEGORY);
-		}while(!dataHandler.hasSensorCategory(selectedSensCategory));
-		return selectedSensCategory;
-	}
-	
-	private String safeInsertActuatorCategory() {
-		String selectedActuCategory = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR_CATEGORY);
-		if(dataHandler.hasActuatorCategory(selectedActuCategory)) return selectedActuCategory;
-		else do {	
-				selectedActuCategory = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ACTUATOR_CATEGORY + " " + Strings.INSERT_SENSOR_CATEGORY);
-		}while(!dataHandler.hasActuatorCategory(selectedActuCategory));
-		return selectedActuCategory;
-	}
-	
-	private String safeInsertRoom() {
-		String selectedRoom = RawInputHandler.readNotVoidString(Strings.INSERT_ROOM);
-		if(dataHandler.hasRoom(selectedRoom)) return selectedRoom;
-		else do{
-				selectedRoom = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ROOM + " " + Strings.INSERT_ROOM);	
-		}while(!dataHandler.hasRoom(selectedRoom));
-		return selectedRoom;
-	}
-
-	private String safeInsertSensor() {
-		String selectedSensor = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR);
-		if(dataHandler.hasSensor(selectedSensor)) return selectedSensor;
-		else do {
-				selectedSensor = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_SENSOR+ " " + Strings.INSERT_SENSOR);
-		}while(!dataHandler.hasSensor(selectedSensor));
-		return selectedSensor;
-	}
-	
-	private String safeInsertActuator() {
-		String selectedActuator = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR);
-		if(dataHandler.hasActuator(selectedActuator)) return selectedActuator;
-		else do {		
-				selectedActuator = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ACTUATOR + " " + Strings.INSERT_ACTUATOR);
-		}while(!dataHandler.hasActuator(selectedActuator));
-		return selectedActuator;
-	}
-	
-	private String safeInsertArtifact() {
-		String selectedArtifact = RawInputHandler.readNotVoidString(Strings.INSERT_ARTIFACT);
-		if(dataHandler.hasArtifact(selectedArtifact)) return selectedArtifact;
-		do {
-				selectedArtifact = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ARTIFACT + " " + Strings.INSERT_ARTIFACT);
-		}while(!dataHandler.hasArtifact(selectedArtifact));
-		return selectedArtifact;
-	}
-	
+		
 	/*
 	 * Questi metodi di caricamento dataHandler sono stati messi qui perchè se li avessi messi in FileLoader avrei avuto
 	 * problemi ciclici. Cioè per caricare il dataHandler mi serviva FileLoader, per fare FileLoader mi serviva InputLoader
 	 * per fare InputLoader mi serviva dataHandler. 
 	 * Forse non la soluzione migliore ma sicuramente la più veloce.
 	 */
-	public DataHandler getDataHandler() {
-	if(safeReadDataHandler() == null) {
-		System.out.println("Attenzione! Non è presente nessun file di salvataggio o non è stato possibile caricarlo");
-		System.out.println("Verranno utilizzati i dati presenti nel programma");
-		return new DataHandler();
-	} else {
-		System.out.println("Caricamento dati da file");
-		return safeReadDataHandler();
-		}
-	}
-	public DataHandler safeReadDataHandler() {
-		String filePath = Strings.dataHandlerPath+"\\dataHandler.dat";
-		File f = new File(filePath);
-		if(f.isFile() && f.canRead()) {
-			try {
-			FileInputStream in = new FileInputStream(f);
-			ObjectInputStream objectIn = new ObjectInputStream(in);
-			return (DataHandler) objectIn.readObject();
-			}catch(IOException | ClassNotFoundException ex) {
-				ex.printStackTrace();
-			} 
-		}
-		return null;
-	}
+
 }
 

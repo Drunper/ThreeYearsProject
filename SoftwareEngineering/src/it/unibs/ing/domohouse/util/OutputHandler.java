@@ -66,7 +66,7 @@ public class OutputHandler {
 			System.out.println(Strings.LAST_MEASURED_VALUE+splitted[i++]);
 		}
 
-		System.out.println(splitted[i]);
+		System.out.println(Strings.STATUS+splitted[i]);
 	}
 	
 	public static void printListOfString(String [] list) {
