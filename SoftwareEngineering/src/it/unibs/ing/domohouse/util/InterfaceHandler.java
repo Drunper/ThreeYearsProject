@@ -335,10 +335,10 @@ public class InterfaceHandler {
 	
 	private String safeInsertArtifact() {
 		String selectedArtifact = RawInputHandler.readNotVoidString(Strings.INSERT_ARTIFACT);
-		if(dataHandler.hasActuator(selectedArtifact)) return selectedArtifact;
+		if(dataHandler.hasArtifact(selectedArtifact)) return selectedArtifact;
 		do {
 				selectedArtifact = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ARTIFACT + " " + Strings.INSERT_ARTIFACT);
-		}while(!dataHandler.hasActuator(selectedArtifact));
+		}while(!dataHandler.hasArtifact(selectedArtifact));
 		return selectedArtifact;
 	}
 	
