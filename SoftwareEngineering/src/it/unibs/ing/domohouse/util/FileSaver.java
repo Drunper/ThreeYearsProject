@@ -11,7 +11,7 @@ public class FileSaver {
 	 * La fase di caricamento diventerebbe estremamente complicata, ed è ciò che dovremo fare (più o meno) nella versione 5.
 	 */
 	public void writeDataHandlerToFile(DataHandler data) {
-		String filePath = Strings.dataHandlerPath+"\\dataHandler.dat";
+		String filePath = Strings.DATA_HANDLER_PATH+"\\dataHandler.dat";
 		try (ObjectOutputStream objectOut = new ObjectOutputStream(new FileOutputStream(filePath))){ 			
 			objectOut.writeObject(data);
 		} catch (Exception ex) {
@@ -20,7 +20,7 @@ public class FileSaver {
 	}
 		
 	public void createDirs() {
-		File file = new File(Strings.dataHandlerPath);
+		File file = new File(Strings.DATA_HANDLER_PATH);
 		file.mkdirs();
 	}
 }

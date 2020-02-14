@@ -341,7 +341,7 @@ public class FileLoader {
 			}
 		}
 	private DataHandler safeReadDataHandler() {
-			String filePath = Strings.dataHandlerPath+"\\dataHandler.dat";
+			String filePath = Strings.DATA_HANDLER_PATH+"\\dataHandler.dat";
 			File f = new File(filePath);
 			if(f.isFile() && f.canRead()) {
 				try {

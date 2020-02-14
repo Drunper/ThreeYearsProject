@@ -1,7 +1,7 @@
 package it.unibs.ing.domohouse.util;
 
 public class Strings {
-	public static final String dataHandlerPath = "C:\\test\\data";
+	public static final String DATA_HANDLER_PATH = "C:\\test\\data";
 	//TITLES
 	public static final String LOGIN_MENU_TITLE = "Login:";
 	public static final String USER_MENU_TITLE = "Menu unità immobiliare";
