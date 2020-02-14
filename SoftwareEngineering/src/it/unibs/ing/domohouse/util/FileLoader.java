@@ -16,25 +16,11 @@ import java.util.stream.Stream;
 
 public class FileLoader {
 	
-	private InputHandler inputHandler;
 	/*
 	 * Cartelle in cui mettere i file txt. SE vogliamo usare l'applicazione su altri OS dobbiamo adattare queste stringhe
 	 * ottenendo il separatore usato dal file system. A quel punto non saranno più costanti. Bisogna informarsi su questo
 	 * ambito.
 	 */
-	private static final String SENSOR_CATEGORIES_PATH = "inizialization\\categories\\sensor";
-	private static final String ACTUATOR_CATEGORIES_PATH = "inizialization\\categories\\actuator";
-	private static final String HOUSES_PATH = "inizialization\\houses";
-	private static final String ROOMS_PATH = "inizialization\\rooms";
-	private static final String SENSOR_PATH = "inizialization\\sensors";
-	private static final String ACTUATOR_PATH = "inizialization\\actuators";
-	private static final String ARTIFACT_PATH = "inizialization\\artifacts";
-
-	
-	public FileLoader(InputHandler inputHandler) {
-		this.inputHandler = inputHandler;
-	}
-
 
 	/*
 	 * Ottiene la lista dei file presenti in una data cartella
