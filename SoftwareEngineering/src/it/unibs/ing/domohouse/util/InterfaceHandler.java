@@ -30,7 +30,7 @@ public class InterfaceHandler {
 		login = new HomeLogin();
 		dataHandler = new DataHandler();
 		inputHandler = new InputHandler(dataHandler);
-		loader = new FileLoader(inputHandler);
+		loader = new FileLoader();
 		saver = new FileSaver();
 		login.addEntry(Strings.MAINTAINER_USER, Strings.PASSWORD);
 		checkExistenceDataHandler();
@@ -42,7 +42,7 @@ public class InterfaceHandler {
 			System.out.println("Caricamento file...");
 			dataHandler = loader.getDataHandler();
 			inputHandler = new InputHandler(dataHandler);
-			loader = new FileLoader(inputHandler);
+			loader = new FileLoader();
 			firstStart = false;
 			System.out.println("Caricamento da file effettuato!");
 		}else { //Se non è presente		
