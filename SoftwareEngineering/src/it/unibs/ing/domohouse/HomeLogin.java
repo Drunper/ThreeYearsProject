@@ -7,10 +7,10 @@ import java.util.HashMap;
 
 public class HomeLogin {
 
-	HashMap<String, String> maintainers;
-	MessageDigest md;
-	byte[] hash;
-	String hexHash;
+	private HashMap<String, String> maintainers;
+	private MessageDigest md;
+	private byte[] hash;
+	private String hexHash;
 	
 	public HomeLogin () {
 		maintainers = new HashMap<>();

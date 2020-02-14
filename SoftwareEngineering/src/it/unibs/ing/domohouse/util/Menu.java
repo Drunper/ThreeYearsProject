@@ -7,33 +7,33 @@ package it.unibs.ing.domohouse.util;
  */
 public class Menu
 {
-	private String titolo;
-	private String [] voci;
+	private String title;
+	private String [] voices;
 	
 	private final static String FRAME = "--------------------------------";
 	private final static String EXIT_VOICE = "0\tEsci";
 	private final static String INSERT_REQUEST = "Digita il numero dell'opzione desiderata > ";
 	
-	public Menu (String titolo, String [] voci)
+	public Menu (String title, String [] voices)
 	{
-		this.titolo = titolo;
-		this.voci = voci;
+		this.title = title;
+		this.voices = voices;
 	}
 	
 	public int select ()
 	{
-		stampaMenu();
-		return RawInputHandler.readIntWithBounds(INSERT_REQUEST, 0, voci.length);
+		printMenu();
+		return RawInputHandler.readIntWithBounds(INSERT_REQUEST, 0, voices.length);
 	}
 			
-	public void stampaMenu ()
+	public void printMenu ()
 	{
 		System.out.println(FRAME);
-		System.out.println(titolo);
+		System.out.println(title);
 		System.out.println(FRAME);
-	    for (int i=0; i<voci.length; i++)
+	    for (int i=0; i<voices.length; i++)
 	    {
-	    	System.out.println( (i+1) + "\t" + voci[i]);
+	    	System.out.println( (i+1) + "\t" + voices[i]);
 	    }
 	    System.out.println();
 	    System.out.println(EXIT_VOICE);
