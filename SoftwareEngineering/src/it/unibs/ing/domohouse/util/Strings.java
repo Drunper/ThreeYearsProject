@@ -19,9 +19,9 @@ public class Strings {
 	//HOUSE MENU
 	public static final String INSERT_ROOM = "Inserisci il nome della stanza su cui vuoi operare";
 	public static final String NO_ROOM = "Non sono ancora presenti stanze nella casa";
-	public static final String ERROR_NON_EXISTENT_ROOM = "Attenzione! La stanza selezionata non esiste, assicurati di aver digitato correttamente il nome.";
+	public static final String ERROR_NON_EXISTENT_ROOM = "Attenzione! La stanza selezionata non esite, assicurati di aver digitato correttamente il nome.";
 	public static final String INSERT_SENSOR_CATEGORY = "Inserisci la categoria di sensori che vuoi visualizzare";
-	public static final String NO_SENSOR_CATEGORY = "Non sono ancora presenti categorie di sensori";
+	public static final String NO_SENSOR_CATEGORY = "Non sono ancora presenti categori di sensori";
 	public static final String ERROR_NON_EXISTENT_SENSOR_CATEGORY = "Attenzione! La categoria di sensori selezionata non esiste.";
 	public static final String INSERT_ACTUATOR_CATEGORY = "Inserisci la categoria di attuatori che vuoi visualizzare";
 	public static final String NO_ACTUATOR_CATEGORY = "Non sono ancora presenti categorie di attuatori";
@@ -87,6 +87,9 @@ public class Strings {
 	public static final String SENSOR_CATEGORY_INPUT_INFO_DOMAIN = "Inserisci il dominio dell'informazione (del tipo \"min-max\" esempio: \"1-20\")";
 	public static final String SENSOR_CATEGORY_DETECTABLE_INFO = "Inserisci unità di misura";
 	public static final String SENSOR_CATEGORY_INPUT_INFO ="Inserisci l'informazione rilevabile dalla categoria (scegli tra temperatura, pressione, umidità e vento)";
+	public static final String INSERT_SENSOR_CATEGORY_MIN_VALUE = "Inserisci il valore minimo rilevabile della categoria";
+	public static final String INSERT_SENSOR_CATEGORY_MAX_VALUE = "Inserisci il valore massimo rilevabile della categoria";
+	
 	
 	//ACTUATOR CATEGORY
 	public static final String ACTUATOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di attuatori";
@@ -125,12 +128,12 @@ public class Strings {
 	public static final String DEFAULT_MODE = "Modalità di default: ";
 	public static final String OPERATING_MODES = "Modalità operative:";
 	
-	public static final int FIRST_TOKEN = 0;
-	public static final int SECOND_TOKEN = 1;
-	public static final int THIRD_TOKEN = 2;
-	public static final int FOURTH_TOKEN = 3;
-	public static final int FIFTH_TOKEN = 4;
-	public static final int SPACING_COSTANT = 50;
+	public static int FIRST_TOKEN = 0;
+	public static int SECOND_TOKEN = 1;
+	public static int THIRD_TOKEN = 2;
+	public static int FOURTH_TOKEN = 3;
+	public static int FIFTH_TOKEN = 4;
+	public static int SPACING_COSTANT = 50;
 	
 	//UTILS
 	public static final String BACK_CHARACTER = "^";

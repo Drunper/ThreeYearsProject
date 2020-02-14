@@ -7,6 +7,10 @@ import it.unibs.ing.domohouse.interfaces.Manageable;
 
 public class SensorCategory implements Manageable, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2513977621862706027L;
 	private String name;
 	private String text;
 	private HashMap<String, String> infoDomainMap;
@@ -36,12 +40,12 @@ public class SensorCategory implements Manageable, Serializable {
 		this.text = text;
 	}
 	
-	public double [] getDomain(String info) {  // info = 1-20 (gradi)
+	public double [] getDomain(String info) {  // info = 1 -to- 20 (gradi)
 		//PatternSyntaxException
 		String domain = infoDomainMap.get(info);
 		int Index = domain.indexOf("(");
 		domain = domain.substring(0, Index);
-		String [] bounds = domain.split("-");
+		String [] bounds = domain.split(" -to- ");
 		double [] numericBounds = new double[2];
 		numericBounds[0] = Double.parseDouble(bounds[0]);
 		numericBounds[1] = Double.parseDouble(bounds[1]);

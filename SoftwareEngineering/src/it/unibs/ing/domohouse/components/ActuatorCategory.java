@@ -9,9 +9,14 @@ import it.unibs.ing.domohouse.util.OperatingModesHandler;
 
 public class ActuatorCategory implements Manageable, Serializable {
 
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3544838050806873679L;
 	private String name;
 	private String text;
-	private HashMap<String, Consumer<Gettable>> operatingModesMap;
+	private HashMap<String, SerializableConsumer<Gettable>> operatingModesMap;
 	
 	public ActuatorCategory(String name, String text) {
 		this.name = name;
@@ -39,7 +44,7 @@ public class ActuatorCategory implements Manageable, Serializable {
 		return operatingModesMap.keySet().toArray(new String[0]);
 	}
 	
-	public void putOperatingMode(String name, Consumer<Gettable> operatingMode) {
+	public void putOperatingMode(String name, SerializableConsumer<Gettable> operatingMode) {
 		operatingModesMap.put(name, operatingMode);
 	}
 	
@@ -52,6 +57,6 @@ public class ActuatorCategory implements Manageable, Serializable {
 	}
 	
 	public String toString() {
-		return name+':'+text+':'+String.join(":", listOfOperatingModes());
+		return name+':'+text;
 	}
 }

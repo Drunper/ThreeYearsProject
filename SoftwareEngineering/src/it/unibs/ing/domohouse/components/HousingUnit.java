@@ -8,6 +8,10 @@ import it.unibs.ing.domohouse.util.Manager;
 
 public class HousingUnit implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4272512019548783815L;
 	private String name;
 	private String descr;
 	private Manager roomManager;

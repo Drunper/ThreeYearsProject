@@ -8,6 +8,10 @@ import it.unibs.ing.domohouse.util.Manager;
 
 public class Sensor implements Manageable, Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3804289994000782961L;
 	private String name;
 	protected SensorCategory category;
 	private Manager measuredObjects;

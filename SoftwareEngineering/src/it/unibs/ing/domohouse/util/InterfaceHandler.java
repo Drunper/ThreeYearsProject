@@ -34,6 +34,7 @@ public class InterfaceHandler {
 		saver = new FileSaver();
 		login.addEntry(Strings.MAINTAINER_USER, Strings.PASSWORD);
 		checkExistenceDataHandler();
+		OperatingModesHandler.fillOperatingModes();
 	}
 	
 	private void checkExistenceDataHandler() {

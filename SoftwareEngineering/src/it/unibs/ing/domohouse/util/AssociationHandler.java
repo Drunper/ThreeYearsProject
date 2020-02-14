@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 public class AssociationHandler implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1194017378304880890L;
 	//Forse si può usare la classe Manager, valuterò
 	private ArrayList<Association> associationList;
 	

@@ -22,6 +22,7 @@ public class FileLoader {
 	 * ambito.
 	 */
 
+
 	/*
 	 * Ottiene la lista dei file presenti in una data cartella
 	private List<File> getFiles(String path) {

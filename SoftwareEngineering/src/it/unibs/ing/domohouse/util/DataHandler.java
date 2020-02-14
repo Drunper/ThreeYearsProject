@@ -6,6 +6,10 @@ import it.unibs.ing.domohouse.components.*;
 
 public class DataHandler implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 830399600665259268L;
 	private Manager sensorCategoryManager;
 	private Manager actuatorCategoryManager;
 	private HousingUnit housingUnit;

@@ -9,6 +9,10 @@ import java.util.Set;
 
 public class Manager implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5803882506409735012L;
 	private TreeMap<String, Manageable> elementMap;
 	
 	public Manager() {

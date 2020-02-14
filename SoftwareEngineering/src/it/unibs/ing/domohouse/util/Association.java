@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 public class Association implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 844718073354532891L;
 	private String element;
 	private boolean elementIsARoom;
 	private ArrayList<String> associatedCategory;

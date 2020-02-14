@@ -9,6 +9,10 @@ import it.unibs.ing.domohouse.util.Manager;
 
 public class Actuator implements Manageable, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8133324316964731994L;
 	private String name;
 	private Manager controlledObjects;
 	private ActuatorCategory category;
