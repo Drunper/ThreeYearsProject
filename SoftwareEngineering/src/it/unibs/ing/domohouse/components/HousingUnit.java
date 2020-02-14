@@ -101,7 +101,7 @@ public class HousingUnit implements Serializable {
 		room.addSensor(toAdd);
 		sensorManager.addEntry(toAdd);
 	}
-
+	
 	public boolean hasRoomOrArtifact(String name) {
 		assert name.length() > 0 : "Violated hasRoomOrArtifact name.length() > 0";
 		return associationManager.hasEntry(name);

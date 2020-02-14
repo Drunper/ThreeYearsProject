@@ -87,12 +87,12 @@ public class OutputHandler {
 			System.out.println(Strings.INFO_DOMAIN+k+Strings.SEPARATOR_WITH_SPACE+splitted[i]);
 			i++;
 		}
-		while(!splitted[i].equalsIgnoreCase(Strings.END_DOMAIN_TAG));
+		while(splitted[i].equalsIgnoreCase(Strings.END_DOMAIN_TAG));
 		System.out.println(Strings.DETECTABLE_INFOS);
-		for(i++; i < splitted.length; i++)
-		{
+		do{
 			System.out.println(splitted[i]);
-		}
+			i++;
+		}while(i < splitted.length);
 	}
 	
 	public static void printActuatorCategory(String actuatorCategoryText) {

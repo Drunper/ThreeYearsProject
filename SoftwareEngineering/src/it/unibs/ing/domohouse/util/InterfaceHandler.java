@@ -121,6 +121,10 @@ public class InterfaceHandler {
 					break;
 				case 3:
 					OutputHandler.clearOutput();
+					if(dataHandler.getRoomList().length == 0) {
+						System.out.println(Strings.NO_ROOM);
+						break;
+					}
 					OutputHandler.printListOfString(dataHandler.getRoomList());
 					System.out.println();
 					System.out.println();
@@ -134,6 +138,10 @@ public class InterfaceHandler {
 					break;
 				case 5:
 					OutputHandler.clearOutput();
+					if(dataHandler.getSensorCategoryList().length == 0) {
+						System.out.println(Strings.NO_SENSOR_CATEGORY);
+						break;
+					}
 					OutputHandler.printListOfString(dataHandler.getSensorCategoryList());
 					System.out.println();
 					System.out.println();
@@ -144,12 +152,16 @@ public class InterfaceHandler {
 					break;
 				case 6:
 					OutputHandler.clearOutput();
+					if(dataHandler.getActuatorCategoryList().length == 0) {
+						System.out.println(Strings.NO_ACTUATOR_CATEGORY);
+						break;
+					}
 					OutputHandler.printListOfString(dataHandler.getActuatorCategoryList());
 					System.out.println();
 					System.out.println();
 					
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
-					OutputHandler.printSensorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
+					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
 				case 7:
 					inputHandler.readSensorCategoryFromUser();
@@ -181,6 +193,10 @@ public class InterfaceHandler {
 					break;
 				case 2:
 					OutputHandler.clearOutput();
+					if(dataHandler.getRoomList().length == 0) {
+						System.out.println(Strings.NO_ROOM);
+						break;
+					}
 					OutputHandler.printListOfString(dataHandler.getRoomList());
 					System.out.println();
 					System.out.println();
@@ -189,6 +205,10 @@ public class InterfaceHandler {
 					break;
 				case 3:
 					OutputHandler.clearOutput();
+					if(dataHandler.getSensorCategoryList().length == 0) {
+						System.out.println(Strings.NO_SENSOR_CATEGORY);
+						break;
+					}
 					OutputHandler.printListOfString(dataHandler.getSensorCategoryList());
 					System.out.println();
 					System.out.println();
@@ -197,6 +217,10 @@ public class InterfaceHandler {
 					break;
 				case 4:
 					OutputHandler.clearOutput();
+					if(dataHandler.getActuatorCategoryList().length == 0) {
+						System.out.println(Strings.NO_ACTUATOR_CATEGORY);
+						break;
+					}
 					OutputHandler.printListOfString(dataHandler.getActuatorCategoryList());
 					System.out.println();
 					System.out.println();
@@ -224,6 +248,10 @@ public class InterfaceHandler {
 				break;
 			case 2:
 				OutputHandler.clearOutput();
+				if(dataHandler.getSensorNames(selectedRoom).length == 0) {
+					System.out.println(Strings.NO_SENSOR);
+					break;
+				}
 				OutputHandler.printListOfString(dataHandler.getSensorNames(selectedRoom));
 				System.out.println();
 				System.out.println();
@@ -232,6 +260,10 @@ public class InterfaceHandler {
 				break;
 			case 3:
 				OutputHandler.clearOutput();
+				if(dataHandler.getActuatorNames(selectedRoom).length == 0) {
+					System.out.println(Strings.NO_ACTUATOR);
+					break;
+				}
 				OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedRoom));
 				System.out.println();
 				System.out.println();
@@ -240,6 +272,10 @@ public class InterfaceHandler {
 				break;
 			case 4:
 				OutputHandler.clearOutput();
+				if(dataHandler.getArtifactNames(selectedRoom).length == 0) {
+					System.out.println(Strings.NO_ARTIFACT);
+					break;
+				}
 				OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedRoom));
 				System.out.println();
 				System.out.println();			
@@ -266,6 +302,10 @@ public class InterfaceHandler {
 					break;
 				case 2:
 					OutputHandler.clearOutput();
+					if(dataHandler.getSensorNames(selectedRoom).length == 0) {
+						System.out.println(Strings.NO_SENSOR);
+						break;
+					}
 					OutputHandler.printListOfString(dataHandler.getSensorNames(selectedRoom));
 					System.out.println();
 					System.out.println();			
@@ -274,6 +314,9 @@ public class InterfaceHandler {
 					break;
 				case 3:
 					OutputHandler.clearOutput();
+					if(dataHandler.getActuatorNames(selectedRoom).length == 0) {
+						System.out.println(Strings.NO_ACTUATOR);
+					}
 					OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedRoom));
 					System.out.println();
 					System.out.println();
@@ -282,6 +325,9 @@ public class InterfaceHandler {
 					break;
 				case 4:
 					OutputHandler.clearOutput();
+					if(dataHandler.getArtifactNames(selectedRoom).length == 0) {
+						System.out.println(Strings.NO_ARTIFACT);
+					}
 					OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedRoom));
 					System.out.println();
 					System.out.println();
@@ -304,13 +350,6 @@ public class InterfaceHandler {
 		}
 		while(exitFlag!=true);	
 	}
-		
-	/*
-	 * Questi metodi di caricamento dataHandler sono stati messi qui perchè se li avessi messi in FileLoader avrei avuto
-	 * problemi ciclici. Cioè per caricare il dataHandler mi serviva FileLoader, per fare FileLoader mi serviva InputLoader
-	 * per fare InputLoader mi serviva dataHandler. 
-	 * Forse non la soluzione migliore ma sicuramente la più veloce.
-	 */
 
 }
 

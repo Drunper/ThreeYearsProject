@@ -10,7 +10,6 @@ public class SensorCategory implements Manageable, Serializable {
 	private String name;
 	private String text;
 	private HashMap<String, String> infoDomainMap;
-	
 	/*
 	 * invariante di classe: detectableInfos.size() > 0 && name != null && text != null
 	 * ancora da implementare
@@ -37,9 +36,11 @@ public class SensorCategory implements Manageable, Serializable {
 		this.text = text;
 	}
 	
-	public double [] getDomain(String info) {
+	public double [] getDomain(String info) {  // info = 1-20 (gradi)
 		//PatternSyntaxException
 		String domain = infoDomainMap.get(info);
+		int Index = domain.indexOf("(");
+		domain = domain.substring(0, Index);
 		String [] bounds = domain.split("-");
 		double [] numericBounds = new double[2];
 		numericBounds[0] = Double.parseDouble(bounds[0]);
@@ -54,7 +55,9 @@ public class SensorCategory implements Manageable, Serializable {
 
 	public String getMeasurementUnit(String info) {
 		String domain = infoDomainMap.get(info);
-		String measurementUnit = domain.split("(")[1].split(")")[0];
+		int startIndex = domain.indexOf("(");
+		int endIndex = domain.indexOf(")");
+		String measurementUnit = domain.substring(startIndex + 1, endIndex);
 		return measurementUnit;
 	}
 	

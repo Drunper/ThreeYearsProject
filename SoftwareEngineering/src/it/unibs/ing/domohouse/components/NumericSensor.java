@@ -36,12 +36,15 @@ public class NumericSensor extends Sensor {
 		for (String name : objectNames)
 		{
 			Gettable element = getElementByName(name);
+			if(element.hasNumericProperty(variableName)) { //Se è possibile rilevare informazioni allora le rileva
 			valueFromObject = element.getNumericProperty(variableName);
 			if(valueFromObject > upperBound)
 				valueFromObject = upperBound;
 			else if(valueFromObject < lowerBound)
 				valueFromObject = lowerBound;
 			measure += valueFromObject;
+			}
+			else measure += lowerBound; //se non è possibile rilevare informazioni allora si assume che ci sia il minimo
 		}
 		// faccio la media perché non ho altre idee su come ottenere un valore che non sia completamente scorrelato da tutti gli altri
 		measure = measure / objectNames.length; 

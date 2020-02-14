@@ -18,18 +18,24 @@ public class Strings {
 	
 	//HOUSE MENU
 	public static final String INSERT_ROOM = "Inserisci il nome della stanza su cui vuoi operare";
+	public static final String NO_ROOM = "Non sono ancora presenti stanze nella casa";
 	public static final String ERROR_NON_EXISTENT_ROOM = "Attenzione! La stanza selezionata non esite, assicurati di aver digitato correttamente il nome.";
 	public static final String INSERT_SENSOR_CATEGORY = "Inserisci la categoria di sensori che vuoi visualizzare";
+	public static final String NO_SENSOR_CATEGORY = "Non sono ancora presenti categori di sensori";
 	public static final String ERROR_NON_EXISTENT_SENSOR_CATEGORY = "Attenzione! La categoria di sensori selezionata non esiste.";
 	public static final String INSERT_ACTUATOR_CATEGORY = "Inserisci la categoria di attuatori che vuoi visualizzare";
+	public static final String NO_ACTUATOR_CATEGORY = "Non sono ancora presenti categorie di attuatori";
 	public static final String ERROR_NON_EXISTENT_ACTUATOR_CATEGORY = "Attenzione! La categoria di attuatori selezionata non esiste.";
 	
 	//ROOM MENU
 	public static final String INSERT_SENSOR = "Inserisci il nome del sensore che vuoi visualizzare";
+	public static final String NO_SENSOR = "Non sono presenti sensori in questa stanza";
 	public static final String ERROR_NON_EXISTENT_SENSOR = "Attenzione! Il sensore selezionato non esiste.";
 	public static final String INSERT_ACTUATOR = "Inserisci il nome dell'attuatore che vuoi visualizzare";
+	public static final String NO_ACTUATOR = "Non sono presenti attuatori in questa stanza";
 	public static final String ERROR_NON_EXISTENT_ACTUATOR = "Attenzione! L'attuatore selezionato non esiste.";
 	public static final String INSERT_ARTIFACT = "Inserisci il nome dell'artefatto che vuoi visualizzare";
+	public static final String NO_ARTIFACT = "Non sono presenti artefatti in questa stanza";
 	public static final String ERROR_NON_EXISTENT_ARTIFACT = "Attenzione! L'artefatto selezionato non esiste.";
 	
 	//INPUTHANDLER
@@ -78,7 +84,8 @@ public class Strings {
 	
 	//SENSOR CATEGORY
 	public static final String SENSOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di sensori";
-	public static final String SENSOR_CATEGORY_INPUT_INFO_DOMAIN = "Inserisci il dominio dell'informazione (del tipo \"min-max\" esempio: \"1-20\" (unita di misura) )";
+	public static final String SENSOR_CATEGORY_INPUT_INFO_DOMAIN = "Inserisci il dominio dell'informazione (del tipo \"min-max\" esempio: \"1-20\")";
+	public static final String SENSOR_CATEGORY_DETECTABLE_INFO = "Inserisci unità di misura";
 	public static final String SENSOR_CATEGORY_INPUT_INFO ="Inserisci l'informazione rilevabile dalla categoria (scegli tra temperatura, pressione, umidità e vento)";
 	
 	//ACTUATOR CATEGORY

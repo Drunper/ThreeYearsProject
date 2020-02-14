@@ -51,6 +51,14 @@ public class Artifact implements Gettable, Serializable {
 		nonNumericPropertiesMap.put(variableName, newValue);
 	}
 	
+	public boolean hasNumericProperty(String variableName) {
+		return numericPropertiesMap.containsKey(variableName);
+	}
+	
+	public boolean hasNonNumericProperty(String variableName) {
+		return nonNumericPropertiesMap.containsKey(variableName);
+	}
+	
 	public String toString() {
 		String unformattedText;
 		unformattedText = name+':'+text;

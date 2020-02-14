@@ -15,7 +15,6 @@ public class DataHandler implements Serializable {
 		actuatorCategoryManager = new Manager();
 		/*
 		housingUnit = new HousingUnit("Casa di Ivan", "Boh"); 
-		
 		SensorCategory temperatura = new SensorCategory("sensori di temperatura", "TEMP:Tommaso Ebhardt:idle:endD");
 		SensorCategory antifiamma = new SensorCategory("sensori antifiamma", "ANTFLM:Herbert Asbury:idle:endD");
 		SensorCategory antifumo = new SensorCategory("sensori di rilevamento fumo", "ANTFM:Douglas Adams:idle:endD");
@@ -210,6 +209,7 @@ public class DataHandler implements Serializable {
 	public String getActuatorString(String selectedActuator) {
 		return housingUnit.getActuatorString(selectedActuator);
 	}
+	
 
 	public String[] getArtifactNames(String selectedRoom) {
 		Room room = housingUnit.getRoom(selectedRoom);
@@ -239,7 +239,7 @@ public class DataHandler implements Serializable {
 	public void addSensor(String location, Sensor sensor) {
 		housingUnit.addSensor(location, sensor);
 	}
-	
+
 	public boolean hasRoomOrArtifact(String name) {
 		return housingUnit.hasRoomOrArtifact(name);
 	}

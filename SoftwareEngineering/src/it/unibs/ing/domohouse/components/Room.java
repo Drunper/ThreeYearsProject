@@ -132,8 +132,16 @@ public class Room implements Gettable, Serializable {
 		return artifactManager.namesList();
 	}
 	
+	public boolean hasNumericProperty(String variableName) {
+		return numericPropertiesMap.containsKey(variableName);
+	}
+	
 	public double getNumericProperty(String variableName) {
 		return numericPropertiesMap.get(variableName);
+	}
+	
+	public boolean hasNonNumericProperty(String variableName) {
+		return nonNumericPropertiesMap.containsKey(variableName);
 	}
 	
 	public String getNonNumericProperty(String variableName) {

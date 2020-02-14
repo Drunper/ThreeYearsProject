@@ -12,6 +12,10 @@ public class AssociationHandler implements Serializable{
 		associationList = new ArrayList<>();
 	}
 	
+	public int size() {
+		return associationList.size();
+	}
+	
 	public void addAssociation(Association association) {
 		associationList.add(association);
 	}

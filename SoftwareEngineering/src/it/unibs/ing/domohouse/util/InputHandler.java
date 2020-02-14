@@ -64,6 +64,7 @@ public class InputHandler {
 		while(!dataHandler.hasSensorCategory(category));
 		boolean roomOrArtifact = RawInputHandler.yesOrNo(Strings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
 		ArrayList<String> objectList = new ArrayList<>();
+		
 		do
 		{
 			String toAssoc;
@@ -179,6 +180,8 @@ public class InputHandler {
 		String abbreviation = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_ABBREVIATION);
 		String constructor = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_MANUFACTURER);
 		String domain = RawInputHandler.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_INFO_DOMAIN);
+		String unit_measurement = RawInputHandler.readNotVoidString(Strings.SENSOR_CATEGORY_DETECTABLE_INFO);
+		domain = domain + " (" + unit_measurement + ")";
 		String detectableInfo = RawInputHandler.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_INFO);
 		
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
@@ -358,5 +361,5 @@ public class InputHandler {
 		}while(!dataHandler.hasArtifact(selectedArtifact));
 		return selectedArtifact;
 	}
-	
+
 }
