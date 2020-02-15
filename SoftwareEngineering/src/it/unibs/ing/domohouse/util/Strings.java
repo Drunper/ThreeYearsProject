@@ -1,7 +1,7 @@
 package it.unibs.ing.domohouse.util;
 
 public class Strings {
-	public static final String DATA_HANDLER_PATH = "C:\\test\\data";
+	public static final String DATA_HANDLER_PATH = "C:\\test\\data\\dataHandler.dat";
 	//TITLES
 	public static final String LOGIN_MENU_TITLE = "Login:";
 	public static final String USER_MENU_TITLE = "Menu unità immobiliare";
@@ -37,6 +37,10 @@ public class Strings {
 	public static final String INSERT_ARTIFACT = "Inserisci il nome dell'artefatto che vuoi visualizzare";
 	public static final String NO_ARTIFACT = "Non sono presenti artefatti in questa stanza";
 	public static final String ERROR_NON_EXISTENT_ARTIFACT = "Attenzione! L'artefatto selezionato non esiste.";
+	public static final String ROOM_INPUT_TEMPERATURE = "Inserisci valore temperatura della stanza (gradi)";
+	public static final String ROOM_INPUT_HUMIDITY = "Inserisci valore umidita della stanza della stanza";
+	public static final String ROOM_INPUT_PRESSURE = "Inserisci valore pressione della stanza della stanza (hPa)";
+	public static final String ROOM_INPUT_WIND = "Inserisci valore velocità del vento (km/h";
 	
 	//INPUTHANDLER
 	public static final String PROCEED_WITH_CREATION = "Procedere con la creazione e salvataggio?";

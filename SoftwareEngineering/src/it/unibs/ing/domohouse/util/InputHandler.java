@@ -14,7 +14,6 @@ import it.unibs.ing.domohouse.components.SensorCategory;
 public class InputHandler {
 
 	private DataHandler dataHandler;
-	//work in progress
 	
 	public InputHandler(DataHandler dataHandler) {
 		this.dataHandler = dataHandler;
@@ -158,10 +157,10 @@ public class InputHandler {
 		}
 		while(dataHandler.hasRoomOrArtifact(name));
 		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
-		double temp = RawInputHandler.readDouble("Inserisci valore temperatura della stanza (gradi)");
-		double umidita = RawInputHandler.readDouble("Inserisci valore umidita della stanza della stanza");
-		double pressione = RawInputHandler.readDouble("Inserisci valore pressione della stanza della stanza (pascal)");
-		double vento = RawInputHandler.readDouble("Inserisci valore velocità del vento (km/h");
+		double temp = RawInputHandler.readDouble(Strings.ROOM_INPUT_TEMPERATURE);
+		double umidita = RawInputHandler.readDouble(Strings.ROOM_INPUT_HUMIDITY);
+		double pressione = RawInputHandler.readDouble(Strings.ROOM_INPUT_PRESSURE);
+		double vento = RawInputHandler.readDouble(Strings.ROOM_INPUT_WIND);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
 			createRoom(name, descr, temp, umidita, pressione, vento);

@@ -3,9 +3,7 @@ package it.unibs.ing.domohouse.components;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.function.Consumer;
-
 import it.unibs.ing.domohouse.interfaces.*;
-import it.unibs.ing.domohouse.util.OperatingModesHandler;
 
 public class ActuatorCategory implements Manageable, Serializable {
 

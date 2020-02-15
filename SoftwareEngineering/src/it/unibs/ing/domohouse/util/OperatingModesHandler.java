@@ -2,8 +2,6 @@ package it.unibs.ing.domohouse.util;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.function.Consumer;
-
 import it.unibs.ing.domohouse.interfaces.Gettable;
 import it.unibs.ing.domohouse.interfaces.SerializableConsumer;
 
@@ -67,7 +65,7 @@ public class OperatingModesHandler implements Serializable{
 		operatingModesMap.put("aumentoTemperatura10gradi", aumentoTemperatura10gradi);
 		operatingModesMap.put("diminuizioneTemperatura10gradi", diminuizioneTemperatura10gradi);
 		operatingModesMap.put("diminuizioneTemperatura5gradi", diminuizioneTemperatura5gradi);
-		operatingModesMap.put("aumentoTemperatura5gradi", diminuizioneTemperatura5gradi);
+		operatingModesMap.put("aumentoTemperatura5gradi", aumentoTemperatura5gradi);
 		operatingModesMap.put("diminuizioneTemperatura1gradi", diminuizioneTemperatura1gradi);
 		operatingModesMap.put("aumentoTemperatura1gradi", aumentoTemperatura1gradi);
 		operatingModesMap.put("aumentoUmidita", aumentoUmidita);

@@ -1,14 +1,7 @@
 package it.unibs.ing.domohouse.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
 import it.unibs.ing.domohouse.HomeLogin;
-import it.unibs.ing.domohouse.HomeMain;
 import it.unibs.ing.domohouse.components.HousingUnit;
-import it.unibs.ing.domohouse.components.Room;
 
 public class InterfaceHandler {
 	
