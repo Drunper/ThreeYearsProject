@@ -11,7 +11,9 @@ public class HomeLogin {
 	private MessageDigest md;
 	private byte[] hash;
 	private String hexHash;
-	
+	/*
+	 * invariante: maintainers != null
+	 */
 	public HomeLogin () {
 		maintainers = new HashMap<>();
 		try {
@@ -23,15 +25,27 @@ public class HomeLogin {
 	}
 	
 	private void hash (String toHash) {
+		assert toHash != null;
 		hash = md.digest(toHash.getBytes(StandardCharsets.UTF_8));
 		hexHash = bytesToHex(hash);
+		assert homeLoginInvariant() : "Invariante di classe non soddisfatto";
 	}
 	
 	public void addEntry (String maintainerID, String passwordHash) {
+		assert homeLoginInvariant() : "Invariante di classe non soddisfatto";
+		assert maintainerID != null && passwordHash != null;
+		int pre_size = maintainers.size();
+		
 		maintainers.put(maintainerID, passwordHash);
+		
+		assert maintainers.size() >= pre_size;
+		assert homeLoginInvariant() : "Invariante di classe non soddisfatto";
 	}
 	
 	public boolean checkPassword (String maintainerID, String password) {
+		assert maintainerID != null && password != null;
+		assert homeLoginInvariant() : "Invariante di classe non soddisfatto";
+		
 		if (!maintainers.containsKey(maintainerID))
 			return false;
 		else
@@ -49,5 +63,10 @@ public class HomeLogin {
 	        hexString.append(hex);
 	    }
 	    return hexString.toString();
+	}
+	
+	private boolean homeLoginInvariant() {
+		boolean checkMap = maintainers != null;
+		return checkMap;
 	}
 }

@@ -16,12 +16,20 @@ public class NumericSensor extends Sensor {
 	}
 	
 	private void setBounds(String variableName) {
+		assert variableName != null && variableName.length() > 0;
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		double [] bounds = category.getDomain(variableName);
 		lowerBound = bounds[0];
-		upperBound = bounds[1];		
+		upperBound = bounds[1];
+	
+		assert upperBound >= lowerBound;
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public String [] getMeasurements() {
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		String [] infos = category.getDetectableInfoList();
 		int size = infos.length;
 		String [] measurements = new String[size];
@@ -29,10 +37,15 @@ public class NumericSensor extends Sensor {
 		{
 			measurements[i] = addMeasurementUnit(getMeasurementOf(infos[i]), infos[i]);
 		}
+		assert measurements != null;
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		return measurements;
 	}
 	
 	private double getMeasurementOf(String variableName) {
+		assert variableName != null && variableName.length() > 0;
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		setBounds(variableName);
 		double measure = 0;
 		double valueFromObject;
@@ -52,15 +65,26 @@ public class NumericSensor extends Sensor {
 		}
 		// faccio la media perché non ho altre idee su come ottenere un valore che non sia completamente scorrelato da tutti gli altri
 		measure = measure / objectNames.length; 
+		
+		//assert measure >= lowerBound; ??
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		return measure;
 	}
 	
 	private String addMeasurementUnit(double value, String variableName) {
+		assert variableName != null && variableName.length() > 0;
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		String valueWithUnit = value + " " + category.getMeasurementUnit(variableName);
+		
+		assert valueWithUnit != null && valueWithUnit.length() > 0;
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		return valueWithUnit;
 	}
 	
 	public String toString() {
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		String unformattedText;
 		String status;
 		if (isState()) 
@@ -77,6 +101,16 @@ public class NumericSensor extends Sensor {
 			unformattedText = unformattedText+"mv:"+value+':';
 		}
 		unformattedText = unformattedText+status;
+		
+		assert unformattedText.length() > 0;
+		assert unformattedText.contains("acceso") || unformattedText.contains("spento");
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		return unformattedText;
 	}
+	
+	private boolean numericSensorInvariant() {
+		return super.sensorInvariant();
+	}
+	
 }

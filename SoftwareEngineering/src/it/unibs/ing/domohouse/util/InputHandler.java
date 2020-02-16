@@ -14,7 +14,9 @@ import it.unibs.ing.domohouse.components.SensorCategory;
 public class InputHandler {
 
 	private DataHandler dataHandler;
-	
+	/*
+	 * invariante dataHandler != null
+	 */
 	public InputHandler(DataHandler dataHandler) {
 		this.dataHandler = dataHandler;
 	}
@@ -26,9 +28,13 @@ public class InputHandler {
 		{
 			createHouse(name, descr);
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void readArtifactFromUser(String location) {
+		assert location != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		String name;
 		do
 		{
@@ -42,9 +48,14 @@ public class InputHandler {
 		{
 			createArtifact(name, descr, location);
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void readNumericSensorFromUser(String location) {
+		assert location != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String name;
 		do
 		{
@@ -94,9 +105,14 @@ public class InputHandler {
 		{
 			createNumericSensor(name, category, roomOrArtifact, objectList, location);
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void readActuatorFromUser(String location) {
+		assert location != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String name;
 		do
 		{
@@ -145,9 +161,13 @@ public class InputHandler {
 		{
 			createActuator(name, category, roomOrArtifact, objectList, location);
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void readRoomFromUser() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String name;
 		do
 		{
@@ -165,9 +185,13 @@ public class InputHandler {
 		{
 			createRoom(name, descr, temp, umidita, pressione, vento);
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void readSensorCategoryFromUser() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String name;
 		do
 		{
@@ -189,9 +213,13 @@ public class InputHandler {
 		{
 			createSensorCategory(name, abbreviation, constructor, domain, detectableInfo);
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void readActuatorCategoryFromUser() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String name;
 		do
 		{
@@ -222,35 +250,64 @@ public class InputHandler {
 		{
 			createActuatorCategory(name, abbreviation, constructor, listOfModes, defaultMode);
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 
 	public void changeHouseDescription() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String descr = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_SAVING))
 		{
 			dataHandler.changeHouseDescription(descr);
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 
 	public void changeRoomDescription(String selectedRoom) {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_SAVING))
 		{
 			dataHandler.changeRoomDescription(selectedRoom, descr);
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void createHouse(String name, String descr) {
+		assert name != null && name.length() > 0;
+		assert descr != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		HousingUnit house = new HousingUnit(name, descr);
 		dataHandler.addHouse(house);
+		
+		assert house != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void createArtifact(String name, String descr, String location) {
-		Artifact arti = new Artifact(name, descr);
-		dataHandler.addArtifact(location, arti);
+		assert name != null && name.length() > 0;
+		assert descr != null;
+		assert location != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
+		Artifact art = new Artifact(name, descr);
+		dataHandler.addArtifact(location, art);
+		
+		assert art != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void createNumericSensor(String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
+		assert name != null && name.length() > 0;
+		assert category != null && objectList != null && location != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String realName = name + "_" + category;
 		Sensor sensor = new NumericSensor(realName, dataHandler.getSensorCategory(category));
 		sensor.setMeasuringRoom(roomOrArtifact);
@@ -263,9 +320,16 @@ public class InputHandler {
 			else
 				sensor.addEntry(dataHandler.getArtifact(object));
 		}
+		
+		assert sensor != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void createActuator(String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
+		assert name != null && name.length() > 0;
+		assert category != null && objectList != null && location != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String realName = name + "_" + category;
 		Actuator actuator = new Actuator(realName, dataHandler.getActuatorCategory(category));
 		actuator.setControllingRoom(roomOrArtifact);
@@ -278,24 +342,44 @@ public class InputHandler {
 			else
 				actuator.addEntry(dataHandler.getArtifact(object));
 		}
+		
+		assert actuator != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void createRoom(String name, String descr, double temp, double umidita, double pressione, double vento) {
+		assert name != null && descr != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		Room room = new Room(name, descr, temp, umidita, pressione, vento);
 		dataHandler.addRoom(room);
+		
+		assert room != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 
 
 	
 	public void createSensorCategory(String name, String abbreviation, String constructor, String domain, String detectableInfo) {
+		assert name != null && name.length() > 0;
+		assert abbreviation != null && constructor != null && domain != null && detectableInfo != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String descr = abbreviation+':'+constructor+':'+domain;
 		SensorCategory cat = new SensorCategory(name, descr);
 		dataHandler.addSensorCategory(cat);
 		cat.putInfo(detectableInfo, domain);
+		
+		assert cat != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void createActuatorCategory(String name, String abbreviation, String manufacturer,
 			ArrayList<String> listOfModes, String defaultMode) {
+		assert name != null && name.length() > 0;
+		assert abbreviation != null && manufacturer != null && listOfModes != null && defaultMode != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String descr = abbreviation+':'+manufacturer+':'+defaultMode;
 		for(String toConcat : listOfModes)
 		{
@@ -307,60 +391,98 @@ public class InputHandler {
 			cat.putOperatingMode(toAdd, OperatingModesHandler.getOperatingMode(toAdd));
 		}
 		dataHandler.addActuatorCategory(cat);
+		
+		assert cat != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public String safeInsertSensorCategory() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String selectedSensCategory = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR_CATEGORY);
 		if(dataHandler.hasSensorCategory(selectedSensCategory)) return selectedSensCategory;
 		else do {
 				selectedSensCategory = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_SENSOR_CATEGORY + " " + Strings.INSERT_SENSOR_CATEGORY);
 		}while(!dataHandler.hasSensorCategory(selectedSensCategory));
+		
+		assert selectedSensCategory != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		return selectedSensCategory;
 	}
 	
 	public String safeInsertActuatorCategory() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String selectedActuCategory = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR_CATEGORY);
 		if(dataHandler.hasActuatorCategory(selectedActuCategory)) return selectedActuCategory;
 		else do {	
 				selectedActuCategory = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ACTUATOR_CATEGORY + " " + Strings.INSERT_SENSOR_CATEGORY);
 		}while(!dataHandler.hasActuatorCategory(selectedActuCategory));
+		
+		assert selectedActuCategory != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		return selectedActuCategory;
 	}
 	
 	public String safeInsertRoom() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String selectedRoom = RawInputHandler.readNotVoidString(Strings.INSERT_ROOM);
 		if(dataHandler.hasRoom(selectedRoom)) return selectedRoom;
 		else do{
 				selectedRoom = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ROOM + " " + Strings.INSERT_ROOM);	
 		}while(!dataHandler.hasRoom(selectedRoom));
+		
+		assert selectedRoom != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		return selectedRoom;
 	}
 
 	public String safeInsertSensor() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String selectedSensor = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR);
 		if(dataHandler.hasSensor(selectedSensor)) return selectedSensor;
 		else do {
 				selectedSensor = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_SENSOR+ " " + Strings.INSERT_SENSOR);
 		}while(!dataHandler.hasSensor(selectedSensor));
+		
+		assert selectedSensor != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		return selectedSensor;
 	}
 	
 	public String safeInsertActuator() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String selectedActuator = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR);
 		if(dataHandler.hasActuator(selectedActuator)) return selectedActuator;
 		else do {		
 				selectedActuator = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ACTUATOR + " " + Strings.INSERT_ACTUATOR);
 		}while(!dataHandler.hasActuator(selectedActuator));
+		
+		assert selectedActuator != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		return selectedActuator;
 	}
 	
 	public String safeInsertArtifact() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String selectedArtifact = RawInputHandler.readNotVoidString(Strings.INSERT_ARTIFACT);
 		if(dataHandler.hasArtifact(selectedArtifact)) return selectedArtifact;
 		do {
 				selectedArtifact = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ARTIFACT + " " + Strings.INSERT_ARTIFACT);
 		}while(!dataHandler.hasArtifact(selectedArtifact));
+		
+		assert selectedArtifact != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		return selectedArtifact;
+	}
+	
+	private boolean inputHandlerInvariant() {
+		if(dataHandler != null) return true;
+		return false;
 	}
 
 }

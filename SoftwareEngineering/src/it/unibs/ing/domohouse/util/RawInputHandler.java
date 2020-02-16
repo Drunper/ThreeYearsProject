@@ -32,11 +32,15 @@ public class RawInputHandler {
 	}
 	
 	public static String readString(String message) {
+		assert message != null;
+		
 		System.out.println(message);
 		return reader.next();
 	}
 	
 	public static String readNotVoidString(String message) {
+		assert message != null;
+		
 		boolean endFlag = false;
 		String rdString = null;
 		do
@@ -53,6 +57,8 @@ public class RawInputHandler {
 	}
 	
 	public static String readStringWithMaximumLength(String message, int maxLength) {
+		assert message != null;
+		
 		boolean endFlag = false;
 		String rdString = null;
 		do
@@ -68,6 +74,8 @@ public class RawInputHandler {
 	}
 	  
 	public static char readChar (String message) {
+		assert message != null;
+		
 		boolean endFlag = false;
 		char readValue = '\0';
 		do
@@ -86,6 +94,8 @@ public class RawInputHandler {
 	}
 	  
 	public static char readUpperChar (String message, String usableChars) {
+		assert message != null && usableChars != null;
+		
 		boolean endFlag = false;
 		char readValue = '\0';
 		do
@@ -102,6 +112,8 @@ public class RawInputHandler {
 	}
 	  
 	public static int readInt (String message) {
+		assert message != null;
+		
 		boolean endflag = false;
 		int readValue = 0;
 		do
@@ -124,6 +136,8 @@ public class RawInputHandler {
   
 	public static int readIntWithMinimum(String message, int minimumValue)
 	{
+	   assert message != null;
+	   
 	   boolean endFlag = false;
 	   int readValue = 0;
 	   do
@@ -140,6 +154,8 @@ public class RawInputHandler {
 
 	public static int readIntWithBounds(String message, int minimumValue, int maximumValue)
 	{
+		assert message != null;
+		
 		boolean endFlag = false;
 		int readValue = 0;
 		do
@@ -158,6 +174,8 @@ public class RawInputHandler {
 	}
  
 	public static double readDouble (String message) {
+		assert message != null;
+		
 		boolean endFlag = false;
 		double readValue = 0;
 		do
@@ -179,14 +197,20 @@ public class RawInputHandler {
 	}
 	  
 	public int readPositiveInteger(String message) {
+		assert message != null;
+		
 		return readIntWithMinimum(message,POSITIVE_NUMBER_MINIMUM_VALUE);
 	}
 	  
 	public static int readNonNegativeInteger(String message) {
+		assert message != null;
+		
 		return readIntWithMinimum(message,NON_NEGATIVE_MINIMUM_VALUE);
 	}
 	 
 	public static double readDoubleWithMinumum (String message, double minimumValue) {
+		assert message != null;
+		
 		boolean endFlag = false;
 		double readValue = 0;
 		do
@@ -202,6 +226,8 @@ public class RawInputHandler {
 	}
 	  
 	public static boolean yesOrNo(String message) {
+		assert message != null;
+		
 		String myMessage = message + "("+ANSWER_YES+"/"+ANSWER_NO+")";
 		char valoreLetto = readUpperChar(myMessage,String.valueOf(ANSWER_YES)+String.valueOf(ANSWER_NO));
 		  

@@ -13,7 +13,9 @@ public class Menu
 	private final static String FRAME = "--------------------------------";
 	private final static String EXIT_VOICE = "0\tEsci";
 	private final static String INSERT_REQUEST = "Digita il numero dell'opzione desiderata > ";
-	
+	/*
+	 * invariante title e menu != null
+	 */
 	public Menu (String title, String [] voices)
 	{
 		this.title = title;
@@ -22,12 +24,18 @@ public class Menu
 	
 	public int select ()
 	{
+		assert menuInvariant() : "Invariante di classe non soddisfatto";
+		
 		printMenu();
-		return RawInputHandler.readIntWithBounds(INSERT_REQUEST, 0, voices.length);
+		int result = RawInputHandler.readIntWithBounds(INSERT_REQUEST, 0, voices.length);
+		
+		assert menuInvariant() : "Invariante di classe non soddisfatto";
+		return result;
 	}
 			
 	public void printMenu ()
 	{
+		assert menuInvariant() : "Invariante di classe non soddisfatto";
 		System.out.println(FRAME);
 		System.out.println(title);
 		System.out.println(FRAME);
@@ -38,6 +46,15 @@ public class Menu
 	    System.out.println();
 	    System.out.println(EXIT_VOICE);
 		System.out.println();
+		assert menuInvariant() : "Invariante di classe non soddisfatto";
+	}
+	
+	private boolean menuInvariant() {
+		boolean checkTitle = title != null;
+		boolean checkVoices = voices != null;
+		
+		if(checkTitle && checkVoices) return true;
+		return false;
 	}
 	  	
 }

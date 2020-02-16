@@ -15,17 +15,24 @@ public class FileLoader {
 	}
 	
 	private DataHandler safeReadDataHandler() {
-		String filePath = Strings.DATA_HANDLER_PATH;
+		String filePath = Strings.DATA_HANDLER_PATH + Strings.DATA_HANDLER_NAME_FILE;
+				
 		File f = new File(filePath);
 		if(f.isFile() && f.canRead()) {
 			try (ObjectInputStream objectIn = new ObjectInputStream(new FileInputStream(f)))
 			{
 				return (DataHandler) objectIn.readObject();
 			}
-			catch(IOException | ClassNotFoundException ex) 
+			catch(IOException ex)
+			{
+				//do something -> gestire l'eccezione
+				System.out.println(Strings.ERROR_LOAD_FILE);
+				ex.printStackTrace();
+			}
+			catch(ClassNotFoundException ex) 
 			{
 				ex.printStackTrace();
-			} 
+			}
 		}
 		return null;
 	}

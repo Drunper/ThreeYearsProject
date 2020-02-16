@@ -24,48 +24,92 @@ public class Artifact implements Gettable, Serializable {
 	}
 
 	public String getName() {
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return this.name;
 	}
 	
 	public String getDescr() {
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return this.text;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String newName) {
+		assert newName.length() > 0 && newName != null;
+		this.name = newName;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void setDescr(String text) {
+		assert text != null;
 		this.text = text;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public double getNumericProperty(String variableName) {
+		assert variableName != null;
+		assert numericPropertiesMap != null;
+		assert numericPropertiesMap.containsKey(variableName) : "numericPropertiesMap non contiene " + variableName;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return numericPropertiesMap.get(variableName);
 	}
 	
 	public String getNonNumericProperty(String variableName) {
+		assert variableName.length() > 0 && variableName != null;
+		assert nonNumericPropertiesMap != null;
+		assert nonNumericPropertiesMap.containsKey(variableName) : "nonNumericPropertiesMap non contiene " + variableName;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return nonNumericPropertiesMap.get(variableName);
 	}
 	
 	public void setNumericProperty (String variableName, double newValue) {
+		assert variableName.length() > 0 && variableName != null;
+		assert numericPropertiesMap != null;
+		int pre_size = numericPropertiesMap.size();
 		numericPropertiesMap.put(variableName, newValue);
+		assert numericPropertiesMap.size() >= pre_size;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
+		
 	}
 	
 	public void setNonNumericProperty (String variableName, String newValue) {
+		assert variableName.length() > 0 && variableName != null;
+		assert nonNumericPropertiesMap != null;
+		int pre_size = nonNumericPropertiesMap.size();
 		nonNumericPropertiesMap.put(variableName, newValue);
+		assert nonNumericPropertiesMap.size() >= pre_size;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public boolean hasNumericProperty(String variableName) {
+		assert variableName != null;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return numericPropertiesMap.containsKey(variableName);
 	}
 	
 	public boolean hasNonNumericProperty(String variableName) {
+		assert variableName != null;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return nonNumericPropertiesMap.containsKey(variableName);
 	}
 	
 	public String toString() {
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		String unformattedText;
 		unformattedText = name+':'+text;
+		assert unformattedText.length() > 0;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return unformattedText;
+	}
+	
+	private boolean artifactInvariant() {
+		boolean checkName = false;
+		boolean checkTest = false;
+		boolean checkMap = false;
+		if(name.length() > 0 && name != null) checkName = true;
+		if(text != null) checkTest = true;
+		if(numericPropertiesMap != null && nonNumericPropertiesMap != null) checkMap = true; 
+		
+		if(checkName && checkTest && checkMap) return true;
+		return false;
 	}
 }

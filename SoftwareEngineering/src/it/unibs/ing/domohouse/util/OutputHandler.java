@@ -3,6 +3,9 @@ package it.unibs.ing.domohouse.util;
 public class OutputHandler {
 
 	public static void printHousingUnit(String housingUnitText) {
+		assert housingUnitText != null;
+		assert housingUnitText.contains(Strings.SEPARATOR);
+		
 		String [] splitted = housingUnitText.split(Strings.SEPARATOR);
 		System.out.println(Strings.HOUSING_UNIT);
 		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
@@ -14,6 +17,9 @@ public class OutputHandler {
 	}
 	
 	public static void printRoom(String roomText) {
+		assert roomText != null;
+		assert roomText.contains(Strings.SEPARATOR);
+		
 		String [] splitted = roomText.split(Strings.SEPARATOR);
 		System.out.println(Strings.ROOM);
 		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
@@ -25,6 +31,9 @@ public class OutputHandler {
 	}
 	
 	public static void printArtifact(String artifactText) {
+		assert artifactText != null;
+		assert artifactText.contains(Strings.SEPARATOR);
+		
 		String [] splitted = artifactText.split(Strings.SEPARATOR);
 		System.out.println(Strings.ARTIFACT);
 		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
@@ -32,6 +41,9 @@ public class OutputHandler {
 	}
 	
 	public static void printActuator(String actuatorText) {
+		assert actuatorText != null;
+		assert actuatorText.contains(Strings.SEPARATOR);
+		
 		String [] splitted = actuatorText.split(Strings.SEPARATOR);
 		System.out.println(Strings.ACTUATOR);
 		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
@@ -48,6 +60,9 @@ public class OutputHandler {
 	}
 	
 	public static void printSensor(String sensorText) {
+		assert sensorText != null;
+		assert sensorText.contains(Strings.SEPARATOR);
+		
 		String [] splitted = sensorText.split(Strings.SEPARATOR);
 		System.out.println(Strings.SENSOR);
 		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
@@ -70,11 +85,16 @@ public class OutputHandler {
 	}
 	
 	public static void printListOfString(String [] list) {
+		assert list != null;
+		
 		for(String element : list)
 			System.out.println(element);
 	}
 	
 	public static void printSensorCategory(String sensorCategoryText) {
+		assert sensorCategoryText != null;
+		assert sensorCategoryText.contains(Strings.SEPARATOR);
+		
 		String [] splitted = sensorCategoryText.split(Strings.SEPARATOR);
 		System.out.println(Strings.SENSOR_CATEGORY);
 		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);
@@ -96,6 +116,9 @@ public class OutputHandler {
 	}
 	
 	public static void printActuatorCategory(String actuatorCategoryText) {
+		assert actuatorCategoryText != null;
+		assert actuatorCategoryText.contains(Strings.SEPARATOR);
+		
 		String [] splitted = actuatorCategoryText.split(Strings.SEPARATOR);
 		System.out.println(Strings.ACTUATOR_CATEGORY);
 		System.out.println(Strings.NAME+splitted[Strings.FIRST_TOKEN]);

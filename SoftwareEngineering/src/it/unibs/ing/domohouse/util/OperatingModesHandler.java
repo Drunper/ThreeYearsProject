@@ -12,8 +12,13 @@ public class OperatingModesHandler implements Serializable{
 	 */
 	private static final long serialVersionUID = -7032900220446234368L;
 	private static HashMap<String, SerializableConsumer<Gettable>> operatingModesMap = new HashMap<>();
-	
+	/*
+	 * invariante operatingModesMap != null
+	 */
 	public static void fillOperatingModes() {
+		
+		SerializableConsumer<Gettable> idle = g -> { };
+		
 		SerializableConsumer<Gettable> aumentoTemperatura10gradi = g -> {
 			double temp = g.getNumericProperty("temperatura");
 			temp = temp +10;
@@ -61,7 +66,8 @@ public class OperatingModesHandler implements Serializable{
 					umidita = umidita + 2;
 					g.setNumericProperty("umidità", umidita);
 				};
-			
+		
+		operatingModesMap.put("idle", idle);
 		operatingModesMap.put("aumentoTemperatura10gradi", aumentoTemperatura10gradi);
 		operatingModesMap.put("diminuizioneTemperatura10gradi", diminuizioneTemperatura10gradi);
 		operatingModesMap.put("diminuizioneTemperatura5gradi", diminuizioneTemperatura5gradi);
@@ -80,10 +86,27 @@ public class OperatingModesHandler implements Serializable{
 	}
 	
 	public static SerializableConsumer<Gettable> getOperatingMode(String name) {
-		return operatingModesMap.get(name);
+		assert name != null;
+		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert operatingModesMap.containsKey(name) : "operatingModesMap non contiente " + name;
+		
+		SerializableConsumer<Gettable> g = operatingModesMap.get(name);
+		
+		assert g != null;
+		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
+		return g;
 	}
 	
 	public static boolean hasOperatingMode(String name) {
+		assert name != null;
+		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
+		
 		return operatingModesMap.containsKey(name);
+	}
+	
+	//E' legale un static invariant?
+	private static boolean operatingModesHandlerInvariant() {
+		if(operatingModesMap != null) return true;
+		return false;
 	}
 }

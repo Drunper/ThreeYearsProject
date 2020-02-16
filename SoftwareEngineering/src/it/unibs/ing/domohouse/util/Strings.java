@@ -1,7 +1,12 @@
 package it.unibs.ing.domohouse.util;
 
 public class Strings {
-	public static final String DATA_HANDLER_PATH = "C:\\test\\data\\dataHandler.dat";
+	public static final String DATA_HANDLER_PATH = "C:\\test\\data"; //NON INSERIRE QUI IL NOME DEL FILE
+	public static final String DATA_HANDLER_NAME_FILE = "\\dataHandler.dat";
+	public static final String ERROR_LOAD_FILE = "Non è stato possibile caricare il file! (ERROR: failed or interrupted I/O operations)";
+	public static final String LOADING_FILE = "Caricamento file...";
+	public static final String LOADED = "Caricamento da file effettuato!";
+	public static final String NO_FILE = "Attenzione! Non è stato trovato alcun file di salvataggio. Chiamare un manutentore per configurare il sistema!";
 	//TITLES
 	public static final String LOGIN_MENU_TITLE = "Login:";
 	public static final String USER_MENU_TITLE = "Menu unità immobiliare";
