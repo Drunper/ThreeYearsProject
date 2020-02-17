@@ -63,7 +63,7 @@ public class InterfaceHandler {
 			switch(scelta)
 			{
 				case 1: 
-					if(firstStart) {System.out.println("Accesso vietato! Per il primo avvio chiamare un manutentore per configurare il sistema");}
+					if(firstStart) {System.out.println(Strings.USER_FIRST_ACCESS_PROHIBITED);}
 					else {
 						user = RawInputHandler.readNotVoidString(Strings.INSERT_USER);
 						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
@@ -92,7 +92,7 @@ public class InterfaceHandler {
 					while (!user.equalsIgnoreCase(Strings.BACK_CHARACTER) && !ok);
 					if (ok) {
 						if(firstStart) {
-							System.out.println("Creazione dati di base per la prima configurazione...");
+							System.out.println(Strings.BASIC_FILE_CREATION);
 							dataHandler.addHouse(new HousingUnit("Casa","Inserire una descrizione.."));
 						}
 						showMaintainerMenu();
@@ -236,7 +236,7 @@ public class InterfaceHandler {
 					System.out.println();
 					
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
-					OutputHandler.printSensorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
+					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
 			}
 		}

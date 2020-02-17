@@ -7,6 +7,9 @@ public class Strings {
 	public static final String LOADING_FILE = "Caricamento file...";
 	public static final String LOADED = "Caricamento da file effettuato!";
 	public static final String NO_FILE = "Attenzione! Non è stato trovato alcun file di salvataggio. Chiamare un manutentore per configurare il sistema!";
+	public static final String BASIC_FILE_CREATION = "Creazione dati di base per la prima configurazione...";
+	public static final String USER_FIRST_ACCESS_PROHIBITED = "Accesso vietato! Per il primo avvio chiamare un manutentore per configurare il sistema";
+
 	//TITLES
 	public static final String LOGIN_MENU_TITLE = "Login:";
 	public static final String USER_MENU_TITLE = "Menu unità immobiliare";
