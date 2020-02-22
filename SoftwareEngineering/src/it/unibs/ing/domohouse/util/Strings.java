@@ -48,7 +48,7 @@ public class Strings {
 	public static final String ROOM_INPUT_TEMPERATURE = "Inserisci valore temperatura della stanza (gradi)";
 	public static final String ROOM_INPUT_HUMIDITY = "Inserisci valore umidita della stanza della stanza";
 	public static final String ROOM_INPUT_PRESSURE = "Inserisci valore pressione della stanza della stanza (hPa)";
-	public static final String ROOM_INPUT_WIND = "Inserisci valore velocità del vento (km/h";
+	public static final String ROOM_INPUT_WIND = "Inserisci valore velocità del vento (km/h)";
 	
 	//INPUTHANDLER
 	public static final String PROCEED_WITH_CREATION = "Procedere con la creazione e salvataggio?";
