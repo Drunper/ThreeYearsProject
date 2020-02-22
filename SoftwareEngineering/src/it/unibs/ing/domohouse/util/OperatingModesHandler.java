@@ -102,7 +102,7 @@ public class OperatingModesHandler implements Serializable{
 		
 		return operatingModesMap.containsKey(name);
 	}
-	
+
 	private static boolean operatingModesHandlerInvariant() {
 		if(operatingModesMap != null) return true;
 		return false;

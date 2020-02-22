@@ -176,6 +176,7 @@ public class InterfaceHandler {
 					inputHandler.readActuatorCategoryFromUser();
 					break;		
 				case 9:
+					firstStart = false;
 					saver.createDirs();
 					saver.writeDataHandlerToFile(dataHandler);
 					break;
