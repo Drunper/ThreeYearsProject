@@ -66,7 +66,8 @@ public class NumericSensor extends Sensor {
 		// faccio la media perché non ho altre idee su come ottenere un valore che non sia completamente scorrelato da tutti gli altri
 		measure = measure / objectNames.length; 
 		
-		//assert measure >= lowerBound; ??
+		assert measure >= lowerBound;
+		assert measure <= upperBound;
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		return measure;
 	}
@@ -91,7 +92,10 @@ public class NumericSensor extends Sensor {
 			status = "acceso";
 		else
 			status = "spento";
-		unformattedText = getName()+':'+category.getName()+':';
+		
+		String name = getName().split("_")[0];
+		
+		unformattedText = name +':'+category.getName()+':';
 		for(String measuredObject : measuredObjectsList())
 		{
 			unformattedText = unformattedText+"me:"+measuredObject+':';

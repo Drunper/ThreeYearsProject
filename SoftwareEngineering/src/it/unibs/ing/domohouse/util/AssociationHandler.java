@@ -22,7 +22,6 @@ public class AssociationHandler implements Serializable{
 	}
 	
 	public void addAssociation(Association association) {
-		//DUBBIO: E' legale utilizzare associationList.size() in pre conditions? 
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
 		int pre_size = associationList.size();
 		
@@ -33,7 +32,6 @@ public class AssociationHandler implements Serializable{
 	}
 	
 	public void removeAssociation(Association assoc) {
-		//DUBBIO: E' legale utilizzare associationList.size() in pre conditions? 
 		assert assoc != null;
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
 		assert associationList.contains(assoc) : "associationList non contiente " + assoc + " e dunque non può rimuoverlo";

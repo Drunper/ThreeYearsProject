@@ -36,11 +36,8 @@ public class Actuator implements Manageable, Serializable {
 	}
 	
 	public String getName() {
-		assert name.contains("_") : "Il nome dell'attuatore non contiente il carattere \"_\"";
-		String s = name.split("_")[0];
-		assert !s.contains("_");
 		assert actuatorInvariant();
-		return s;
+		return name;
 	}
 
 	public void setName(String newName) {
@@ -92,7 +89,9 @@ public class Actuator implements Manageable, Serializable {
 	public String toString() {
 		assert name != null && name.length() > 0 && category != null 
 				&& category.getName().length() > 0 && controlledObjects != null;
-		String unformattedText = name+':'+category.getName()+':';
+		
+		String n = name.split("_")[0];
+		String unformattedText = n +':'+category.getName()+':';
 		String status;
 		if (state) 
 			status = "acceso";

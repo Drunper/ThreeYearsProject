@@ -14,7 +14,7 @@ public class FileLoader {
 			return safeReadDataHandler();
 	}
 	
-	private DataHandler safeReadDataHandler() {
+	private DataHandler safeReadDataHandler() {		
 		String filePath = Strings.DATA_HANDLER_PATH + Strings.DATA_HANDLER_NAME_FILE;
 				
 		File f = new File(filePath);
@@ -25,7 +25,6 @@ public class FileLoader {
 			}
 			catch(IOException ex)
 			{
-				//do something -> gestire l'eccezione
 				System.out.println(Strings.ERROR_LOAD_FILE);
 				ex.printStackTrace();
 			}

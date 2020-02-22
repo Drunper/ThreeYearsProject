@@ -1,7 +1,7 @@
 package it.unibs.ing.domohouse.util;
 
 public class Strings {
-	public static final String DATA_HANDLER_PATH = "C:\\test\\data"; //NON INSERIRE QUI IL NOME DEL FILE
+	public static final String DATA_HANDLER_PATH = "data"; //NON INSERIRE QUI IL NOME DEL FILE
 	public static final String DATA_HANDLER_NAME_FILE = "\\dataHandler.dat";
 	public static final String ERROR_LOAD_FILE = "Non è stato possibile caricare il file! (ERROR: failed or interrupted I/O operations)";
 	public static final String LOADING_FILE = "Caricamento file...";
@@ -82,6 +82,9 @@ public class Strings {
 	public static final String SENSOR_WRONG_ASSOCIATION_ARTIFACT = "L'elemento a cui si vuole associare il sensore non è un artefatto!";
 	public static final String SENSOR_WRONG_ASSOCIATION_CATEGORY = "Un sensore di questa categoria è già associato all'artefatto/stanza in questione";
 	public static final String SENSOR_ANOTHER_ASSOCIATION = "Associare sensore ad altro oggetto?";
+	public static final String NO_ASSOCIABLE_ELEMENT = "Non ci sono oggetti associabili di questo tipo";
+	public static final String NO_SENSOR_ROOM_OR_ARTIFACT_ERROR = "Impossibile creare il sensore perchè non ci sono stanze o artefatti associabili ad esso";
+	public static final String NO_SENSOR_CATEGORY_ERROR = "Impossibile creare il sensore perchè non sono presenti categorie nel sistema";
 	
 	//ACTUATOR
 	public static final String ACTUATOR_INPUT_NAME = "Inserisci il nome dell'attuatore (senza la categoria)";
@@ -93,6 +96,8 @@ public class Strings {
 	public static final String ACTUATOR_WRONG_ASSOCIATION_ARTIFACT = "L'elemento a cui si vuole associare l'attautore non è un artefatto!";
 	public static final String ACTUATOR_WRONG_ASSOCIATION_CATEGORY = "Un attuatore di questa categoria è già associato all'artefatto/stanza in questione";
 	public static final String ACTUATOR_ANOTHER_ASSOCIATION = "Associare attuatore ad altro oggetto?";
+	public static final String NO_ACTUATOR_ROOM_OR_ARTIFACT_ERROR = "Impossibile creare l'attuatore perchè non ci sono stanze o artefatti associabili ad esso";
+	public static final String NO_ACTUATOR_CATEGORY_ERROR = "Impossibile creare l'attuatore perchè non sono presenti categorie nel sistema";
 	
 	//SENSOR CATEGORY
 	public static final String SENSOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di sensori";

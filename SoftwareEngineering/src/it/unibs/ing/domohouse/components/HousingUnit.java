@@ -237,6 +237,27 @@ public class HousingUnit implements Serializable {
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
+	public boolean isThereRoomOrArtifact() {
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		if(roomManager.size() != 0 || artifactManager.size() != 0) return true;
+		return false;
+	}
+	
+	public boolean isThereRoom() {
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		if(roomManager.size() != 0) return true;
+		return false;
+	}
+	
+	public boolean isThereArtifact() {
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		if(artifactManager.size() != 0) return true;
+		return false;
+	}
+	
 	private boolean housingUnitInvariant() {
 		boolean checkName = name != null && name.length() > 0 ;
 		boolean checkDescr = descr != null;

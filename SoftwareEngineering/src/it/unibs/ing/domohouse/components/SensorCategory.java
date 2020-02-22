@@ -54,7 +54,6 @@ public class SensorCategory implements Manageable, Serializable {
 		assert info != null && info.length() > 0;
 		assert sensorCategoryInvariant() : "Invariante della classe non soddisfatto";
 
-		//PatternSyntaxException
 		String domain = infoDomainMap.get(info);
 		assert domain.contains("(") : "domain non contiene \"(\" ";
 		int Index = domain.indexOf("(");

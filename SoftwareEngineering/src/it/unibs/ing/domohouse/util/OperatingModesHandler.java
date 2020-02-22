@@ -80,8 +80,7 @@ public class OperatingModesHandler implements Serializable{
 		
 		/*
 		 * Qua è necessario aggiungere altre modalità operative come fatto sopra.
-		 * Devono essere non parametriche. Se vengono in mente altre opzioni per risolvere
-		 * il problema delle modalità operative ditemi pure.
+		 * Devono essere non parametriche.
 		 */
 	}
 	
@@ -104,7 +103,6 @@ public class OperatingModesHandler implements Serializable{
 		return operatingModesMap.containsKey(name);
 	}
 	
-	//E' legale un static invariant?
 	private static boolean operatingModesHandlerInvariant() {
 		if(operatingModesMap != null) return true;
 		return false;

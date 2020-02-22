@@ -28,11 +28,8 @@ public class Sensor implements Manageable, Serializable{
 	}
 	
 	public String getName() {
-		assert name.contains("_");
-		String result = name.split("_")[0];
-		assert result.length()>0;
 		assert sensorInvariant() : "Invariante della classe non soddisfatto";
-		return result;
+		return name;
 	}
 
 	public void setName(String name) {

@@ -55,7 +55,8 @@ public class InputHandler {
 	public void readNumericSensorFromUser(String location) {
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
-		
+		if(dataHandler.getSensorCategoryList().length != 0) {
+			
 		String name;
 		do
 		{
@@ -72,7 +73,22 @@ public class InputHandler {
 				System.out.println(Strings.CATEGORY_NON_EXISTENT);
 		}
 		while(!dataHandler.hasSensorCategory(category));
-		boolean roomOrArtifact = RawInputHandler.yesOrNo(Strings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
+		if(dataHandler.isThereRoomOrArtifact()) {
+			
+		boolean isThereRoom = dataHandler.isThereRoom();
+		boolean isThereArtifact = dataHandler.isThereArtifact();
+		boolean roomOrArtifact;
+		
+		do {	
+		roomOrArtifact = RawInputHandler.yesOrNo(Strings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
+			
+		if((roomOrArtifact && !isThereRoom)) 
+			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+		else if ((!roomOrArtifact && !isThereArtifact))
+			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+		
+		}while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
+		
 		ArrayList<String> objectList = new ArrayList<>();
 		
 		do
@@ -105,7 +121,12 @@ public class InputHandler {
 		{
 			createNumericSensor(name, category, roomOrArtifact, objectList, location);
 		}
-		
+	}else {
+		System.out.println(Strings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
+		}
+	}else {
+		System.out.println(Strings.NO_SENSOR_CATEGORY_ERROR);
+	}
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
@@ -113,6 +134,7 @@ public class InputHandler {
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
+		if(dataHandler.getActuatorCategoryList().length != 0) {
 		String name;
 		do
 		{
@@ -129,7 +151,22 @@ public class InputHandler {
 				System.out.println(Strings.CATEGORY_NON_EXISTENT);
 		}
 		while(!dataHandler.hasActuatorCategory(category));
-		boolean roomOrArtifact = RawInputHandler.yesOrNo(Strings.ACTUATOR_ARTIFACT_OR_ROOM_ASSOCIATION);
+		
+		if(dataHandler.isThereRoomOrArtifact()) {
+			boolean isThereRoom = dataHandler.isThereRoom();
+			boolean isThereArtifact = dataHandler.isThereArtifact();
+			boolean roomOrArtifact;
+			
+		do {
+		roomOrArtifact = RawInputHandler.yesOrNo(Strings.ACTUATOR_ARTIFACT_OR_ROOM_ASSOCIATION);
+		
+		if((roomOrArtifact && !isThereRoom)) 
+			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+		else if ((!roomOrArtifact && !isThereArtifact))
+			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+		
+		}while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
+		
 		ArrayList<String> objectList = new ArrayList<>();
 		do
 		{
@@ -160,6 +197,12 @@ public class InputHandler {
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
 			createActuator(name, category, roomOrArtifact, objectList, location);
+		}
+		}else {
+			System.out.println(Strings.NO_ACTUATOR_ROOM_OR_ARTIFACT_ERROR);
+		}
+		}else {
+			System.out.println(Strings.NO_ACTUATOR_CATEGORY_ERROR);
 		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";

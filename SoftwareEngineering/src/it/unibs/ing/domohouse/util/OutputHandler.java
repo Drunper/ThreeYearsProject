@@ -131,10 +131,7 @@ public class OutputHandler {
 			System.out.println(splitted[i]);
 		}
 	}
-	
-	/*I know it sucks, but there's no known way to clear the output inside an IDE
-	I could have a better way if we ran natively the app into a Windows command prompt,
-	but since we run it in Eclipse this is the best way to do it.*/
+
 	public final static void clearOutput()
 	{
 		for (int i = 0; i < Strings.SPACING_COSTANT; ++i) System.out.println();
