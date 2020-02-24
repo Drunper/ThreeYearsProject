@@ -2,11 +2,12 @@ package it.unibs.ing.domohouse.components;
 
 import java.io.Serializable;
 
+import it.unibs.ing.domohouse.interfaces.Manageable;
 import it.unibs.ing.domohouse.util.Association;
 import it.unibs.ing.domohouse.util.AssociationHandler;
 import it.unibs.ing.domohouse.util.Manager;
 
-public class HousingUnit implements Serializable {
+public class HousingUnit implements Serializable, Manageable {
 	
 	/**
 	 * 

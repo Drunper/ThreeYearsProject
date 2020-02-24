@@ -22,37 +22,42 @@ public class InputHandler {
 	}
 	
 	public void readHouseFromUser() {
-		String name = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_NAME);
-		String descr = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_DESCRIPTION);
+		String name;
+		do {
+		name = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_NAME);
+		if(dataHandler.hasHouse(name)) System.out.println(Strings.NAME_ALREADY_EXISTENT);
+		}while(dataHandler.hasHouse(name));
+		
+		String descr = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			createHouse(name, descr);
+			createHouse(name, descr);	
 		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public void readArtifactFromUser(String location) {
+	public void readArtifactFromUser(String selectedHouse, String location) {
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		String name;
 		do
 		{
 			name = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_NAME);
-			if (dataHandler.hasRoomOrArtifact(name))
+			if (dataHandler.hasRoomOrArtifact(selectedHouse, name))
 				System.out.println(Strings.ARTIFACT_ROOM_NAME_ASSIGNED);
 		}
-		while(dataHandler.hasRoomOrArtifact(name));
+		while(dataHandler.hasRoomOrArtifact(selectedHouse, name));
 		String descr = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			createArtifact(name, descr, location);
+			createArtifact(selectedHouse, name, descr, location);
 		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public void readNumericSensorFromUser(String location) {
+	public void readNumericSensorFromUser(String selectedHouse, String location) {
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		if(dataHandler.getSensorCategoryList().length != 0) {
@@ -61,10 +66,10 @@ public class InputHandler {
 		do
 		{
 			name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
-			if (dataHandler.hasSensor(name))
+			if (dataHandler.hasSensor(selectedHouse, name))
 				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
 		}
-		while(dataHandler.hasSensor(name));
+		while(dataHandler.hasSensor(selectedHouse, name));
 		String category;
 		do
 		{
@@ -73,10 +78,10 @@ public class InputHandler {
 				System.out.println(Strings.CATEGORY_NON_EXISTENT);
 		}
 		while(!dataHandler.hasSensorCategory(category));
-		if(dataHandler.isThereRoomOrArtifact()) {
+		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
 			
-		boolean isThereRoom = dataHandler.isThereRoom();
-		boolean isThereArtifact = dataHandler.isThereArtifact();
+		boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
+		boolean isThereArtifact = dataHandler.isThereArtifact(selectedHouse);
 		boolean roomOrArtifact;
 		
 		do {	
@@ -100,26 +105,26 @@ public class InputHandler {
 					toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ROOM_ASSOCIATION);
 				else
 					toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ARTIFACT_ASSOCIATION);
-				if (!dataHandler.hasRoomOrArtifact(toAssoc))
+				if (!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc))
 					System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
 				else
 				{
-					if (roomOrArtifact && !dataHandler.isElementARoom(toAssoc))
+					if (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc))
 						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ROOM);
-					else if (!roomOrArtifact && dataHandler.isElementARoom(toAssoc))
+					else if (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc))
 						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ARTIFACT);
-					else if (dataHandler.isAssociated(toAssoc, category))
+					else if (dataHandler.isAssociated(selectedHouse, toAssoc, category))
 						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_CATEGORY);
 				}
 			}
-			while(!dataHandler.hasRoomOrArtifact(toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(toAssoc)) 
-					|| (!roomOrArtifact && dataHandler.isElementARoom(toAssoc)) || dataHandler.isAssociated(toAssoc, category));
+			while(!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc)) 
+					|| (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc)) || dataHandler.isAssociated(selectedHouse, toAssoc, category));
 			objectList.add(toAssoc);
 		}
 		while(RawInputHandler.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			createNumericSensor(name, category, roomOrArtifact, objectList, location);
+			createNumericSensor(selectedHouse, name, category, roomOrArtifact, objectList, location);
 		}
 	}else {
 		System.out.println(Strings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
@@ -130,7 +135,7 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public void readActuatorFromUser(String location) {
+	public void readActuatorFromUser(String selectedHouse, String location) {
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
@@ -139,10 +144,10 @@ public class InputHandler {
 		do
 		{
 			name = RawInputHandler.readNotVoidString(Strings.ACTUATOR_INPUT_NAME);
-			if (dataHandler.hasActuator(name))
+			if (dataHandler.hasActuator(selectedHouse, name))
 				System.out.println(Strings.ACTUATOR_NAME_ASSIGNED);
 		}
-		while(dataHandler.hasActuator(name));
+		while(dataHandler.hasActuator(selectedHouse, name));
 		String category;
 		do
 		{
@@ -152,9 +157,9 @@ public class InputHandler {
 		}
 		while(!dataHandler.hasActuatorCategory(category));
 		
-		if(dataHandler.isThereRoomOrArtifact()) {
-			boolean isThereRoom = dataHandler.isThereRoom();
-			boolean isThereArtifact = dataHandler.isThereArtifact();
+		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
+			boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
+			boolean isThereArtifact = dataHandler.isThereArtifact(selectedHouse);
 			boolean roomOrArtifact;
 			
 		do {
@@ -177,26 +182,26 @@ public class InputHandler {
 					toAssoc = RawInputHandler.readNotVoidString(Strings.ACTUATOR_ROOM_ASSOCIATION);
 				else
 					toAssoc = RawInputHandler.readNotVoidString(Strings.ACTUATOR_ARTIFACT_ASSOCIATION);
-				if (!dataHandler.hasRoomOrArtifact(toAssoc))
+				if (!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc))
 					System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
 				else
 				{
-					if (roomOrArtifact && !dataHandler.isElementARoom(toAssoc))
+					if (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc))
 						System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_ROOM);
-					else if (!roomOrArtifact && dataHandler.isElementARoom(toAssoc))
+					else if (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc))
 						System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_ARTIFACT);
-					else if (dataHandler.isAssociated(toAssoc, category))
+					else if (dataHandler.isAssociated(selectedHouse, toAssoc, category))
 						System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_CATEGORY);
 				}
 			}
-			while(!dataHandler.hasRoomOrArtifact(toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(toAssoc)) 
-					|| (!roomOrArtifact && dataHandler.isElementARoom(toAssoc)) || dataHandler.isAssociated(toAssoc, category));
+			while(!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc)) 
+					|| (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc)) || dataHandler.isAssociated(selectedHouse, toAssoc, category));
 			objectList.add(toAssoc);
 		}
 		while(RawInputHandler.yesOrNo(Strings.ACTUATOR_ANOTHER_ASSOCIATION));
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			createActuator(name, category, roomOrArtifact, objectList, location);
+			createActuator(selectedHouse, name, category, roomOrArtifact, objectList, location);
 		}
 		}else {
 			System.out.println(Strings.NO_ACTUATOR_ROOM_OR_ARTIFACT_ERROR);
@@ -208,17 +213,17 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public void readRoomFromUser() {
+	public void readRoomFromUser(String selectedHouse) {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String name;
 		do
 		{
 			name = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_NAME);
-			if (dataHandler.hasRoomOrArtifact(name))
+			if (dataHandler.hasRoomOrArtifact(selectedHouse, name))
 				System.out.println(Strings.NAME_ALREADY_EXISTENT);
 		}
-		while(dataHandler.hasRoomOrArtifact(name));
+		while(dataHandler.hasRoomOrArtifact(selectedHouse, name));
 		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
 		double temp = RawInputHandler.readDouble(Strings.ROOM_INPUT_TEMPERATURE);
 		double umidita = RawInputHandler.readDouble(Strings.ROOM_INPUT_HUMIDITY);
@@ -226,7 +231,7 @@ public class InputHandler {
 		double vento = RawInputHandler.readDouble(Strings.ROOM_INPUT_WIND);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			createRoom(name, descr, temp, umidita, pressione, vento);
+			createRoom(selectedHouse, name, descr, temp, umidita, pressione, vento);
 		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -297,25 +302,25 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 
-	public void changeHouseDescription() {
+	public void changeHouseDescription(String selectedHouse) {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String descr = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_SAVING))
 		{
-			dataHandler.changeHouseDescription(descr);
+			dataHandler.changeHouseDescription(selectedHouse, descr);
 		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 
-	public void changeRoomDescription(String selectedRoom) {
+	public void changeRoomDescription(String selectedHouse, String selectedRoom) {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_SAVING))
 		{
-			dataHandler.changeRoomDescription(selectedRoom, descr);
+			dataHandler.changeRoomDescription(selectedHouse, selectedRoom, descr);
 		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -333,20 +338,20 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public void createArtifact(String name, String descr, String location) {
+	public void createArtifact(String selectedHouse, String name, String descr, String location) {
 		assert name != null && name.length() > 0;
 		assert descr != null;
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		Artifact art = new Artifact(name, descr);
-		dataHandler.addArtifact(location, art);
+		dataHandler.addArtifact(selectedHouse, location, art);
 		
 		assert art != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public void createNumericSensor(String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
+	public void createNumericSensor(String selectedHouse, String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
 		assert name != null && name.length() > 0;
 		assert category != null && objectList != null && location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -354,21 +359,21 @@ public class InputHandler {
 		String realName = name + "_" + category;
 		Sensor sensor = new NumericSensor(realName, dataHandler.getSensorCategory(category));
 		sensor.setMeasuringRoom(roomOrArtifact);
-		dataHandler.addSensor(location, sensor);
+		dataHandler.addSensor(selectedHouse, location, sensor);
 		for(String object : objectList)
 		{
-			dataHandler.addAssociation(object, category);
+			dataHandler.addAssociation(selectedHouse, object, category);
 			if (roomOrArtifact)
-				sensor.addEntry(dataHandler.getRoom(object));
+				sensor.addEntry(dataHandler.getRoom(selectedHouse, object));
 			else
-				sensor.addEntry(dataHandler.getArtifact(object));
+				sensor.addEntry(dataHandler.getArtifact(selectedHouse, object));
 		}
 		
 		assert sensor != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public void createActuator(String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
+	public void createActuator(String selectedHouse, String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
 		assert name != null && name.length() > 0;
 		assert category != null && objectList != null && location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -376,26 +381,26 @@ public class InputHandler {
 		String realName = name + "_" + category;
 		Actuator actuator = new Actuator(realName, dataHandler.getActuatorCategory(category));
 		actuator.setControllingRoom(roomOrArtifact);
-		dataHandler.addActuator(location, actuator);
+		dataHandler.addActuator(selectedHouse, location, actuator);
 		for(String object : objectList)
 		{
-			dataHandler.addAssociation(object, category);
+			dataHandler.addAssociation(selectedHouse, object, category);
 			if (roomOrArtifact)
-				actuator.addEntry(dataHandler.getRoom(object));
+				actuator.addEntry(dataHandler.getRoom(selectedHouse, object));
 			else
-				actuator.addEntry(dataHandler.getArtifact(object));
+				actuator.addEntry(dataHandler.getArtifact(selectedHouse, object));
 		}
 		
 		assert actuator != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public void createRoom(String name, String descr, double temp, double umidita, double pressione, double vento) {
+	public void createRoom(String selectedHouse, String name, String descr, double temp, double umidita, double pressione, double vento) {
 		assert name != null && descr != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		Room room = new Room(name, descr, temp, umidita, pressione, vento);
-		dataHandler.addRoom(room);
+		dataHandler.addRoom(selectedHouse, room);
 		
 		assert room != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -467,56 +472,67 @@ public class InputHandler {
 		return selectedActuCategory;
 	}
 	
-	public String safeInsertRoom() {
+	public String safeInsertHouse() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
+		String selectedHouse = RawInputHandler.readNotVoidString(Strings.INSERT_HOUSE);
+		if(dataHandler.hasHouse(selectedHouse)) return selectedHouse;
+		else do {
+			selectedHouse = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_HOUSE + " " + Strings.INSERT_HOUSE);
+		}while(!dataHandler.hasHouse(selectedHouse));
+		return selectedHouse;
+	}
+	
+	public String safeInsertRoom(String selectedHouse) {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String selectedRoom = RawInputHandler.readNotVoidString(Strings.INSERT_ROOM);
-		if(dataHandler.hasRoom(selectedRoom)) return selectedRoom;
+		if(dataHandler.hasRoom(selectedHouse, selectedRoom)) return selectedRoom;
 		else do{
 				selectedRoom = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ROOM + " " + Strings.INSERT_ROOM);	
-		}while(!dataHandler.hasRoom(selectedRoom));
+		}while(!dataHandler.hasRoom(selectedHouse, selectedRoom));
 		
 		assert selectedRoom != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		return selectedRoom;
 	}
 
-	public String safeInsertSensor() {
+	public String safeInsertSensor(String selectedHouse) {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String selectedSensor = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR);
-		if(dataHandler.hasSensor(selectedSensor)) return selectedSensor;
+		if(dataHandler.hasSensor(selectedHouse, selectedSensor)) return selectedSensor;
 		else do {
 				selectedSensor = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_SENSOR+ " " + Strings.INSERT_SENSOR);
-		}while(!dataHandler.hasSensor(selectedSensor));
+		}while(!dataHandler.hasSensor(selectedHouse, selectedSensor));
 		
 		assert selectedSensor != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		return selectedSensor;
 	}
 	
-	public String safeInsertActuator() {
+	public String safeInsertActuator(String selectedHouse) {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String selectedActuator = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR);
-		if(dataHandler.hasActuator(selectedActuator)) return selectedActuator;
+		if(dataHandler.hasActuator(selectedHouse, selectedActuator)) return selectedActuator;
 		else do {		
 				selectedActuator = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ACTUATOR + " " + Strings.INSERT_ACTUATOR);
-		}while(!dataHandler.hasActuator(selectedActuator));
+		}while(!dataHandler.hasActuator(selectedHouse, selectedActuator));
 		
 		assert selectedActuator != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		return selectedActuator;
 	}
 	
-	public String safeInsertArtifact() {
+	public String safeInsertArtifact(String selectedHouse) {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String selectedArtifact = RawInputHandler.readNotVoidString(Strings.INSERT_ARTIFACT);
-		if(dataHandler.hasArtifact(selectedArtifact)) return selectedArtifact;
+		if(dataHandler.hasArtifact(selectedHouse, selectedArtifact)) return selectedArtifact;
 		do {
 				selectedArtifact = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_ARTIFACT + " " + Strings.INSERT_ARTIFACT);
-		}while(!dataHandler.hasArtifact(selectedArtifact));
+		}while(!dataHandler.hasArtifact(selectedHouse, selectedArtifact));
 		
 		assert selectedArtifact != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";

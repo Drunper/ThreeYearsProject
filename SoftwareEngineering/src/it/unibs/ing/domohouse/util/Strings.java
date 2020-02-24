@@ -14,8 +14,10 @@ public class Strings {
 	public static final String LOGIN_MENU_TITLE = "Login:";
 	public static final String USER_MENU_TITLE = "Menu unità immobiliare";
 	public static final String USER_ROOM_MENU_TITLE = "Menu stanza";
+	public static final String USER_UNIT_MENU_TITLE = "Menu principale fruitore";
 	public static final String MAINTAINER_MENU_TITLE = "Menu unità immobiliare (manutentore)";
 	public static final String MAINTAINER_ROOM_MENU_TITLE = "Menu stanza (manutentore)";
+	public static final String MAINTAINER_UNIT_MENU_TITLE = "Menu principale manutentore";
 	
 	//LOGIN
 	public static final String INSERT_PASSWORD = "Inserisci la password";
@@ -23,6 +25,11 @@ public class Strings {
 	public static final String INSERT_USER = "Inserisci il nome utente (^ per tornare indietro)";
 	public static final String PASSWORD = "6fcb473c563dc49628a187d2a590ff2c000da215d8cd914f7901df3bc2a2c626"; //pippo123456
 	public static final String MAINTAINER_USER = "prova";
+	
+	//MAINTAINER MENU
+	public static final String INSERT_HOUSE = "Inserisci il nome della casa su cui vuoi operare";
+	public static final String ERROR_NON_EXISTENT_HOUSE = "Attenzione! La casa selezionata non esiste, assicurati di aver digitato correttamente il nome.";
+
 	
 	//HOUSE MENU
 	public static final String INSERT_ROOM = "Inserisci il nome della stanza su cui vuoi operare";
@@ -60,6 +67,7 @@ public class Strings {
 	public static final String INPUT_CATEGORY_MANUFACTURER = "Inserisci il costruttore";
 	
 	//HOUSE
+	public static final String HOUSE_INPUT_NAME = "Inserisci il nome dell'unità immobiliare";
 	public static final String HOUSE_INPUT_DESCRIPTION = "Inserisci la descrizione dell'unità immobiliare";
 	
 	//ROOM
@@ -166,5 +174,7 @@ public class Strings {
 			"Inserisci categoria di attuatori", "Salva dati"};
 	public static final String [] MAINTAINER_ROOM_VOICES = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto", 
 			"Modifica descrizione stanza", "Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto"};
+	public static final String[] MAINTAINER_UNIT_MENU = {"Visualizza unità immobiliare", "Aggiungi unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
+	public static final String[] USER_UNIT_MENU = {"Visualizza unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
 
 }

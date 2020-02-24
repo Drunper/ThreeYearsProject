@@ -14,9 +14,11 @@ public class InterfaceHandler {
 
 	//MENU
 	private final Menu menu = new Menu(Strings.LOGIN_MENU_TITLE, Strings.LOGIN_VOICES);
-	private final Menu userMenu = new Menu(Strings.USER_MENU_TITLE, Strings.USER_VOICES);
+	private final Menu userMenu = new Menu(Strings.USER_UNIT_MENU_TITLE, Strings.USER_UNIT_MENU);
+	private final Menu userUnitMenu = new Menu(Strings.USER_MENU_TITLE, Strings.USER_VOICES);
 	private final Menu roomMenu  = new Menu(Strings.USER_ROOM_MENU_TITLE, Strings.ROOM_VOICES);
-	private final Menu maintainerMenu = new Menu(Strings.MAINTAINER_MENU_TITLE, Strings.MAINTAINER_VOICES);
+	private final Menu maintainerMenu = new Menu(Strings.MAINTAINER_UNIT_MENU_TITLE, Strings.MAINTAINER_UNIT_MENU);
+	private final Menu maintainerUnitMenu = new Menu(Strings.MAINTAINER_MENU_TITLE, Strings.MAINTAINER_VOICES);
 	private final Menu maintainerRoomMenu = new Menu(Strings.MAINTAINER_ROOM_MENU_TITLE, Strings.MAINTAINER_ROOM_VOICES);	
 	/*
 	 * invariante login, dataHandler, loader, saver != null; 
@@ -105,13 +107,65 @@ public class InterfaceHandler {
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 	
+	private void showUserMenu() {
+		assert userMenu != null; 
+		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		
+		OutputHandler.clearOutput();
+		boolean exitFlag = false;
+		do
+		{
+			int choice = userMenu.select();
+			switch(choice) {
+				case 0: 
+					exitFlag = true;
+					break;
+				case 1:
+					OutputHandler.clearOutput();
+					OutputHandler.printListOfString(dataHandler.getHouseList());
+					String selectedHouse = inputHandler.safeInsertHouse();
+					showUserUnitMenu(selectedHouse);
+					break;
+				case 2:
+					OutputHandler.clearOutput();
+					if(dataHandler.getSensorCategoryList().length == 0) {
+						System.out.println(Strings.NO_SENSOR_CATEGORY);
+						break;
+					}
+					OutputHandler.printListOfString(dataHandler.getSensorCategoryList());
+					System.out.println();
+					System.out.println();
+					
+					String selectedSensCategory = inputHandler.safeInsertSensorCategory();
+					
+					OutputHandler.printSensorCategory(dataHandler.getSensorCategoryString(selectedSensCategory));
+					break;
+				case 3:
+					OutputHandler.clearOutput();
+					if(dataHandler.getActuatorCategoryList().length == 0) {
+						System.out.println(Strings.NO_ACTUATOR_CATEGORY);
+						break;
+					}
+					OutputHandler.printListOfString(dataHandler.getActuatorCategoryList());
+					System.out.println();
+					System.out.println();
+					
+					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
+					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
+					break;
+			}
+		}while(exitFlag != true);
+		
+		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+	}
+	
 	private void showMaintainerMenu() {
 		assert maintainerMenu != null;
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 		OutputHandler.clearOutput();
 		boolean exitFlag = false;
-		do
+		do 
 		{
 			int choice = maintainerMenu.select();
 			switch(choice) {
@@ -120,27 +174,84 @@ public class InterfaceHandler {
 					break;
 				case 1:
 					OutputHandler.clearOutput();
-					OutputHandler.printHousingUnit(dataHandler.getHousingUnitString());
+					OutputHandler.printListOfString(dataHandler.getHouseList());
+					String selectedHouse = RawInputHandler.readNotVoidString("Inserisci la casa");
+					showMaintainerUnitMenu(selectedHouse);
 					break;
 				case 2:
-					inputHandler.changeHouseDescription();
+					OutputHandler.clearOutput();
+					inputHandler.readHouseFromUser();
+					break; 
+				case 3:
+					OutputHandler.clearOutput();
+					if(dataHandler.getSensorCategoryList().length == 0) {
+						System.out.println(Strings.NO_SENSOR_CATEGORY);
+						break;
+					}
+					OutputHandler.printListOfString(dataHandler.getSensorCategoryList());
+					System.out.println();
+					System.out.println();
+					
+					String selectedSensCategory = inputHandler.safeInsertSensorCategory();
+					
+					OutputHandler.printSensorCategory(dataHandler.getSensorCategoryString(selectedSensCategory));
+					break;
+				case 4: 
+					OutputHandler.clearOutput();
+					if(dataHandler.getActuatorCategoryList().length == 0) {
+						System.out.println(Strings.NO_ACTUATOR_CATEGORY);
+						break;
+					}
+					OutputHandler.printListOfString(dataHandler.getActuatorCategoryList());
+					System.out.println();
+					System.out.println();
+					
+					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
+					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
+					break;
+			}
+		}while(exitFlag != true);
+		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		
+	}
+	
+	
+	private void showMaintainerUnitMenu(String selectedHouse) {
+		assert maintainerUnitMenu != null;
+		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		
+		OutputHandler.clearOutput();
+		boolean exitFlag = false;
+		do
+		{
+			int choice = maintainerUnitMenu.select();
+			switch(choice) {
+				case 0:
+					exitFlag = true;
+					break;
+				case 1:
+					OutputHandler.clearOutput();
+					OutputHandler.printHousingUnit(dataHandler.getHousingUnitString(selectedHouse));
+					break;
+				case 2:
+					inputHandler.changeHouseDescription(selectedHouse);
 					break;
 				case 3:
 					OutputHandler.clearOutput();
-					if(dataHandler.getRoomList().length == 0) {
+					if(dataHandler.getRoomList(selectedHouse).length == 0) {
 						System.out.println(Strings.NO_ROOM);
 						break;
 					}
-					OutputHandler.printListOfString(dataHandler.getRoomList());
+					OutputHandler.printListOfString(dataHandler.getRoomList(selectedHouse));
 					System.out.println();
 					System.out.println();
 					
-					String selectedRoom = inputHandler.safeInsertRoom();
+					String selectedRoom = inputHandler.safeInsertRoom(selectedHouse);
 					
-					showMaintainerRoomMenu(selectedRoom);
+					showMaintainerRoomMenu(selectedHouse, selectedRoom);
 					break;
 				case 4:
-					inputHandler.readRoomFromUser();
+					inputHandler.readRoomFromUser(selectedHouse);
 					break;
 				case 5:
 					OutputHandler.clearOutput();
@@ -186,33 +297,33 @@ public class InterfaceHandler {
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 
-	private void showUserMenu() {
-		assert userMenu != null;
+	private void showUserUnitMenu(String selectedHouse) {
+		assert userUnitMenu != null;
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 		OutputHandler.clearOutput();
 		boolean exitFlag = false;
 		do {
-			int choice = userMenu.select();
+			int choice = userUnitMenu.select();
 			switch(choice) {
 				case 0:
 					exitFlag = true;
 					break;
 				case 1:
 					OutputHandler.clearOutput();
-					OutputHandler.printHousingUnit(dataHandler.getHousingUnitString());
+					OutputHandler.printHousingUnit(dataHandler.getHousingUnitString(selectedHouse));
 					break;
 				case 2:
 					OutputHandler.clearOutput();
-					if(dataHandler.getRoomList().length == 0) {
+					if(dataHandler.getRoomList(selectedHouse).length == 0) {
 						System.out.println(Strings.NO_ROOM);
 						break;
 					}
-					OutputHandler.printListOfString(dataHandler.getRoomList());
+					OutputHandler.printListOfString(dataHandler.getRoomList(selectedHouse));
 					System.out.println();
 					System.out.println();
-					String selectedRoom = inputHandler.safeInsertRoom();
-					showUserRoomMenu(selectedRoom);
+					String selectedRoom = inputHandler.safeInsertRoom(selectedHouse);
+					showUserRoomMenu(selectedHouse, selectedRoom);
 					break;
 				case 3:
 					OutputHandler.clearOutput();
@@ -246,7 +357,7 @@ public class InterfaceHandler {
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 
-	private void showUserRoomMenu(String selectedRoom) {
+	private void showUserRoomMenu(String selectedHouse, String selectedRoom) {
 		assert selectedRoom != null;
 		assert roomMenu != null;
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
@@ -261,43 +372,43 @@ public class InterfaceHandler {
 				break;
 			case 1:
 				OutputHandler.clearOutput();
-				OutputHandler.printRoom(dataHandler.getRoomString(selectedRoom));
+				OutputHandler.printRoom(dataHandler.getRoomString(selectedHouse, selectedRoom));
 				break;
 			case 2:
 				OutputHandler.clearOutput();
-				if(dataHandler.getSensorNames(selectedRoom).length == 0) {
+				if(dataHandler.getSensorNames(selectedHouse, selectedRoom).length == 0) {
 					System.out.println(Strings.NO_SENSOR);
 					break;
 				}
-				OutputHandler.printListOfString(dataHandler.getSensorNames(selectedRoom));
+				OutputHandler.printListOfString(dataHandler.getSensorNames(selectedHouse, selectedRoom));
 				System.out.println();
 				System.out.println();
-				String selectedSensor = inputHandler.safeInsertSensor();
-				OutputHandler.printSensor(dataHandler.getSensorString((selectedSensor)));
+				String selectedSensor = inputHandler.safeInsertSensor(selectedHouse);
+				OutputHandler.printSensor(dataHandler.getSensorString(selectedHouse, selectedSensor));
 				break;
 			case 3:
 				OutputHandler.clearOutput();
-				if(dataHandler.getActuatorNames(selectedRoom).length == 0) {
+				if(dataHandler.getActuatorNames(selectedHouse, selectedRoom).length == 0) {
 					System.out.println(Strings.NO_ACTUATOR);
 					break;
 				}
-				OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedRoom));
+				OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedHouse, selectedRoom));
 				System.out.println();
 				System.out.println();
-				String selectedActuator = inputHandler.safeInsertActuator();
-				OutputHandler.printActuator(dataHandler.getActuatorString(selectedActuator));
+				String selectedActuator = inputHandler.safeInsertActuator(selectedHouse);
+				OutputHandler.printActuator(dataHandler.getActuatorString(selectedHouse, selectedActuator));
 				break;
 			case 4:
 				OutputHandler.clearOutput();
-				if(dataHandler.getArtifactNames(selectedRoom).length == 0) {
+				if(dataHandler.getArtifactNames(selectedHouse, selectedRoom).length == 0) {
 					System.out.println(Strings.NO_ARTIFACT);
 					break;
 				}
-				OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedRoom));
+				OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedHouse, selectedRoom));
 				System.out.println();
 				System.out.println();			
-				String selectedArtifact = inputHandler.safeInsertArtifact();
-				OutputHandler.printArtifact(dataHandler.getArtifactString(selectedArtifact));
+				String selectedArtifact = inputHandler.safeInsertArtifact(selectedHouse);
+				OutputHandler.printArtifact(dataHandler.getArtifactString(selectedHouse, selectedArtifact));
 				break;	
 			}
 		}
@@ -306,7 +417,7 @@ public class InterfaceHandler {
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 	
-	private void showMaintainerRoomMenu(String selectedRoom) {
+	private void showMaintainerRoomMenu(String selectedHouse, String selectedRoom) {
 		assert selectedRoom != null;
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
@@ -320,53 +431,53 @@ public class InterfaceHandler {
 					break;
 				case 1:
 					OutputHandler.clearOutput();
-					OutputHandler.printRoom(dataHandler.getRoomString(selectedRoom));
+					OutputHandler.printRoom(dataHandler.getRoomString(selectedHouse, selectedRoom));
 					break;
 				case 2:
 					OutputHandler.clearOutput();
-					if(dataHandler.getSensorNames(selectedRoom).length == 0) {
+					if(dataHandler.getSensorNames(selectedHouse, selectedRoom).length == 0) {
 						System.out.println(Strings.NO_SENSOR);
 						break;
 					}
-					OutputHandler.printListOfString(dataHandler.getSensorNames(selectedRoom));
+					OutputHandler.printListOfString(dataHandler.getSensorNames(selectedHouse, selectedRoom));
 					System.out.println();
 					System.out.println();			
-					String selectedSensor = inputHandler.safeInsertSensor();
-					OutputHandler.printSensor(dataHandler.getSensorString(selectedSensor));
+					String selectedSensor = inputHandler.safeInsertSensor(selectedHouse);
+					OutputHandler.printSensor(dataHandler.getSensorString(selectedHouse, selectedSensor));
 					break;
 				case 3:
 					OutputHandler.clearOutput();
-					if(dataHandler.getActuatorNames(selectedRoom).length == 0) {
+					if(dataHandler.getActuatorNames(selectedHouse, selectedRoom).length == 0) {
 						System.out.println(Strings.NO_ACTUATOR);
 					}
-					OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedRoom));
+					OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedHouse, selectedRoom));
 					System.out.println();
 					System.out.println();
-					String selectedActuator = inputHandler.safeInsertActuator();
-					OutputHandler.printActuator(dataHandler.getActuatorString(selectedActuator));
+					String selectedActuator = inputHandler.safeInsertActuator(selectedHouse);
+					OutputHandler.printActuator(dataHandler.getActuatorString(selectedHouse, selectedActuator));
 					break;
 				case 4:
 					OutputHandler.clearOutput();
-					if(dataHandler.getArtifactNames(selectedRoom).length == 0) {
+					if(dataHandler.getArtifactNames(selectedHouse, selectedRoom).length == 0) {
 						System.out.println(Strings.NO_ARTIFACT);
 					}
-					OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedRoom));
+					OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedHouse, selectedRoom));
 					System.out.println();
 					System.out.println();
-					String selectedArtifact = inputHandler.safeInsertArtifact();
-					OutputHandler.printArtifact(dataHandler.getArtifactString(selectedArtifact));
+					String selectedArtifact = inputHandler.safeInsertArtifact(selectedHouse);
+					OutputHandler.printArtifact(dataHandler.getArtifactString(selectedHouse, selectedArtifact));
 					break;	
 				case 5:
-					inputHandler.changeRoomDescription(selectedRoom);
+					inputHandler.changeRoomDescription(selectedHouse, selectedRoom);
 					break;
 				case 6:
-					inputHandler.readNumericSensorFromUser(selectedRoom);
+					inputHandler.readNumericSensorFromUser(selectedHouse, selectedRoom);
 					break;
 				case 7:
-					inputHandler.readActuatorFromUser(selectedRoom);
+					inputHandler.readActuatorFromUser(selectedHouse, selectedRoom);
 					break;
 				case 8:
-					inputHandler.readArtifactFromUser(selectedRoom);
+					inputHandler.readArtifactFromUser(selectedHouse, selectedRoom);
 					break;
 			}
 		}

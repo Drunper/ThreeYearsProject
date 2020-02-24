@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.util;
 
 public class OutputHandler {
+	
 
 	public static void printHousingUnit(String housingUnitText) {
 		assert housingUnitText != null;

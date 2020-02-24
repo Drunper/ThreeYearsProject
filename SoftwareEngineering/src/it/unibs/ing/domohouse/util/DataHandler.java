@@ -9,32 +9,49 @@ public class DataHandler implements Serializable {
 	private static final long serialVersionUID = 830399600665259268L;
 	private Manager sensorCategoryManager;
 	private Manager actuatorCategoryManager;
-	private HousingUnit housingUnit;
+	private Manager housingUnitManager;
+	//private HousingUnit housingUnit;
+	
 	/*
-	 * invariante sensorCategoryManager != null, actuatorCategoryManager != null
+	 * invariante sensorCategoryManager != null, actuatorCategoryManager != null, housingUnitManager != null
 	 */
 	public DataHandler () {
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
+		housingUnitManager = new Manager();		
 	}
-
+	
+	public boolean hasHouse(String selectedHouse) {
+		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
+		
+		return housingUnitManager.hasEntry(selectedHouse);
+	}
+	
+	public String[] getHouseList() {
+		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
+		return housingUnitManager.namesList();
+	}
 
 	public void addHouse(HousingUnit toAdd) {
 		assert toAdd != null;
-		housingUnit = toAdd;
+		housingUnitManager.addEntry(toAdd);
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 	
-	public String getHousingUnitString() {
-		assert housingUnit != null;
+	public String getHousingUnitString(String selectedHouse) {
+		assert selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		return housingUnit.toString();
+		return housingUnitManager.getElementString(selectedHouse);
 	}
 
-	public String[] getRoomList() {
-		assert housingUnit != null;
+	public String[] getRoomList(String selectedHouse) {
+		assert selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		return housingUnit.roomList();
+		assert (HousingUnit) housingUnitManager.getElementByName(selectedHouse) != null;
+		
+		HousingUnit selected = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		
+		return selected.roomList();
 	}
 
 	public String[] getSensorCategoryList() {
@@ -130,51 +147,50 @@ public class DataHandler implements Serializable {
 		return act;
 	}
 
-	public String getRoomString(String selectedRoom) {
+	public String getRoomString(String selectedHouse, String selectedRoom) {
 		assert selectedRoom != null;
+		assert selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null; 
-		assert housingUnit.hasRoom(selectedRoom) : "La casa " + housingUnit.getName() + " non contiene la stanza " + selectedRoom;
 		
-		String result =  housingUnit.getRoomString(selectedRoom);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		String result =  _selectedHouse.getRoomString(selectedRoom);
 		
 		assert result != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		return result;
 	}
 
-	public String[] getSensorNames(String selectedRoom) {
+	public String[] getSensorNames(String selectedHouse, String selectedRoom) {
 
-		assert selectedRoom != null && housingUnit != null;
+		assert selectedRoom != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit.hasRoom(selectedRoom) : "La casa + " + housingUnit.getName() + " non contiene la stanza " + selectedRoom;
 		
-		Room room = housingUnit.getRoom(selectedRoom);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		Room room = _selectedHouse.getRoom(selectedRoom);
 		
 		assert room != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		return room.getSensorsNames();
 	}
 
-	public String getSensorString(String selectedSensor) {
+	public String getSensorString(String selectedHouse, String selectedSensor) {
 		assert selectedSensor != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null; 
 		
-		String result = housingUnit.getSensorString(selectedSensor);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		String result = _selectedHouse.getSensorString(selectedSensor);
 		
 		assert result != null; 
 		return result;
 	}
 
-	public String[] getActuatorNames(String selectedRoom) {
+	public String[] getActuatorNames(String selectedHouse, String selectedRoom) {
 
-		assert selectedRoom != null;
+		assert selectedRoom != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null; 
-		assert housingUnit.hasRoom(selectedRoom) : "La casa " + housingUnit.getName() + " non contiene la stanza " + selectedRoom;
 		
-		Room room = housingUnit.getRoom(selectedRoom);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		Room room = _selectedHouse.getRoom(selectedRoom);
 		
 		assert room != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
@@ -182,12 +198,12 @@ public class DataHandler implements Serializable {
 		return room.getActuatorsNames();
 	}
 
-	public String getActuatorString(String selectedActuator) {
+	public String getActuatorString(String selectedHouse, String selectedActuator) {
 		assert selectedActuator != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null; 
-		
-		String result =  housingUnit.getActuatorString(selectedActuator);
+
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		String result =  _selectedHouse.getActuatorString(selectedActuator);
 		
 		assert result != null; 
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
@@ -195,146 +211,153 @@ public class DataHandler implements Serializable {
 	}
 	
 
-	public String[] getArtifactNames(String selectedRoom) {
-		assert selectedRoom != null;
+	public String[] getArtifactNames(String selectedHouse, String selectedRoom) {
+		assert selectedRoom != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
-		assert housingUnit.hasRoom(selectedRoom) : "La casa " + housingUnit.getName() + " non contiente la stanza " + selectedRoom + " e dunque non può restituire i nomi degli artefatti";
 		
-		Room room = housingUnit.getRoom(selectedRoom);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		Room room = _selectedHouse.getRoom(selectedRoom);
 		
 		assert room != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		return room.getArtifactsNames();
 	}
 
-	public String getArtifactString(String selectedArtifact) {
+	public String getArtifactString(String selectedHouse, String selectedArtifact) {
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
 		
-		String s = housingUnit.getArtifactString(selectedArtifact);
+		
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		String s = _selectedHouse.getArtifactString(selectedArtifact);
 		
 		assert s != null; 
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		return s; 
 	}
 
-	public void changeHouseDescription(String descr) {
-		assert descr != null;
-		assert housingUnit != null;
+	public void changeHouseDescription(String selectedHouse, String descr) {
+		assert descr != null && selectedHouse != null;
 		
-		housingUnit.setDescr(descr);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		_selectedHouse.setDescr(descr);
 		
-		assert housingUnit.getDescr() != null;
+		assert _selectedHouse.getDescr() != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 
-	public boolean hasRoom(String name) {
-		assert name != null;
+	public boolean hasRoom(String selectedHouse, String name) {
+		assert name != null && selectedHouse != null ;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
 		
-		return housingUnit.hasRoom(name);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		
+		return _selectedHouse.hasRoom(name);
 	}
 
-	public void addRoom(Room toAdd) {
-		assert toAdd != null;
-		assert housingUnit != null;
+	public void addRoom(String selectedHouse, Room toAdd) {
+		assert toAdd != null && selectedHouse != null;
 		
-		housingUnit.addRoom(toAdd);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		_selectedHouse.addRoom(toAdd);
 		
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 
-	public void changeRoomDescription(String selectedRoom, String descr) {
+	public void changeRoomDescription(String selectedHouse, String selectedRoom, String descr) {
 		assert selectedRoom != null && descr != null; 
-		assert housingUnit != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit.hasRoom(selectedRoom) : "La casa " + housingUnit.getName() + " non contiente la stanza " + selectedRoom;
 		
-		housingUnit.setRoomDescription(selectedRoom, descr);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		_selectedHouse.setRoomDescription(selectedRoom, descr);
 
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 
-	public void addSensor(String location, Sensor sensor) {
+	public void addSensor(String selectedHouse, String location, Sensor sensor) {
 		assert location != null && sensor != null && sensor.getName() != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null; 
-		assert housingUnit.hasRoom(location);
 		
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		_selectedHouse.addSensor(location, sensor);
 		
-		housingUnit.addSensor(location, sensor);
-		
-		assert housingUnit.getRoom(location).getSensorByName(sensor.getName()) != null;
+	//	assert housingUnit.getRoom(location).getSensorByName(sensor.getName()) != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 
-	public boolean hasRoomOrArtifact(String name) {
-		assert name != null; 
+	public boolean hasRoomOrArtifact(String selectedHouse, String name) {
+		assert name != null && selectedHouse != null ; 
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		return housingUnit.hasRoomOrArtifact(name);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		
+		return _selectedHouse.hasRoomOrArtifact(name);
 	}
 
-	public boolean hasSensor(String name) {
-		assert name != null;
+	public boolean hasSensor(String selectedHouse, String name) {
+		assert name != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		return housingUnit.hasSensor(name);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return _selectedHouse.hasSensor(name);
 	}
 	
-	public boolean hasActuator(String name) {
-		assert name != null;
+	public boolean hasActuator(String selectedHouse, String name) {
+		assert name != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		return housingUnit.hasActuator(name);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return _selectedHouse.hasActuator(name);
 	}
 
-	public boolean hasArtifact(String name) {
-		assert name != null;
+	public boolean hasArtifact(String selectedHouse, String name) {
+		assert name != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		return housingUnit.hasArtifact(name);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return _selectedHouse.hasArtifact(name);
 	}
 
-	public boolean isElementARoom(String toAssoc) {
+	public boolean isElementARoom(String selectedHouse, String toAssoc) {
 		assert toAssoc != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		return housingUnit.isElementARoom(toAssoc);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return _selectedHouse.isElementARoom(toAssoc);
 	}
 
-	public boolean isAssociated(String toAssoc, String category) {
-		assert toAssoc != null && category != null;
+	public boolean isAssociated(String selectedHouse, String toAssoc, String category) {
+		assert toAssoc != null && category != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		return housingUnit.isAssociated(toAssoc, category);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return _selectedHouse.isAssociated(toAssoc, category);
 	}
 
-	public void addAssociation(String object, String category) {
-		assert object != null && category != null;
+	public void addAssociation(String selectedHouse, String object, String category) {
+		assert object != null && category != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		housingUnit.addAssociation(object, category);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		_selectedHouse.addAssociation(object, category);
 	
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 
-	public Room getRoom(String name) {
-		assert name != null;
+	public Room getRoom(String selectedHouse, String name) {
+		assert name != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
-		assert housingUnit.hasRoom(name) : "La casa " + housingUnit.getName() + " non contiene la stanza " + name;
+		//assert housingUnit != null;
+		//assert housingUnit.hasRoom(name) : "La casa " + housingUnit.getName() + " non contiene la stanza " + name;
 		
-		Room room = housingUnit.getRoom(name);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		Room room = _selectedHouse.getRoom(name);
 		
 		assert room != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
@@ -342,39 +365,42 @@ public class DataHandler implements Serializable {
 		return room;
 	}
 
-	public Artifact getArtifact(String name) {
-		assert name != null;
+	public Artifact getArtifact(String selectedHouse, String name) {
+		assert name != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		Artifact art = housingUnit.getArtifact(name);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		Artifact art = _selectedHouse.getArtifact(name);
 		
 		assert art != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		return art;
 	}
 
-	public void addArtifact(String location, Artifact toAdd) {
-		assert location != null && toAdd != null && toAdd.getName() != null;
+	public void addArtifact(String selectedHouse, String location, Artifact toAdd) {
+		assert location != null && toAdd != null && toAdd.getName() != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null; 
-		assert housingUnit.hasRoom(location);
+		//assert housingUnit != null; 
+		//assert housingUnit.hasRoom(location);
 		
-		housingUnit.addArtifact(toAdd, location);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		_selectedHouse.addArtifact(toAdd, location);
 		
-		assert housingUnit.hasArtifact(toAdd.getName());
+		//assert housingUnit.hasArtifact(toAdd.getName());
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 	
-	public void addActuator(String location, Actuator toAdd) {
-		assert location != null && toAdd != null;
+	public void addActuator(String selectedHouse, String location, Actuator toAdd) {
+		assert location != null && toAdd != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
-		assert housingUnit.hasRoom(location);
+		//assert housingUnit != null;
+		//assert housingUnit.hasRoom(location);
 		
-		housingUnit.addActuator(toAdd, location);
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		_selectedHouse.addActuator(toAdd, location);
 		
-		assert housingUnit.getRoom(location).getActuatorByName(toAdd.getName()) != null;
+		//assert housingUnit.getRoom(location).getActuatorByName(toAdd.getName()) != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 	}
@@ -385,28 +411,34 @@ public class DataHandler implements Serializable {
 		return OperatingModesHandler.hasOperatingMode(name);
 	}
 	
-	public boolean isThereRoomOrArtifact() {
+	public boolean isThereRoomOrArtifact(String selectedHouse) {
+		assert selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		return housingUnit.isThereRoomOrArtifact();
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return _selectedHouse.isThereRoomOrArtifact();
 	}
 	
-	public boolean isThereRoom() {
+	public boolean isThereRoom(String selectedHouse) {
+		assert selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		return housingUnit.isThereRoom();
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return _selectedHouse.isThereRoom();
 	}
 	
-	public boolean isThereArtifact() {
+	public boolean isThereArtifact(String selectedHouse) {
+		assert selectedHouse != null; 
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert housingUnit != null;
+		//assert housingUnit != null;
 		
-		return housingUnit.isThereArtifact();
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return _selectedHouse.isThereArtifact();
 	}
 	public boolean dataHandlerInvariant() {
-		boolean checkManagers = sensorCategoryManager != null && actuatorCategoryManager != null;
+		boolean checkManagers = sensorCategoryManager != null && actuatorCategoryManager != null && housingUnitManager != null;
 		return checkManagers; 
 	}
 }
