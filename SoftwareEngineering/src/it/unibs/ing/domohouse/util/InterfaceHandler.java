@@ -1,7 +1,6 @@
 package it.unibs.ing.domohouse.util;
 
 import it.unibs.ing.domohouse.HomeLogin;
-import it.unibs.ing.domohouse.components.HousingUnit;
 
 public class InterfaceHandler {
 	
@@ -93,10 +92,7 @@ public class InterfaceHandler {
 					}
 					while (!user.equalsIgnoreCase(Strings.BACK_CHARACTER) && !ok);
 					if (ok) {
-						if(firstStart) {
-							System.out.println(Strings.BASIC_FILE_CREATION);
-							dataHandler.addHouse(new HousingUnit("Casa","Inserire una descrizione.."));
-						}
+						if(firstStart)	System.out.println(Strings.BASIC_FILE_CREATION);	
 						showMaintainerMenu();
 					}
 					break;
@@ -122,9 +118,14 @@ public class InterfaceHandler {
 					break;
 				case 1:
 					OutputHandler.clearOutput();
-					OutputHandler.printListOfString(dataHandler.getHouseList());
-					String selectedHouse = inputHandler.safeInsertHouse();
-					showUserUnitMenu(selectedHouse);
+											
+					if(dataHandler.getHouseList().length > 0) {
+						OutputHandler.printListOfString(dataHandler.getHouseList());
+						String selectedHouse = inputHandler.safeInsertHouse();
+						showUserUnitMenu(selectedHouse);
+					}else{
+						System.out.println(Strings.NO_HOUSE);
+					}
 					break;
 				case 2:
 					OutputHandler.clearOutput();
@@ -173,10 +174,14 @@ public class InterfaceHandler {
 					exitFlag = true;
 					break;
 				case 1:
-					OutputHandler.clearOutput();
-					OutputHandler.printListOfString(dataHandler.getHouseList());
-					String selectedHouse = RawInputHandler.readNotVoidString("Inserisci la casa");
-					showMaintainerUnitMenu(selectedHouse);
+					OutputHandler.clearOutput();	
+					if(dataHandler.getHouseList().length > 0) {
+						OutputHandler.printListOfString(dataHandler.getHouseList());
+						String selectedHouse = inputHandler.safeInsertHouse();
+						showMaintainerUnitMenu(selectedHouse);
+					}else{
+						System.out.println(Strings.NO_HOUSE);
+					}
 					break;
 				case 2:
 					OutputHandler.clearOutput();
@@ -208,6 +213,18 @@ public class InterfaceHandler {
 					
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
 					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
+					break;
+				case 5:
+					inputHandler.readSensorCategoryFromUser();
+					break;
+				case 6:
+					inputHandler.readActuatorCategoryFromUser();
+					break;		
+				case 7:
+					firstStart = false;
+					saver.createDirs();
+					saver.writeDataHandlerToFile(dataHandler);
+					System.out.println(Strings.DATA_SAVED);
 					break;
 			}
 		}while(exitFlag != true);
@@ -279,17 +296,6 @@ public class InterfaceHandler {
 					
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
 					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
-					break;
-				case 7:
-					inputHandler.readSensorCategoryFromUser();
-					break;
-				case 8:
-					inputHandler.readActuatorCategoryFromUser();
-					break;		
-				case 9:
-					firstStart = false;
-					saver.createDirs();
-					saver.writeDataHandlerToFile(dataHandler);
 					break;
 			}
 		}
