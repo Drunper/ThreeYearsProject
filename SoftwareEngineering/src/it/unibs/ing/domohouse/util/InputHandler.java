@@ -6,10 +6,12 @@ import it.unibs.ing.domohouse.components.Actuator;
 import it.unibs.ing.domohouse.components.ActuatorCategory;
 import it.unibs.ing.domohouse.components.Artifact;
 import it.unibs.ing.domohouse.components.HousingUnit;
+import it.unibs.ing.domohouse.components.NonNumericSensor;
+import it.unibs.ing.domohouse.components.NonNumericSensorCategory;
 import it.unibs.ing.domohouse.components.NumericSensor;
 import it.unibs.ing.domohouse.components.Room;
 import it.unibs.ing.domohouse.components.Sensor;
-import it.unibs.ing.domohouse.components.SensorCategory;
+import it.unibs.ing.domohouse.components.NumericSensorCategory;
 
 public class InputHandler {
 
@@ -37,6 +39,12 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
+	public void readSensorFromUser(String selectedHouse, String location) {
+		boolean choice = RawInputHandler.yesOrNo(Strings.SENSOR_CHOICE);
+		
+		if(choice) readNumericSensorFromUser(selectedHouse, location);
+		else readNonNumericSensorFromUser(selectedHouse, location);
+	}
 	public void readArtifactFromUser(String selectedHouse, String location) {
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -57,10 +65,87 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
+	public void readNonNumericSensorFromUser(String selectedHouse, String location) {
+		assert location != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		if(dataHandler.hasNonNumericSensorCategory() && dataHandler.getSensorCategoryList().length != 0) {
+		String name;
+		do
+		{
+			name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
+			if (dataHandler.hasSensor(selectedHouse, name))
+				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
+		}
+		while(dataHandler.hasSensor(selectedHouse, name));
+		String category;
+		do
+		{
+			category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
+			if (!dataHandler.hasSensorCategory(category))
+				System.out.println(Strings.CATEGORY_NON_EXISTENT);
+		}
+		while(!dataHandler.hasSensorCategory(category));
+		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
+			
+		boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
+		boolean isThereArtifact = dataHandler.isThereArtifact(selectedHouse);
+		boolean roomOrArtifact;
+		
+		do {	
+		roomOrArtifact = RawInputHandler.yesOrNo(Strings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
+			
+		if((roomOrArtifact && !isThereRoom)) 
+			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+		else if ((!roomOrArtifact && !isThereArtifact))
+			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+		
+		}while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
+		
+		ArrayList<String> objectList = new ArrayList<>();
+		
+		do
+		{
+			String toAssoc;
+			do
+			{
+				if (roomOrArtifact)
+					toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ROOM_ASSOCIATION);
+				else
+					toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ARTIFACT_ASSOCIATION);
+				if (!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc))
+					System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
+				else
+				{
+					if (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc))
+						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ROOM);
+					else if (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc))
+						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ARTIFACT);
+					else if (dataHandler.isAssociated(selectedHouse, toAssoc, category))
+						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_CATEGORY);
+				}
+			}
+			while(!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc)) 
+					|| (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc)) || dataHandler.isAssociated(selectedHouse, toAssoc, category));
+			objectList.add(toAssoc);
+		}
+		while(RawInputHandler.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
+		{
+			createNonNumericSensor(selectedHouse, name, category, roomOrArtifact, objectList, location);
+		}
+	}else {
+		System.out.println(Strings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
+		}
+	}else{
+		System.out.println(Strings.NO_SENSOR_CATEGORY_ERROR);
+	}
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+	}
+	
 	public void readNumericSensorFromUser(String selectedHouse, String location) {
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
-		if(dataHandler.getSensorCategoryList().length != 0) {
+		if(dataHandler.hasNumericSensorCategory() && dataHandler.getSensorCategoryList().length != 0) {
 			
 		String name;
 		do
@@ -238,6 +323,45 @@ public class InputHandler {
 	}
 	
 	public void readSensorCategoryFromUser() {
+		boolean choice = RawInputHandler.yesOrNo(Strings.SENSOR_CATEGORY_CHOICE);
+		if(choice) readNumericSensorCategoryFromUser();
+		else readNonNumericSensorCategoryFromUser();
+	}
+	
+	public void readNonNumericSensorCategoryFromUser() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
+		String name;
+		do
+		{
+			name = RawInputHandler.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_NAME);
+			if (dataHandler.hasSensorCategory(name))
+				System.out.println(Strings.NAME_ALREADY_EXISTENT);
+		}
+		while(dataHandler.hasSensorCategory(name));
+		String abbreviation = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_ABBREVIATION);
+		String constructor = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_MANUFACTURER);
+		ArrayList<String> domain = new ArrayList<>();
+		String s;
+		do {	
+			s = RawInputHandler.readNotVoidString(Strings.INPUT_NON_NUMERIC_DOMAIN);
+			if(!s.equals(Strings.BACK_CHARACTER)) domain.add(s);
+			
+		}while(!s.equals(Strings.BACK_CHARACTER));
+		
+		String detectableInfo = RawInputHandler.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_INFO);
+		
+		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
+		{
+			createNonNumericSensorCategory(name, abbreviation, constructor, domain, detectableInfo);
+		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+	}
+	
+	
+	
+	public void readNumericSensorCategoryFromUser() {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String name;
@@ -259,7 +383,7 @@ public class InputHandler {
 		
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			createSensorCategory(name, abbreviation, constructor, domain, detectableInfo);
+			createNumericSensorCategory(name, abbreviation, constructor, domain, detectableInfo);
 		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -357,7 +481,29 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String realName = name + "_" + category;
-		Sensor sensor = new NumericSensor(realName, dataHandler.getSensorCategory(category));
+		Sensor sensor = new NumericSensor(realName, (NumericSensorCategory) dataHandler.getSensorCategory(category));
+		sensor.setMeasuringRoom(roomOrArtifact);
+		dataHandler.addSensor(selectedHouse, location, sensor);
+		for(String object : objectList)
+		{
+			dataHandler.addAssociation(selectedHouse, object, category);
+			if (roomOrArtifact)
+				sensor.addEntry(dataHandler.getRoom(selectedHouse, object));
+			else
+				sensor.addEntry(dataHandler.getArtifact(selectedHouse, object));
+		}
+		
+		assert sensor != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+	}
+
+	public void createNonNumericSensor(String selectedHouse, String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
+		assert name != null && name.length() > 0;
+		assert category != null && objectList != null && location != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
+		String realName = name + "_" + category;
+		Sensor sensor = new NonNumericSensor(realName, (NonNumericSensorCategory) dataHandler.getSensorCategory(category));
 		sensor.setMeasuringRoom(roomOrArtifact);
 		dataHandler.addSensor(selectedHouse, location, sensor);
 		for(String object : objectList)
@@ -406,15 +552,28 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 
-
 	
-	public void createSensorCategory(String name, String abbreviation, String constructor, String domain, String detectableInfo) {
+	public void createNumericSensorCategory(String name, String abbreviation, String constructor, String domain, String detectableInfo) {
 		assert name != null && name.length() > 0;
 		assert abbreviation != null && constructor != null && domain != null && detectableInfo != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String descr = abbreviation+':'+constructor+':'+domain;
-		SensorCategory cat = new SensorCategory(name, descr);
+		NumericSensorCategory cat = new NumericSensorCategory(name, descr);
+		dataHandler.addSensorCategory(cat);
+		cat.putInfo(detectableInfo, domain);
+		
+		assert cat != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+	}
+	
+	public void createNonNumericSensorCategory(String name, String abbreviation, String constructor, ArrayList<String> domain, String detectableInfo) {
+		assert name != null && name.length() > 0;
+		assert abbreviation != null && constructor != null && domain != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
+		String descr = abbreviation+':'+constructor+':'+domain;
+		NonNumericSensorCategory cat = new NonNumericSensorCategory(name, descr);
 		dataHandler.addSensorCategory(cat);
 		cat.putInfo(detectableInfo, domain);
 		

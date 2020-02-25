@@ -476,8 +476,8 @@ public class InterfaceHandler {
 				case 5:
 					inputHandler.changeRoomDescription(selectedHouse, selectedRoom);
 					break;
-				case 6:
-					inputHandler.readNumericSensorFromUser(selectedHouse, selectedRoom);
+				case 6:		
+					inputHandler.readSensorFromUser(selectedHouse, selectedRoom);
 					break;
 				case 7:
 					inputHandler.readActuatorFromUser(selectedHouse, selectedRoom);

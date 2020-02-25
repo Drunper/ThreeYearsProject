@@ -42,6 +42,7 @@ public class Strings {
 	public static final String INSERT_ACTUATOR_CATEGORY = "Inserisci la categoria di attuatori che vuoi visualizzare";
 	public static final String NO_ACTUATOR_CATEGORY = "Non sono ancora presenti categorie di attuatori";
 	public static final String ERROR_NON_EXISTENT_ACTUATOR_CATEGORY = "Attenzione! La categoria di attuatori selezionata non esiste.";
+	public static final String SENSOR_CATEGORY_CHOICE = "Vuoi creare una categoria di sensori numerica? (No la creerà non numerica)";
 	
 	//ROOM MENU
 	public static final String INSERT_SENSOR = "Inserisci il nome del sensore che vuoi visualizzare";
@@ -66,6 +67,7 @@ public class Strings {
 	public static final String CATEGORY_NON_EXISTENT = "Categoria non esistente, prego reinserire altro nome";
 	public static final String INPUT_CATEGORY_ABBREVIATION = "Inserisci la sigla della categoria";
 	public static final String INPUT_CATEGORY_MANUFACTURER = "Inserisci il costruttore";
+	public static final String INPUT_NON_NUMERIC_DOMAIN = "Inserisci un'informazione di dominio (\"^\" per uscire)";
 	
 	//HOUSE
 	public static final String HOUSE_INPUT_NAME = "Inserisci il nome dell'unità immobiliare";
@@ -82,6 +84,7 @@ public class Strings {
 	public static final String ROOM_OR_ARTIFACT_NON_EXISTENT = "Artefatto/stanza non presente, prego reinserire";
 	
 	//SENSOR
+	public static final String SENSOR_CHOICE = "Vuoi inserire un sensore numerico? (No inserirà un sensore non numerico";
 	public static final String SENSOR_INPUT_NAME = "Inserisci il nome del sensore (senza la categoria)";
 	public static final String SENSOR_NAME_ASSIGNED = "Nome già assegnato a un sensore, prego reinserire altro nome";
 	public static final String SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION = "Vuoi associare il sensore a stanze?(No assocerà il sensore ad artefatti)";
@@ -93,7 +96,7 @@ public class Strings {
 	public static final String SENSOR_ANOTHER_ASSOCIATION = "Associare sensore ad altro oggetto?";
 	public static final String NO_ASSOCIABLE_ELEMENT = "Non ci sono oggetti associabili di questo tipo";
 	public static final String NO_SENSOR_ROOM_OR_ARTIFACT_ERROR = "Impossibile creare il sensore perchè non ci sono stanze o artefatti associabili ad esso";
-	public static final String NO_SENSOR_CATEGORY_ERROR = "Impossibile creare il sensore perchè non sono presenti categorie nel sistema";
+	public static final String NO_SENSOR_CATEGORY_ERROR = "Impossibile creare il sensore perchè non sono presenti categorie di quel tipo nel sistema";
 	
 	//ACTUATOR
 	public static final String ACTUATOR_INPUT_NAME = "Inserisci il nome dell'attuatore (senza la categoria)";
@@ -112,7 +115,7 @@ public class Strings {
 	public static final String SENSOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di sensori";
 	public static final String SENSOR_CATEGORY_INPUT_INFO_DOMAIN = "Inserisci il dominio dell'informazione (del tipo \"min-max\" esempio: \"1-20\")";
 	public static final String SENSOR_CATEGORY_DETECTABLE_INFO = "Inserisci unità di misura";
-	public static final String SENSOR_CATEGORY_INPUT_INFO ="Inserisci l'informazione rilevabile dalla categoria (scegli tra temperatura, pressione, umidità e vento)";
+	public static final String SENSOR_CATEGORY_INPUT_INFO ="Inserisci l'informazione rilevabile dalla categoria (ad esempio temperatura, pressione, umidità, vento...)";
 	public static final String INSERT_SENSOR_CATEGORY_MIN_VALUE = "Inserisci il valore minimo rilevabile della categoria";
 	public static final String INSERT_SENSOR_CATEGORY_MAX_VALUE = "Inserisci il valore massimo rilevabile della categoria";
 	

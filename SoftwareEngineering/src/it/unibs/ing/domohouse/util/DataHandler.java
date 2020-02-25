@@ -3,6 +3,7 @@ package it.unibs.ing.domohouse.util;
 import java.io.Serializable;
 
 import it.unibs.ing.domohouse.components.*;
+import it.unibs.ing.domohouse.interfaces.Manageable;
 
 public class DataHandler implements Serializable {
 
@@ -57,6 +58,25 @@ public class DataHandler implements Serializable {
 	public String[] getSensorCategoryList() {
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		return sensorCategoryManager.namesList();
+	}
+	
+	//Cast brutale
+	public boolean hasNumericSensorCategory() {
+		for(String cat : sensorCategoryManager.namesList()) {
+			Manageable m = sensorCategoryManager.getElementByName(cat);
+			SensorCategory s = (SensorCategory) m;	
+			if(s.getIsNumeric()) return true;
+		}	
+		return false;
+	}
+	
+	public boolean hasNonNumericSensorCategory() {
+		for(String cat : sensorCategoryManager.namesList()) {
+			Manageable m = sensorCategoryManager.getElementByName(cat);
+			SensorCategory s = (SensorCategory) m;	
+			if(s.getIsNumeric() == false) return true;
+		}	
+		return false;
 	}
 
 	public String getSensorCategoryString(String selectedSensCategory) {

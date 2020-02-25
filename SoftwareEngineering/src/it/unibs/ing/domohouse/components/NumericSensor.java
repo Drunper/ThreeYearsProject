@@ -11,7 +11,7 @@ public class NumericSensor extends Sensor {
 	private double lowerBound;
 	private double upperBound;
 	
-	public NumericSensor(String name, SensorCategory category) {
+	public NumericSensor(String name, NumericSensorCategory category) {
 		super(name, category);
 	}
 	
@@ -19,7 +19,7 @@ public class NumericSensor extends Sensor {
 		assert variableName != null && variableName.length() > 0;
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		
-		double [] bounds = category.getDomain(variableName);
+		double [] bounds = ((NumericSensorCategory) category).getDomain(variableName);
 		lowerBound = bounds[0];
 		upperBound = bounds[1];
 	
@@ -30,7 +30,7 @@ public class NumericSensor extends Sensor {
 	public String [] getMeasurements() {
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		
-		String [] infos = category.getDetectableInfoList();
+		String [] infos = ((NumericSensorCategory) category).getDetectableInfoList();
 		int size = infos.length;
 		String [] measurements = new String[size];
 		for (int i = 0; i < size; i++)
@@ -76,7 +76,7 @@ public class NumericSensor extends Sensor {
 		assert variableName != null && variableName.length() > 0;
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		
-		String valueWithUnit = value + " " + category.getMeasurementUnit(variableName);
+		String valueWithUnit = value + " " + ((NumericSensorCategory) category).getMeasurementUnit(variableName);
 		
 		assert valueWithUnit != null && valueWithUnit.length() > 0;
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
