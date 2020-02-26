@@ -472,6 +472,24 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 
+	public void setOperatingMode(String selectedHouse, String selectedRoom, String selectedActuator) {
+		
+		Actuator act = dataHandler.getRoom(selectedHouse, selectedRoom).getActuatorByName(selectedActuator);
+
+		System.out.println(act.getCategory().listOfOperatingModes()); //da vedere se funziona
+		
+		String op;
+		do {
+			op = RawInputHandler.readNotVoidString("Inserisci la modalità operativa");
+			if(!act.getCategory().hasOperatingMode(op)) System.out.println("La modalità operativa inserita è inesistente");	
+		}while(!act.getCategory().hasOperatingMode(op));
+		
+		/*
+		 * Da vedere se la mod operativa è parametrica o no e agire di conseguenza
+		 */
+		
+	}
+	
 	public void changeHouseDescription(String selectedHouse) {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		

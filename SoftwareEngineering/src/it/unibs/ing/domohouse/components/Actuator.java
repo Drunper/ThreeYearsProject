@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.components;
 
 import java.io.Serializable;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import it.unibs.ing.domohouse.interfaces.Gettable;
@@ -47,6 +48,10 @@ public class Actuator implements Manageable, Serializable {
 		assert actuatorInvariant();
 	}
 	
+	public ActuatorCategory getCategory() {
+		return this.category;
+	}
+	
 	//Fatto per chiarezza, solo un artefatto o una stanza può essere controllato dall'attuatore
 	public void addEntry(Room toAdd) {
 		assert toAdd != null : "toAdd è null";
@@ -74,7 +79,7 @@ public class Actuator implements Manageable, Serializable {
 		assert actuatorInvariant();
 	}
 	
-	public void setOperatingMode(String operatingMode) {
+	public void setNonParametricOperatingMode(String operatingMode) {
 		assert category != null && category.getOperatingMode(operatingMode) != null;
 		this.operatingMode = operatingMode;
 		Consumer<Gettable> mode = category.getOperatingMode(operatingMode);
@@ -85,6 +90,20 @@ public class Actuator implements Manageable, Serializable {
 		operatingMode = defaultMode;
 		assert actuatorInvariant();
 	}
+	
+	public void setParametricOperatingMode(String operatingMode, Object o) {
+		assert category != null && category.getOperatingMode(operatingMode) != null;
+		this.operatingMode = operatingMode;
+		BiConsumer<Gettable, Object> mode = category.getParametricOperatingMode(operatingMode);
+		
+		for(String object : controlledObjects.namesList())
+		{
+			mode.accept((Gettable)controlledObjects.getElementByName(object), o);
+		}
+		operatingMode = defaultMode;
+		assert actuatorInvariant();
+	}
+	
 	
 	public String toString() {
 		assert name != null && name.length() > 0 && category != null 

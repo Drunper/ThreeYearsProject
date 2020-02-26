@@ -3,6 +3,7 @@ package it.unibs.ing.domohouse.util;
 import java.io.Serializable;
 import java.util.HashMap;
 import it.unibs.ing.domohouse.interfaces.Gettable;
+import it.unibs.ing.domohouse.interfaces.SerializableBiConsumer;
 import it.unibs.ing.domohouse.interfaces.SerializableConsumer;
 
 public class OperatingModesHandler implements Serializable{
@@ -21,7 +22,7 @@ public class OperatingModesHandler implements Serializable{
 		
 		SerializableConsumer<Gettable> aumentoTemperatura10gradi = g -> {
 			double temp = g.getNumericProperty("temperatura");
-			temp = temp +10;
+			temp = temp + 10;
 			g.setNumericProperty("temperatura", temp);
 		};
 		
@@ -66,6 +67,10 @@ public class OperatingModesHandler implements Serializable{
 					umidita = umidita + 2;
 					g.setNumericProperty("umidità", umidita);
 				};
+		
+		SerializableBiConsumer<Gettable, Double> mantenimentoTemperatura = (g,i) ->{
+				g.setNumericProperty("temperatura", i);
+		};
 		
 		operatingModesMap.put("idle", idle);
 		operatingModesMap.put("aumentoTemperatura10gradi", aumentoTemperatura10gradi);

@@ -3,6 +3,7 @@ package it.unibs.ing.domohouse.components;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.function.Consumer;
+
 import it.unibs.ing.domohouse.interfaces.*;
 
 public class ActuatorCategory implements Manageable, Serializable {
@@ -15,6 +16,10 @@ public class ActuatorCategory implements Manageable, Serializable {
 	private String name;
 	private String text;
 	private HashMap<String, SerializableConsumer<Gettable>> operatingModesMap;
+	//Assumiamo che i parametri siano solo double o string, se si vuole aggiungere una mappa ricordarsi
+	//di modificare il metodo hasOperatingMode
+	private HashMap<String, SerializableBiConsumer<Gettable,Object>> parametricOperatingModesMap;
+
 	
 	/*
 	 * invariante name > 0, text > 0
@@ -23,6 +28,7 @@ public class ActuatorCategory implements Manageable, Serializable {
 		this.name = name;
 		this.text = text;
 		operatingModesMap = new HashMap<>();
+		parametricOperatingModesMap = new HashMap<>();
 	}
 	
 	public String getName() {
@@ -50,7 +56,22 @@ public class ActuatorCategory implements Manageable, Serializable {
 	public String [] listOfOperatingModes() {
 		assert operatingModesMap !=null;
 		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
-		return operatingModesMap.keySet().toArray(new String[0]);
+		String[] op1 = operatingModesMap.keySet().toArray(new String[0]);
+		String[] op2 = parametricOperatingModesMap.keySet().toArray(new String[0]);
+		
+		int dim = op1.length + op2.length;
+		
+		String[] result = new String[dim]; 
+		
+		for(int i=0; i< op1.length; i++) {
+			result[i] = op1[i];
+		}
+		
+		for(int i=0; i <op2.length; i++) {
+			result[op1.length-1 + i] = op2[i];
+		}
+		
+		return result;
 	}
 	
 	public void putOperatingMode(String name, SerializableConsumer<Gettable> operatingMode) {
@@ -61,10 +82,43 @@ public class ActuatorCategory implements Manageable, Serializable {
 		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
+	public void putParametricOperatingMode(String name, SerializableBiConsumer<Gettable, Object> operatingMode) {
+		assert name.length() > 0;
+		int pre_size = parametricOperatingModesMap.size();
+		
+		parametricOperatingModesMap.put(name, operatingMode);
+		
+		assert parametricOperatingModesMap.size() >= pre_size;
+		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+	}
+	
+	
 	public Consumer<Gettable> getOperatingMode(String name) {
 		assert operatingModesMap.containsKey(name) : "operatingModesMap non contiene il nome richiesto";
 		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
 		return operatingModesMap.get(name);
+	}
+	
+	public SerializableBiConsumer<Gettable, Object> getParametricOperatingMode(String name) {
+		assert parametricOperatingModesMap.containsKey(name) : "doubleOperatingModesMap non contiene il nome richiesto";
+		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		return parametricOperatingModesMap.get(name);
+	}
+	
+	
+	public boolean hasOperatingMode(String op) {
+		if(parametricOperatingModesMap.containsKey(op) || operatingModesMap.containsKey(op)) return true;
+		return false;
+	}
+	
+	public boolean hasParametricOperatingMode(String op) {
+		if(parametricOperatingModesMap.containsKey(op)) return true;
+		return false;
+	}
+	
+	public boolean hasNonParametricOperatingMode(String op) {
+		if(operatingModesMap.size() > 0) return true;
+		return false;
 	}
 	
 	public String getDefaultMode() {
