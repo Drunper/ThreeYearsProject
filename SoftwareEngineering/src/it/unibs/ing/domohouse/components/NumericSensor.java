@@ -1,5 +1,7 @@
 package it.unibs.ing.domohouse.components;
 
+import java.util.ArrayList;
+
 import it.unibs.ing.domohouse.interfaces.Gettable;
 
 public class NumericSensor extends Sensor {
@@ -11,11 +13,13 @@ public class NumericSensor extends Sensor {
 	private double lowerBound;
 	private double upperBound;
 	
-	public NumericSensor(String name, NumericSensorCategory category) {
-		super(name, category);
+	public NumericSensor(String name, ArrayList<SensorCategory> categoryList) {
+		super(name, categoryList);
 	}
 	
-	private void setBounds(String variableName) {
+
+	
+	private void setBounds(String variableName, SensorCategory category) {
 		assert variableName != null && variableName.length() > 0;
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		
@@ -27,7 +31,27 @@ public class NumericSensor extends Sensor {
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public String [] getMeasurements() {
+	public String[] getMeasurements() {
+		ArrayList<String[]> result = new ArrayList<>();
+		String[] measurements;
+		for(SensorCategory elem : categoryList) result.add(getMeasurements(elem));
+		
+		int bound = 0;
+		
+		for(String[] elem : result) bound = bound + elem.length;
+		measurements = new String[bound];
+		
+		int index = 0;
+		for(int i = 0; i<result.size(); i++) {
+			for(int j = 0; j<result.get(i).length; j++) {
+				measurements[j + index] = result.get(i)[j];
+			}
+			index = index + result.get(i).length;
+		}	
+		return measurements;
+	}
+	
+	private String [] getMeasurements(SensorCategory category) {
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		
 		String [] infos = ((NumericSensorCategory) category).getDetectableInfoList();
@@ -35,18 +59,18 @@ public class NumericSensor extends Sensor {
 		String [] measurements = new String[size];
 		for (int i = 0; i < size; i++)
 		{
-			measurements[i] = addMeasurementUnit(getMeasurementOf(infos[i]), infos[i]);
+			measurements[i] = addMeasurementUnit(getMeasurementOf(infos[i],category), infos[i], category);
 		}
 		assert measurements != null;
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		return measurements;
 	}
 	
-	private double getMeasurementOf(String variableName) {
+	private double getMeasurementOf(String variableName, SensorCategory category) {
 		assert variableName != null && variableName.length() > 0;
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		
-		setBounds(variableName);
+		setBounds(variableName, category);
 		double measure = 0;
 		double valueFromObject;
 		String [] objectNames = measuredObjectsList();
@@ -72,7 +96,8 @@ public class NumericSensor extends Sensor {
 		return measure;
 	}
 	
-	private String addMeasurementUnit(double value, String variableName) {
+	
+	private String addMeasurementUnit(double value, String variableName, SensorCategory category) {
 		assert variableName != null && variableName.length() > 0;
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		
@@ -82,6 +107,8 @@ public class NumericSensor extends Sensor {
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
 		return valueWithUnit;
 	}
+	
+
 	
 	public String toString() {
 		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
@@ -94,8 +121,15 @@ public class NumericSensor extends Sensor {
 			status = "spento";
 		
 		String name = getName().split("_")[0];
+
+		String result = ""; 
+		for(SensorCategory elem : categoryList) result = result + elem.getName() + ", ";
 		
-		unformattedText = name +':'+category.getName()+':';
+		int end = result.length() - 2;
+		result = result.substring(0, end);
+		
+		
+		unformattedText = name +':'+result+':';
 		for(String measuredObject : measuredObjectsList())
 		{
 			unformattedText = unformattedText+"me:"+measuredObject+':';

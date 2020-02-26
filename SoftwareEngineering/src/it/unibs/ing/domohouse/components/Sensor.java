@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.components;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import it.unibs.ing.domohouse.interfaces.Gettable;
 import it.unibs.ing.domohouse.interfaces.Manageable;
@@ -14,15 +15,15 @@ public class Sensor implements Manageable, Serializable{
 	private static final long serialVersionUID = -3804289994000782961L;
 	
 	private String name;
-	protected SensorCategory category;
+	protected ArrayList<SensorCategory> categoryList;
 	private Manager measuredObjects;
 	private boolean state;
 	private boolean measuringRoom;
 
-	public Sensor(String name, SensorCategory category) {
+	public Sensor(String name, ArrayList<SensorCategory> categoryList) {
 		super();
 		this.name = name;
-		this.category = category;
+		this.categoryList = categoryList;
 		measuredObjects = new Manager();
 		state = true;
 	}
@@ -100,7 +101,7 @@ public class Sensor implements Manageable, Serializable{
 	
 	protected boolean sensorInvariant() {
 		boolean checkName = name != null && name.length() > 0;
-		boolean checkCategory = category != null;
+		boolean checkCategory = categoryList != null;
 		boolean checkManager = measuredObjects != null;
 		
 		if(checkName && checkCategory && checkManager) return true;

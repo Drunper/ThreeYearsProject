@@ -11,6 +11,7 @@ import it.unibs.ing.domohouse.components.NonNumericSensorCategory;
 import it.unibs.ing.domohouse.components.NumericSensor;
 import it.unibs.ing.domohouse.components.Room;
 import it.unibs.ing.domohouse.components.Sensor;
+import it.unibs.ing.domohouse.components.SensorCategory;
 import it.unibs.ing.domohouse.components.NumericSensorCategory;
 
 public class InputHandler {
@@ -77,14 +78,36 @@ public class InputHandler {
 				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
 		}
 		while(dataHandler.hasSensor(selectedHouse, name));
+		
+		ArrayList<String> categoryList = new ArrayList<String>();
 		String category;
 		do
+		{ 
+		do 
 		{
+		do
+		{
+		do
+		{
+		//da da da da
 			category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
-			if (!dataHandler.hasSensorCategory(category))
+			if (!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER))
 				System.out.println(Strings.CATEGORY_NON_EXISTENT);
 		}
-		while(!dataHandler.hasSensorCategory(category));
+		while(!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER));
+		
+		if(category.equalsIgnoreCase(Strings.BACK_CHARACTER)) break; //break per uscire dal while per non generare eccezione del tipo getSensorCategory("^")
+		if(dataHandler.getSensorCategory(category).getIsNumeric()) System.out.println(Strings.ERROR_TYPE_CATEGORY);
+		}
+		while(dataHandler.getSensorCategory(category).getIsNumeric());
+			
+		if(!category.equalsIgnoreCase(Strings.BACK_CHARACTER)) categoryList.add(category);
+		}
+		while(!category.equalsIgnoreCase(Strings.BACK_CHARACTER));
+		if(categoryList.size() == 0) System.out.println(Strings.NO_CATEGORY_INSERTED);
+		}
+		while(categoryList.size() == 0);
+		
 		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
 			
 		boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
@@ -131,7 +154,7 @@ public class InputHandler {
 		while(RawInputHandler.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			createNonNumericSensor(selectedHouse, name, category, roomOrArtifact, objectList, location);
+			createNonNumericSensor(selectedHouse, name, categoryList, roomOrArtifact, objectList, location);
 		}
 	}else {
 		System.out.println(Strings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
@@ -155,14 +178,37 @@ public class InputHandler {
 				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
 		}
 		while(dataHandler.hasSensor(selectedHouse, name));
+		
+		ArrayList<String> categoryList = new ArrayList<String>();
 		String category;
 		do
 		{
+		do 
+		{
+		do
+		{
+		do
+		{
+			//da da da da
 			category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
-			if (!dataHandler.hasSensorCategory(category))
+			if ((!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER)))
 				System.out.println(Strings.CATEGORY_NON_EXISTENT);
 		}
-		while(!dataHandler.hasSensorCategory(category));
+		while(!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER));
+		
+		if(category.equalsIgnoreCase(Strings.BACK_CHARACTER)) break; //break per uscire dal while per non generare eccezione del tipo getSensorCategory("^")
+		
+		if(!dataHandler.getSensorCategory(category).getIsNumeric()) System.out.println(Strings.ERROR_TYPE_CATEGORY);
+		}while(!dataHandler.getSensorCategory(category).getIsNumeric());
+			
+		if(!category.equalsIgnoreCase(Strings.BACK_CHARACTER)) categoryList.add(category);
+		}
+		while(!category.equalsIgnoreCase(Strings.BACK_CHARACTER));
+		
+		if(categoryList.size() == 0) System.out.println(Strings.NO_CATEGORY_INSERTED);
+		}
+		while(categoryList.size() == 0);
+			
 		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
 			
 		boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
@@ -209,7 +255,7 @@ public class InputHandler {
 		while(RawInputHandler.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			createNumericSensor(selectedHouse, name, category, roomOrArtifact, objectList, location);
+			createNumericSensor(selectedHouse, name, categoryList, roomOrArtifact, objectList, location);
 		}
 	}else {
 		System.out.println(Strings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
@@ -475,13 +521,22 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public void createNumericSensor(String selectedHouse, String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
+	public void createNumericSensor(String selectedHouse, String name, ArrayList<String> categoryList, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
 		assert name != null && name.length() > 0;
-		assert category != null && objectList != null && location != null;
+		assert categoryList != null && objectList != null && location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
-		String realName = name + "_" + category;
-		Sensor sensor = new NumericSensor(realName, (NumericSensorCategory) dataHandler.getSensorCategory(category));
+		String category = "";
+		for(String elem : categoryList) category = category + "_" + elem;
+			
+		String realName = name + category;
+		
+		ArrayList<SensorCategory> catList = new ArrayList<>();
+		for(String elem : categoryList) {
+			catList.add(dataHandler.getSensorCategory(elem));
+		}
+		
+		Sensor sensor = new NumericSensor(realName, catList);
 		sensor.setMeasuringRoom(roomOrArtifact);
 		dataHandler.addSensor(selectedHouse, location, sensor);
 		for(String object : objectList)
@@ -497,13 +552,23 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 
-	public void createNonNumericSensor(String selectedHouse, String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
+	public void createNonNumericSensor(String selectedHouse, String name, ArrayList<String> categoryList, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
 		assert name != null && name.length() > 0;
-		assert category != null && objectList != null && location != null;
+		assert categoryList != null && objectList != null && location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
-		String realName = name + "_" + category;
-		Sensor sensor = new NonNumericSensor(realName, (NonNumericSensorCategory) dataHandler.getSensorCategory(category));
+		
+		String category = "";
+		for(String elem : categoryList) category = category + "_" + elem;
+			
+		String realName = name + category;
+		
+		ArrayList<SensorCategory> catList = new ArrayList<>();
+		for(String elem : categoryList) {
+			catList.add(dataHandler.getSensorCategory(elem));
+		}
+		
+		Sensor sensor = new NonNumericSensor(realName, catList);
 		sensor.setMeasuringRoom(roomOrArtifact);
 		dataHandler.addSensor(selectedHouse, location, sensor);
 		for(String object : objectList)
@@ -575,6 +640,7 @@ public class InputHandler {
 		String descr = abbreviation+':'+constructor+':'+domain;
 		NonNumericSensorCategory cat = new NonNumericSensorCategory(name, descr);
 		dataHandler.addSensorCategory(cat);
+		
 		cat.putInfo(detectableInfo, domain);
 		
 		assert cat != null;

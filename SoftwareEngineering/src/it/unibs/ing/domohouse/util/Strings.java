@@ -63,7 +63,7 @@ public class Strings {
 	public static final String PROCEED_WITH_CREATION = "Procedere con la creazione e salvataggio?";
 	public static final String NAME_ALREADY_EXISTENT = "Nome già inserito, prego reinserire altro nome";
 	public static final String PROCEED_WITH_SAVING = "Salvare le modifiche?";
-	public static final String INSERT_CATEGORY = "Inserisci il nome della categoria";
+	public static final String INSERT_CATEGORY = "Inserisci il nome della categoria (\"^\" per fermarti)";
 	public static final String CATEGORY_NON_EXISTENT = "Categoria non esistente, prego reinserire altro nome";
 	public static final String INPUT_CATEGORY_ABBREVIATION = "Inserisci la sigla della categoria";
 	public static final String INPUT_CATEGORY_MANUFACTURER = "Inserisci il costruttore";
@@ -118,7 +118,8 @@ public class Strings {
 	public static final String SENSOR_CATEGORY_INPUT_INFO ="Inserisci l'informazione rilevabile dalla categoria (ad esempio temperatura, pressione, umidità, vento...)";
 	public static final String INSERT_SENSOR_CATEGORY_MIN_VALUE = "Inserisci il valore minimo rilevabile della categoria";
 	public static final String INSERT_SENSOR_CATEGORY_MAX_VALUE = "Inserisci il valore massimo rilevabile della categoria";
-	
+	public static final String NO_CATEGORY_INSERTED = "Attenzione! Devi inserire almeno una categoria!";
+	public static final String ERROR_TYPE_CATEGORY = "Attenzione! Il sensore non può appartenere a questo genere di categoria";
 	
 	//ACTUATOR CATEGORY
 	public static final String ACTUATOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di attuatori";
