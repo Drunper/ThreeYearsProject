@@ -60,7 +60,7 @@ public class ActuatorCategory implements Manageable, Serializable {
 		String[] op2 = parametricOperatingModesMap.keySet().toArray(new String[0]);
 		
 		int dim = op1.length + op2.length;
-		
+				
 		String[] result = new String[dim]; 
 		
 		for(int i=0; i< op1.length; i++) {
@@ -68,7 +68,7 @@ public class ActuatorCategory implements Manageable, Serializable {
 		}
 		
 		for(int i=0; i <op2.length; i++) {
-			result[op1.length-1 + i] = op2[i];
+			result[op1.length + i] = op2[i];
 		}
 		
 		return result;
@@ -116,8 +116,9 @@ public class ActuatorCategory implements Manageable, Serializable {
 		return false;
 	}
 	
+	
 	public boolean hasNonParametricOperatingMode(String op) {
-		if(operatingModesMap.size() > 0) return true;
+		if(operatingModesMap.containsKey(op)) return true;
 		return false;
 	}
 	

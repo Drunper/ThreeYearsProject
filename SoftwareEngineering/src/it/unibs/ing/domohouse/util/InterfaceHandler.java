@@ -406,6 +406,16 @@ public class InterfaceHandler {
 				break;
 			case 4:
 				OutputHandler.clearOutput();
+				if(dataHandler.getActuatorNames(selectedHouse, selectedRoom).length == 0) {
+					System.out.println(Strings.NO_ACTUATOR);
+					break;
+				}
+				OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedHouse, selectedRoom));
+				String selectedAct = inputHandler.safeInsertActuator(selectedHouse);
+				inputHandler.setOperatingMode(selectedHouse, selectedRoom, selectedAct);
+				break;
+			case 5:
+				OutputHandler.clearOutput();
 				if(dataHandler.getArtifactNames(selectedHouse, selectedRoom).length == 0) {
 					System.out.println(Strings.NO_ARTIFACT);
 					break;
@@ -464,6 +474,16 @@ public class InterfaceHandler {
 					break;
 				case 4:
 					OutputHandler.clearOutput();
+					if(dataHandler.getActuatorNames(selectedHouse, selectedRoom).length == 0) {
+						System.out.println(Strings.NO_ACTUATOR);
+						break;
+					}
+					OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedHouse, selectedRoom));
+					String selectedAct = inputHandler.safeInsertActuator(selectedHouse);
+					inputHandler.setOperatingMode(selectedHouse, selectedRoom, selectedAct);
+					break;
+				case 5:
+					OutputHandler.clearOutput();
 					if(dataHandler.getArtifactNames(selectedHouse, selectedRoom).length == 0) {
 						System.out.println(Strings.NO_ARTIFACT);
 					}
@@ -473,16 +493,16 @@ public class InterfaceHandler {
 					String selectedArtifact = inputHandler.safeInsertArtifact(selectedHouse);
 					OutputHandler.printArtifact(dataHandler.getArtifactString(selectedHouse, selectedArtifact));
 					break;	
-				case 5:
+				case 6:
 					inputHandler.changeRoomDescription(selectedHouse, selectedRoom);
 					break;
-				case 6:		
+				case 7:		
 					inputHandler.readSensorFromUser(selectedHouse, selectedRoom);
 					break;
-				case 7:
+				case 8:
 					inputHandler.readActuatorFromUser(selectedHouse, selectedRoom);
 					break;
-				case 8:
+				case 9:
 					inputHandler.readArtifactFromUser(selectedHouse, selectedRoom);
 					break;
 			}

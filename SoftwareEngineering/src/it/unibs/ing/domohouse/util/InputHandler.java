@@ -70,15 +70,7 @@ public class InputHandler {
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		if(dataHandler.hasNonNumericSensorCategory() && dataHandler.getSensorCategoryList().length != 0) {
-		String name;
-		do
-		{
-			name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
-			if (dataHandler.hasSensor(selectedHouse, name))
-				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
-		}
-		while(dataHandler.hasSensor(selectedHouse, name));
-		
+				
 		ArrayList<String> categoryList = new ArrayList<String>();
 		String category;
 		do
@@ -108,7 +100,24 @@ public class InputHandler {
 		}
 		while(categoryList.size() == 0);
 		
+		String name;
+		String toCheck;
+		do
+		{
+			name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
+			toCheck = name;
+			for(String elem : categoryList) {
+				toCheck = toCheck + "_" + elem;
+			}
+			if (dataHandler.hasSensor(selectedHouse, toCheck))
+				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
+		}
+		while(dataHandler.hasSensor(selectedHouse, toCheck));
+		
 		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
+		
+		category = "";
+		for(String elem : categoryList) category = category + "_" + elem;
 			
 		boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
 		boolean isThereArtifact = dataHandler.isThereArtifact(selectedHouse);
@@ -123,6 +132,32 @@ public class InputHandler {
 			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
 		
 		}while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
+		
+		if(roomOrArtifact) {
+			boolean ok = false;
+			for(int i=0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
+				if(!dataHandler.isAssociated(selectedHouse, dataHandler.getRoomList(selectedHouse)[i], category)) ok = true;
+				
+			}
+			
+			if(!ok) {
+				System.out.println(Strings.NO_ROOM_TO_ASSOC);
+				return;
+			}
+		}else {
+			boolean ok = false;
+			for(int i=0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
+				for(int k = 0; k < dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomList(selectedHouse)[i])).length; k++){
+					String artifact = dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomList(selectedHouse))[i])[k];
+					if(!dataHandler.isAssociated(selectedHouse, artifact, category)) ok = true;
+				}
+			}
+			if(!ok) {
+				System.out.println(Strings.NO_ARTIFACT_TO_ASSOC);
+				return;
+			}
+		}
+		
 		
 		ArrayList<String> objectList = new ArrayList<>();
 		
@@ -169,15 +204,6 @@ public class InputHandler {
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		if(dataHandler.hasNumericSensorCategory() && dataHandler.getSensorCategoryList().length != 0) {
-			
-		String name;
-		do
-		{
-			name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
-			if (dataHandler.hasSensor(selectedHouse, name))
-				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
-		}
-		while(dataHandler.hasSensor(selectedHouse, name));
 		
 		ArrayList<String> categoryList = new ArrayList<String>();
 		String category;
@@ -208,9 +234,26 @@ public class InputHandler {
 		if(categoryList.size() == 0) System.out.println(Strings.NO_CATEGORY_INSERTED);
 		}
 		while(categoryList.size() == 0);
-			
+		
+		String name;
+		String toCheck;
+		do
+		{
+			name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
+			toCheck = name;
+			for(String elem : categoryList) {
+				toCheck = toCheck + "_" + elem;
+			}
+			if (dataHandler.hasSensor(selectedHouse, toCheck))
+				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
+		}
+		while(dataHandler.hasSensor(selectedHouse, toCheck));
+		
 		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
-			
+		
+		category = "";
+		for(String elem : categoryList) category = category + "_" + elem;	
+		
 		boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
 		boolean isThereArtifact = dataHandler.isThereArtifact(selectedHouse);
 		boolean roomOrArtifact;
@@ -224,6 +267,32 @@ public class InputHandler {
 			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
 		
 		}while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
+		
+		if(roomOrArtifact) {
+			boolean ok = false;
+			for(int i=0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
+				if(!dataHandler.isAssociated(selectedHouse, dataHandler.getRoomList(selectedHouse)[i], category)) ok = true;
+				
+			}
+			
+			if(!ok) {
+				System.out.println(Strings.NO_ROOM_TO_ASSOC);
+				return;
+			}
+		}else {
+			boolean ok = false;
+			for(int i=0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
+				for(int k = 0; k < dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomList(selectedHouse)[i])).length; k++){
+					String artifact = dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomList(selectedHouse))[i])[k];
+					if(!dataHandler.isAssociated(selectedHouse, artifact, category)) ok = true;
+				}
+			}
+			if(!ok) {
+				System.out.println(Strings.NO_ARTIFACT_TO_ASSOC);
+				return;
+			}
+		}
+		
 		
 		ArrayList<String> objectList = new ArrayList<>();
 		
@@ -271,22 +340,26 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		if(dataHandler.getActuatorCategoryList().length != 0) {
-		String name;
-		do
-		{
-			name = RawInputHandler.readNotVoidString(Strings.ACTUATOR_INPUT_NAME);
-			if (dataHandler.hasActuator(selectedHouse, name))
-				System.out.println(Strings.ACTUATOR_NAME_ASSIGNED);
-		}
-		while(dataHandler.hasActuator(selectedHouse, name));
+		
 		String category;
 		do
 		{
-			category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
+			category = RawInputHandler.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_NAME);
 			if (!dataHandler.hasActuatorCategory(category))
-				System.out.println(Strings.CATEGORY_NON_EXISTENT);
+					System.out.println(Strings.CATEGORY_NON_EXISTENT);
 		}
 		while(!dataHandler.hasActuatorCategory(category));
+			
+			
+		String name;
+		do
+		{
+			name = RawInputHandler.readNotVoidString(Strings.ACTUATOR_INPUT_NAME); 
+			if (dataHandler.hasActuator(selectedHouse, name + "_" + category))						
+				System.out.println(Strings.ACTUATOR_NAME_ASSIGNED);
+		}
+		while(dataHandler.hasActuator(selectedHouse, name + "_" + category));
+		
 		
 		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
 			boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
@@ -302,6 +375,31 @@ public class InputHandler {
 			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
 		
 		}while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
+		
+		if(roomOrArtifact) {
+			boolean ok = false;
+			for(int i = 0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
+			if(!dataHandler.isAssociated(selectedHouse, dataHandler.getRoomList(selectedHouse)[i], category)) ok = true;
+			}
+
+			if(!ok) {
+			System.out.println(Strings.NO_ROOM_TO_ASSOC);
+			return;
+			}
+		}else{
+			boolean ok = false;
+			for(int i = 0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
+				for(int j = 0; j < dataHandler.getArtifactNames(selectedHouse, dataHandler.getRoomList(selectedHouse)[i]).length; j++) {
+					String artifact = dataHandler.getArtifactNames(selectedHouse, dataHandler.getRoomList(selectedHouse)[i])[j];
+					if(!dataHandler.isAssociated(selectedHouse, artifact , category)) ok = true;
+				}
+			}
+			
+			if(!ok) {
+				System.out.println(Strings.NO_ARTIFACT_TO_ASSOC);
+				return;
+			}
+		}
 		
 		ArrayList<String> objectList = new ArrayList<>();
 		do
@@ -474,9 +572,9 @@ public class InputHandler {
 
 	public void setOperatingMode(String selectedHouse, String selectedRoom, String selectedActuator) {
 		
-		Actuator act = dataHandler.getRoom(selectedHouse, selectedRoom).getActuatorByName(selectedActuator);
-
-		System.out.println(act.getCategory().listOfOperatingModes()); //da vedere se funziona
+		Actuator act = dataHandler.getRoom(selectedHouse, selectedRoom).getActuatorByName(selectedActuator);	
+		
+		OutputHandler.printListOfString(act.getCategory().listOfOperatingModes());
 		
 		String op;
 		do {
@@ -487,6 +585,46 @@ public class InputHandler {
 		/*
 		 * Da vedere se la mod operativa è parametrica o no e agire di conseguenza
 		 */
+		
+		if(act.getCategory().hasNonParametricOperatingMode(op)) {
+			//Gestire mod operativa non parametrica
+			act.setNonParametricOperatingMode(op);
+		}else {
+			//Gestire mod operativa paramerica
+			String info = OperatingModesHandler.getParameterInfo(op); //in questa stringa abbiamo il tipo di parametro
+			/*La stringa sarà del tipo "Double:1", che richiede un Double . Oppure "String:2" che richiede 2 stringhe
+			Si assume che i parametri possano essere Double o String, in questo modo è eliminato il problema dell'utilizzo
+			di array di double o array di string nel operatingModesMap
+			*/
+			
+			String type = info.split(":")[0]; //Es. contiente double
+			int num = Integer.parseInt(info.split(":")[1]); //Es. contiente 1
+	
+			switch(type) {
+			case "Double":
+				int i= 0;
+				Double param;
+				ArrayList<Double> dParamList = new ArrayList<>(); //siccome non possiamo sapere se ci sono uno o più param di tipo double utilizziamo arraylist per sicurezza
+				do {
+					param = RawInputHandler.readDouble("Inserisci il valore");
+					dParamList.add(param);
+					i++;
+				}while(i<num);
+				act.setParametricOperatingMode(op, dParamList);
+				break;
+			case "String":
+				int k = 0;
+				String sParam;
+				ArrayList<String> sParamList = new ArrayList<>();
+				do {
+					sParam = RawInputHandler.readNotVoidString("Inserisci il valore (stringa)");
+					sParamList.add(sParam);
+					k++;
+				}while(k<num);
+				act.setParametricOperatingMode(op,sParamList);
+				break;
+			}
+		}
 		
 	}
 	
@@ -679,7 +817,12 @@ public class InputHandler {
 		ActuatorCategory cat = new ActuatorCategory(name, descr);
 		for(String toAdd : listOfModes)
 		{
-			cat.putOperatingMode(toAdd, OperatingModesHandler.getOperatingMode(toAdd));
+			//NOTA : listOfModes contiene tutte mod op esistenti perchè è stato controllato prima
+			
+			if(OperatingModesHandler.hasNonParametricOperatingMode(toAdd)) //se è non parametrica aggiunge con il metodo giusto
+				cat.putOperatingMode(toAdd, OperatingModesHandler.getOperatingMode(toAdd));
+			else //altrimenti le inserisce in parametricOperatingMode
+				cat.putParametricOperatingMode(toAdd, OperatingModesHandler.getParametricOperatingMode(toAdd));
 		}
 		dataHandler.addActuatorCategory(cat);
 		

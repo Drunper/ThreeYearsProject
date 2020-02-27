@@ -110,6 +110,8 @@ public class Strings {
 	public static final String ACTUATOR_ANOTHER_ASSOCIATION = "Associare attuatore ad altro oggetto?";
 	public static final String NO_ACTUATOR_ROOM_OR_ARTIFACT_ERROR = "Impossibile creare l'attuatore perchè non ci sono stanze o artefatti associabili ad esso";
 	public static final String NO_ACTUATOR_CATEGORY_ERROR = "Impossibile creare l'attuatore perchè non sono presenti categorie nel sistema";
+	public static final String NO_ROOM_TO_ASSOC = "Non sono disponibili stanze da associare con quella categoria";
+	public static final String NO_ARTIFACT_TO_ASSOC = "Non sono disponibili artefatti da associare con quella categoria";
 	
 	//SENSOR CATEGORY
 	public static final String SENSOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di sensori";
@@ -173,13 +175,14 @@ public class Strings {
 	public static final String [] LOGIN_VOICES = {"Fruitore", "Manutentore"};
 	public static final String [] USER_VOICES = {"Visualizzare descrizione unità immobiliare", "Visualizza stanza", 
 			"Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
-	public static final String [] ROOM_VOICES = {"Visualizzare descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto"};
+	public static final String [] ROOM_VOICES = {"Visualizzare descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Aziona attuatore", "Visualizza artefatto"};
 	public static final String [] MAINTAINER_VOICES = {"Visualizzare descrizione unità immobiliare", "Modifica descrizione unità immobilare", "Visualizza stanza", 
 			"Inserisci stanza", "Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
-	public static final String [] MAINTAINER_ROOM_VOICES = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Visualizza artefatto", 
+	public static final String [] MAINTAINER_ROOM_VOICES = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Aziona attuatore", "Visualizza artefatto", 
 			"Modifica descrizione stanza", "Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto"};
 	public static final String[] MAINTAINER_UNIT_MENU = {"Visualizza unità immobiliare", "Aggiungi unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Inserisci categoria di sensori", 
 			"Inserisci categoria di attuatori", "Salva dati"};
 	public static final String[] USER_UNIT_MENU = {"Visualizza unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
+
 
 }

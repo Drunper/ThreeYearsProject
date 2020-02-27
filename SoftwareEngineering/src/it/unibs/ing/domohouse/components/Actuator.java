@@ -87,12 +87,11 @@ public class Actuator implements Manageable, Serializable {
 		{
 			mode.accept((Gettable)controlledObjects.getElementByName(object));
 		}
-		operatingMode = defaultMode;
 		assert actuatorInvariant();
 	}
 	
 	public void setParametricOperatingMode(String operatingMode, Object o) {
-		assert category != null && category.getOperatingMode(operatingMode) != null;
+		assert category != null && category.getParametricOperatingMode(operatingMode) != null;
 		this.operatingMode = operatingMode;
 		BiConsumer<Gettable, Object> mode = category.getParametricOperatingMode(operatingMode);
 		
@@ -100,7 +99,6 @@ public class Actuator implements Manageable, Serializable {
 		{
 			mode.accept((Gettable)controlledObjects.getElementByName(object), o);
 		}
-		operatingMode = defaultMode;
 		assert actuatorInvariant();
 	}
 	
