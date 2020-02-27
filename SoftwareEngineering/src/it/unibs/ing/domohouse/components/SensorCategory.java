@@ -36,10 +36,12 @@ public class SensorCategory implements Manageable, Serializable{
 	}
 	
 	public void setIsNumeric(boolean flag) {
+		assert sensorCategoryInvariant() : "Invariante della classe non soddisfatto";
 		this.isNumeric = flag;
 	}
 	
 	public boolean getIsNumeric() {
+		assert sensorCategoryInvariant() : "Invariante della classe non soddisfatto";
 		return this.isNumeric;
 	}
 	

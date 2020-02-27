@@ -11,10 +11,11 @@ public class NonNumericSensor extends Sensor {
 
 	public NonNumericSensor(String name, ArrayList <SensorCategory> categoryList) {
 		super(name, categoryList);
-
 	}
 	
 	public String[] getMeasurements() {
+		assert  nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		ArrayList<String[]> result = new ArrayList<>();
 		String[] measurements;
 		for(SensorCategory elem : categoryList) result.add(getMeasurements(elem));
@@ -30,11 +31,18 @@ public class NonNumericSensor extends Sensor {
 				measurements[j + index] = result.get(i)[j];
 			}
 			index = index + result.get(i).length;
-		}	
+		}
+		
+		
+		assert measurements != null;
+		assert nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";
 		return measurements;
 	}
 	
 	private String[] getMeasurements(SensorCategory category) {	
+		assert category != null;
+		assert  nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		String [] infos = ((NonNumericSensorCategory) category).getDetectableInfoList();
 		int size = infos.length;
 		String [] measurements = new String[size];
@@ -42,6 +50,9 @@ public class NonNumericSensor extends Sensor {
 		{
 			measurements[i] = getMeasurementOf(infos[i]);
 		}
+		
+		assert measurements != null;
+		assert  nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";
 		return measurements;
 	}
 	
@@ -54,6 +65,9 @@ public class NonNumericSensor extends Sensor {
 	
 	//da migliorare
 	private String getMeasurementOf(String variableName) {
+		assert variableName != null;
+		assert  nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		assert variableName != null && variableName.length() > 0;
 		
 		boolean hasProperty = false;
@@ -68,11 +82,14 @@ public class NonNumericSensor extends Sensor {
 			}
 		}
 		
+		assert  nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		if(hasProperty) return valueFromObject; //se è possibili rilevare informazioni le rileva
 		else return "N/A"; //altrimenti rilascia N/A
 	}
 
 	public String toString() {
+		assert  nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";
 		
 		String unformattedText;
 		String status;
@@ -105,5 +122,10 @@ public class NonNumericSensor extends Sensor {
 		
 		return unformattedText;
 	}
+	
+	private boolean nonNumericSensorInvariant() {
+		return super.sensorInvariant();
+	}
+
 
 }

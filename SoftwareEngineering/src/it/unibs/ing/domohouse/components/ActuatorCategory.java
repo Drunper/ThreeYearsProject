@@ -22,7 +22,7 @@ public class ActuatorCategory implements Manageable, Serializable {
 
 	
 	/*
-	 * invariante name > 0, text > 0
+	 * invariante name > 0, text > 0 name != null, text != null
 	 */
 	public ActuatorCategory(String name, String text) {
 		this.name = name;
@@ -54,7 +54,7 @@ public class ActuatorCategory implements Manageable, Serializable {
 	}
 	
 	public String [] listOfOperatingModes() {
-		assert operatingModesMap !=null;
+		assert operatingModesMap !=null && parametricOperatingModesMap != null;
 		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
 		String[] op1 = operatingModesMap.keySet().toArray(new String[0]);
 		String[] op2 = parametricOperatingModesMap.keySet().toArray(new String[0]);
@@ -77,7 +77,9 @@ public class ActuatorCategory implements Manageable, Serializable {
 	public void putOperatingMode(String name, SerializableConsumer<Gettable> operatingMode) {
 		assert name.length() > 0;
 		int pre_size = operatingModesMap.size();
+		
 		operatingModesMap.put(name, operatingMode);
+		
 		assert operatingModesMap.size() >= pre_size;
 		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -96,28 +98,34 @@ public class ActuatorCategory implements Manageable, Serializable {
 	public Consumer<Gettable> getOperatingMode(String name) {
 		assert operatingModesMap.containsKey(name) : "operatingModesMap non contiene il nome richiesto";
 		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		
 		return operatingModesMap.get(name);
 	}
 	
 	public SerializableBiConsumer<Gettable, Object> getParametricOperatingMode(String name) {
 		assert parametricOperatingModesMap.containsKey(name) : "doubleOperatingModesMap non contiene il nome richiesto";
 		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		
 		return parametricOperatingModesMap.get(name);
 	}
 	
 	
 	public boolean hasOperatingMode(String op) {
+		assert operatingModesMap !=null && parametricOperatingModesMap != null;
+		
 		if(parametricOperatingModesMap.containsKey(op) || operatingModesMap.containsKey(op)) return true;
 		return false;
 	}
 	
 	public boolean hasParametricOperatingMode(String op) {
+		assert parametricOperatingModesMap != null;
 		if(parametricOperatingModesMap.containsKey(op)) return true;
 		return false;
 	}
 	
 	
 	public boolean hasNonParametricOperatingMode(String op) {
+		assert operatingModesMap !=null;
 		if(operatingModesMap.containsKey(op)) return true;
 		return false;
 	}
@@ -134,7 +142,7 @@ public class ActuatorCategory implements Manageable, Serializable {
 	}
 	
 	private boolean actuatorCategoryInvariant() {
-		if(name.length() > 0 && name != null && text.length() > 0 && text != null && operatingModesMap != null) return true;
+		if(name.length() > 0 && name != null && text.length() > 0 && text != null && operatingModesMap !=null && parametricOperatingModesMap != null) return true;
 		return false;
 	}
 }

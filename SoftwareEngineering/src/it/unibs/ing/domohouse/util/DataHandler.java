@@ -10,9 +10,7 @@ public class DataHandler implements Serializable {
 	private static final long serialVersionUID = 830399600665259268L;
 	private Manager sensorCategoryManager;
 	private Manager actuatorCategoryManager;
-	private Manager housingUnitManager;
-	//private HousingUnit housingUnit;
-	
+	private Manager housingUnitManager;	
 	/*
 	 * invariante sensorCategoryManager != null, actuatorCategoryManager != null, housingUnitManager != null
 	 */
@@ -23,6 +21,7 @@ public class DataHandler implements Serializable {
 	}
 	
 	public boolean hasHouse(String selectedHouse) {
+		assert selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 		return housingUnitManager.hasEntry(selectedHouse);
@@ -62,6 +61,8 @@ public class DataHandler implements Serializable {
 	
 	//Cast brutale
 	public boolean hasNumericSensorCategory() {
+		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
+		
 		for(String cat : sensorCategoryManager.namesList()) {
 			Manageable m = sensorCategoryManager.getElementByName(cat);
 			SensorCategory s = (SensorCategory) m;	
@@ -71,6 +72,8 @@ public class DataHandler implements Serializable {
 	}
 	
 	public boolean hasNonNumericSensorCategory() {
+		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
+		
 		for(String cat : sensorCategoryManager.namesList()) {
 			Manageable m = sensorCategoryManager.getElementByName(cat);
 			SensorCategory s = (SensorCategory) m;	
@@ -181,7 +184,7 @@ public class DataHandler implements Serializable {
 	}
 
 	public String[] getSensorNames(String selectedHouse, String selectedRoom) {
-
+		assert selectedHouse != null;
 		assert selectedRoom != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
@@ -194,6 +197,7 @@ public class DataHandler implements Serializable {
 	}
 
 	public String getSensorString(String selectedHouse, String selectedSensor) {
+		assert selectedHouse != null;
 		assert selectedSensor != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
@@ -205,7 +209,7 @@ public class DataHandler implements Serializable {
 	}
 
 	public String[] getActuatorNames(String selectedHouse, String selectedRoom) {
-
+		assert selectedHouse != null;
 		assert selectedRoom != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
@@ -219,6 +223,7 @@ public class DataHandler implements Serializable {
 	}
 
 	public String getActuatorString(String selectedHouse, String selectedActuator) {
+		assert selectedHouse != null;
 		assert selectedActuator != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 
@@ -244,6 +249,7 @@ public class DataHandler implements Serializable {
 	}
 
 	public String getArtifactString(String selectedHouse, String selectedArtifact) {
+		assert selectedHouse != null && selectedArtifact != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 		
@@ -284,6 +290,7 @@ public class DataHandler implements Serializable {
 	}
 
 	public void changeRoomDescription(String selectedHouse, String selectedRoom, String descr) {
+		assert selectedHouse != null;
 		assert selectedRoom != null && descr != null; 
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
@@ -294,20 +301,20 @@ public class DataHandler implements Serializable {
 	}
 
 	public void addSensor(String selectedHouse, String location, Sensor sensor) {
+		assert selectedHouse != null;
 		assert location != null && sensor != null && sensor.getName() != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		_selectedHouse.addSensor(location, sensor);
 		
-	//	assert housingUnit.getRoom(location).getSensorByName(sensor.getName()) != null;
+	    assert _selectedHouse.getRoom(location).getSensorByName(sensor.getName()) != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 
 	public boolean hasRoomOrArtifact(String selectedHouse, String name) {
 		assert name != null && selectedHouse != null ; 
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		
@@ -317,7 +324,6 @@ public class DataHandler implements Serializable {
 	public boolean hasSensor(String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		return _selectedHouse.hasSensor(name);
@@ -326,7 +332,6 @@ public class DataHandler implements Serializable {
 	public boolean hasActuator(String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		return _selectedHouse.hasActuator(name);
@@ -335,8 +340,7 @@ public class DataHandler implements Serializable {
 	public boolean hasArtifact(String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
-		
+	
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		return _selectedHouse.hasArtifact(name);
 	}
@@ -344,7 +348,6 @@ public class DataHandler implements Serializable {
 	public boolean isElementARoom(String selectedHouse, String toAssoc) {
 		assert toAssoc != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		return _selectedHouse.isElementARoom(toAssoc);
@@ -353,8 +356,7 @@ public class DataHandler implements Serializable {
 	public boolean isAssociated(String selectedHouse, String toAssoc, String category) {
 		assert toAssoc != null && category != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
-		
+	
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		return _selectedHouse.isAssociated(toAssoc, category);
 	}
@@ -362,7 +364,7 @@ public class DataHandler implements Serializable {
 	public void addAssociation(String selectedHouse, String object, String category) {
 		assert object != null && category != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
+		assert housingUnitManager.getElementByName(selectedHouse) != null;
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		_selectedHouse.addAssociation(object, category);
@@ -373,8 +375,7 @@ public class DataHandler implements Serializable {
 	public Room getRoom(String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
-		//assert housingUnit.hasRoom(name) : "La casa " + housingUnit.getName() + " non contiene la stanza " + name;
+		assert housingUnitManager.getElementByName(selectedHouse) != null;
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		Room room = _selectedHouse.getRoom(name);
@@ -388,7 +389,6 @@ public class DataHandler implements Serializable {
 	public Artifact getArtifact(String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		Artifact art = _selectedHouse.getArtifact(name);
@@ -401,26 +401,20 @@ public class DataHandler implements Serializable {
 	public void addArtifact(String selectedHouse, String location, Artifact toAdd) {
 		assert location != null && toAdd != null && toAdd.getName() != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null; 
-		//assert housingUnit.hasRoom(location);
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		_selectedHouse.addArtifact(toAdd, location);
 		
-		//assert housingUnit.hasArtifact(toAdd.getName());
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 	
 	public void addActuator(String selectedHouse, String location, Actuator toAdd) {
 		assert location != null && toAdd != null && selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
-		//assert housingUnit.hasRoom(location);
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		_selectedHouse.addActuator(toAdd, location);
 		
-		//assert housingUnit.getRoom(location).getActuatorByName(toAdd.getName()) != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 	}
@@ -434,7 +428,6 @@ public class DataHandler implements Serializable {
 	public boolean isThereRoomOrArtifact(String selectedHouse) {
 		assert selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		return _selectedHouse.isThereRoomOrArtifact();
@@ -443,7 +436,6 @@ public class DataHandler implements Serializable {
 	public boolean isThereRoom(String selectedHouse) {
 		assert selectedHouse != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		return _selectedHouse.isThereRoom();
@@ -452,7 +444,6 @@ public class DataHandler implements Serializable {
 	public boolean isThereArtifact(String selectedHouse) {
 		assert selectedHouse != null; 
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
-		//assert housingUnit != null;
 		
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		return _selectedHouse.isThereArtifact();

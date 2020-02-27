@@ -41,12 +41,15 @@ public class InputHandler {
 	}
 	
 	public void readSensorFromUser(String selectedHouse, String location) {
+		assert selectedHouse != null && location != null;
+		
 		boolean choice = RawInputHandler.yesOrNo(Strings.SENSOR_CHOICE);
 		
 		if(choice) readNumericSensorFromUser(selectedHouse, location);
 		else readNonNumericSensorFromUser(selectedHouse, location);
 	}
 	public void readArtifactFromUser(String selectedHouse, String location) {
+		assert selectedHouse != null;
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		String name;
@@ -67,6 +70,7 @@ public class InputHandler {
 	}
 	
 	public void readNonNumericSensorFromUser(String selectedHouse, String location) {
+		assert selectedHouse != null;
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		if(dataHandler.hasNonNumericSensorCategory() && dataHandler.getSensorCategoryList().length != 0) {
@@ -201,6 +205,7 @@ public class InputHandler {
 	}
 	
 	public void readNumericSensorFromUser(String selectedHouse, String location) {
+		assert selectedHouse != null;
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		if(dataHandler.hasNumericSensorCategory() && dataHandler.getSensorCategoryList().length != 0) {
@@ -336,6 +341,7 @@ public class InputHandler {
 	}
 	
 	public void readActuatorFromUser(String selectedHouse, String location) {
+		assert selectedHouse != null;
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
@@ -443,6 +449,7 @@ public class InputHandler {
 	}
 	
 	public void readRoomFromUser(String selectedHouse) {
+		assert selectedHouse != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String name;
@@ -467,6 +474,8 @@ public class InputHandler {
 	}
 	
 	public void readSensorCategoryFromUser() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		boolean choice = RawInputHandler.yesOrNo(Strings.SENSOR_CATEGORY_CHOICE);
 		if(choice) readNumericSensorCategoryFromUser();
 		else readNonNumericSensorCategoryFromUser();
@@ -571,7 +580,9 @@ public class InputHandler {
 	}
 
 	public void setOperatingMode(String selectedHouse, String selectedRoom, String selectedActuator) {
+		assert selectedHouse != null && selectedRoom != null && selectedActuator != null;
 		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		Actuator act = dataHandler.getRoom(selectedHouse, selectedRoom).getActuatorByName(selectedActuator);	
 		
 		OutputHandler.printListOfString(act.getCategory().listOfOperatingModes());
@@ -581,24 +592,19 @@ public class InputHandler {
 			op = RawInputHandler.readNotVoidString("Inserisci la modalità operativa");
 			if(!act.getCategory().hasOperatingMode(op)) System.out.println("La modalità operativa inserita è inesistente");	
 		}while(!act.getCategory().hasOperatingMode(op));
-		
-		/*
-		 * Da vedere se la mod operativa è parametrica o no e agire di conseguenza
-		 */
-		
+				
 		if(act.getCategory().hasNonParametricOperatingMode(op)) {
-			//Gestire mod operativa non parametrica
+			//Gestisce mod operativa non parametrica
 			act.setNonParametricOperatingMode(op);
 		}else {
-			//Gestire mod operativa paramerica
+			//Gestisce mod operativa paramerica
 			String info = OperatingModesHandler.getParameterInfo(op); //in questa stringa abbiamo il tipo di parametro
 			/*La stringa sarà del tipo "Double:1", che richiede un Double . Oppure "String:2" che richiede 2 stringhe
-			Si assume che i parametri possano essere Double o String, in questo modo è eliminato il problema dell'utilizzo
-			di array di double o array di string nel operatingModesMap
+			Si assume che i parametri possano essere Double o String.
 			*/
 			
-			String type = info.split(":")[0]; //Es. contiente double
-			int num = Integer.parseInt(info.split(":")[1]); //Es. contiente 1
+			String type = info.split(":")[0]; 
+			int num = Integer.parseInt(info.split(":")[1]); 
 	
 			switch(type) {
 			case "Double":
@@ -629,6 +635,7 @@ public class InputHandler {
 	}
 	
 	public void changeHouseDescription(String selectedHouse) {
+		assert selectedHouse != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String descr = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_DESCRIPTION);
@@ -641,6 +648,7 @@ public class InputHandler {
 	}
 
 	public void changeRoomDescription(String selectedHouse, String selectedRoom) {
+		assert selectedHouse != null && selectedRoom != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
@@ -665,6 +673,7 @@ public class InputHandler {
 	}
 	
 	public void createArtifact(String selectedHouse, String name, String descr, String location) {
+		assert selectedHouse != null;
 		assert name != null && name.length() > 0;
 		assert descr != null;
 		assert location != null;
@@ -678,6 +687,7 @@ public class InputHandler {
 	}
 	
 	public void createNumericSensor(String selectedHouse, String name, ArrayList<String> categoryList, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
+		assert selectedHouse != null;
 		assert name != null && name.length() > 0;
 		assert categoryList != null && objectList != null && location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -709,6 +719,7 @@ public class InputHandler {
 	}
 
 	public void createNonNumericSensor(String selectedHouse, String name, ArrayList<String> categoryList, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
+		assert selectedHouse != null;
 		assert name != null && name.length() > 0;
 		assert categoryList != null && objectList != null && location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -741,6 +752,7 @@ public class InputHandler {
 	}
 	
 	public void createActuator(String selectedHouse, String name, String category, boolean roomOrArtifact, ArrayList<String> objectList, String location) {
+		assert selectedHouse != null;
 		assert name != null && name.length() > 0;
 		assert category != null && objectList != null && location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -763,6 +775,7 @@ public class InputHandler {
 	}
 	
 	public void createRoom(String selectedHouse, String name, String descr, double temp, double umidita, double pressione, double vento) {
+		assert selectedHouse != null;
 		assert name != null && descr != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
@@ -870,6 +883,7 @@ public class InputHandler {
 	}
 	
 	public String safeInsertRoom(String selectedHouse) {
+		assert selectedHouse != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String selectedRoom = RawInputHandler.readNotVoidString(Strings.INSERT_ROOM);
@@ -884,6 +898,7 @@ public class InputHandler {
 	}
 
 	public String safeInsertSensor(String selectedHouse) {
+		assert selectedHouse != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String selectedSensor = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR);
@@ -898,6 +913,7 @@ public class InputHandler {
 	}
 	
 	public String safeInsertActuator(String selectedHouse) {
+		assert selectedHouse != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String selectedActuator = RawInputHandler.readNotVoidString(Strings.INSERT_ACTUATOR);
@@ -912,6 +928,7 @@ public class InputHandler {
 	}
 	
 	public String safeInsertArtifact(String selectedHouse) {
+		assert selectedHouse != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String selectedArtifact = RawInputHandler.readNotVoidString(Strings.INSERT_ARTIFACT);

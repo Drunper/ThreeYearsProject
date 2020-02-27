@@ -9,19 +9,13 @@ import it.unibs.ing.domohouse.interfaces.SerializableConsumer;
 
 public class OperatingModesHandler implements Serializable{
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -7032900220446234368L;
 	private static HashMap<String, SerializableConsumer<Gettable>> operatingModesMap = new HashMap<>();
 	private static HashMap<String, SerializableBiConsumer<Gettable, Object>> parametricOperatingModesMap = new HashMap<>();
 	
 	/*
 	 * struttura di supporto per effettuare controlli di inserimento
-	 * Una migliore scelta implementativa sarebbe quella di utilizzare strutture proprie al posto di
-	 * Consumer per poterle adattare al nostro caso. Ma questo richiederebbe una notevole mole di lavoro
-	 * che risulterebbe la migliore scelta se e solo se avessimo tempo. Dunque, secondo me, conviene proseguire in questo
-	 * modo e implementare il nostro consumer solo in caso avanzi tempo alla fine della v5
 	 * 
 	 * paramMap avr‡ come key il nome della modalit‡ operativa 
 	 * e come valore i parametri che chiede in ingresso.
@@ -30,14 +24,12 @@ public class OperatingModesHandler implements Serializable{
 	 * key = "modalit‡Op1"
 	 * valore = "String:4"
 	 * 
-	 * Questo vuol dire che la modalit‡Op1 avr‡ come parametri di ingresso 4 stringhe. Successivamente
-	 * vedremo come questo viene elaborato
+	 * Questo vuol dire che la modalit‡Op1 avr‡ come parametri di ingresso 4 stringhe.
 	 */
-	
 	private static HashMap<String, String> paramMap = new HashMap<String, String>();
 	
 	/*
-	 * invariante operatingModesMap != null
+	 * invariante operatingModesMap != null, parametricOperatingModesMap != null, paramMap != null
 	 */
 	public static void fillOperatingModes() {
 		
@@ -128,8 +120,10 @@ public class OperatingModesHandler implements Serializable{
 		return g;
 	}
 	
-	//Aggiunto getParameterInfo
+
 	public static String getParameterInfo(String name) {
+		assert name != null;
+		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
 		return paramMap.get(name);
 	}
 	
@@ -146,17 +140,9 @@ public class OperatingModesHandler implements Serializable{
 		return g;
 	}
 	
-	/*
-	 * Siccome Ë stato aggiunta un altra hashMap il metodo hasOperatingMode, che veniva chiamato da dataHandler
-	 * per il controllo nell'inserimento di mod op quando veniva creata una categoria di attuatori, Ë stato modificato
-	 * per controllare che esista la mod op o in operatingModesMap (contenente mod non op) o in parametricModesMap (contenente mod op).
-	 * 
-	 * Sono infine stati aggiunti dei metodo hasParametricOperatingMode e hasNonParametricOperatingMode che vengono usati
-	 * per poter inserire correttamente le modalit‡ operative nelle strutture dati
-	 * della categoria di attuatori in creazione (anche li abbiamo operatingModesMap e paramOperatingModesMap) 
-	 */
 	public static boolean hasOperatingMode(String name) {
 		assert name != null;
+		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 		if(operatingModesMap.containsKey(name) || parametricOperatingModesMap.containsKey(name)) return true;
 		return false;
@@ -175,7 +161,7 @@ public class OperatingModesHandler implements Serializable{
 	}
 
 	private static boolean operatingModesHandlerInvariant() {
-		if(operatingModesMap != null) return true;
+		if(operatingModesMap != null && parametricOperatingModesMap != null && paramMap != null) return true;
 		return false;
 	}
 }

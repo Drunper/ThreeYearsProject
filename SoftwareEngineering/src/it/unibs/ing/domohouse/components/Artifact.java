@@ -65,7 +65,9 @@ public class Artifact implements Gettable, Serializable {
 		assert variableName.length() > 0 && variableName != null;
 		assert numericPropertiesMap != null;
 		int pre_size = numericPropertiesMap.size();
+		
 		numericPropertiesMap.put(variableName, newValue);
+		
 		assert numericPropertiesMap.size() >= pre_size;
 		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		
@@ -75,7 +77,9 @@ public class Artifact implements Gettable, Serializable {
 		assert variableName.length() > 0 && variableName != null;
 		assert nonNumericPropertiesMap != null;
 		int pre_size = nonNumericPropertiesMap.size();
+		
 		nonNumericPropertiesMap.put(variableName, newValue);
+		
 		assert nonNumericPropertiesMap.size() >= pre_size;
 		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -94,8 +98,10 @@ public class Artifact implements Gettable, Serializable {
 	
 	public String toString() {
 		assert artifactInvariant() : "Invariante della classe non soddisfatto";
+		
 		String unformattedText;
 		unformattedText = name+':'+text;
+		
 		assert unformattedText.length() > 0;
 		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return unformattedText;

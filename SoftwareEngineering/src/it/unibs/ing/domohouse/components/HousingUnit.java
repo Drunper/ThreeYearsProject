@@ -22,7 +22,7 @@ public class HousingUnit implements Serializable, Manageable {
 	private AssociationHandler associationManager; //per il controllo delle associazioni
 	
 	/*
-	 * invariante name > 0, descr > 0, diversi da null. Manager != null, se
+	 * invariante name > 0, descr > 0, diversi da null. Manager != null
 	 */
 	
 	public HousingUnit(String name, String descr) {
