@@ -9,6 +9,7 @@ public class InterfaceHandler {
 	private DataHandler dataHandler;
 	private FileLoader loader;
 	private FileSaver saver;
+	private LogWriter logWriter;
 	private boolean firstStart;
 
 	//MENU
@@ -29,8 +30,10 @@ public class InterfaceHandler {
 		loader = new FileLoader();
 		saver = new FileSaver();
 		login.addEntry(Strings.MAINTAINER_USER, Strings.PASSWORD);
+		logWriter = new LogWriter();
 		checkExistenceDataHandler();
 		OperatingModesHandler.fillOperatingModes();
+		saver.createDirs();
 	}
 	
 	private void checkExistenceDataHandler() {
@@ -70,6 +73,7 @@ public class InterfaceHandler {
 						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
 						{
 							System.out.println(Strings.WELCOME + user);
+							logWriter.write("L'utente " + user + " ha effettuato il login\n");
 							showUserMenu();
 						}
 					}
@@ -92,7 +96,8 @@ public class InterfaceHandler {
 					}
 					while (!user.equalsIgnoreCase(Strings.BACK_CHARACTER) && !ok);
 					if (ok) {
-						if(firstStart)	System.out.println(Strings.BASIC_FILE_CREATION);	
+						if(firstStart)	System.out.println(Strings.BASIC_FILE_CREATION);
+						logWriter.write("Il manutentore " + user + " ha effettuato il login\n");
 						showMaintainerMenu();
 					}
 					break;
@@ -121,7 +126,7 @@ public class InterfaceHandler {
 											
 					if(dataHandler.getHouseList().length > 0) {
 						OutputHandler.printListOfString(dataHandler.getHouseList());
-						String selectedHouse = inputHandler.safeInsertHouse();
+						String selectedHouse = inputHandler.safeInsertHouse();						
 						showUserUnitMenu(selectedHouse);
 					}else{
 						System.out.println(Strings.NO_HOUSE);
@@ -222,7 +227,6 @@ public class InterfaceHandler {
 					break;		
 				case 7:
 					firstStart = false;
-					saver.createDirs();
 					saver.writeDataHandlerToFile(dataHandler);
 					System.out.println(Strings.DATA_SAVED);
 					break;

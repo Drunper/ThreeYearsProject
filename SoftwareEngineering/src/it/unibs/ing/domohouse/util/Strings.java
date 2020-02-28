@@ -3,6 +3,8 @@ package it.unibs.ing.domohouse.util;
 public class Strings {
 	public static final String DATA_HANDLER_PATH = "data"; 
 	public static final String DATA_HANDLER_NAME_FILE = "\\dataHandler.dat";
+	public static final String LOG_PATH = "data";
+	public static final String LOG_NAME_FILE = "\\log.txt";
 	public static final String ERROR_LOAD_FILE = "Non è stato possibile caricare il file! (ERROR: failed or interrupted I/O operations)";
 	public static final String LOADING_FILE = "Caricamento file...";
 	public static final String LOADED = "Caricamento da file effettuato!";

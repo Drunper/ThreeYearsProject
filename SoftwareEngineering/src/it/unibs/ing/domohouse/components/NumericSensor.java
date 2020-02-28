@@ -6,9 +6,7 @@ import it.unibs.ing.domohouse.interfaces.Gettable;
 
 public class NumericSensor extends Sensor {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 8260369897935564520L;
 	private double lowerBound;
 	private double upperBound;
@@ -16,8 +14,6 @@ public class NumericSensor extends Sensor {
 	public NumericSensor(String name, ArrayList<SensorCategory> categoryList) {
 		super(name, categoryList);
 	}
-	
-
 	
 	private void setBounds(String variableName, SensorCategory category) {
 		assert variableName != null && variableName.length() > 0;
