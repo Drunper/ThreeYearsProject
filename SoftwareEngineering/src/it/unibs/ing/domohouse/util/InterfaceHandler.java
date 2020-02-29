@@ -9,7 +9,6 @@ public class InterfaceHandler {
 	private DataHandler dataHandler;
 	private FileLoader loader;
 	private FileSaver saver;
-	private LogWriter logWriter;
 	private boolean firstStart;
 
 	//MENU
@@ -30,7 +29,6 @@ public class InterfaceHandler {
 		loader = new FileLoader();
 		saver = new FileSaver();
 		login.addEntry(Strings.MAINTAINER_USER, Strings.PASSWORD);
-		logWriter = new LogWriter();
 		checkExistenceDataHandler();
 		OperatingModesHandler.fillOperatingModes();
 		saver.createDirs();
@@ -73,7 +71,6 @@ public class InterfaceHandler {
 						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
 						{
 							System.out.println(Strings.WELCOME + user);
-							logWriter.write("L'utente " + user + " ha effettuato il login\n");
 							showUserMenu();
 						}
 					}
@@ -97,7 +94,6 @@ public class InterfaceHandler {
 					while (!user.equalsIgnoreCase(Strings.BACK_CHARACTER) && !ok);
 					if (ok) {
 						if(firstStart)	System.out.println(Strings.BASIC_FILE_CREATION);
-						logWriter.write("Il manutentore " + user + " ha effettuato il login\n");
 						showMaintainerMenu();
 					}
 					break;
