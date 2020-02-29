@@ -259,6 +259,30 @@ public class HousingUnit implements Serializable, Manageable {
 		return false;
 	}
 	
+	public double getSensorValue(String selectedSensor, String info) {
+		
+		Sensor sens = (Sensor) sensorManager.getElementByName(selectedSensor);
+
+		if(sens.isMeasuringRoom()) {
+			String [] rooms = roomManager.namesList();
+			for(int i=0; i<rooms.length; i++) {
+				if(sens.getElementByName(rooms[i]) != null) {
+					Room room = (Room) roomManager.getElementByName(rooms[i]);
+						return room.getNumericProperty(info);
+				}
+			}	
+		}else {
+			String [] artifacts = artifactManager.namesList();
+			for(int i=0; i < artifacts.length; i++) {
+				if(sens.getElementByName(artifacts[i]) != null) {
+					Artifact art = (Artifact) artifactManager.getElementByName(artifacts[i]);
+						return art.getNumericProperty(info);
+				}
+			}
+		}
+		return 0;
+	}
+	
 	private boolean housingUnitInvariant() {
 		boolean checkName = name != null && name.length() > 0 ;
 		boolean checkDescr = descr != null;

@@ -119,7 +119,7 @@ public class Strings {
 	public static final String SENSOR_CATEGORY_INPUT_NAME = "Inserisci il nome della categoria di sensori";
 	public static final String SENSOR_CATEGORY_INPUT_INFO_DOMAIN = "Inserisci il dominio dell'informazione (del tipo \"min-max\" esempio: \"1-20\")";
 	public static final String SENSOR_CATEGORY_DETECTABLE_INFO = "Inserisci unità di misura";
-	public static final String SENSOR_CATEGORY_INPUT_INFO ="Inserisci l'informazione rilevabile dalla categoria (ad esempio temperatura, pressione, umidità, vento...)";
+	public static final String SENSOR_CATEGORY_INPUT_INFO ="Inserisci l'informazione rilevabile dalla categoria (ad esempio temperatura, pressione, umidità, vento, presenza...)";
 	public static final String INSERT_SENSOR_CATEGORY_MIN_VALUE = "Inserisci il valore minimo rilevabile della categoria";
 	public static final String INSERT_SENSOR_CATEGORY_MAX_VALUE = "Inserisci il valore massimo rilevabile della categoria";
 	public static final String NO_CATEGORY_INSERTED = "Attenzione! Devi inserire almeno una categoria!";

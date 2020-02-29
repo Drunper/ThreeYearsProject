@@ -465,9 +465,14 @@ public class InputHandler {
 		double umidita = RawInputHandler.readDouble(Strings.ROOM_INPUT_HUMIDITY);
 		double pressione = RawInputHandler.readDouble(Strings.ROOM_INPUT_PRESSURE);
 		double vento = RawInputHandler.readDouble(Strings.ROOM_INPUT_WIND);
+		boolean presenza = RawInputHandler.yesOrNo("Sono presenti persone?");
+		String presenza_persone;
+		if(presenza) presenza_persone = "presenza di persone";
+		else presenza_persone = "assenza di persone";
+		
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
 		{
-			createRoom(selectedHouse, name, descr, temp, umidita, pressione, vento);
+			createRoom(selectedHouse, name, descr, temp, umidita, pressione, vento, presenza_persone);
 		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -774,12 +779,12 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public void createRoom(String selectedHouse, String name, String descr, double temp, double umidita, double pressione, double vento) {
+	public void createRoom(String selectedHouse, String name, String descr, double temp, double umidita, double pressione, double vento, String presenza_persone) {
 		assert selectedHouse != null;
 		assert name != null && descr != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
-		Room room = new Room(name, descr, temp, umidita, pressione, vento);
+		Room room = new Room(name, descr, temp, umidita, pressione, vento, presenza_persone);
 		dataHandler.addRoom(selectedHouse, room);
 		
 		assert room != null;

@@ -34,7 +34,7 @@ public class Room implements Gettable, Serializable {
 		numericPropertiesMap = new TreeMap<>();
 		nonNumericPropertiesMap = new TreeMap<>();
 	}
-	public Room (String name, String text, double temp, double umidita, double pressione, double vento) {
+	public Room (String name, String text, double temp, double umidita, double pressione, double vento, String presenza_persone) {
 		this.name = name;
 		this.text = text;
 		sensorManager = new Manager();
@@ -46,6 +46,7 @@ public class Room implements Gettable, Serializable {
 		numericPropertiesMap.put("pressione", pressione);
 		numericPropertiesMap.put("vento", vento);
 		nonNumericPropertiesMap = new TreeMap<>();
+		nonNumericPropertiesMap.put("presenza", presenza_persone);
 	}
 
 	public String getName() {
