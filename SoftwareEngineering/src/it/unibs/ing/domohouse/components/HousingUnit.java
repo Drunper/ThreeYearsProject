@@ -115,6 +115,17 @@ public class HousingUnit implements Serializable, Manageable {
 		assert result != null;
 		return result;
 	}
+	
+	public Actuator getActuator(String selectedActuator) {
+		assert selectedActuator != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		Actuator act = (Actuator) actuatorManager.getElementByName(selectedActuator);
+		
+		assert act != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		return act;
+	}
 
 	public String getActuatorString(String selectedActuator) {
 		assert selectedActuator != null && selectedActuator.length() > 0;
