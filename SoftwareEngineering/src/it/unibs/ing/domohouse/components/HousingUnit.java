@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.components;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import it.unibs.ing.domohouse.interfaces.Manageable;
 import it.unibs.ing.domohouse.util.Association;
@@ -20,6 +21,7 @@ public class HousingUnit implements Serializable, Manageable {
 	private Manager actuatorManager; //tutti gli attuatori della casa
 	private Manager artifactManager; //tutti gli artefatti della casa
 	private AssociationHandler associationManager; //per il controllo delle associazioni
+	private ArrayList<Rule> rules = new ArrayList<>();
 	
 	/*
 	 * invariante name > 0, descr > 0, diversi da null. Manager != null
@@ -114,6 +116,17 @@ public class HousingUnit implements Serializable, Manageable {
 		String result = sensorManager.getElementString(selectedSensor);
 		assert result != null;
 		return result;
+	}
+	
+	public Sensor getSensor(String selectedSensor) {
+		assert selectedSensor != null; 
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		Sensor sens = (Sensor) sensorManager.getElementByName(selectedSensor);
+		
+		assert sens != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		return sens;
 	}
 	
 	public Actuator getActuator(String selectedActuator) {
@@ -270,6 +283,31 @@ public class HousingUnit implements Serializable, Manageable {
 		return false;
 	}
 	
+	public String getNonNumericSensorValue(String selectedSensor, String info) {
+		
+		Sensor sens = (Sensor) sensorManager.getElementByName(selectedSensor);
+		
+		if(sens.isMeasuringRoom()) {
+			String [] rooms = roomManager.namesList();
+			for(int i = 0; i < rooms.length; i++) {
+				if(sens.getElementByName(rooms[i]) != null) {
+					Room room = (Room) roomManager.getElementByName(rooms[i]);
+					return room.getNonNumericProperty(info);
+				}
+			}
+		}else {
+			String [] artifacts = artifactManager.namesList();
+			for(int i=0; i < artifacts.length; i++) {
+				if(sens.getElementByName(artifacts[i]) != null) {
+					Artifact art = (Artifact) artifactManager.getElementByName(artifacts[i]);
+						return art.getNonNumericProperty(info);
+				}
+			}
+		}
+		return "";
+		
+	}
+	
 	public double getSensorValue(String selectedSensor, String info) {
 		
 		Sensor sens = (Sensor) sensorManager.getElementByName(selectedSensor);
@@ -294,6 +332,83 @@ public class HousingUnit implements Serializable, Manageable {
 		return 0;
 	}
 	
+	public void addRule(Rule r) {
+		assert r != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		rules.add(r);
+	}
+	
+	public void checkRules() {
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		for(Rule r : rules) {
+			r.checkRule();
+		}
+	}
+	
+	public void disableRule(String selectedRule) {
+		for(Rule r : rules) {
+			if(selectedRule.equalsIgnoreCase(selectedRule)) {
+				r.setState(false);
+			}
+		}
+	}
+	
+	public void enableRule(String selectedRule) {
+		for(Rule r : rules) {
+			if(selectedRule.equalsIgnoreCase(selectedRule)) {
+				r.setState(true);
+			}
+		}
+	}
+	
+	public String []  getEnabledRulesList() {
+		
+		ArrayList<Rule> enabledRules = new ArrayList<>();
+		
+		for(Rule r : rules) {
+			if(r.isActive()) enabledRules.add(r);
+		}
+		
+		String [] s = new String[enabledRules.size()];
+		
+		for(int i = 0; i < enabledRules.size(); i++) {
+			s[i] = enabledRules.get(i).getName() + " -> " + enabledRules.get(i).getCompleteRule() + " Abilitata: " + enabledRules.get(i).isActive();
+		}
+		return s;
+	}
+	
+	public String [] getAllRulesList() {
+		String [] s = new String[rules.size()];
+		
+		for(int i = 0; i < rules.size(); i++) {
+			s[i] = rules.get(i).getName() + " -> " + rules.get(i).getCompleteRule() + " Abilitata: " + rules.get(i).isActive();
+		}
+		
+		return s;
+	}
+	
+	public boolean hasRule(String selectedRule) {
+		for(Rule r : rules) {
+			if(r.getName().equalsIgnoreCase(selectedRule)) return true;
+		}
+		return false;
+	}
+	
+	public String[] getSensorNames() {
+		return sensorManager.namesList();
+	}
+	
+	public String[] getActuatorNames() {
+		return actuatorManager.namesList();
+	}
+	
+	public String[] getCategoriesOfASensor(String selectedSensor) {
+		Sensor _selectedSensor = (Sensor) sensorManager.getElementByName(selectedSensor);
+		return _selectedSensor.getCategories();
+	}
+	
 	private boolean housingUnitInvariant() {
 		boolean checkName = name != null && name.length() > 0 ;
 		boolean checkDescr = descr != null;
@@ -302,4 +417,6 @@ public class HousingUnit implements Serializable, Manageable {
 		if(checkName && checkDescr && checkManagers) return true;
 		return false;
 	}
+
+
 }

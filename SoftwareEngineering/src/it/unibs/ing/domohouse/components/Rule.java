@@ -1,22 +1,27 @@
 package it.unibs.ing.domohouse.components;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import it.unibs.ing.domohouse.util.DataHandler;
 
-interface Operator{
+interface Operator extends Serializable{
 	boolean compare(double a, double b);
 }
 
-interface booleanOperator{
-	boolean compare(boolean a, boolean b);
+interface stringOperator extends Serializable{
+	boolean compare(String a, String b);
 }
 
 
-public class Rule {
+public class Rule implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3835080225181052479L;
 	private HousingUnit housingUnit;
 	private String name;
 	private String antString;
@@ -25,8 +30,8 @@ public class Rule {
 
 	private boolean state;
 	
-	private Map<String, Operator> opMap = new HashMap<String, Operator>();
-	//Map<String, booleanOperator> booleanOpMap = new HashMap<String, booleanOperator>();
+	private Map<String, Operator> numericOpMap = new HashMap<String, Operator>();
+	private Map<String, stringOperator> nonNumericOpMap = new HashMap<String, stringOperator>();
 	
 	public Rule(HousingUnit housingUnit, String name, String antString, String consString, boolean state) {
 		this.name = name;
@@ -40,9 +45,8 @@ public class Rule {
 	/*
 	 * Metodi pubblici
 	 */
-	//comment
 	public void checkRule() {
-		if(getAntecedente()) actuateConseguente();
+		if(state && getAntecedente()) actuateConseguente();
 	}
 	
 	public void setState(boolean state) {
@@ -51,6 +55,14 @@ public class Rule {
 	
 	public boolean isActive() {
 		return this.state;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public String getCompleteRule() {
+		return "if " + antString + " then " + consString;
 	}
 	
 	/*
@@ -70,7 +82,7 @@ public class Rule {
 		if(antString.contains("&&") || antString.contains("||")) {
 			res = getCostValue(antString.split("[\\&\\&|\\|\\|]")[0]);
 		antString = antString.replace(antString.split("[\\&\\&|\\|\\|]")[0], "");
-		if(antString.startsWith("&&")) {
+		if(antString.startsWith("&&")) { 
 			antString = antString.replace("&&", "");
 			return res && getAntValue(antString);
 		}else {
@@ -82,27 +94,55 @@ public class Rule {
 		}
 	}
 	
+	//i1_igrometro.umiditaRelativa > 30 
+	//v1_videocamera.presenza == "presenza di persone"
 	private boolean getCostValue(String s) {
-		String value1;
-		String info;
-		String op = "";
-		String value2;
+
+		if(housingUnit.getSensor(s.split(".")[0]).categoryList.get(0).getIsNumeric()) {		
+			String value1;
+			String info;
+			String op = "";
+			String value2;
 		
-		value1 = s.split(".")[0];
-		double num1 = getValue(value1);
+			value1 = s.split(".")[0];
+			double num1 = getValue(value1);
 		
-		value2 = s.split("<|>|>=|<=|==|!=")[1];
-		double num2 = getValue(value2);
+			value2 = s.split("<|>|>=|<=|==|!=")[1];
+			double num2 = getValue(value2);
 		
-		if(s.contains(">=")) op = ">=";
-		else if(s.contains("<=")) op = "<=";
-		else if(s.contains(">")) op = ">";
-		else if(s.contains("<")) op = "<";
-		else if(s.contains("==")) op = "==";
-		else if(s.contains("!=")) op = "!=";
+			if(s.contains(">=")) op = ">=";
+			else if(s.contains("<=")) op = "<=";
+			else if(s.contains(">")) op = ">";
+			else if(s.contains("<")) op = "<";
+			else if(s.contains("==")) op = "==";
+			else if(s.contains("!=")) op = "!=";
 
 		
-		return opMap.get(op).compare( num1, num2);
+			return numericOpMap.get(op).compare( num1, num2);
+		}else {
+			//v1_videocamera.presenza == "presenza di persone"
+			String sensor;
+			String info;
+			String op ="";
+			String value;
+			
+			sensor = s.split(".")[0];
+			s = s.split(".")[1]; //presenza == presenza di persone
+			info = s.split("==|!=")[0];
+			
+			if(s.contains("==")) {
+				op = "==";
+				value = s.split("==")[1];
+			}
+			else {
+				op = "!=";
+				value = s.split("!=")[1];
+			}
+			
+			String temp = housingUnit.getNonNumericSensorValue(sensor, info);
+			
+			return nonNumericOpMap.get(op).compare(temp, value);
+		}
 	}
 	
 	//i1_igrometro.umiditàRelativa ,  30
@@ -159,32 +199,32 @@ public class Rule {
 	}
 
 	private void fillMap() {
-		opMap.put(">", new Operator() {
+		numericOpMap.put(">", new Operator() {
             @Override public boolean compare(double a, double b) {
                 return a > b;
             }
         });
-        opMap.put("<", new Operator() {
+        numericOpMap.put("<", new Operator() {
             @Override public boolean compare(double a, double b) {
                 return a < b;
             }
         });
-        opMap.put("==", new Operator() {
+        numericOpMap.put("==", new Operator() {
             @Override public boolean compare(double a, double b) {
                 return a == b;
             }
         });
-        opMap.put(">=", new Operator() {
+        numericOpMap.put(">=", new Operator() {
             @Override public boolean compare(double a, double b) {
                 return a >= b;
             }
         });
-        opMap.put("<=", new Operator() {
+        numericOpMap.put("<=", new Operator() {
             @Override public boolean compare(double a, double b) {
                 return a <= b;
             }
         });
-        opMap.put("!=", new Operator() {
+        numericOpMap.put("!=", new Operator() {
             @Override public boolean compare(double a, double b) {
                 return a != b;
             }

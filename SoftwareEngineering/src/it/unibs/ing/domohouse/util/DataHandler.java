@@ -1,6 +1,11 @@
 package it.unibs.ing.domohouse.util;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.SocketException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import it.unibs.ing.domohouse.components.*;
 import it.unibs.ing.domohouse.interfaces.Manageable;
@@ -10,15 +15,20 @@ public class DataHandler implements Serializable {
 	private static final long serialVersionUID = 830399600665259268L;
 	private Manager sensorCategoryManager;
 	private Manager actuatorCategoryManager;
-	private Manager housingUnitManager;	
+	private Manager housingUnitManager;
+	
+	
 	/*
 	 * invariante sensorCategoryManager != null, actuatorCategoryManager != null, housingUnitManager != null
 	 */
 	public DataHandler () {
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
-		housingUnitManager = new Manager();		
+		housingUnitManager = new Manager();
+		
 	}
+	
+	
 	
 	public boolean hasHouse(String selectedHouse) {
 		assert selectedHouse != null;
@@ -30,6 +40,10 @@ public class DataHandler implements Serializable {
 	public String[] getHouseList() {
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
 		return housingUnitManager.namesList();
+	}
+	
+	public HousingUnit getHousingUnit(String selectedHouse) {
+		return (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 	}
 
 	public void addHouse(HousingUnit toAdd) {
@@ -59,6 +73,34 @@ public class DataHandler implements Serializable {
 		return sensorCategoryManager.namesList();
 	}
 	
+	public String[] getCategoriesOfASensor(String selectedHouse, String selectedSensor) {
+		
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return _selectedHouse.getCategoriesOfASensor(selectedSensor);
+	}
+	
+	public SensorCategory getSensorCategoryByInfo(String info) {
+		
+		for(String cat : sensorCategoryManager.namesList()) {
+			SensorCategory sensCat = getSensorCategory(cat);
+			
+			if(sensCat.getIsNumeric()) {
+				NumericSensorCategory numSensCat = (NumericSensorCategory) sensCat;
+				String [] detectableInfoList = numSensCat.getDetectableInfoList();
+				for(String inf : detectableInfoList) {
+					if(info.equalsIgnoreCase(inf)) return numSensCat;
+				}
+			}else {
+				NonNumericSensorCategory NonNumSensCat = (NonNumericSensorCategory) sensCat;
+				String [] detectableInfoList = NonNumSensCat.getDetectableInfoList();
+				for(String inf : detectableInfoList) {
+					if(info.equalsIgnoreCase(inf)) return NonNumSensCat;
+				}
+				
+			}
+		}
+		return null;
+	}
 	//Cast brutale
 	public boolean hasNumericSensorCategory() {
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
@@ -344,7 +386,13 @@ public class DataHandler implements Serializable {
 		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
 		return _selectedHouse.hasArtifact(name);
 	}
-
+	
+	public boolean hasRule(String selectedHouse, String rule) {
+		
+		HousingUnit _selectedHouse =  (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return _selectedHouse.hasRule(rule);
+	}
+	
 	public boolean isElementARoom(String selectedHouse, String toAssoc) {
 		assert toAssoc != null;
 		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";

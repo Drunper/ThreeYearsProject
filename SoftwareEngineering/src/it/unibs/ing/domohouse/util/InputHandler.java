@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import it.unibs.ing.domohouse.components.Actuator;
 import it.unibs.ing.domohouse.components.ActuatorCategory;
@@ -10,6 +11,7 @@ import it.unibs.ing.domohouse.components.NonNumericSensor;
 import it.unibs.ing.domohouse.components.NonNumericSensorCategory;
 import it.unibs.ing.domohouse.components.NumericSensor;
 import it.unibs.ing.domohouse.components.Room;
+import it.unibs.ing.domohouse.components.Rule;
 import it.unibs.ing.domohouse.components.Sensor;
 import it.unibs.ing.domohouse.components.SensorCategory;
 import it.unibs.ing.domohouse.components.NumericSensorCategory;
@@ -945,6 +947,119 @@ public class InputHandler {
 		assert selectedArtifact != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		return selectedArtifact;
+	}
+	
+	public void readRuleFromUser(String selectedHouse) {
+		
+		String name;
+		do {
+		name = RawInputHandler.readNotVoidString("Inserisci il nome della regola");
+		}while(dataHandler.hasRule(selectedHouse, name));
+		
+		String antString = "";
+		String consString = "";
+		boolean cont;
+		
+		do {	
+		boolean choice = RawInputHandler.yesOrNo("Vuoi inserire una variabile sensoriale? (S/N) (\"N\" inserirà un numero)");
+		String sensor;
+		String info;
+		String superOp;
+	
+		
+			OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getSensorNames());
+			sensor = safeInsertSensor(selectedHouse);
+			
+			ArrayList<String> infos = new ArrayList<>();
+			for(String cat : dataHandler.getCategoriesOfASensor(selectedHouse, sensor)) {
+				
+				if(dataHandler.getSensorCategory(cat).getIsNumeric()) {
+					NumericSensorCategory numcat = (NumericSensorCategory) dataHandler.getSensorCategory(cat);
+					String [] temp = numcat.getDetectableInfoList();
+					
+					for(int i = 0; i < temp.length; i++) {
+						infos.add(temp[i]);
+					}
+					
+				}else {
+					NonNumericSensorCategory nonNumcat = (NonNumericSensorCategory) dataHandler.getSensorCategory(cat);
+					String [] temp = nonNumcat.getDetectableInfoList();
+								
+					for(int i = 0; i < temp.length; i++) {
+						infos.add(temp[i]);
+					}
+				}	
+			}
+			String [] printableInfos = infos.toArray(new String[0]);
+			OutputHandler.printListOfString(printableInfos);
+			
+			
+			do {
+				info = RawInputHandler.readNotVoidString("Inserisci l'informazione da rilevare");
+				if(!infos.contains(info)) System.out.println("Inserisci il nome corretto dell'informazione da rilevare");
+			}while(!infos.contains(info));
+			
+			
+			if(dataHandler.getSensorCategoryByInfo(info).getIsNumeric()) {//se l'informazione è di una categoria numerica
+			String op;
+			do {
+				op = RawInputHandler.readNotVoidString("Inserisci l'operatore");
+				if(! (op.equals(">=") || op.equals("<=") || op.equals("<") || op.equals(">") || op.equals("!=") || op.equals("==")))
+					System.out.println("Inserisci un operatore valido");
+			}while(! (op.equals(">=") || op.equals("<=") || op.equals("<") || op.equals(">") || op.equals("!=") || op.equals("==")));
+			
+			double value = RawInputHandler.readDouble("Inserisci il valore desiderato da confrontare");
+			antString = antString + sensor + "." + info + op + value;
+		}else {
+			String op;
+			do {
+				op = RawInputHandler.readNotVoidString("Inserisci l'operatore");
+				if(! (op.equals("!=") || op.equals("==")))
+					System.out.println("Inserisci un operatore valido");
+			}while(! (op.equals("!=") || op.equals("==")));
+			
+			String sValue = RawInputHandler.readNotVoidString("Inserisci il valore desiderato da confrontare");
+			antString = antString + sensor + "." + info + op + sValue;
+				}
+		
+		
+		cont = RawInputHandler.yesOrNo("Vuoi inserire un altro costituente?");
+		if(cont) {
+			do {
+				superOp = RawInputHandler.readNotVoidString("Inserisci l'operatore ( && oppure || )");
+				if(! (superOp.equals("&&") || superOp.equals("||")))
+					System.out.println("Inserisci un operatore valido");
+			}while(! (superOp.equals("&&") || superOp.equals("||")));
+			
+			antString = antString + superOp;
+		}
+		
+		}while(cont);
+		
+		
+		//costruzione consString
+		//b1_attCancelloBattente := apertura
+		
+		OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getActuatorNames());
+		String actuator = safeInsertActuator(selectedHouse);
+		
+		
+		
+		OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getActuator(actuator).getCategory().listOfOperatingModes());
+		
+		ArrayList<String> modOp = new ArrayList<>(Arrays.asList(dataHandler.getHousingUnit(selectedHouse).getActuator(actuator).getCategory().listOfOperatingModes()));
+		
+		String operatingMod;
+		do {
+			operatingMod = RawInputHandler.readNotVoidString("Inserisci la modalità operativa che verrà azionata");
+			if(!modOp.contains(operatingMod)) System.out.println("Modalità operativa non presente");
+		}while(!modOp.contains(operatingMod));
+		
+		consString = actuator + ":=" + operatingMod;
+		
+		Rule r = new Rule(dataHandler.getHousingUnit(selectedHouse), name, antString, consString, true);
+		
+		dataHandler.getHousingUnit(selectedHouse).addRule(r);
 	}
 	
 	private boolean inputHandlerInvariant() {

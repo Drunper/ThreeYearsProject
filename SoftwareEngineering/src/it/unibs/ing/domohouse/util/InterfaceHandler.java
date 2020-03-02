@@ -1,6 +1,11 @@
 package it.unibs.ing.domohouse.util;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import it.unibs.ing.domohouse.HomeLogin;
+import it.unibs.ing.domohouse.components.HousingUnit;
 
 public class InterfaceHandler {
 	
@@ -10,6 +15,7 @@ public class InterfaceHandler {
 	private FileLoader loader;
 	private FileSaver saver;
 	private boolean firstStart;
+	private ScheduledExecutorService checkThread;
 
 	//MENU
 	private final Menu menu = new Menu(Strings.LOGIN_MENU_TITLE, Strings.LOGIN_VOICES);
@@ -32,6 +38,20 @@ public class InterfaceHandler {
 		checkExistenceDataHandler();
 		OperatingModesHandler.fillOperatingModes();
 		saver.createDirs();
+		checkThread = Executors.newSingleThreadScheduledExecutor();
+		
+		checkThread.scheduleAtFixedRate(new Runnable() {
+			public void run() {
+				try {
+					for(String houseName : dataHandler.getHouseList()) {
+						HousingUnit h = (HousingUnit) dataHandler.getHousingUnit(houseName);
+						h.checkRules();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}, 0, 3, TimeUnit.SECONDS); //parte subito e ogni 3 secondi controlla le rules
 	}
 	
 	private void checkExistenceDataHandler() {
@@ -232,7 +252,6 @@ public class InterfaceHandler {
 		
 	}
 	
-	
 	private void showMaintainerUnitMenu(String selectedHouse) {
 		assert maintainerUnitMenu != null;
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
@@ -355,6 +374,21 @@ public class InterfaceHandler {
 					
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
 					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
+					break;
+				case 5:
+					//aggiungi regola
+					OutputHandler.clearOutput();
+					inputHandler.readRuleFromUser(selectedHouse);
+					break;
+				case 6:
+					//visualizza regole attive
+					OutputHandler.clearOutput();
+					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getEnabledRulesList());
+					break;
+				case 7: 
+					//visualizza tutte le regole
+					OutputHandler.clearOutput();
+					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getAllRulesList());
 					break;
 			}
 		}

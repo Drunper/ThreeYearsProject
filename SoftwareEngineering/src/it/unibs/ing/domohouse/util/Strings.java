@@ -176,7 +176,7 @@ public class Strings {
 	//STATIC MENU VOICES STRINGS
 	public static final String [] LOGIN_VOICES = {"Fruitore", "Manutentore"};
 	public static final String [] USER_VOICES = {"Visualizzare descrizione unità immobiliare", "Visualizza stanza", 
-			"Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
+			"Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Aggiungi regola", "Visualizza regole attive", "Visualizza tutte le regole" };
 	public static final String [] ROOM_VOICES = {"Visualizzare descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Aziona attuatore", "Visualizza artefatto"};
 	public static final String [] MAINTAINER_VOICES = {"Visualizzare descrizione unità immobiliare", "Modifica descrizione unità immobilare", "Visualizza stanza", 
 			"Inserisci stanza", "Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
