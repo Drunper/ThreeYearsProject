@@ -40,6 +40,7 @@ public class Rule {
 	/*
 	 * Metodi pubblici
 	 */
+	//comment
 	public void checkRule() {
 		if(getAntecedente()) actuateConseguente();
 	}
