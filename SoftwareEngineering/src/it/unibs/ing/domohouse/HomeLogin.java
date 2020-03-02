@@ -12,7 +12,7 @@ public class HomeLogin {
 	private byte[] hash;
 	private String hexHash;
 	/*
-	 * invariante: maintainers != null
+	 * invariante: maintainers != null 
 	 */
 	public HomeLogin () {
 		maintainers = new HashMap<>();
