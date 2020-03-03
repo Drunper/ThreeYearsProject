@@ -27,6 +27,8 @@ public class InputHandler {
 	}
 	
 	public void readHouseFromUser() {
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String name;
 		do {
 		name = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_NAME);
@@ -44,16 +46,21 @@ public class InputHandler {
 	
 	public void readSensorFromUser(String selectedHouse, String location) {
 		assert selectedHouse != null && location != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		boolean choice = RawInputHandler.yesOrNo(Strings.SENSOR_CHOICE);
 		
 		if(choice) readNumericSensorFromUser(selectedHouse, location);
 		else readNonNumericSensorFromUser(selectedHouse, location);
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
+	
 	public void readArtifactFromUser(String selectedHouse, String location) {
 		assert selectedHouse != null;
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		String name;
 		do
 		{
@@ -75,6 +82,7 @@ public class InputHandler {
 		assert selectedHouse != null;
 		assert location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		if(dataHandler.hasNonNumericSensorCategory() && dataHandler.getSensorCategoryList().length != 0) {
 				
 		ArrayList<String> categoryList = new ArrayList<String>();
@@ -87,7 +95,6 @@ public class InputHandler {
 		{
 		do
 		{
-		//da da da da
 			category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
 			if (!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER))
 				System.out.println(Strings.CATEGORY_NON_EXISTENT);
@@ -222,7 +229,6 @@ public class InputHandler {
 		{
 		do
 		{
-			//da da da da
 			category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
 			if ((!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER)))
 				System.out.println(Strings.CATEGORY_NON_EXISTENT);
@@ -588,16 +594,16 @@ public class InputHandler {
 
 	public void setOperatingMode(String selectedHouse, String selectedRoom, String selectedActuator) {
 		assert selectedHouse != null && selectedRoom != null && selectedActuator != null;
-		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		Actuator act = dataHandler.getRoom(selectedHouse, selectedRoom).getActuatorByName(selectedActuator);	
 		
 		OutputHandler.printListOfString(act.getCategory().listOfOperatingModes());
 		
 		String op;
 		do {
-			op = RawInputHandler.readNotVoidString("Inserisci la modalità operativa");
-			if(!act.getCategory().hasOperatingMode(op)) System.out.println("La modalità operativa inserita è inesistente");	
+			op = RawInputHandler.readNotVoidString(Strings.INSERT_OPERATING_MODE);
+			if(!act.getCategory().hasOperatingMode(op)) System.out.println(Strings.ERR_OPERATING_MODE);	
 		}while(!act.getCategory().hasOperatingMode(op));
 				
 		if(act.getCategory().hasNonParametricOperatingMode(op)) {
@@ -619,7 +625,7 @@ public class InputHandler {
 				Double param;
 				ArrayList<Double> dParamList = new ArrayList<>(); //siccome non possiamo sapere se ci sono uno o più param di tipo double utilizziamo arraylist per sicurezza
 				do {
-					param = RawInputHandler.readDouble("Inserisci il valore");
+					param = RawInputHandler.readDouble(Strings.INPUT_PARAMETER_VALUE);
 					dParamList.add(param);
 					i++;
 				}while(i<num);
@@ -630,7 +636,7 @@ public class InputHandler {
 				String sParam;
 				ArrayList<String> sParamList = new ArrayList<>();
 				do {
-					sParam = RawInputHandler.readNotVoidString("Inserisci il valore (stringa)");
+					sParam = RawInputHandler.readNotVoidString(Strings.INPUT_STRING_PARAMETER_VALUE);
 					sParamList.add(sParam);
 					k++;
 				}while(k<num);
@@ -950,6 +956,8 @@ public class InputHandler {
 	}
 	
 	public void readRuleFromUser(String selectedHouse) {
+		assert selectedHouse != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String name;
 		do {
@@ -1104,6 +1112,8 @@ public class InputHandler {
 		Rule r = new Rule(dataHandler.getHousingUnit(selectedHouse), name, antString, consString, true);
 		
 		dataHandler.getHousingUnit(selectedHouse).addRule(r);
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	private boolean inputHandlerInvariant() {

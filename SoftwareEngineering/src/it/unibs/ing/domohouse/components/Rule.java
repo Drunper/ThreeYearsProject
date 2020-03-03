@@ -23,6 +23,9 @@ public class Rule implements Serializable{
 	private Map<String, Operator> numericOpMap = new HashMap<String, Operator>();
 	private Map<String, StringOperator> nonNumericOpMap = new HashMap<String, StringOperator>();
 	
+	/*
+	 * invariante name != null, antString !=null, consString != null, numericOpMap != null, nonNumericOpMap != null
+	 */
 	public Rule(HousingUnit housingUnit, String name, String antString, String consString, boolean state) {
 		this.name = name;
 		this.antString = antString;
@@ -36,22 +39,27 @@ public class Rule implements Serializable{
 	 * Metodi pubblici
 	 */
 	public void checkRule() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		if(state && getAntecedente()) actuateConseguente();
 	}
 	
 	public void setState(boolean state) {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		this.state = state;
 	}
 	
 	public boolean isActive() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		return this.state;
 	}
 	
 	public String getName() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		return this.name;
 	}
 	
 	public String getCompleteRule() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		return "[if]   " + antString + "   \n\t\t\t[then]   " + consString;
 	}
 	
@@ -59,15 +67,20 @@ public class Rule implements Serializable{
 	 * Metodi privati
 	 */
 	private boolean getAntecedente() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		return getAntValue(this.antString);
 	}
 	
 	private void actuateConseguente() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		consElaboration(this.consString);
 	}
 	
 	//i1_igrometro.umiditaRelativa > 30 
 	private boolean getAntValue(String antString) {
+		assert antString != null;
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
+		
 		boolean res;
 		
 		if(antString.contains("&&") || antString.contains("||")) {
@@ -88,6 +101,9 @@ public class Rule implements Serializable{
 	//i1_igrometro.umiditaRelativa > 30 
 	//v1_videocamera.presenza == "presenza di persone"
 	private boolean getCostValue(String s) {
+		assert s != null;
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
+		
 		if(housingUnit.getSensor(s.split("\\.")[0]).isNumeric()) {		
 			String value1;
 			String info;
@@ -136,6 +152,9 @@ public class Rule implements Serializable{
 	
 	//i1_igrometro.umiditàRelativa ,  30
 	private double getValue(String toElaborate) {
+		assert toElaborate != null;
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
+		
 		String sensor;
 		String info;
 		if(toElaborate.matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$")) {      //deve prendere Double non integer
@@ -156,6 +175,9 @@ public class Rule implements Serializable{
 	 *  I requisiti non specificano l'elaborazione di due o più conseguenti, dunque per ora ne assumiamo uno
 	 */
 	private void consElaboration(String toElaborate) {
+		assert toElaborate != null;
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
+		
 		toElaborate.replace(" ", ""); //elimino gli spazi
 		String act;
 		String cat;
@@ -219,6 +241,8 @@ public class Rule implements Serializable{
 	}
 
 	private void fillMap() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
+		
 		numericOpMap.put(">", new Operator() {
             @Override public boolean compare(double a, double b) {
                 return a > b;
@@ -259,7 +283,20 @@ public class Rule implements Serializable{
                 return !a.equalsIgnoreCase(b);
             }
         });
- 
+        
+        
+        assert numericOpMap.size() > 0 && nonNumericOpMap.size() > 0;
+        assert ruleInvariant() : "Invariante della classe non soddisfatto";
+	}
+	
+	private boolean ruleInvariant() {
+		boolean checkName = name != null;
+		boolean checkAntString = antString != null;
+		boolean checkConsString = consString != null;
+		boolean checkMaps = numericOpMap != null && nonNumericOpMap != null;
+		
+		if(checkName && checkAntString && checkConsString && checkMaps) return true;
+		return false;
 	}
 
 }

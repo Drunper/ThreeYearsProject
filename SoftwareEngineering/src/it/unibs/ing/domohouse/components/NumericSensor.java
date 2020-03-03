@@ -28,6 +28,8 @@ public class NumericSensor extends Sensor {
 	}
 	
 	public String[] getMeasurements() {
+		assert numericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		ArrayList<String[]> result = new ArrayList<>();
 		String[] measurements;
 		for(SensorCategory elem : categoryList) result.add(getMeasurements(elem));

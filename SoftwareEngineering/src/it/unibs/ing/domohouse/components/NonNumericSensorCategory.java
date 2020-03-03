@@ -24,6 +24,8 @@ public class NonNumericSensorCategory extends SensorCategory {
 	}
 	
 	public boolean contains(String variableName, String valueFromObject) {
+		assert variableName != null && valueFromObject != null;
+		assert sensorCategoryInvariant() : "Invariante della classe non soddisfatto";
 		
 		return infoDomainMap.get(variableName).contains(valueFromObject);
 	}
@@ -48,6 +50,8 @@ public class NonNumericSensorCategory extends SensorCategory {
 	}
 	
 	public String toString(){	
+		assert sensorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		
 		String result = getName()+':'+getDescr()+':'+String.join(":", getDetectableInfoList());	
 		
 		assert result != null;

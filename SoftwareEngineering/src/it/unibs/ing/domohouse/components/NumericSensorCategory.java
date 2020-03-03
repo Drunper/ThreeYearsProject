@@ -9,8 +9,6 @@ public class NumericSensorCategory extends SensorCategory {
 	
 
 	private static final long serialVersionUID = -2513977621862706027L;
-	//private String name;
-	//private String text;
 	private HashMap<String, String> infoDomainMap;
 	/*
 	 * invariante di classe: detectableInfos.size() > 0 && name != null && text != null
@@ -22,7 +20,6 @@ public class NumericSensorCategory extends SensorCategory {
 	}
 
 	public double [] getDomain(String info) {  // info = 1 -to- 20 (gradi)
-	
 		assert info != null && info.length() > 0;
 		assert sensorCategoryInvariant() : "Invariante della classe non soddisfatto";
 

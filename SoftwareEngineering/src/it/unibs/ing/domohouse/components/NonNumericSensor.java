@@ -89,6 +89,9 @@ public class NonNumericSensor extends Sensor {
 	}
 	
 	private boolean checkDomainConsistency(String variableName, String valueFromObject) {
+		assert variableName != null && valueFromObject != null;
+		assert  nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		boolean flag = false;
 		for(SensorCategory s : categoryList) {
 			NonNumericSensorCategory cat = (NonNumericSensorCategory) s;

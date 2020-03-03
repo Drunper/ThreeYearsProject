@@ -7,9 +7,7 @@ import it.unibs.ing.domohouse.interfaces.Gettable;
 import it.unibs.ing.domohouse.util.Manager;
 
 public class Room implements Gettable, Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -2234559747971441506L;
 	private String name;
 	private String text;

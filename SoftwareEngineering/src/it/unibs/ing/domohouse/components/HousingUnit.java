@@ -284,6 +284,8 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 	
 	public String getNonNumericSensorValue(String selectedSensor, String info) {
+		assert selectedSensor != null && info != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		
 		Sensor sens = (Sensor) sensorManager.getElementByName(selectedSensor);
 		
@@ -292,7 +294,9 @@ public class HousingUnit implements Serializable, Manageable {
 			for(int i = 0; i < rooms.length; i++) {
 				if(sens.getElementByName(rooms[i]) != null) {
 					Room room = (Room) roomManager.getElementByName(rooms[i]);
-					return room.getNonNumericProperty(info);
+					String result = room.getNonNumericProperty(info);
+					assert result != null; 
+					return result;
 				}
 			}
 		}else {
@@ -300,7 +304,9 @@ public class HousingUnit implements Serializable, Manageable {
 			for(int i=0; i < artifacts.length; i++) {
 				if(sens.getElementByName(artifacts[i]) != null) {
 					Artifact art = (Artifact) artifactManager.getElementByName(artifacts[i]);
-						return art.getNonNumericProperty(info);
+						String result = art.getNonNumericProperty(info);
+						assert result != null;
+						return result;
 				}
 			}
 		}
@@ -309,6 +315,8 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 	
 	public double getSensorValue(String selectedSensor, String info) {
+		assert selectedSensor != null && info != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		
 		Sensor sens = (Sensor) sensorManager.getElementByName(selectedSensor);
 
@@ -348,6 +356,9 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 	
 	public void disableRule(String selectedRule) {
+		assert selectedRule != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
 		for(Rule r : rules) {
 			if(selectedRule.equalsIgnoreCase(selectedRule)) {
 				r.setState(false);
@@ -356,6 +367,9 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 	
 	public void enableRule(String selectedRule) {
+		assert selectedRule != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
 		for(Rule r : rules) {
 			if(selectedRule.equalsIgnoreCase(selectedRule)) {
 				r.setState(true);
@@ -364,6 +378,8 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 	
 	public String []  getEnabledRulesList() {
+		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		
 		ArrayList<Rule> enabledRules = new ArrayList<>();
 		
@@ -376,20 +392,31 @@ public class HousingUnit implements Serializable, Manageable {
 		for(int i = 0; i < enabledRules.size(); i++) {
 			s[i] = enabledRules.get(i).getName() + " -> " + enabledRules.get(i).getCompleteRule() + " Abilitata: " + enabledRules.get(i).isActive();
 		}
+		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
 		return s;
 	}
 	
 	public String [] getAllRulesList() {
+		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
 		String [] s = new String[rules.size()];
 		
 		for(int i = 0; i < rules.size(); i++) {
 			s[i] = rules.get(i).getName() + " -> " + rules.get(i).getCompleteRule() + " Abilitata: " + rules.get(i).isActive();
 		}
 		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
 		return s;
 	}
 	
 	public boolean hasRule(String selectedRule) {
+		assert selectedRule != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
 		for(Rule r : rules) {
 			if(r.getName().equalsIgnoreCase(selectedRule)) return true;
 		}
@@ -397,15 +424,22 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 	
 	public String[] getSensorNames() {
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		return sensorManager.namesList();
 	}
 	
 	public String[] getActuatorNames() {
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		return actuatorManager.namesList();
 	}
 	
 	public String[] getCategoriesOfASensor(String selectedSensor) {
+		assert selectedSensor != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
 		Sensor _selectedSensor = (Sensor) sensorManager.getElementByName(selectedSensor);
+		
+		assert _selectedSensor != null;
 		return _selectedSensor.getCategories();
 	}
 	
@@ -414,7 +448,8 @@ public class HousingUnit implements Serializable, Manageable {
 		boolean checkDescr = descr != null;
 		boolean checkManagers = roomManager != null && sensorManager != null  && actuatorManager !=null 
 				&& artifactManager != null && associationManager != null;
-		if(checkName && checkDescr && checkManagers) return true;
+		boolean checkRules = rules != null;
+		if(checkName && checkDescr && checkManagers && checkRules) return true;
 		return false;
 	}
 

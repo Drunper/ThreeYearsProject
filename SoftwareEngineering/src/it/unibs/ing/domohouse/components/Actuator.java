@@ -49,6 +49,7 @@ public class Actuator implements Manageable, Serializable {
 	}
 	
 	public ActuatorCategory getCategory() {
+		assert actuatorInvariant();
 		return this.category;
 	}
 	

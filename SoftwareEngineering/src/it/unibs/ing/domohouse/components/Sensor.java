@@ -97,6 +97,8 @@ public class Sensor implements Manageable, Serializable{
 	}
 	
 	public String [] getCategories() {
+		assert sensorInvariant() : "Invariante della classe non soddisfatto";
+		
 		String [] categoriesName = new String[categoryList.size()];
 		for(int i = 0; i < categoriesName.length; i++) {
 			categoriesName[i] = categoryList.get(i).getName();

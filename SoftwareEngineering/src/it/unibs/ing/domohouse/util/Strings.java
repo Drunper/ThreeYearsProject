@@ -130,6 +130,8 @@ public class Strings {
 	public static final String ACTUATOR_CATEGORY_INPUT_OPERATING_MODE = "Inserisci una modalità operativa (^ per terminare)";
 	public static final String ACTUATOR_CATEGORY_INPUT_DEFAULT_MODE = "Inserisci la modalità di default (tra quelle già inserite)";
 	public static final String OPERATING_MODE_NOT_SUPPORTED = "La modalità operativa richiesta non è supportata dal sistema";
+	public static final String INSERT_OPERATING_MODE = "Inserisci la modalità operativa";
+	public static final String ERR_OPERATING_MODE = "La modalità operativa inserita è inesistente";
 	
 	//INPUT RULE 
 	public static final String INPUT_RULE_NAME = "Inserisci il nome della regola";
