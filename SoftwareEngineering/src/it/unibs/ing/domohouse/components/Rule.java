@@ -5,15 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.unibs.ing.domohouse.interfaces.Operator;
+import it.unibs.ing.domohouse.interfaces.StringOperator;
 import it.unibs.ing.domohouse.util.DataHandler;
-
-interface Operator extends Serializable{
-	boolean compare(double a, double b);
-}
-
-interface stringOperator extends Serializable{
-	boolean compare(String a, String b);
-}
 
 
 public class Rule implements Serializable{
@@ -31,7 +25,7 @@ public class Rule implements Serializable{
 	private boolean state;
 	
 	private Map<String, Operator> numericOpMap = new HashMap<String, Operator>();
-	private Map<String, stringOperator> nonNumericOpMap = new HashMap<String, stringOperator>();
+	private Map<String, StringOperator> nonNumericOpMap = new HashMap<String, StringOperator>();
 	
 	public Rule(HousingUnit housingUnit, String name, String antString, String consString, boolean state) {
 		this.name = name;
@@ -259,12 +253,12 @@ public class Rule implements Serializable{
                 return a != b;
             }
         });
-        nonNumericOpMap.put("==", new stringOperator() {
+        nonNumericOpMap.put("==", new StringOperator() {
             @Override public boolean compare(String a, String b) {
                 return a.equalsIgnoreCase(b);
             }
         });
-        nonNumericOpMap.put("!=", new stringOperator() {
+        nonNumericOpMap.put("!=", new StringOperator() {
             @Override public boolean compare(String a, String b) {
                 return !a.equalsIgnoreCase(b);
             }
