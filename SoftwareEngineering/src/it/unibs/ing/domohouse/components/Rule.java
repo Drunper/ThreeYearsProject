@@ -11,9 +11,6 @@ import it.unibs.ing.domohouse.interfaces.StringOperator;
 
 public class Rule implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3835080225181052479L;
 	private HousingUnit housingUnit;
 	private String name;
