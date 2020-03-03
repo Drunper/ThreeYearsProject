@@ -1,12 +1,7 @@
 package it.unibs.ing.domohouse.util;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.SocketException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
+import java.io.Serializable;
 import it.unibs.ing.domohouse.components.*;
 import it.unibs.ing.domohouse.interfaces.Manageable;
 
