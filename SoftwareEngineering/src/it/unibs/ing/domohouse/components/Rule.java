@@ -7,7 +7,6 @@ import java.util.Map;
 
 import it.unibs.ing.domohouse.interfaces.Operator;
 import it.unibs.ing.domohouse.interfaces.StringOperator;
-import it.unibs.ing.domohouse.util.DataHandler;
 
 
 public class Rule implements Serializable{
