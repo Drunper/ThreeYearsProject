@@ -13,6 +13,7 @@ public class SensorCategory implements Manageable, Serializable{
 		this.name = name;
 		this.text = text;
 	}
+	
 	public String getName() {
 		assert sensorCategoryInvariant() : "Invariante della classe non soddisfatto";
 		return this.name;

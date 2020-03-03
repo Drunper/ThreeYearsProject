@@ -6,7 +6,6 @@ import it.unibs.ing.domohouse.interfaces.Gettable;
 
 public class NonNumericSensor extends Sensor {
 
-
 	private static final long serialVersionUID = 1067004464682653014L;
 
 	public NonNumericSensor(String name, ArrayList <SensorCategory> categoryList) {
@@ -55,8 +54,7 @@ public class NonNumericSensor extends Sensor {
 		assert  nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";
 		return measurements;
 	}
-	
-	
+
 	/*
 	 * Attualmente pensiamo al nonNumericSensor come un sensore che può rilevare l'informazione di un
 	 * solo elemento(stanza o artefatto). Per una futura implementazione si può pensare ai sensori non numerici

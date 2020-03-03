@@ -525,8 +525,6 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	
-	
 	public void readNumericSensorCategoryFromUser() {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
@@ -799,7 +797,6 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 
-	
 	public void createNumericSensorCategory(String name, String abbreviation, String constructor, String domain, String detectableInfo) {
 		assert name != null && name.length() > 0;
 		assert abbreviation != null && constructor != null && domain != null && detectableInfo != null;
