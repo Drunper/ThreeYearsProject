@@ -316,6 +316,21 @@ public class InterfaceHandler {
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
 					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
+				case 7:
+					//aggiungi regola
+					OutputHandler.clearOutput();
+					inputHandler.readRuleFromUser(selectedHouse);
+					break;
+				case 8:
+					//visualizza regole attive
+					OutputHandler.clearOutput();
+					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getEnabledRulesList());
+					break;
+				case 9: 
+					//visualizza tutte le regole
+					OutputHandler.clearOutput();
+					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getAllRulesList());
+					break;
 			}
 		}
 		while(exitFlag != true);

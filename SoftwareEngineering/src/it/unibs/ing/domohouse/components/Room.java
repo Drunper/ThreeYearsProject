@@ -47,6 +47,7 @@ public class Room implements Gettable, Serializable {
 		numericPropertiesMap.put("vento", vento);
 		nonNumericPropertiesMap = new TreeMap<>();
 		nonNumericPropertiesMap.put("presenza", presenza_persone);
+		nonNumericPropertiesMap.put("coloreLuce", "bianco");
 	}
 
 	public String getName() {

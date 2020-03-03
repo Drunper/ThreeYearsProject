@@ -179,7 +179,7 @@ public class Strings {
 			"Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Aggiungi regola", "Visualizza regole attive", "Visualizza tutte le regole" };
 	public static final String [] ROOM_VOICES = {"Visualizzare descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Aziona attuatore", "Visualizza artefatto"};
 	public static final String [] MAINTAINER_VOICES = {"Visualizzare descrizione unità immobiliare", "Modifica descrizione unità immobilare", "Visualizza stanza", 
-			"Inserisci stanza", "Visualizza categorie di sensori", "Visualizza categorie di attuatori"};
+			"Inserisci stanza", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Aggiungi regola", "Visualizza regole attive", "Visualizza tutte le regole"};
 	public static final String [] MAINTAINER_ROOM_VOICES = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Aziona attuatore", "Visualizza artefatto", 
 			"Modifica descrizione stanza", "Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto"};
 	public static final String[] MAINTAINER_UNIT_MENU = {"Visualizza unità immobiliare", "Aggiungi unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Inserisci categoria di sensori", 

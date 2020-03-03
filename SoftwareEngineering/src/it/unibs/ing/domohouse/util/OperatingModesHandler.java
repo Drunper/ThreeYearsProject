@@ -41,7 +41,7 @@ public class OperatingModesHandler implements Serializable{
 			g.setNumericProperty("temperatura", temp);
 		};
 		
-		SerializableConsumer<Gettable> diminuizioneTemperatura10gradi = g ->{
+		SerializableConsumer<Gettable> diminuzioneTemperatura10gradi = g ->{
 			double temp = g.getNumericProperty("temperatura");
 			temp = temp - 10;
 			g.setNumericProperty("temperatura", temp);
@@ -53,7 +53,7 @@ public class OperatingModesHandler implements Serializable{
 			g.setNumericProperty("temperatura", temp);
 		};
 			
-		SerializableConsumer<Gettable> diminuizioneTemperatura5gradi = g ->{
+		SerializableConsumer<Gettable> diminuzioneTemperatura5gradi = g ->{
 				double temp = g.getNumericProperty("temperatura");
 				temp = temp - 5;
 				g.setNumericProperty("temperatura", temp);
@@ -65,13 +65,13 @@ public class OperatingModesHandler implements Serializable{
 				g.setNumericProperty("temperatura", temp);
 			};
 				
-		SerializableConsumer<Gettable> diminuizioneTemperatura1gradi = g ->{
+		SerializableConsumer<Gettable> diminuzioneTemperatura1gradi = g ->{
 					double temp = g.getNumericProperty("temperatura");
 					temp = temp - 1;
 					g.setNumericProperty("temperatura", temp);
 				};
 				
-		SerializableConsumer<Gettable> diminuizioneUmidita = g ->{
+		SerializableConsumer<Gettable> diminuzioneUmidita = g ->{
 					double umidita = g.getNumericProperty("umidità");
 					umidita = umidita - 2;
 					g.setNumericProperty("umidità", umidita);
@@ -92,18 +92,28 @@ public class OperatingModesHandler implements Serializable{
 			}
 		};
 		
+		SerializableBiConsumer<Gettable, Object> coloreLuci = (g, paramList) ->{
+			if(paramList instanceof ArrayList && ((ArrayList) paramList).get(0) instanceof String) {
+				//In questo caso l'utente avrà inserito solamente un valore nell'arraylist e andremo a prendere quello
+				String color = ((ArrayList<String>) paramList).get(0);
+				g.setNonNumericProperty("coloreLuce", color);
+			}
+		};
+		
 		operatingModesMap.put("idle", idle);
 		operatingModesMap.put("aumentoTemperatura10gradi", aumentoTemperatura10gradi);
-		operatingModesMap.put("diminuizioneTemperatura10gradi", diminuizioneTemperatura10gradi);
-		operatingModesMap.put("diminuizioneTemperatura5gradi", diminuizioneTemperatura5gradi);
+		operatingModesMap.put("diminuzioneTemperatura10gradi", diminuzioneTemperatura10gradi);
+		operatingModesMap.put("diminuzioneTemperatura5gradi", diminuzioneTemperatura5gradi);
 		operatingModesMap.put("aumentoTemperatura5gradi", aumentoTemperatura5gradi);
-		operatingModesMap.put("diminuizioneTemperatura1gradi", diminuizioneTemperatura1gradi);
+		operatingModesMap.put("diminuzioneTemperatura1gradi", diminuzioneTemperatura1gradi);
 		operatingModesMap.put("aumentoTemperatura1gradi", aumentoTemperatura1gradi);
 		operatingModesMap.put("aumentoUmidita", aumentoUmidita);
-		operatingModesMap.put("diminuizioneUmidita", diminuizioneUmidita);
+		operatingModesMap.put("diminuzioneUmidita", diminuzioneUmidita);
 		
 		parametricOperatingModesMap.put("mantenimentoTemperatura", mantenimentoTemperatura);
 		paramMap.put("mantenimentoTemperatura", "Double:1"); 
+		parametricOperatingModesMap.put("cambiaColore", coloreLuci);
+		paramMap.put("cambiaColore", "String:1");
 		
 		
 	}
@@ -159,7 +169,7 @@ public class OperatingModesHandler implements Serializable{
 		
 		return operatingModesMap.containsKey(name);
 	}
-
+	
 	private static boolean operatingModesHandlerInvariant() {
 		if(operatingModesMap != null && parametricOperatingModesMap != null && paramMap != null) return true;
 		return false;

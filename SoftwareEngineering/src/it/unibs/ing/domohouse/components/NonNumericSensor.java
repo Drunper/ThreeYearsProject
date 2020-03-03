@@ -84,9 +84,18 @@ public class NonNumericSensor extends Sensor {
 		
 		assert  nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";
 		
-		if(hasProperty) return valueFromObject; //se è possibili rilevare informazioni le rileva
+		if(hasProperty && checkDomainConsistency(variableName, valueFromObject)) return valueFromObject; //se è possibili rilevare informazioni le rileva
 		else return "N/A"; //altrimenti rilascia N/A
 	}
+	
+	private boolean checkDomainConsistency(String variableName, String valueFromObject) {
+		boolean flag = false;
+		for(SensorCategory s : categoryList) {
+			NonNumericSensorCategory cat = (NonNumericSensorCategory) s;
+			if(cat.contains(variableName, valueFromObject)) flag = true;
+			}
+		return flag;
+		}
 
 	public String toString() {
 		assert  nonNumericSensorInvariant() : "Invariante della classe non soddisfatto";

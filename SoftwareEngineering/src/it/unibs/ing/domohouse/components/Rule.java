@@ -62,7 +62,7 @@ public class Rule implements Serializable{
 	}
 	
 	public String getCompleteRule() {
-		return "if " + antString + " then " + consString;
+		return "[if]   " + antString + "   \n\t\t\t[then]   " + consString;
 	}
 	
 	/*
@@ -76,6 +76,7 @@ public class Rule implements Serializable{
 		consElaboration(this.consString);
 	}
 	
+	//i1_igrometro.umiditaRelativa > 30 
 	private boolean getAntValue(String antString) {
 		boolean res;
 		
@@ -115,9 +116,8 @@ public class Rule implements Serializable{
 			else if(s.contains("<")) op = "<";
 			else if(s.contains("==")) op = "==";
 			else if(s.contains("!=")) op = "!=";
-
-		
-			return numericOpMap.get(op).compare( num1, num2);
+			
+			return numericOpMap.get(op).compare(num1, num2);
 		}else {
 			//v1_videocamera.presenza == "presenza di persone"
 			String sensor;
@@ -148,7 +148,7 @@ public class Rule implements Serializable{
 	private double getValue(String toElaborate) {
 		String sensor;
 		String info;
-		if(toElaborate.matches("^[-+]?\\\\d+(\\\\.{0,1}(\\\\d+?))?$")) {      //deve prendere Double non integer
+		if(toElaborate.matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$")) {      //deve prendere Double non integer
 			return Double.parseDouble(toElaborate);
 		}else {	
 			sensor = toElaborate.split("\\.")[0];
@@ -178,28 +178,28 @@ public class Rule implements Serializable{
 		cat = toElaborate.split(":=")[0];
 		toElaborate = toElaborate.split(":=")[1]; 
 		modOp = toElaborate; //da verificare che sia parametrica o no
-		
+
 		ArrayList<Double> paramDouble = new ArrayList<>(); //array double da passare per azionare op Mod
 		ArrayList<String> paramString = new ArrayList<>(); //array string da passare per azionare op Mod
 		
 		//si assume che una modOp parametrica sia nella forma "mantenimentoTemperatura(param)"
 		if(modOp.contains("(")) { //se paramatrica
-			modOp = toElaborate.split("(")[0]; //modOp = mantenimentoTemperatura
-			toElaborate = toElaborate.split("(")[1]; //toElaborate = param)
-			param = toElaborate.split(")")[0]; //toElaborate = param
+			modOp = toElaborate.split("\\(")[0]; //modOp = mantenimentoTemperatura
+			toElaborate = toElaborate.split("\\(")[1]; //toElaborate = param)
+			param = toElaborate.split("\\)")[0]; //toElaborate = param
 			
 			if(!param.contains(",")) { //se è mono parametrica
 				//param può essere una stringa oppure un double
-				if(param.matches("^[-+]?\\\\d+(\\\\.{0,1}(\\\\d+?))?$")) { //se fa match con double regex allora è double
+				if(param.matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$")) { //se fa match con double regex allora è double
 				paramValue = Double.parseDouble(param);
 				paramDouble.add(paramValue);
-				housingUnit.getActuator(act).setParametricOperatingMode(modOp, paramDouble);
+				housingUnit.getActuator(act + "_" + cat).setParametricOperatingMode(modOp, paramDouble);
 				}else {//altrimenti è una stringa e possiamo tenere param	
 				paramString.add(param);
-				housingUnit.getActuator(act).setParametricOperatingMode(modOp, paramString);
+				housingUnit.getActuator(act + "_" + cat).setParametricOperatingMode(modOp, paramString);
 				}
 			}else {
-				if(param.split(",")[0].matches("^[-+]?\\\\d+(\\\\.{0,1}(\\\\d+?))?$")) { //se sono parametri Double
+				if(param.split(",")[0].matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$")) { //se sono parametri Double
 					do { //12,31,42
 					paramDouble.add(Double.parseDouble(param.split(",")[0]));
 					param = param.split(",")[1];
@@ -208,7 +208,7 @@ public class Rule implements Serializable{
 					
 					paramDouble.add(Double.parseDouble(param)); //aggiungo ultimo valore che rimarrebe fuori
 					
-					housingUnit.getActuator(act).setParametricOperatingMode(modOp, paramDouble);
+					housingUnit.getActuator(act + "_" + cat).setParametricOperatingMode(modOp, paramDouble);
 					
 				}else {//sono parametri String
 					do {
@@ -219,12 +219,12 @@ public class Rule implements Serializable{
 					
 					paramString.add(param); //aggiungo ultimo valore che rimarrebe fuori
 					
-					housingUnit.getActuator(act).setParametricOperatingMode(modOp, paramString);
+					housingUnit.getActuator(act + "_" + cat).setParametricOperatingMode(modOp, paramString);
 					
 				}
 			}
 		}else {//se non è parametrica
-			housingUnit.getActuator(act).setNonParametricOperatingMode(modOp);	
+			housingUnit.getActuator(act + "_" + cat).setNonParametricOperatingMode(modOp);	
 		}	
 	}
 
@@ -257,6 +257,16 @@ public class Rule implements Serializable{
         numericOpMap.put("!=", new Operator() {
             @Override public boolean compare(double a, double b) {
                 return a != b;
+            }
+        });
+        nonNumericOpMap.put("==", new stringOperator() {
+            @Override public boolean compare(String a, String b) {
+                return a.equalsIgnoreCase(b);
+            }
+        });
+        nonNumericOpMap.put("!=", new stringOperator() {
+            @Override public boolean compare(String a, String b) {
+                return !a.equalsIgnoreCase(b);
             }
         });
  

@@ -23,6 +23,11 @@ public class NonNumericSensorCategory extends SensorCategory {
 		return domain.toArray(new String[0]);
 	}
 	
+	public boolean contains(String variableName, String valueFromObject) {
+		
+		return infoDomainMap.get(variableName).contains(valueFromObject);
+	}
+	
 	
 	public String[] getDetectableInfoList() {
 		assert sensorCategoryInvariant() : "Invariante della classe non soddisfatto";
