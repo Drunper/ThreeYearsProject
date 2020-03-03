@@ -953,7 +953,7 @@ public class InputHandler {
 		
 		String name;
 		do {
-		name = RawInputHandler.readNotVoidString("Inserisci il nome della regola");
+		name = RawInputHandler.readNotVoidString(Strings.INPUT_RULE_NAME);
 		}while(dataHandler.hasRule(selectedHouse, name));
 		
 		String antString = "";
@@ -994,40 +994,40 @@ public class InputHandler {
 			
 			
 			do {
-				info = RawInputHandler.readNotVoidString("Inserisci l'informazione da rilevare");
-				if(!infos.contains(info)) System.out.println("Inserisci il nome corretto dell'informazione da rilevare");
+				info = RawInputHandler.readNotVoidString(Strings.INPUT_INFO_TO_DETECT);
+				if(!infos.contains(info)) System.out.println(Strings.ERROR_INFO_NAME);
 			}while(!infos.contains(info));
 			
 			
 			if(dataHandler.getSensorCategoryByInfo(info).getIsNumeric()) {//se l'informazione è di una categoria numerica
 			String op;
 			do {
-				op = RawInputHandler.readNotVoidString("Inserisci l'operatore");
+				op = RawInputHandler.readNotVoidString(Strings.INPUT_OPERATOR);
 				if(! (op.equals(">=") || op.equals("<=") || op.equals("<") || op.equals(">") || op.equals("!=") || op.equals("==")))
-					System.out.println("Inserisci un operatore valido");
+					System.out.println(Strings.ERROR_OPERATOR);
 			}while(! (op.equals(">=") || op.equals("<=") || op.equals("<") || op.equals(">") || op.equals("!=") || op.equals("==")));
 			
-			double value = RawInputHandler.readDouble("Inserisci il valore desiderato da confrontare");
+			double value = RawInputHandler.readDouble(Strings.INPUT_DESIRED_VALUE);
 			antString = antString + sensor + "." + info + op + value;
 		}else {
 			String op;
 			do {
-				op = RawInputHandler.readNotVoidString("Inserisci l'operatore");
+				op = RawInputHandler.readNotVoidString(Strings.INPUT_OPERATOR);
 				if(! (op.equals("!=") || op.equals("==")))
-					System.out.println("Inserisci un operatore valido");
+					System.out.println(Strings.ERROR_OPERATOR);
 			}while(! (op.equals("!=") || op.equals("==")));
 			
-			String sValue = RawInputHandler.readNotVoidString("Inserisci il valore desiderato da confrontare");
+			String sValue = RawInputHandler.readNotVoidString(Strings.INPUT_DESIRED_VALUE);
 			antString = antString + sensor + "." + info + op + sValue;
 				}
 		
 		
-		cont = RawInputHandler.yesOrNo("Vuoi inserire un altro costituente?");
+		cont = RawInputHandler.yesOrNo(Strings.INPUT_NEW_COST);
 		if(cont) {
 			do {
-				superOp = RawInputHandler.readNotVoidString("Inserisci l'operatore ( && oppure || )");
+				superOp = RawInputHandler.readNotVoidString(Strings.INPUT_COST_OPERATOR);
 				if(! (superOp.equals("&&") || superOp.equals("||")))
-					System.out.println("Inserisci un operatore valido");
+					System.out.println(Strings.ERROR_OPERATOR);
 			}while(! (superOp.equals("&&") || superOp.equals("||")));
 			
 			antString = antString + superOp;
@@ -1050,15 +1050,15 @@ public class InputHandler {
 		
 		String operatingMod;
 		do {
-			operatingMod = RawInputHandler.readNotVoidString("Inserisci la modalità operativa che verrà azionata");
-			if(!modOp.contains(operatingMod)) System.out.println("Modalità operativa non presente");
+			operatingMod = RawInputHandler.readNotVoidString(Strings.INPUT_OPERATING_MODE);
+			if(!modOp.contains(operatingMod)) System.out.println(Strings.ERROR_OPERATING_MODE);
 		}while(!modOp.contains(operatingMod));
 		
 		//se la mod op inserita è parametrica
 		if(dataHandler.getHousingUnit(selectedHouse).getActuator(actuator)
 				.getCategory().hasParametricOperatingMode(operatingMod)){
 			
-			String param_info = OperatingModesHandler.getParameterInfo(operatingMod); //Duoble:2
+			String param_info = OperatingModesHandler.getParameterInfo(operatingMod);
 			String num;
 			int k;
 			
@@ -1072,11 +1072,11 @@ public class InputHandler {
 			int i = 0;
 			do {
 				if(param_info.equals("Double")) {
-					double temp = RawInputHandler.readDouble("Inserisci il valore del parametro");
+					double temp = RawInputHandler.readDouble(Strings.INPUT_PARAMETER_VALUE);
 					numbers.add(temp);
 					i++;
 				}else {
-					String temp = RawInputHandler.readNotVoidString("Inserisci il valore del parametro (String)");
+					String temp = RawInputHandler.readNotVoidString(Strings.INPUT_STRING_PARAMETER_VALUE);
 					strings.add(temp);
 					i++;
 				}	

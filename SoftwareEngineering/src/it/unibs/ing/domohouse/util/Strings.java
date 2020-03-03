@@ -131,6 +131,23 @@ public class Strings {
 	public static final String ACTUATOR_CATEGORY_INPUT_DEFAULT_MODE = "Inserisci la modalità di default (tra quelle già inserite)";
 	public static final String OPERATING_MODE_NOT_SUPPORTED = "La modalità operativa richiesta non è supportata dal sistema";
 	
+	//INPUT RULE 
+	public static final String INPUT_RULE_NAME = "Inserisci il nome della regola";
+	public static final String INPUT_INFO_TO_DETECT = "Inserisci l'informazione da rilevare";
+	public static final String ERROR_INFO_NAME = "Inserisci il nome corretto dell'informazione da rilevare";
+	public static final String INPUT_OPERATOR = "Inserisci l'operatore";
+	public static final String ERROR_OPERATOR = "Inserisci un operatore valido";
+	public static final String INPUT_DESIRED_VALUE = "Inserisci il valore desiderato da confrontare";
+	public static final String INPUT_NEW_COST = "Vuoi inserire un altro costituente?";
+	public static final String INPUT_COST_OPERATOR = "Inserisci l'operatore ( && oppure || )";
+	public static final String INPUT_OPERATING_MODE = "Inserisci la modalità operativa che verrà azionata";
+	public static final String ERROR_OPERATING_MODE = "Modalità operativa non presente";
+	public static final String INPUT_PARAMETER_VALUE = "Inserisci il valore del parametro";
+	public static final String INPUT_STRING_PARAMETER_VALUE = "Inserisci il valore del parametro (String)";
+	
+	
+	
+	
 	//DATA OUTPUT
 	public static final String SEPARATOR = ":";
 	public static final String SEPARATOR_WITH_SPACE = ": ";
