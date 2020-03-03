@@ -104,6 +104,10 @@ public class Sensor implements Manageable, Serializable{
 		return categoriesName;
 	}
 	
+	public boolean isNumeric() {
+		return categoryList.get(0).getIsNumeric();
+	}
+	
 	protected boolean sensorInvariant() {
 		boolean checkName = name != null && name.length() > 0;
 		boolean checkCategory = categoryList != null;

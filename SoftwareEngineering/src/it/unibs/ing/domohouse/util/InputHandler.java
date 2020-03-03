@@ -961,7 +961,6 @@ public class InputHandler {
 		boolean cont;
 		
 		do {	
-		boolean choice = RawInputHandler.yesOrNo("Vuoi inserire una variabile sensoriale? (S/N) (\"N\" inserirà un numero)");
 		String sensor;
 		String info;
 		String superOp;
@@ -1055,7 +1054,52 @@ public class InputHandler {
 			if(!modOp.contains(operatingMod)) System.out.println("Modalità operativa non presente");
 		}while(!modOp.contains(operatingMod));
 		
-		consString = actuator + ":=" + operatingMod;
+		//se la mod op inserita è parametrica
+		if(dataHandler.getHousingUnit(selectedHouse).getActuator(actuator)
+				.getCategory().hasParametricOperatingMode(operatingMod)){
+			
+			String param_info = OperatingModesHandler.getParameterInfo(operatingMod); //Duoble:2
+			String num;
+			int k;
+			
+			num = param_info.split(":")[1];
+			k = Integer.parseInt(num);
+			param_info = param_info.split(":")[0];
+			
+			ArrayList<Double> numbers = new ArrayList<>();
+			ArrayList<String> strings = new ArrayList<>();
+			
+			int i = 0;
+			do {
+				if(param_info.equals("Double")) {
+					double temp = RawInputHandler.readDouble("Inserisci il valore del parametro");
+					numbers.add(temp);
+					i++;
+				}else {
+					String temp = RawInputHandler.readNotVoidString("Inserisci il valore del parametro (String)");
+					strings.add(temp);
+					i++;
+				}	
+			}while(i<k);
+			
+			String parameters = "";
+			if(param_info.equals("Double")) {
+				for(double number : numbers) {
+					parameters = parameters + number + ",";
+				}
+					
+			}else {
+				for(String string : strings) {
+					parameters = parameters + string + ",";
+				}
+			}
+			
+			parameters = parameters.substring(0, parameters.length() - 1); //rimuovo ultima virgola
+			
+			consString = actuator + ":=" + operatingMod + "(" + parameters + ")";
+			
+		}
+		else consString = actuator + ":=" + operatingMod;
 		
 		Rule r = new Rule(dataHandler.getHousingUnit(selectedHouse), name, antString, consString, true);
 		

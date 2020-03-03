@@ -97,14 +97,13 @@ public class Rule implements Serializable{
 	//i1_igrometro.umiditaRelativa > 30 
 	//v1_videocamera.presenza == "presenza di persone"
 	private boolean getCostValue(String s) {
-
-		if(housingUnit.getSensor(s.split(".")[0]).categoryList.get(0).getIsNumeric()) {		
+		if(housingUnit.getSensor(s.split("\\.")[0]).isNumeric()) {		
 			String value1;
 			String info;
 			String op = "";
 			String value2;
 		
-			value1 = s.split(".")[0];
+			value1 = s.split("<|>|>=|<=|==|!=")[0];
 			double num1 = getValue(value1);
 		
 			value2 = s.split("<|>|>=|<=|==|!=")[1];
@@ -126,8 +125,8 @@ public class Rule implements Serializable{
 			String op ="";
 			String value;
 			
-			sensor = s.split(".")[0];
-			s = s.split(".")[1]; //presenza == presenza di persone
+			sensor = s.split("\\.")[0];
+			s = s.split("\\.")[1]; //presenza == presenza di persone
 			info = s.split("==|!=")[0];
 			
 			if(s.contains("==")) {
@@ -152,8 +151,8 @@ public class Rule implements Serializable{
 		if(toElaborate.matches("^[-+]?\\\\d+(\\\\.{0,1}(\\\\d+?))?$")) {      //deve prendere Double non integer
 			return Double.parseDouble(toElaborate);
 		}else {	
-			sensor = toElaborate.split(".")[0];
-			info = toElaborate.split(".")[1];	
+			sensor = toElaborate.split("\\.")[0];
+			info = toElaborate.split("\\.")[1];	
 			return housingUnit.getSensorValue(sensor, info);			
 		}
 	}
@@ -180,18 +179,49 @@ public class Rule implements Serializable{
 		toElaborate = toElaborate.split(":=")[1]; 
 		modOp = toElaborate; //da verificare che sia parametrica o no
 		
+		ArrayList<Double> paramDouble = new ArrayList<>(); //array double da passare per azionare op Mod
+		ArrayList<String> paramString = new ArrayList<>(); //array string da passare per azionare op Mod
+		
 		//si assume che una modOp parametrica sia nella forma "mantenimentoTemperatura(param)"
 		if(modOp.contains("(")) { //se paramatrica
 			modOp = toElaborate.split("(")[0]; //modOp = mantenimentoTemperatura
 			toElaborate = toElaborate.split("(")[1]; //toElaborate = param)
 			param = toElaborate.split(")")[0]; //toElaborate = param
 			
-			//param può essere una stringa oppure un double
-			if(param.matches("^[-+]?\\\\d+(\\\\.{0,1}(\\\\d+?))?$")) { //se fa match con double regex allora è double
+			if(!param.contains(",")) { //se è mono parametrica
+				//param può essere una stringa oppure un double
+				if(param.matches("^[-+]?\\\\d+(\\\\.{0,1}(\\\\d+?))?$")) { //se fa match con double regex allora è double
 				paramValue = Double.parseDouble(param);
-				housingUnit.getActuator(act).setParametricOperatingMode(modOp, paramValue);
-			}else {//altrimenti è una stringa e possiamo tenere param	
-				housingUnit.getActuator(act).setParametricOperatingMode(modOp, param);
+				paramDouble.add(paramValue);
+				housingUnit.getActuator(act).setParametricOperatingMode(modOp, paramDouble);
+				}else {//altrimenti è una stringa e possiamo tenere param	
+				paramString.add(param);
+				housingUnit.getActuator(act).setParametricOperatingMode(modOp, paramString);
+				}
+			}else {
+				if(param.split(",")[0].matches("^[-+]?\\\\d+(\\\\.{0,1}(\\\\d+?))?$")) { //se sono parametri Double
+					do { //12,31,42
+					paramDouble.add(Double.parseDouble(param.split(",")[0]));
+					param = param.split(",")[1];
+					
+					}while(param.contains(","));
+					
+					paramDouble.add(Double.parseDouble(param)); //aggiungo ultimo valore che rimarrebe fuori
+					
+					housingUnit.getActuator(act).setParametricOperatingMode(modOp, paramDouble);
+					
+				}else {//sono parametri String
+					do {
+					paramString.add(param.split(",")[0]);
+					param = param.split(",")[1];
+					
+					}while(param.contains(","));
+					
+					paramString.add(param); //aggiungo ultimo valore che rimarrebe fuori
+					
+					housingUnit.getActuator(act).setParametricOperatingMode(modOp, paramString);
+					
+				}
 			}
 		}else {//se non è parametrica
 			housingUnit.getActuator(act).setNonParametricOperatingMode(modOp);	
