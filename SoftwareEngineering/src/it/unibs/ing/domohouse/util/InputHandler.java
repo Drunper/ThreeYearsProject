@@ -963,12 +963,19 @@ public class InputHandler {
 		
 		String antString = "";
 		String consString = "";
-		boolean cont;
+		boolean cont = false;
 		
 		do {	
+			String superOp;	
+			
+		boolean choice = RawInputHandler.yesOrNo("Vuoi inserire una condizione sensoriale? (\"NO\" inserirà variabile temporale");
+		
+		if(choice) {
+			
+
 		String sensor;
 		String info;
-		String superOp;
+	
 	
 		
 			OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getSensorNames());
@@ -1025,8 +1032,35 @@ public class InputHandler {
 			String sValue = RawInputHandler.readNotVoidString(Strings.INPUT_DESIRED_VALUE);
 			antString = antString + sensor + "." + info + op + sValue;
 				}
-		
-		
+		}else {
+			//condizione temporale
+			String op;
+			do {
+				op = RawInputHandler.readNotVoidString(Strings.INPUT_OPERATOR);
+				if(! (op.equals(">=") || op.equals("<=") || op.equals("<") || op.equals(">") || op.equals("!=") || op.equals("==")))
+					System.out.println(Strings.ERROR_OPERATOR);
+			}while(! (op.equals(">=") || op.equals("<=") || op.equals("<") || op.equals(">") || op.equals("!=") || op.equals("==")));
+			
+			String time;
+			int hour = -1;
+			int minute = -1;
+			do {
+				time = RawInputHandler.readNotVoidString("Inserisci l'orario (formato HH.mm)");
+				if(time.contains(".")) {
+					try{
+					hour = Integer.parseInt(time.split("\\.")[0]);
+					minute = Integer.parseInt(time.split("\\.")[1]);
+					}catch(Exception ex) {
+						hour = -1;
+						minute = -1;
+					}
+				}
+				if(!time.contains(".") || hour > 23 || hour < 0 || minute > 59 || minute < 0 ) 
+					System.out.println("Inserisci un orario valido");
+			}while(!time.contains(".") || hour > 23 || hour < 0 || minute > 59 || minute < 0 );
+			
+			antString = antString + "time" + op + time;
+		} 
 		cont = RawInputHandler.yesOrNo(Strings.INPUT_NEW_COST);
 		if(cont) {
 			do {
@@ -1036,8 +1070,7 @@ public class InputHandler {
 			}while(! (superOp.equals("&&") || superOp.equals("||")));
 			
 			antString = antString + superOp;
-		}
-		
+			}
 		}while(cont);
 		
 		
@@ -1106,6 +1139,33 @@ public class InputHandler {
 		}
 		else consString = actuator + ":=" + operatingMod;
 		
+		boolean choice = RawInputHandler.yesOrNo("Vuoi azionare l'attuatore ad una determinata ora?");
+		
+		if(choice) {
+			String time;
+			int hour = -1;
+			int minute = -1;
+			do {
+				time = RawInputHandler.readNotVoidString("Inserisci l'orario (formato HH.mm)");
+				//22.
+				//rfemfwe.ewofnwe
+				if(time.contains(".")) {
+					try {
+					hour = Integer.parseInt(time.split("\\.")[0]);
+					minute = Integer.parseInt(time.split("\\.")[1]);
+					}catch(Exception ex) {
+						hour = -1;
+						minute = -1;
+					}
+				}
+				if(!time.contains(".") || hour > 23 || hour < 0 || minute > 59 || minute < 0 ) 
+					System.out.println("Inserisci un orario valido");
+			}while(!time.contains(".") || hour > 23 || hour < 0 || minute > 59 || minute < 0 );
+			
+			consString = consString + "," + "start:=" + time;
+		}
+		
+				
 		Rule r = new Rule(dataHandler.getHousingUnit(selectedHouse), name, antString, consString, true);
 		
 		dataHandler.getHousingUnit(selectedHouse).addRule(r);

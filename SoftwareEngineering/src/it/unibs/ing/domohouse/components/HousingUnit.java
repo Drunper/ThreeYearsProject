@@ -2,6 +2,7 @@ package it.unibs.ing.domohouse.components;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import it.unibs.ing.domohouse.interfaces.Manageable;
 import it.unibs.ing.domohouse.util.Association;
@@ -22,6 +23,7 @@ public class HousingUnit implements Serializable, Manageable {
 	private Manager artifactManager; //tutti gli artefatti della casa
 	private AssociationHandler associationManager; //per il controllo delle associazioni
 	private ArrayList<Rule> rules = new ArrayList<>();
+	private HashMap<Rule, Double> queuedRules = new HashMap<>();
 	
 	/*
 	 * invariante name > 0, descr > 0, diversi da null. Manager != null
@@ -353,6 +355,24 @@ public class HousingUnit implements Serializable, Manageable {
 		for(Rule r : rules) {
 			r.checkRule();
 		}
+		
+		for(Rule r : queuedRules.keySet()) {
+			if(queuedRules.get(r) == Double.parseDouble(Clock.getCurrentTime())) {
+				r.actuateConseguente();
+			}
+		}
+	}
+	
+	public void addQueuedRule(Rule r, double time) {
+		queuedRules.put(r, time);
+	}
+	
+	public void removeQueuedRule(Rule r) {
+		queuedRules.remove(r);
+	}
+	
+	public boolean containsQueuedRule(Rule r) {
+		return queuedRules.containsKey(r);
 	}
 	
 	public void disableRule(String selectedRule) {

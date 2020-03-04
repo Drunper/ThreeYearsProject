@@ -85,20 +85,27 @@ public class OperatingModesHandler implements Serializable{
 		
 		SerializableBiConsumer<Gettable, Object> mantenimentoTemperatura = (g, paramList) ->{
 			//Otterremo un arrayList di double contenente un valore ma meglio comunque fare controlli
-			if(paramList instanceof ArrayList && ((ArrayList) paramList).get(0) instanceof Double) {
+			try {
 				//In questo caso l'utente avrà inserito solamente un valore nell'arraylist e andremo a prendere quello
 				double num = ((ArrayList<Double>) paramList).get(0);
 				g.setNumericProperty("temperatura", num);
+				}catch(Exception ex) {
+					//Gestione eccezione
 			}
 		};
 		
 		SerializableBiConsumer<Gettable, Object> coloreLuci = (g, paramList) ->{
-			if(paramList instanceof ArrayList && ((ArrayList) paramList).get(0) instanceof String) {
+			try {
 				//In questo caso l'utente avrà inserito solamente un valore nell'arraylist e andremo a prendere quello
 				String color = ((ArrayList<String>) paramList).get(0);
 				g.setNonNumericProperty("coloreLuce", color);
+				}catch(Exception ex) {
+					//Gestione eccezione
 			}
 		};
+		
+
+		
 		
 		operatingModesMap.put("idle", idle);
 		operatingModesMap.put("aumentoTemperatura10gradi", aumentoTemperatura10gradi);

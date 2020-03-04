@@ -51,7 +51,7 @@ public class InterfaceHandler {
 					e.printStackTrace();
 				}
 			}
-		}, 0, 3, TimeUnit.SECONDS); //parte subito e ogni 3 secondi controlla le rules
+		}, 0, 1, TimeUnit.SECONDS); //parte subito e ogni 1 secondi controlla le rules
 	}
 	
 	private void checkExistenceDataHandler() {
@@ -175,6 +175,10 @@ public class InterfaceHandler {
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
 					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
+				case 4:
+					//aggiorna ora
+					OutputHandler.clearOutput();
+					break;
 			}
 		}while(exitFlag != true);
 		
@@ -245,6 +249,10 @@ public class InterfaceHandler {
 					firstStart = false;
 					saver.writeDataHandlerToFile(dataHandler);
 					System.out.println(Strings.DATA_SAVED);
+					break;
+				case 8:
+					//aggiorna ora
+					OutputHandler.clearOutput();
 					break;
 			}
 		}while(exitFlag != true);
@@ -331,6 +339,10 @@ public class InterfaceHandler {
 					OutputHandler.clearOutput();
 					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getAllRulesList());
 					break;
+				case 10:
+					//aggiorna ora
+					OutputHandler.clearOutput();
+					break;
 			}
 		}
 		while(exitFlag != true);
@@ -405,6 +417,10 @@ public class InterfaceHandler {
 					OutputHandler.clearOutput();
 					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getAllRulesList());
 					break;
+				case 8:
+					//aggiorna ora
+					OutputHandler.clearOutput();
+					break;
 			}
 		}
 		while(exitFlag!=true);
@@ -474,7 +490,11 @@ public class InterfaceHandler {
 				System.out.println();			
 				String selectedArtifact = inputHandler.safeInsertArtifact(selectedHouse);
 				OutputHandler.printArtifact(dataHandler.getArtifactString(selectedHouse, selectedArtifact));
-				break;	
+				break;
+			case 6:
+				//aggiorna ora
+				OutputHandler.clearOutput();
+				break;
 			}
 		}
 		while(exitFlag!=true);		
@@ -553,6 +573,10 @@ public class InterfaceHandler {
 					break;
 				case 9:
 					inputHandler.readArtifactFromUser(selectedHouse, selectedRoom);
+					break;
+				case 10:
+					//aggiorna ora
+					OutputHandler.clearOutput();
 					break;
 			}
 		}

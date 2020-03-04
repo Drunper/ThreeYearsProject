@@ -16,9 +16,11 @@ public class Rule implements Serializable{
 	private String name;
 	private String antString;
 	private String consString;
+	private String startString;
 
 
 	private boolean state;
+	private boolean getStart;
 	
 	private Map<String, Operator> numericOpMap = new HashMap<String, Operator>();
 	private Map<String, StringOperator> nonNumericOpMap = new HashMap<String, StringOperator>();
@@ -32,6 +34,7 @@ public class Rule implements Serializable{
 		this.consString = consString;
 		this.state = state;
 		this.housingUnit = housingUnit;
+		this.getStart = false;
 		fillMap();
 	}
 	
@@ -60,9 +63,19 @@ public class Rule implements Serializable{
 	
 	public String getCompleteRule() {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
-		return "[if]   " + antString + "   \n\t\t\t[then]   " + consString;
+		String result;
+		if(getStart) {
+			result = "[if]   " + antString + "   \n\t\t\t[then]   " + consString +", "+ startString;
+		}else result = "[if]   " + antString + "   \n\t\t\t[then]   " + consString;
+		
+		return result;
 	}
 	
+	public void actuateConseguente() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
+		consMode(this.consString);
+	}
+
 	/*
 	 * Metodi privati
 	 */
@@ -71,10 +84,7 @@ public class Rule implements Serializable{
 		return getAntValue(this.antString);
 	}
 	
-	private void actuateConseguente() {
-		assert ruleInvariant() : "Invariante della classe non soddisfatto";
-		consElaboration(this.consString);
-	}
+
 	
 	//i1_igrometro.umiditaRelativa > 30 
 	private boolean getAntValue(String antString) {
@@ -100,10 +110,12 @@ public class Rule implements Serializable{
 	
 	//i1_igrometro.umiditaRelativa > 30 
 	//v1_videocamera.presenza == "presenza di persone"
+	//time < 6.00
 	private boolean getCostValue(String s) {
 		assert s != null;
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		
+		if(!s.contains("time")) {
 		if(housingUnit.getSensor(s.split("\\.")[0]).isNumeric()) {		
 			String value1;
 			String info;
@@ -147,6 +159,20 @@ public class Rule implements Serializable{
 			String temp = housingUnit.getNonNumericSensorValue(sensor, info);
 			
 			return nonNumericOpMap.get(op).compare(temp, value);
+			}
+		}else {
+			double currentTime = Double.parseDouble(Clock.getCurrentTime());
+			double value = Double.parseDouble(s.split("<|>|>=|<=|==|!=")[1]);
+			
+			String op = "";
+			if(s.contains(">=")) op = ">=";
+			else if(s.contains("<=")) op = "<=";
+			else if(s.contains(">")) op = ">";
+			else if(s.contains("<")) op = "<";
+			else if(s.contains("==")) op = "==";
+			else if(s.contains("!=")) op = "!=";
+		
+			return numericOpMap.get(op).compare(currentTime, value);
 		}
 	}
 	
@@ -174,6 +200,19 @@ public class Rule implements Serializable{
 	 *
 	 *  I requisiti non specificano l'elaborazione di due o più conseguenti, dunque per ora ne assumiamo uno
 	 */
+	
+	//b1_attCancelloBattente := apertura, start := 10
+	private void consMode(String toElaborate) {
+		if(toElaborate.contains("start")) {
+			this.consString = toElaborate.split(",")[0];
+			this.getStart = true;
+			toElaborate = toElaborate.split(",")[1];
+			startString = toElaborate;
+			double time = Double.parseDouble(toElaborate.split(":=")[1]);
+			housingUnit.addQueuedRule(this, time);
+		}
+		else consElaboration(toElaborate);
+	}
 	private void consElaboration(String toElaborate) {
 		assert toElaborate != null;
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
@@ -190,7 +229,13 @@ public class Rule implements Serializable{
 		cat = toElaborate.split(":=")[0];
 		toElaborate = toElaborate.split(":=")[1]; 
 		modOp = toElaborate; //da verificare che sia parametrica o no
-
+		
+		if(housingUnit.containsQueuedRule(this)){
+			//se l'attuatore su cui stiamo lavorando viene azionato e era presente nella coda di attuatori
+			//da azionare in futuro, allora viene rimosso
+			housingUnit.removeQueuedRule(this);
+		}
+		
 		ArrayList<Double> paramDouble = new ArrayList<>(); //array double da passare per azionare op Mod
 		ArrayList<String> paramString = new ArrayList<>(); //array string da passare per azionare op Mod
 		

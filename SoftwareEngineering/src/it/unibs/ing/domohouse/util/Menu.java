@@ -1,5 +1,6 @@
 package it.unibs.ing.domohouse.util;
 
+import it.unibs.ing.domohouse.components.Clock;
 
 /*
  * Classe utilizzata nel corso di Fondamenti di Programmazione. Autore sconosciuto. Utilizzata solamente a fini didattici.
@@ -38,6 +39,8 @@ public class Menu
 		assert menuInvariant() : "Invariante di classe non soddisfatto";
 		System.out.println(FRAME);
 		System.out.println(title);
+		System.out.println(FRAME);
+		System.out.println(Clock.getCurrentTime());
 		System.out.println(FRAME);
 	    for (int i=0; i<voices.length; i++)
 	    {
