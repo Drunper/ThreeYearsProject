@@ -43,7 +43,9 @@ public class Actuator implements Manageable, Serializable {
 		return name;
 	}
 	
+	//info per sapere se l'attuatore sta attuando una modalità operativa
 	public boolean isRunning() {
+		assert actuatorInvariant();
 		return this.running;
 	}
 

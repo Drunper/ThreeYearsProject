@@ -364,14 +364,32 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 	
 	public void addQueuedRule(Rule r, double time) {
+		assert r != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		int pre_size = queuedRules.size();
+		
 		queuedRules.put(r, time);
+		
+		assert queuedRules.size() >= pre_size;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void removeQueuedRule(Rule r) {
+		assert r != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		int pre_size = queuedRules.size();
+		
 		queuedRules.remove(r);
+		
+		assert pre_size >= queuedRules.size();
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+
 	}
 	
 	public boolean containsQueuedRule(Rule r) {
+		assert r != null;
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+
 		return queuedRules.containsKey(r);
 	}
 	
@@ -526,41 +544,9 @@ public class HousingUnit implements Serializable, Manageable {
 		return _selectedSensor.getCategories();
 	}
 	
-	
-	/*public void updateRulesState(String selectedDevice) {
-		//verifico che device sia sensor o actuator
-		if(this.hasSensor(selectedDevice)) {
-			//lavoriamo sul sensore
-			for(Rule r : rules) {
-				if(r.getAntString().contains(selectedDevice)) {
-					Sensor sens = (Sensor) sensorManager.getElementByName(selectedDevice);
-					if(sens.isState()) {
-						//stiamo attivando il sensore
-						//controlliamo lo stato degli altri componenti
-						boolean flag = true;
-						String [] involvedSensors = r.getInvolvedSensors();
-						for(String invSens : involvedSensors) {
-							Sensor invSensor = (Sensor) sensorManager.getElementByName(invSens);
-							if(!invSensor.isState()) flag = false;
-						}
-						
-						String involvedActuator = r.getInvolvedActuator();
-						Actuator invActuator = (Actuator) actuatorManager.getElementByName(involvedActuator);
-						if(!invActuator.isState()) flag = false;
-						
-						if(flag) r.setState(true);
-					}else {
-						//stiamo disattivando il sensore
-						r.setState(false);
-					}
-				}
-			}
-		}else {
-			//lavoriamo sull'attuatore
-		}
-		
-	}*/
 	public void updateRulesState() {
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+
 		boolean flag = true;
 		for(Rule r : rules) {
 			for(String s : r.getInvolvedSensors()) {
@@ -576,7 +562,7 @@ public class HousingUnit implements Serializable, Manageable {
 			else r.setState(false);
 		}
 		
-		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	
@@ -585,7 +571,7 @@ public class HousingUnit implements Serializable, Manageable {
 		boolean checkDescr = descr != null;
 		boolean checkManagers = roomManager != null && sensorManager != null  && actuatorManager !=null 
 				&& artifactManager != null && associationManager != null;
-		boolean checkRules = rules != null;
+		boolean checkRules = rules != null && queuedRules != null;
 		if(checkName && checkDescr && checkManagers && checkRules) return true;
 		return false;
 	}

@@ -520,6 +520,8 @@ public class DataHandler implements Serializable {
 	}
 	
 	public void updateRulesState() {
+		assert dataHandlerInvariant() : "Invariante di classe non soddisfatto";
+		
 		for(String houseName : housingUnitManager.namesList()) {
 			HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(houseName);
 			house.updateRulesState();

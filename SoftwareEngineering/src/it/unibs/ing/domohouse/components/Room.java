@@ -335,6 +335,8 @@ public class Room implements Gettable, Serializable {
 	}
 	
 	public String [] getEnabledSensors() {
+		assert roomInvariant() : "Invariante della classe non soddisfatto";
+		
 		ArrayList<String> enabledSens = new ArrayList<>();
 		for(String s : sensorManager.namesList()) {
 			Sensor sens = (Sensor) sensorManager.getElementByName(s);
@@ -347,10 +349,14 @@ public class Room implements Gettable, Serializable {
 			result[i] = enabledSens.get(i);
 		}
 		
+		assert result != null;
+		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		return result;
 	}
 	
 	public String [] getDisabledSensors() {
+		assert roomInvariant() : "Invariante della classe non soddisfatto";
+		
 		ArrayList<String> disabledSens = new ArrayList<>();
 		for(String s : sensorManager.namesList()) {
 			Sensor sens = (Sensor) sensorManager.getElementByName(s);
@@ -363,10 +369,14 @@ public class Room implements Gettable, Serializable {
 			result[i] = disabledSens.get(i);
 		}
 		
+		assert result != null;
+		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		return result;
 	}
 	
 	public String [] getEnabledActuators() {
+		assert roomInvariant() : "Invariante della classe non soddisfatto";
+		
 		ArrayList<String> enabledActuator = new ArrayList<>();
 		for(String s : actuatorManager.namesList()) {
 			Actuator act = (Actuator) actuatorManager.getElementByName(s);
@@ -379,10 +389,14 @@ public class Room implements Gettable, Serializable {
 			result[i] = enabledActuator.get(i);
 		}
 		
+		assert result != null;
+		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		return result;
 	}
 	
 	public String [] getDisabledActuators() {
+		assert roomInvariant() : "Invariante della classe non soddisfatto";
+		
 		ArrayList<String> disabledActuators = new ArrayList<>();
 		for(String s : actuatorManager.namesList()) {
 			Actuator act = (Actuator) actuatorManager.getElementByName(s);
@@ -395,6 +409,8 @@ public class Room implements Gettable, Serializable {
 			result[i] = disabledActuators.get(i);
 		}
 		
+		assert result != null;
+		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		return result;
 	}
 	

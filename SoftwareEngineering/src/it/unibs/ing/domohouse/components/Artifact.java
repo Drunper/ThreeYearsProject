@@ -37,24 +37,40 @@ public class Artifact implements Gettable, Serializable {
 	}
 	
 	public void addControllerActuator(Actuator actuator) {
+		assert actuator != null;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
+		int pre_size = controllerActuators.size();
+		
 		controllerActuators.add(actuator);
+		
+		assert controllerActuators.size() >= pre_size;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public String [] getControllerActuatorsNames() {
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
+		
 		String [] result = new String[controllerActuators.size()];
 		
 		for(int i = 0; i < controllerActuators.size(); i++) {
 			result[i] = controllerActuators.get(i).getName();
 		}
 		
+		assert result != null;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return result;
 	}
 	
 	public Actuator getActuatorByName(String selectedActuator) {
+		assert selectedActuator != null;
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
+		
 		Actuator result = null;
 		for(int i = 0; i < controllerActuators.size(); i++) {
 			if(controllerActuators.get(i).getName().equals(selectedActuator)) result = controllerActuators.get(i);
 		}
+		
+		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return result;
 	}
 	
@@ -134,13 +150,13 @@ public class Artifact implements Gettable, Serializable {
 	
 	private boolean artifactInvariant() {
 		boolean checkName = false;
-		boolean checkTest = false;
+		boolean checkText = false;
 		boolean checkMap = false;
 		if(name.length() > 0 && name != null) checkName = true;
-		if(text != null) checkTest = true;
-		if(numericPropertiesMap != null && nonNumericPropertiesMap != null) checkMap = true; 
+		if(text != null) checkText = true;
+		if(numericPropertiesMap != null && nonNumericPropertiesMap != null && controllerActuators != null) checkMap = true; 
 		
-		if(checkName && checkTest && checkMap) return true;
+		if(checkName && checkText && checkMap) return true;
 		return false;
 	}
 }

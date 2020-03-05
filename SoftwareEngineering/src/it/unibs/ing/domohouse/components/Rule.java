@@ -83,24 +83,31 @@ public class Rule implements Serializable{
 	}
 	
 	public String getAntString() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		return this.antString;
 	}
 	
 	public String getConsString() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		return this.consString;
 	}
 	
 	public String [] getInvolvedSensors() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
+		
 		String [] result = new String[sensors.size()];
 		
 		for(int i = 0; i < sensors.size(); i++) {
 			result[i] = sensors.get(i);
 		}
 		
+		assert result != null;
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		return result; 
 	}
 	
 	public String getInvolvedActuator() {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		return this.actuator;
 	}
 	/*
@@ -230,6 +237,8 @@ public class Rule implements Serializable{
 	
 	//b1_attCancelloBattente := apertura, start := 10
 	private void consMode(String toElaborate) {
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
+		
 		if(toElaborate.contains("start")) {
 			this.consString = toElaborate.split(",")[0];
 			this.getStart = true;
@@ -239,7 +248,10 @@ public class Rule implements Serializable{
 			housingUnit.addQueuedRule(this, time);
 		}
 		else consElaboration(toElaborate);
+		
+		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 	}
+	
 	private void consElaboration(String toElaborate) {
 		assert toElaborate != null;
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";

@@ -1181,6 +1181,9 @@ public class InputHandler {
 	}
 	
 	public void setRuleState(String selectedHouse) {
+		assert selectedHouse != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		boolean choice = RawInputHandler.yesOrNo("Vuoi attivare una regola? (\"N\" per disattivare una regola)");
 		
 		if(choice) {
@@ -1220,9 +1223,14 @@ public class InputHandler {
 				dataHandler.getHousingUnit(selectedHouse).disableRule(rule);
 			}
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public void setDeviceState(String selectedHouse, String selectedRoom) {
+		assert selectedHouse != null && selectedRoom != null;
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+		
 		boolean choiceDev = RawInputHandler.yesOrNo("Vuoi agire su un sensore? (\"N\" agirà su un attuatore)");
 		
 		if(choiceDev) {
@@ -1308,6 +1316,8 @@ public class InputHandler {
 				}
 			}
 		}
+		
+		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	private boolean inputHandlerInvariant() {

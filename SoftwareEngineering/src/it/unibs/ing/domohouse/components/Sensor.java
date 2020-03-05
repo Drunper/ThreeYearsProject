@@ -107,6 +107,7 @@ public class Sensor implements Manageable, Serializable{
 	}
 	
 	public boolean isNumeric() {
+		assert sensorInvariant() : "Invariante della classe non soddisfatto";
 		return categoryList.get(0).getIsNumeric();
 	}
 	

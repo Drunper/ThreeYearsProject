@@ -26,14 +26,17 @@ public class Clock {
 	}
 	
 	public static int getHour() {
+		assert clockInvariant() : "Invariante della classe non soddisfatto";
 		return hour;
 	}
 	
 	public static int getMinute() {
+		assert clockInvariant() : "Invariante della classe non soddisfatto";
 		return minute;
 	}
 	
 	public static String getCurrentTime() {
+		assert clockInvariant() : "Invariante della classe non soddisfatto";
 
 		String string_hour = "" + hour;
 		String string_minute = "" + minute;
@@ -47,10 +50,14 @@ public class Clock {
 		
 		String result = string_hour + "." + string_minute;
 		
+		assert result != null;
+		assert clockInvariant() : "Invariante della classe non soddisfatto";
 		return result;
 	}
 	
 	private static void updateTime() {
+		assert clockInvariant() : "Invariante della classe non soddisfatto";
+		
 		minute++;
 		if(minute > 59) {
 			minute = 0;
@@ -59,5 +66,14 @@ public class Clock {
 				hour = 0;
 			}
 		}
+		
+		assert clockInvariant() : "Invariante della classe non soddisfatto";
+	}
+	
+	private static boolean clockInvariant() {
+		boolean checkHour = hour >= 0 && hour <= 23;
+		boolean checkMinute = minute >= 0 && minute <= 59;
+		if(checkHour && checkMinute) return true;
+		return false;
 	}
 }
