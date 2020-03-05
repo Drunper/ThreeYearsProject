@@ -340,6 +340,11 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getAllRulesList());
 					break;
 				case 10:
+					//attiva/disattiva regola
+					OutputHandler.clearOutput();
+					inputHandler.setRuleState(selectedHouse);
+					break;
+				case 11:
 					//aggiorna ora
 					OutputHandler.clearOutput();
 					break;
@@ -418,6 +423,11 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getAllRulesList());
 					break;
 				case 8:
+					//attiva/disattiva regola
+					OutputHandler.clearOutput();
+					inputHandler.setRuleState(selectedHouse);
+					break;
+				case 9:
 					//aggiorna ora
 					OutputHandler.clearOutput();
 					break;
@@ -478,6 +488,7 @@ public class InterfaceHandler {
 				OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedHouse, selectedRoom));
 				String selectedAct = inputHandler.safeInsertActuator(selectedHouse);
 				inputHandler.setOperatingMode(selectedHouse, selectedRoom, selectedAct);
+				dataHandler.updateRulesState();
 				break;
 			case 5:
 				OutputHandler.clearOutput();
@@ -492,6 +503,11 @@ public class InterfaceHandler {
 				OutputHandler.printArtifact(dataHandler.getArtifactString(selectedHouse, selectedArtifact));
 				break;
 			case 6:
+				//attiva/disattiva disp
+				inputHandler.setDeviceState(selectedHouse, selectedRoom);
+				dataHandler.updateRulesState();
+				break;
+			case 7:
 				//aggiorna ora
 				OutputHandler.clearOutput();
 				break;
@@ -550,6 +566,7 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedHouse, selectedRoom));
 					String selectedAct = inputHandler.safeInsertActuator(selectedHouse);
 					inputHandler.setOperatingMode(selectedHouse, selectedRoom, selectedAct);
+					dataHandler.updateRulesState();
 					break;
 				case 5:
 					OutputHandler.clearOutput();
@@ -575,6 +592,11 @@ public class InterfaceHandler {
 					inputHandler.readArtifactFromUser(selectedHouse, selectedRoom);
 					break;
 				case 10:
+					//attiva/dis disp
+					inputHandler.setDeviceState(selectedHouse, selectedRoom);
+					dataHandler.updateRulesState();
+					break;
+				case 11:
 					//aggiorna ora
 					OutputHandler.clearOutput();
 					break;

@@ -519,6 +519,13 @@ public class DataHandler implements Serializable {
 		return _selectedHouse.isThereArtifact();
 	}
 	
+	public void updateRulesState() {
+		for(String houseName : housingUnitManager.namesList()) {
+			HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(houseName);
+			house.updateRulesState();
+		}
+	}
+	
 	public boolean dataHandlerInvariant() {
 		boolean checkManagers = sensorCategoryManager != null && actuatorCategoryManager != null && housingUnitManager != null;
 		return checkManagers; 

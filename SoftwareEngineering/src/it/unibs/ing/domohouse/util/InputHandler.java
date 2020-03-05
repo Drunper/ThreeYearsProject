@@ -777,8 +777,10 @@ public class InputHandler {
 			dataHandler.addAssociation(selectedHouse, object, category);
 			if (roomOrArtifact)
 				actuator.addEntry(dataHandler.getRoom(selectedHouse, object));
-			else
+			else {
 				actuator.addEntry(dataHandler.getArtifact(selectedHouse, object));
+				dataHandler.getArtifact(selectedHouse, object).addControllerActuator(actuator);
+			}
 		}
 		
 		assert actuator != null;
@@ -956,6 +958,8 @@ public class InputHandler {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
+		
+		boolean state = true;
 		String name;
 		do {
 		name = RawInputHandler.readNotVoidString(Strings.INPUT_RULE_NAME);
@@ -965,14 +969,15 @@ public class InputHandler {
 		String consString = "";
 		boolean cont = false;
 		
+		ArrayList<String> sensors = new ArrayList<>();
+		String act;
+		
 		do {	
 			String superOp;	
 			
 		boolean choice = RawInputHandler.yesOrNo("Vuoi inserire una condizione sensoriale? (\"NO\" inserirà variabile temporale");
-		
-		if(choice) {
-			
 
+		if(choice) {
 		String sensor;
 		String info;
 	
@@ -980,6 +985,8 @@ public class InputHandler {
 		
 			OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getSensorNames());
 			sensor = safeInsertSensor(selectedHouse);
+			sensors.add(sensor);
+			if(!dataHandler.getHousingUnit(selectedHouse).getSensor(sensor).isState()) state = false;
 			
 			ArrayList<String> infos = new ArrayList<>();
 			for(String cat : dataHandler.getCategoriesOfASensor(selectedHouse, sensor)) {
@@ -1079,8 +1086,8 @@ public class InputHandler {
 		
 		OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getActuatorNames());
 		String actuator = safeInsertActuator(selectedHouse);
-		
-		
+		act = actuator;
+		if(!dataHandler.getHousingUnit(selectedHouse).getActuator(actuator).isState()) state = false;
 		
 		OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getActuator(actuator).getCategory().listOfOperatingModes());
 		
@@ -1166,11 +1173,141 @@ public class InputHandler {
 		}
 		
 				
-		Rule r = new Rule(dataHandler.getHousingUnit(selectedHouse), name, antString, consString, true);
+		Rule r = new Rule(dataHandler.getHousingUnit(selectedHouse), name, antString, consString, sensors, act, state);
 		
 		dataHandler.getHousingUnit(selectedHouse).addRule(r);
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
+	}
+	
+	public void setRuleState(String selectedHouse) {
+		boolean choice = RawInputHandler.yesOrNo("Vuoi attivare una regola? (\"N\" per disattivare una regola)");
+		
+		if(choice) {
+			//attiva regola
+			if(dataHandler.getHousingUnit(selectedHouse).getDisabledRulesList().length == 0) System.out.println("Tutte le regole sono attive o non sono presenti regole");
+			else {
+				ArrayList<String> disabledRules = new ArrayList<>(Arrays.asList(dataHandler.getHousingUnit(selectedHouse).getDisabledRulesListNames()));
+				OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getDisabledRulesList());
+				String rule;
+
+				do {
+				rule = RawInputHandler.readNotVoidString("Inserisci il nome della regola da disattivare (\"^\" per uscire)");
+				if(!rule.equalsIgnoreCase(Strings.BACK_CHARACTER)) {
+					if(!disabledRules.contains(rule)) System.out.println("Attenzione! Inserisci un nome di regola presente nell'elenco");
+				}
+				if(rule.equalsIgnoreCase(Strings.BACK_CHARACTER)) break;
+				}while(!disabledRules.contains(rule));
+
+				dataHandler.getHousingUnit(selectedHouse).enableRule(rule);
+			}
+		}else {
+			//disattiva regola
+			if(dataHandler.getHousingUnit(selectedHouse).getEnabledRulesList().length == 0) System.out.println("Tutte le regole sono disattive o non sono presenti regole");
+			else {
+				ArrayList<String> enabledRules = new ArrayList<>(Arrays.asList(dataHandler.getHousingUnit(selectedHouse).getEnabledRulesListNames()));
+				OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getEnabledRulesList());
+				String rule;
+					do {
+					rule = RawInputHandler.readNotVoidString("Inserisci il nome della regola da disattivare (\"^\" per uscire)");
+					if(!rule.equalsIgnoreCase(Strings.BACK_CHARACTER)) {
+						if(!enabledRules.contains(rule)) System.out.println("Attenzione! Inserisci un nome di regola presente nell'elenco");
+					}
+					if(rule.equalsIgnoreCase(Strings.BACK_CHARACTER)) break;
+					}while(!enabledRules.contains(rule));
+
+				
+				dataHandler.getHousingUnit(selectedHouse).disableRule(rule);
+			}
+		}
+	}
+	
+	public void setDeviceState(String selectedHouse, String selectedRoom) {
+		boolean choiceDev = RawInputHandler.yesOrNo("Vuoi agire su un sensore? (\"N\" agirà su un attuatore)");
+		
+		if(choiceDev) {
+			//attiva/disattiva sensore
+			boolean choice = RawInputHandler.yesOrNo("Vuoi attivare un sensore? (\"N\" per disattivare un sensore)");
+			if(choice) {
+				//attiva un sensore
+				if(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getDisabledSensors().length == 0) System.out.println("Tutti i sensori sono attivi o non sono presenti sensori nella stanza");
+				else {
+					ArrayList<String> disabledSensors = new ArrayList<>(Arrays.asList(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getDisabledSensors()));
+					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getDisabledSensors());
+					String sensor;
+
+					do {
+					sensor = RawInputHandler.readNotVoidString("Inserisci il nome del sensore da attivare (\"^\" per uscire)");
+					if(!sensor.equalsIgnoreCase(Strings.BACK_CHARACTER)) {
+						if(!disabledSensors.contains(sensor)) System.out.println("Attenzione! Inserisci un nome di sensore presente nell'elenco");
+					}
+					if(sensor.equalsIgnoreCase(Strings.BACK_CHARACTER)) break;
+					}while(!disabledSensors.contains(sensor));
+
+					dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getSensorByName(sensor).setState(true);
+				}
+			}else {
+				//disattiva un sensore
+				if(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getEnabledSensors().length == 0) System.out.println("Tutti i sensori sono disattivi o non sono presenti sensori nella stanza");
+				else {
+					ArrayList<String> enabledSensors = new ArrayList<>(Arrays.asList(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getEnabledSensors()));
+					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getEnabledSensors());
+					String sensor;
+						do {
+						sensor = RawInputHandler.readNotVoidString("Inserisci il nome del sensore da disattivare (\"^\" per uscire)");
+						if(!sensor.equalsIgnoreCase(Strings.BACK_CHARACTER)) {
+							if(!enabledSensors.contains(sensor)) System.out.println("Attenzione! Inserisci un nome di sensore presente nell'elenco");
+						}
+						if(sensor.equalsIgnoreCase(Strings.BACK_CHARACTER)) break;
+						}while(!enabledSensors.contains(sensor));
+
+					
+						dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getSensorByName(sensor).setState(false);
+				}
+			}
+			
+			
+		}else {
+			//attiva/disattiva attuatore
+			boolean choice = RawInputHandler.yesOrNo("Vuoi attivare un attuatore? (\"N\" per disattivare un attuatore)");
+			if(choice) {
+				//attiva un attuatore
+				if(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getDisabledActuators().length == 0) System.out.println("Tutti gli attuatori sono attivi o non sono presenti attuatori nella stanza");
+				else {
+					ArrayList<String> disabledActuators = new ArrayList<>(Arrays.asList(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getDisabledActuators()));
+					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getDisabledActuators());
+					String actuator;
+
+					do {
+					actuator = RawInputHandler.readNotVoidString("Inserisci il nome dell'attuatore da attivare (\"^\" per uscire)");
+					if(!actuator.equalsIgnoreCase(Strings.BACK_CHARACTER)) {
+						if(!disabledActuators.contains(actuator)) System.out.println("Attenzione! Inserisci un nome di attuatore presente nell'elenco");
+					}
+					if(actuator.equalsIgnoreCase(Strings.BACK_CHARACTER)) break;
+					}while(!disabledActuators.contains(actuator));
+
+					dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getActuatorByName(actuator).setState(true);
+				}
+			}else {
+				//disattiva un attuatore
+				if(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getEnabledActuators().length == 0) System.out.println("Tutti gli attuatori sono disattivi o non sono presenti attuatori nella stanza");
+				else {
+					ArrayList<String> enabledActuators = new ArrayList<>(Arrays.asList(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getEnabledActuators()));
+					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getEnabledActuators());
+					String actuator;
+						do {
+						actuator = RawInputHandler.readNotVoidString("Inserisci il nome dell'attuatore da disattivare (\"^\" per uscire)");
+						if(!actuator.equalsIgnoreCase(Strings.BACK_CHARACTER)) {
+							if(!enabledActuators.contains(actuator)) System.out.println("Attenzione! Inserisci un nome di attuatore presente nell'elenco");
+						}
+						if(actuator.equalsIgnoreCase(Strings.BACK_CHARACTER)) break;
+						}while(!enabledActuators.contains(actuator));
+
+					
+						dataHandler.getHousingUnit(selectedHouse).getRoom(selectedRoom).getActuatorByName(actuator).setState(false);
+				}
+			}
+		}
 	}
 	
 	private boolean inputHandlerInvariant() {

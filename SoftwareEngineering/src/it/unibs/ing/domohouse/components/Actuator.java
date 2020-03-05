@@ -21,6 +21,7 @@ public class Actuator implements Manageable, Serializable {
 	private String defaultMode;
 	private boolean state;
 	private boolean controllingRoom;
+	private boolean running;
 
 	/*
 	 * invariante: controlledObjects size > 0, name != null
@@ -34,11 +35,16 @@ public class Actuator implements Manageable, Serializable {
 		operatingMode = defaultMode;
 		controlledObjects = new Manager();
 		state = true;
+		running = false;
 	}
 	
 	public String getName() {
 		assert actuatorInvariant();
 		return name;
+	}
+	
+	public boolean isRunning() {
+		return this.running;
 	}
 
 	public void setName(String newName) {
@@ -46,6 +52,14 @@ public class Actuator implements Manageable, Serializable {
 		this.name = newName;
 		assert name.length() > 0 && name != null;
 		assert actuatorInvariant();
+	}
+	
+	public void setState(boolean flag) {
+		this.state = flag;
+	}
+	
+	public boolean isState() {
+		return this.state;
 	}
 	
 	public ActuatorCategory getCategory() {
@@ -83,23 +97,27 @@ public class Actuator implements Manageable, Serializable {
 	public void setNonParametricOperatingMode(String operatingMode) {
 		assert category != null && category.getOperatingMode(operatingMode) != null;
 		this.operatingMode = operatingMode;
+		running = true;
 		Consumer<Gettable> mode = category.getOperatingMode(operatingMode);
 		for(String object : controlledObjects.namesList())
 		{
 			mode.accept((Gettable)controlledObjects.getElementByName(object));
 		}
+		running = false;
 		assert actuatorInvariant();
 	}
 	
 	public void setParametricOperatingMode(String operatingMode, Object o) {
 		assert category != null && category.getParametricOperatingMode(operatingMode) != null;
 		this.operatingMode = operatingMode;
+		running = true;
 		BiConsumer<Gettable, Object> mode = category.getParametricOperatingMode(operatingMode);
 		
 		for(String object : controlledObjects.namesList())
 		{
 			mode.accept((Gettable)controlledObjects.getElementByName(object), o);
 		}
+		running = false;
 		assert actuatorInvariant();
 	}
 	

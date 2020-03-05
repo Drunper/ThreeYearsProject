@@ -3,6 +3,10 @@ package it.unibs.ing.domohouse.util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import it.unibs.ing.domohouse.components.Actuator;
+import it.unibs.ing.domohouse.components.Artifact;
+import it.unibs.ing.domohouse.components.Room;
 import it.unibs.ing.domohouse.interfaces.Gettable;
 import it.unibs.ing.domohouse.interfaces.SerializableBiConsumer;
 import it.unibs.ing.domohouse.interfaces.SerializableConsumer;
@@ -76,7 +80,7 @@ public class OperatingModesHandler implements Serializable{
 					umidita = umidita - 2;
 					g.setNumericProperty("umidità", umidita);
 				};
-		
+			
 		SerializableConsumer<Gettable> aumentoUmidita = g ->{
 					double umidita = g.getNumericProperty("umidità");
 					umidita = umidita + 2;
@@ -104,6 +108,26 @@ public class OperatingModesHandler implements Serializable{
 			}
 		};
 		
+		SerializableConsumer<Gettable> spegnimento = (g) ->{
+			if(g instanceof Room) {
+				Room room = (Room) g;
+				for(String act : room.getActuatorsNames()) {
+					Actuator actuator = room.getActuatorByName(act);
+					if(actuator.isRunning()) {
+						actuator.setState(false);
+					}
+				}
+			}else if(g instanceof Artifact) {
+				Artifact artifact = (Artifact) g;
+				for(String act : artifact.getControllerActuatorsNames()) {
+					Actuator actuator = artifact.getActuatorByName(act);
+					if(actuator.isRunning()) {
+						actuator.setState(false);
+					}
+				}
+			}
+		};
+		
 
 		
 		
@@ -116,6 +140,7 @@ public class OperatingModesHandler implements Serializable{
 		operatingModesMap.put("aumentoTemperatura1gradi", aumentoTemperatura1gradi);
 		operatingModesMap.put("aumentoUmidita", aumentoUmidita);
 		operatingModesMap.put("diminuzioneUmidita", diminuzioneUmidita);
+		operatingModesMap.put("spegnimento", spegnimento);
 		
 		parametricOperatingModesMap.put("mantenimentoTemperatura", mantenimentoTemperatura);
 		paramMap.put("mantenimentoTemperatura", "Double:1"); 

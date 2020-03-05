@@ -334,6 +334,70 @@ public class Room implements Gettable, Serializable {
 		
 	}
 	
+	public String [] getEnabledSensors() {
+		ArrayList<String> enabledSens = new ArrayList<>();
+		for(String s : sensorManager.namesList()) {
+			Sensor sens = (Sensor) sensorManager.getElementByName(s);
+			if(sens.isState()) enabledSens.add(s);
+		}
+		
+		String [] result = new String [enabledSens.size()];
+		
+		for(int i = 0; i < enabledSens.size(); i++) {
+			result[i] = enabledSens.get(i);
+		}
+		
+		return result;
+	}
+	
+	public String [] getDisabledSensors() {
+		ArrayList<String> disabledSens = new ArrayList<>();
+		for(String s : sensorManager.namesList()) {
+			Sensor sens = (Sensor) sensorManager.getElementByName(s);
+			if(!sens.isState()) disabledSens.add(s);
+		}
+		
+		String [] result = new String [disabledSens.size()];
+		
+		for(int i = 0; i < disabledSens.size(); i++) {
+			result[i] = disabledSens.get(i);
+		}
+		
+		return result;
+	}
+	
+	public String [] getEnabledActuators() {
+		ArrayList<String> enabledActuator = new ArrayList<>();
+		for(String s : actuatorManager.namesList()) {
+			Actuator act = (Actuator) actuatorManager.getElementByName(s);
+			if(act.isState()) enabledActuator.add(s);
+		}
+		
+		String [] result = new String [enabledActuator.size()];
+		
+		for(int i = 0; i < enabledActuator.size(); i++) {
+			result[i] = enabledActuator.get(i);
+		}
+		
+		return result;
+	}
+	
+	public String [] getDisabledActuators() {
+		ArrayList<String> disabledActuators = new ArrayList<>();
+		for(String s : actuatorManager.namesList()) {
+			Actuator act = (Actuator) actuatorManager.getElementByName(s);
+			if(!act.isState()) disabledActuators.add(s);
+		}
+		
+		String [] result = new String [disabledActuators.size()];
+		
+		for(int i = 0; i < disabledActuators.size(); i++) {
+			result[i] = disabledActuators.get(i);
+		}
+		
+		return result;
+	}
+	
 	private boolean roomInvariant() {
 		boolean checkName = name != null && name.length() > 0;
 		boolean checkText = text != null;

@@ -14,13 +14,17 @@ public class Rule implements Serializable{
 	private static final long serialVersionUID = -3835080225181052479L;
 	private HousingUnit housingUnit;
 	private String name;
-	private String antString;
-	private String consString;
+	private String antString; //stringa antecedente regola
+	private String consString; //stringa conseguente regola
 	private String startString;
+	
+	//dispositivi coinvolti nella regola
+	private ArrayList<String> sensors;
+	private String actuator;
 
 
 	private boolean state;
-	private boolean getStart;
+	private boolean getStart;//contiene la key word "start"
 	
 	private Map<String, Operator> numericOpMap = new HashMap<String, Operator>();
 	private Map<String, StringOperator> nonNumericOpMap = new HashMap<String, StringOperator>();
@@ -28,12 +32,14 @@ public class Rule implements Serializable{
 	/*
 	 * invariante name != null, antString !=null, consString != null, numericOpMap != null, nonNumericOpMap != null
 	 */
-	public Rule(HousingUnit housingUnit, String name, String antString, String consString, boolean state) {
+	public Rule(HousingUnit housingUnit, String name, String antString, String consString, ArrayList<String> sensors, String actuator, boolean state) {
 		this.name = name;
 		this.antString = antString;
 		this.consString = consString;
 		this.state = state;
 		this.housingUnit = housingUnit;
+		this.sensors = sensors;
+		this.actuator = actuator;
 		this.getStart = false;
 		fillMap();
 	}
@@ -75,7 +81,28 @@ public class Rule implements Serializable{
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		consMode(this.consString);
 	}
-
+	
+	public String getAntString() {
+		return this.antString;
+	}
+	
+	public String getConsString() {
+		return this.consString;
+	}
+	
+	public String [] getInvolvedSensors() {
+		String [] result = new String[sensors.size()];
+		
+		for(int i = 0; i < sensors.size(); i++) {
+			result[i] = sensors.get(i);
+		}
+		
+		return result; 
+	}
+	
+	public String getInvolvedActuator() {
+		return this.actuator;
+	}
 	/*
 	 * Metodi privati
 	 */

@@ -418,6 +418,69 @@ public class HousingUnit implements Serializable, Manageable {
 		return s;
 	}
 	
+	public String [] getEnabledRulesListNames() {
+		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		ArrayList<Rule> enabledRules = new ArrayList<>();
+		
+		for(Rule r : rules) {
+			if(r.isActive()) enabledRules.add(r);
+		}
+		
+		String [] s = new String[enabledRules.size()];
+		
+		for(int i = 0; i < enabledRules.size(); i++) {
+			s[i] = enabledRules.get(i).getName();
+		}
+		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		return s;
+	}
+	
+	public String [] getDisabledRulesList() {
+		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		ArrayList<Rule> disabledRules = new ArrayList<>();
+		
+		for(Rule r : rules) {
+			if(!r.isActive()) disabledRules.add(r);
+		}
+		
+		String [] s = new String[disabledRules.size()];
+		
+		for(int i = 0; i < disabledRules.size(); i++) {
+			s[i] = disabledRules.get(i).getName() + " -> " + disabledRules.get(i).getCompleteRule() + " Abilitata: " + disabledRules.get(i).isActive();
+		}
+		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		return s;
+	}
+	
+	public String [] getDisabledRulesListNames() {
+		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		ArrayList<Rule> enabledRules = new ArrayList<>();
+		
+		for(Rule r : rules) {
+			if(!r.isActive()) enabledRules.add(r);
+		}
+		
+		String [] s = new String[enabledRules.size()];
+		
+		for(int i = 0; i < enabledRules.size(); i++) {
+			s[i] = enabledRules.get(i).getName();
+		}
+		
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		
+		return s;
+	}
+	
 	public String [] getAllRulesList() {
 		
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
@@ -462,6 +525,60 @@ public class HousingUnit implements Serializable, Manageable {
 		assert _selectedSensor != null;
 		return _selectedSensor.getCategories();
 	}
+	
+	
+	/*public void updateRulesState(String selectedDevice) {
+		//verifico che device sia sensor o actuator
+		if(this.hasSensor(selectedDevice)) {
+			//lavoriamo sul sensore
+			for(Rule r : rules) {
+				if(r.getAntString().contains(selectedDevice)) {
+					Sensor sens = (Sensor) sensorManager.getElementByName(selectedDevice);
+					if(sens.isState()) {
+						//stiamo attivando il sensore
+						//controlliamo lo stato degli altri componenti
+						boolean flag = true;
+						String [] involvedSensors = r.getInvolvedSensors();
+						for(String invSens : involvedSensors) {
+							Sensor invSensor = (Sensor) sensorManager.getElementByName(invSens);
+							if(!invSensor.isState()) flag = false;
+						}
+						
+						String involvedActuator = r.getInvolvedActuator();
+						Actuator invActuator = (Actuator) actuatorManager.getElementByName(involvedActuator);
+						if(!invActuator.isState()) flag = false;
+						
+						if(flag) r.setState(true);
+					}else {
+						//stiamo disattivando il sensore
+						r.setState(false);
+					}
+				}
+			}
+		}else {
+			//lavoriamo sull'attuatore
+		}
+		
+	}*/
+	public void updateRulesState() {
+		boolean flag = true;
+		for(Rule r : rules) {
+			for(String s : r.getInvolvedSensors()) {
+				Sensor sens = (Sensor) sensorManager.getElementByName(s);
+				if(!sens.isState()) flag = false;
+			}
+			
+			String actuator = r.getInvolvedActuator();
+			Actuator act = (Actuator) actuatorManager.getElementByName(actuator);
+			if(!act.isState()) flag = false;
+			
+			if(flag) r.setState(true);
+			else r.setState(false);
+		}
+		
+		
+	}
+	
 	
 	private boolean housingUnitInvariant() {
 		boolean checkName = name != null && name.length() > 0 ;

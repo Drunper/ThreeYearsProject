@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.components;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import it.unibs.ing.domohouse.interfaces.Gettable;
@@ -13,12 +14,14 @@ public class Artifact implements Gettable, Serializable {
 	private static final long serialVersionUID = 643544508558962880L;
 	private String name;
 	private String text;
+	private ArrayList<Actuator> controllerActuators;
 	private TreeMap<String, Double> numericPropertiesMap; //treemap per contenere i valori numerici tipo temperatura
 	private TreeMap<String, String> nonNumericPropertiesMap; //treemap per contenere i valori string tipo "presenza persone"
 	
 	public Artifact(String name, String text) {
 		this.name = name;
 		this.text = text;
+		this.controllerActuators = new ArrayList<>();
 		numericPropertiesMap = new TreeMap<>();
 		nonNumericPropertiesMap = new TreeMap<>();
 	}
@@ -31,6 +34,28 @@ public class Artifact implements Gettable, Serializable {
 	public String getDescr() {
 		assert artifactInvariant() : "Invariante della classe non soddisfatto";
 		return this.text;
+	}
+	
+	public void addControllerActuator(Actuator actuator) {
+		controllerActuators.add(actuator);
+	}
+	
+	public String [] getControllerActuatorsNames() {
+		String [] result = new String[controllerActuators.size()];
+		
+		for(int i = 0; i < controllerActuators.size(); i++) {
+			result[i] = controllerActuators.get(i).getName();
+		}
+		
+		return result;
+	}
+	
+	public Actuator getActuatorByName(String selectedActuator) {
+		Actuator result = null;
+		for(int i = 0; i < controllerActuators.size(); i++) {
+			if(controllerActuators.get(i).getName().equals(selectedActuator)) result = controllerActuators.get(i);
+		}
+		return result;
 	}
 	
 	public void setName(String newName) {
