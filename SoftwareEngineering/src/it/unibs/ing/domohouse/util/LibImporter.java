@@ -341,8 +341,58 @@ public class LibImporter {
 		return false;
 		
 	}
-	
+	/*
+	 *
+		Controlla nomi 
+	Controlla consistenza tra array sensor, attuatore e antString consString
+	Rule r = new Rule(dataHandler.getHousingUnit(selectedHouse), name, antString, consString, sensors, act, state);
+	Chiamare metodo dataHandler.getHousingUnit(selectedHouse).addRule(r)
+	 */
+	private boolean importRule(String importedText) {
+		String parameters = importedText.split(":")[1]; //parameters = selectedHouse, name, antString, consString, true/false
+		String selectedHouse;
+		String rule_name;
+		String antString;
+		String consString;
+		String state;
+		//rule:selectedHouse, name, s1_sensori_termici.temperatura>10 && s2_sensore di colore.colore == "verde" || time == 10.00, a1_categoria := mantenimentoTemperatura(19), true
+		if(checkTokens(5, parameters)) {
+			selectedHouse = parameters.split(",")[0];
+			rule_name = parameters.split(",")[1];
+			antString = parameters.split(",")[2];
+			consString = parameters.split(",")[3];
+			state = parameters.split(",")[4];
+			ArrayList<String> sensors = new ArrayList<>();
+			String actuator;
+			
+			if(verifyHousingUnit(selectedHouse) && verifyRule(selectedHouse, rule_name)) {
+				//procedo a controllare antString, consString e costruire ArrayList<String> sensors, e String actuator
+				String toElaborate = antString;
+				
+				while(toElaborate.contains("&&") || toElaborate.contains("||")) {
+					if(!toElaborate.startsWith("&&") && !toElaborate.startsWith("||")) {
+						if(!verifySyntaxRuleCondition(selectedHouse, toElaborate.split("[\\&\\&|\\|\\|]")[0])) return false;
+						if(!verifySyntaxRuleCondition(selectedHouse, toElaborate.split("[\\&\\&|\\|\\|]")[1])) return false;
+						toElaborate = toElaborate.split("[\\&\\&|\\|\\|]")[1];
+					}	
+				}
+				
+				//sintassi condizioni tutto apposto
+				//devo riempire sensor
+				toElaborate = antString;
+				sensors = getSensorFromAntString(toElaborate);
+				
+				//controllo consString
+				if(!consString.contains(":=")) return false;
+				
+				
+				
+			}
+		
 
+		}
+		return false;
+	}
 	
 	private boolean checkTokens(int num_tokens, String parameters) {
 		int comma = 0;
@@ -485,5 +535,88 @@ public class LibImporter {
 		if(dataHandler.hasOperatingMode(operating_mode)) flag = true;
 		else flag = false;
 		return flag;
+	}
+	
+	private boolean verifyRule(String selectedHouse, String rule) {
+		boolean flag = true;
+		rule = rule.toLowerCase();
+		if(verifyHousingUnit(selectedHouse)) {
+			if(dataHandler.getHousingUnit(selectedHouse).hasRule(rule)) flag = false;
+		}else return false;
+		return flag;
+	}
+	
+	private boolean verifySyntaxRuleCondition(String selectedHouse, String condition) {
+		//controlli preliminari (contiente operatore, valore, time, punto...)
+		String test;
+		try {
+			if(condition.contains("time")) {
+				test = condition.split("<|>|>=|<=|==|!=")[0];
+				test = condition.split("<|>|>=|<=|==|!=")[1];
+			}else {
+				test = condition.split("\\.")[0];
+				test = condition.split("\\.")[1].split("<|>|>=|<=|==|!=")[0];
+				test = condition.split("\\.")[1].split("<|>|>=|<=|==|!=")[1];
+			}
+		}catch(Exception ex){
+			return false;
+		}
+		
+		
+		if(!condition.contains("time")) {
+			
+			String sensor = condition.split("\\.")[0]; //s1_sensori_termici
+			String info = condition.split("\\.")[1].split("<|>|>=|<=|==|!=")[0];//temperatura
+			String value = condition.split("\\.")[1].split("<|>|>=|<=|==|!=")[1];//10
+	
+			if(verifySensor(selectedHouse, sensor)) {
+				
+				SensorCategory cat = dataHandler.getSensorCategoryByInfo(info);
+		
+				boolean sensorCategoryHasInfo = false;
+				for(String category : dataHandler.getCategoriesOfASensor(selectedHouse, sensor)){
+					if(category.equalsIgnoreCase(cat.getName())) sensorCategoryHasInfo = true;
+				}
+				if(!sensorCategoryHasInfo) return false;
+		
+				if(cat.getIsNumeric() && !value.matches(DOUBLE_REGEX)) return false; //se la categoria è numerica ma il valore non è double fine
+				if(!cat.getIsNumeric() && value.matches(DOUBLE_REGEX)) return false; //se la categoria è non num ma il valore è double fine (cambiare con String regex)
+				}else return false;
+				
+			}else {
+				//toElaborate.split("[\\&\\&|\\|\\|]")[0]; = time > 10
+				String time = condition.split("<|>|>=|<=|==|!=")[1]; //10.00
+				if(time.contains(".")) {
+					int hour;
+					int minute;
+					try{
+						hour = Integer.parseInt(time.split("\\.")[0]);
+						minute = Integer.parseInt(time.split("\\.")[1]);
+						}catch(Exception ex) {
+							hour = -1;
+							minute = -1;
+						}
+					if(hour < 0 || hour > 23 || minute < 0 || minute > 59) return false;
+				}
+			
+		}
+		//se va tutto bene arriviamo qui
+		return true;
+	}
+	
+	private ArrayList<String> getSensorFromAntString(String antString) {
+		ArrayList<String> sensors = new ArrayList<>();
+		//sens1_ciao.temperatura > 10 && time < 10 || s1.colore == verde
+		while(antString.contains("&&") || antString.contains("||")) {
+			String condition = antString.split("[\\&\\&|\\|\\|]")[0];
+			if(!condition.contains("time")) {
+				String sensor = condition.split("\\.")[0];
+				sensors.add(sensor);
+			}
+			antString = antString.split("[\\&\\&|\\|\\|]")[1];
+		}
+		if(!antString.contains("time")) sensors.add(antString.split("\\.")[0]);
+		
+		return sensors;
 	}
 }
