@@ -1,5 +1,6 @@
 package it.unibs.ing.domohouse.util;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import it.unibs.ing.domohouse.components.Rule;
@@ -18,6 +19,30 @@ public class LibImporter {
 	
 	//Per ora manutentore dovrà inserire elementi e dispositivi secondo un certo ordine
 	//per ogni riga di file eliminare gli spazi e controllare che ci siano i 2 punti e che i 2 punti non siano l'ultimo carattere della riga
+	
+	private boolean readLineOfFile(String line) {
+		if(!line.contains(":")) return false;
+		if(!(line.indexOf(":") == line.length())) return false;
+		
+		String keyword = line.split(":")[0];
+		
+		switch(keyword){
+			case "actuator": return importActuator(line);
+			case "actuator_category": return importActuatorCategory(line);
+			case "artifact": return importArtifact(line);
+			case "housing_unit": return importHousingUnit(line);
+			case "non_numeric_sensor": return importNonNumericSensor(line);
+			case "numeric_sensor": return importNumericSensor(line);
+			case "non_numeric_sensor_category": return importNonNumericSensorCategory(line);
+			case "numeric_sensor_category": return importNumericSensorCategory(line);
+			case "room": return importRoom(line);
+			case "rule": return importRule(line);
+			default: return false;
+		}
+		
+	}
+	
+	
 	
 	//actuator:selectedHouse, name, category, true/false, element1;element2, room
 	//return true se ha importato correttamente l'actuator, return false altrimenti
