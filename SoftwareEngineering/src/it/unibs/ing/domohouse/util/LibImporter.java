@@ -2,6 +2,7 @@ package it.unibs.ing.domohouse.util;
 
 import java.util.ArrayList;
 
+import it.unibs.ing.domohouse.components.Rule;
 import it.unibs.ing.domohouse.components.SensorCategory;
 
 public class LibImporter {
@@ -362,8 +363,10 @@ public class LibImporter {
 			antString = parameters.split(",")[2];
 			consString = parameters.split(",")[3];
 			state = parameters.split(",")[4];
+			boolean rule_state;
 			ArrayList<String> sensors = new ArrayList<>();
 			String actuator;
+
 			
 			if(verifyHousingUnit(selectedHouse) && verifyRule(selectedHouse, rule_name)) {
 				//procedo a controllare antString, consString e costruire ArrayList<String> sensors, e String actuator
@@ -385,8 +388,28 @@ public class LibImporter {
 				//controllo consString
 				if(!consString.contains(":=")) return false;
 				
+				//a1_categoria := mantenimentoTemperatura(19)
+				String test_actuator = consString.split(":=")[0];
+				String operating_mode = consString.split(":=")[1];
 				
+				if(operating_mode.contains("(")) {
+					operating_mode = operating_mode.split("(")[0];
+				}
 				
+				if(verifyActuator(selectedHouse, test_actuator)) {
+					actuator = test_actuator;
+				}else return false;
+				
+				if(!OperatingModesHandler.hasOperatingMode(operating_mode)) return false;
+				
+				if(isBoolean(state)) {
+				 rule_state = Boolean.parseBoolean(state);
+				}else return false;
+				
+				//creo Rule
+				Rule r = new Rule(dataHandler.getHousingUnit(selectedHouse), rule_name, antString, consString, sensors, actuator, rule_state);
+				dataHandler.getHousingUnit(selectedHouse).addRule(r);
+				return true;
 			}
 		
 
