@@ -16,6 +16,8 @@ public class InterfaceHandler {
 	private FileSaver saver;
 	private boolean firstStart;
 	private ScheduledExecutorService checkThread;
+	private LibImporter libImporter;
+	private LogWriter log;
 
 	//MENU
 	private final Menu menu = new Menu(Strings.LOGIN_MENU_TITLE, Strings.LOGIN_VOICES);
@@ -39,6 +41,7 @@ public class InterfaceHandler {
 		OperatingModesHandler.fillOperatingModes();
 		saver.createDirs();
 		checkThread = Executors.newSingleThreadScheduledExecutor();
+		libImporter = new LibImporter(dataHandler, inputHandler);
 		
 		checkThread.scheduleAtFixedRate(new Runnable() {
 			public void run() {
@@ -85,12 +88,15 @@ public class InterfaceHandler {
 			switch(scelta)
 			{
 				case 1: 
-					if(firstStart) {System.out.println(Strings.USER_FIRST_ACCESS_PROHIBITED);}
+					if(firstStart) {
+						log.write("Primo accesso al programma");
+						System.out.println(Strings.USER_FIRST_ACCESS_PROHIBITED);}
 					else {
 						user = RawInputHandler.readNotVoidString(Strings.INSERT_USER);
 						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
 						{
 							System.out.println(Strings.WELCOME + user);
+							log.write(user + " ha effettuato l'accesso al sistema");
 							showUserMenu();
 						}
 					}
@@ -110,10 +116,14 @@ public class InterfaceHandler {
 							if(!ok)
 								System.out.println(Strings.USER_OR_PASSWORD_ERROR);
 						}
+						log.write("Il manutentore "+ user + " ha effettuato l'accesso al sistema");
 					}
 					while (!user.equalsIgnoreCase(Strings.BACK_CHARACTER) && !ok);
 					if (ok) {
-						if(firstStart)	System.out.println(Strings.BASIC_FILE_CREATION);
+						if(firstStart) {
+							System.out.println(Strings.BASIC_FILE_CREATION);
+							log.write("Creazione dei file di base");
+						}
 						showMaintainerMenu();
 					}
 					break;
@@ -138,8 +148,7 @@ public class InterfaceHandler {
 					exitFlag = true;
 					break;
 				case 1:
-					OutputHandler.clearOutput();
-											
+					OutputHandler.clearOutput();						
 					if(dataHandler.getHouseList().length > 0) {
 						OutputHandler.printListOfString(dataHandler.getHouseList());
 						String selectedHouse = inputHandler.safeInsertHouse();						
@@ -251,6 +260,15 @@ public class InterfaceHandler {
 					System.out.println(Strings.DATA_SAVED);
 					break;
 				case 8:
+					//importa file
+					OutputHandler.clearOutput();
+					if(!libImporter.importFile()) {
+						System.out.println(libImporter.getErrorsString());
+					}else {
+						System.out.println("File importato correttamente!");
+					}
+					break;
+				case 9:
 					//aggiorna ora
 					OutputHandler.clearOutput();
 					break;

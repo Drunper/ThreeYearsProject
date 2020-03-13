@@ -5,6 +5,8 @@ public class Strings {
 	public static final String DATA_HANDLER_NAME_FILE = "\\dataHandler.dat";
 	public static final String LOG_PATH = "data";
 	public static final String LOG_NAME_FILE = "\\log.txt";
+	public static final String LIB_PATH = "data";
+	public static final String LIB_NAME = "\\lib.txt";
 	public static final String ERROR_LOAD_FILE = "Non è stato possibile caricare il file! (ERROR: failed or interrupted I/O operations)";
 	public static final String LOADING_FILE = "Caricamento file...";
 	public static final String LOADED = "Caricamento da file effettuato!";
@@ -202,7 +204,7 @@ public class Strings {
 	public static final String [] MAINTAINER_ROOM_VOICES = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Aziona attuatore", "Visualizza artefatto", 
 			"Modifica descrizione stanza", "Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto", "Attiva/disattiva dispositivo", "Aggiorna ora"};
 	public static final String[] MAINTAINER_UNIT_MENU = {"Visualizza unità immobiliare", "Aggiungi unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Inserisci categoria di sensori", 
-			"Inserisci categoria di attuatori", "Salva dati", "Aggiorna ora"};
+			"Inserisci categoria di attuatori", "Salva dati", "Importa file di libreria", "Aggiorna ora"};
 	public static final String[] USER_UNIT_MENU = {"Visualizza unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Aggiorna ora"};
 
 
