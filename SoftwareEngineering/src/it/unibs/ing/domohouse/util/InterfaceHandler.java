@@ -42,6 +42,7 @@ public class InterfaceHandler {
 		saver.createDirs();
 		checkThread = Executors.newSingleThreadScheduledExecutor();
 		libImporter = new LibImporter(dataHandler, inputHandler);
+		log = new LogWriter();
 		
 		checkThread.scheduleAtFixedRate(new Runnable() {
 			public void run() {
@@ -79,6 +80,7 @@ public class InterfaceHandler {
 		assert menu != null;
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
+		log.write(Strings.LOG_SHOW_MAIN_MENU);
 		OutputHandler.clearOutput();
 		String user;
 		int scelta;
@@ -89,14 +91,14 @@ public class InterfaceHandler {
 			{
 				case 1: 
 					if(firstStart) {
-						log.write("Primo accesso al programma");
+						log.write(Strings.LOG_FIRST_ACCESS);
 						System.out.println(Strings.USER_FIRST_ACCESS_PROHIBITED);}
 					else {
 						user = RawInputHandler.readNotVoidString(Strings.INSERT_USER);
 						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
 						{
 							System.out.println(Strings.WELCOME + user);
-							log.write(user + " ha effettuato l'accesso al sistema");
+							log.write(user + Strings.LOG_SYSTEM_ACCESS);
 							showUserMenu();
 						}
 					}
@@ -116,13 +118,13 @@ public class InterfaceHandler {
 							if(!ok)
 								System.out.println(Strings.USER_OR_PASSWORD_ERROR);
 						}
-						log.write("Il manutentore "+ user + " ha effettuato l'accesso al sistema");
+						log.write("Il manutentore "+ user + Strings.LOG_SYSTEM_ACCESS);
 					}
 					while (!user.equalsIgnoreCase(Strings.BACK_CHARACTER) && !ok);
 					if (ok) {
 						if(firstStart) {
 							System.out.println(Strings.BASIC_FILE_CREATION);
-							log.write("Creazione dei file di base");
+							log.write(Strings.LOG_BASIC_FILE_CREATION);
 						}
 						showMaintainerMenu();
 					}
@@ -138,6 +140,7 @@ public class InterfaceHandler {
 		assert userMenu != null; 
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
+		log.write(Strings.LOG_SHOW_USER_MENU);
 		OutputHandler.clearOutput();
 		boolean exitFlag = false;
 		do
@@ -145,13 +148,14 @@ public class InterfaceHandler {
 			int choice = userMenu.select();
 			switch(choice) {
 				case 0: 
+					log.write(Strings.LOG_EXIT_MENU);
 					exitFlag = true;
 					break;
 				case 1:
-					OutputHandler.clearOutput();						
+					OutputHandler.clearOutput();
 					if(dataHandler.getHouseList().length > 0) {
 						OutputHandler.printListOfString(dataHandler.getHouseList());
-						String selectedHouse = inputHandler.safeInsertHouse();						
+						String selectedHouse = inputHandler.safeInsertHouse();
 						showUserUnitMenu(selectedHouse);
 					}else{
 						System.out.println(Strings.NO_HOUSE);
@@ -168,7 +172,7 @@ public class InterfaceHandler {
 					System.out.println();
 					
 					String selectedSensCategory = inputHandler.safeInsertSensorCategory();
-					
+					log.write(Strings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
 					OutputHandler.printSensorCategory(dataHandler.getSensorCategoryString(selectedSensCategory));
 					break;
 				case 3:
@@ -182,11 +186,13 @@ public class InterfaceHandler {
 					System.out.println();
 					
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
+					log.write("Strings.LOG_SHOW_ACTUATOR_CATEGORY  " + selectedActuCategory);
 					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
 				case 4:
 					//aggiorna ora
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_REFRESH_HOUR);
 					break;
 			}
 		}while(exitFlag != true);
@@ -198,6 +204,7 @@ public class InterfaceHandler {
 		assert maintainerMenu != null;
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
+		log.write(Strings.LOG_SHOW_MAINTAINTER_MENU);
 		OutputHandler.clearOutput();
 		boolean exitFlag = false;
 		do 
@@ -205,10 +212,11 @@ public class InterfaceHandler {
 			int choice = maintainerMenu.select();
 			switch(choice) {
 				case 0:
+					log.write(Strings.LOG_EXIT_MENU);
 					exitFlag = true;
 					break;
 				case 1:
-					OutputHandler.clearOutput();	
+					OutputHandler.clearOutput();
 					if(dataHandler.getHouseList().length > 0) {
 						OutputHandler.printListOfString(dataHandler.getHouseList());
 						String selectedHouse = inputHandler.safeInsertHouse();
@@ -219,9 +227,12 @@ public class InterfaceHandler {
 					break;
 				case 2:
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_INSERT_HOUSE);
 					inputHandler.readHouseFromUser();
+					log.write(Strings.LOG_INSERT_HOUSE_SUCCESS);
 					break; 
 				case 3:
+					//visualizza categorie di sensori
 					OutputHandler.clearOutput();
 					if(dataHandler.getSensorCategoryList().length == 0) {
 						System.out.println(Strings.NO_SENSOR_CATEGORY);
@@ -232,10 +243,12 @@ public class InterfaceHandler {
 					System.out.println();
 					
 					String selectedSensCategory = inputHandler.safeInsertSensorCategory();
+					log.write(Strings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
 					
 					OutputHandler.printSensorCategory(dataHandler.getSensorCategoryString(selectedSensCategory));
 					break;
 				case 4: 
+					//visualizza categoria di attuatore
 					OutputHandler.clearOutput();
 					if(dataHandler.getActuatorCategoryList().length == 0) {
 						System.out.println(Strings.NO_ACTUATOR_CATEGORY);
@@ -246,30 +259,45 @@ public class InterfaceHandler {
 					System.out.println();
 					
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
+					log.write(Strings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
 					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
 				case 5:
+					//crea sensor category
+					log.write(Strings.LOG_INSERT_SENSOR_CATEGORY);
 					inputHandler.readSensorCategoryFromUser();
+					log.write(Strings.LOG_INSERT_SENSOR_CATEGORY_SUCCESS);
 					break;
 				case 6:
+					//crea actuator category
+					log.write(Strings.LOG_INSERT_ACTUATOR_CATEGORY);
 					inputHandler.readActuatorCategoryFromUser();
+					log.write(Strings.LOG_INSERT_ACTUATOR_CATEGORY_SUCCESS);
 					break;		
 				case 7:
+					//salva file
 					firstStart = false;
+					log.write(Strings.LOG_SAVING_DATA);
 					saver.writeDataHandlerToFile(dataHandler);
 					System.out.println(Strings.DATA_SAVED);
+					log.write(Strings.DATA_SAVED);
 					break;
 				case 8:
 					//importa file
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_IMPORTING_FILE);
 					if(!libImporter.importFile()) {
-						System.out.println(libImporter.getErrorsString());
+						String error = libImporter.getErrorsString();
+						System.out.println(error);
+						log.write(Strings.LOG_ERROR_IMPORT + error);
 					}else {
-						System.out.println("File importato correttamente!");
+						log.write(Strings.SUCCESS_IMPORT_FILE);
+						System.out.println(Strings.SUCCESS_IMPORT_FILE);
 					}
 					break;
 				case 9:
 					//aggiorna ora
+					log.write(Strings.LOG_REFRESH_HOUR);
 					OutputHandler.clearOutput();
 					break;
 			}
@@ -283,22 +311,30 @@ public class InterfaceHandler {
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 		OutputHandler.clearOutput();
+		log.write(Strings.LOG_SHOW_MAINTAINTER_UNIT_MENU);
 		boolean exitFlag = false;
 		do
 		{
 			int choice = maintainerUnitMenu.select();
 			switch(choice) {
 				case 0:
+					//uscita menu
+					log.write(Strings.LOG_EXIT_MENU);
 					exitFlag = true;
 					break;
 				case 1:
+					//visualizza descrizione unità immobiliare
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_DESCR_HOUSE);
 					OutputHandler.printHousingUnit(dataHandler.getHousingUnitString(selectedHouse));
 					break;
 				case 2:
+					//cambia descrizione casa
+					log.write(Strings.LOG_CHANGE_DESCR_HOUSE);
 					inputHandler.changeHouseDescription(selectedHouse);
 					break;
 				case 3:
+					//visualizza room menu
 					OutputHandler.clearOutput();
 					if(dataHandler.getRoomList(selectedHouse).length == 0) {
 						System.out.println(Strings.NO_ROOM);
@@ -309,13 +345,16 @@ public class InterfaceHandler {
 					System.out.println();
 					
 					String selectedRoom = inputHandler.safeInsertRoom(selectedHouse);
-					
 					showMaintainerRoomMenu(selectedHouse, selectedRoom);
 					break;
 				case 4:
+					//Inserisci stanza
+					log.write(Strings.LOG_INSERT_ROOM);
 					inputHandler.readRoomFromUser(selectedHouse);
+					log.write(Strings.LOG_INSERT_ROOM_SUCCESS);
 					break;
 				case 5:
+					//visualizza sensor category
 					OutputHandler.clearOutput();
 					if(dataHandler.getSensorCategoryList().length == 0) {
 						System.out.println(Strings.NO_SENSOR_CATEGORY);
@@ -326,10 +365,11 @@ public class InterfaceHandler {
 					System.out.println();
 					
 					String selectedSensCategory = inputHandler.safeInsertSensorCategory();
-					
+					log.write(Strings.LOG_SHOW_SENSOR_CATEGORY);
 					OutputHandler.printSensorCategory(dataHandler.getSensorCategoryString(selectedSensCategory));
 					break;
 				case 6:
+					//visualizzazione actuator category
 					OutputHandler.clearOutput();
 					if(dataHandler.getActuatorCategoryList().length == 0) {
 						System.out.println(Strings.NO_ACTUATOR_CATEGORY);
@@ -340,30 +380,37 @@ public class InterfaceHandler {
 					System.out.println();
 					
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
+					log.write(Strings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
 					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
 				case 7:
 					//aggiungi regola
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_INSERT_NEW_RULE);
 					inputHandler.readRuleFromUser(selectedHouse);
+					log.write(Strings.LOG_INSERT_NEW_RULE_SUCCESS);
 					break;
 				case 8:
 					//visualizza regole attive
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_SHOW_ENABLED_RULES);
 					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getEnabledRulesList());
 					break;
 				case 9: 
 					//visualizza tutte le regole
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_SHOW_ALL_RULES);
 					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getAllRulesList());
 					break;
 				case 10:
 					//attiva/disattiva regola
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_ENABLE_DISABLE_RULE);
 					inputHandler.setRuleState(selectedHouse);
 					break;
 				case 11:
 					//aggiorna ora
+					log.write(Strings.LOG_REFRESH_HOUR);
 					OutputHandler.clearOutput();
 					break;
 			}
@@ -376,19 +423,24 @@ public class InterfaceHandler {
 		assert userUnitMenu != null;
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
+		log.write(Strings.LOG_SHOW_USER_UNIT_MENU + selectedHouse);
 		OutputHandler.clearOutput();
 		boolean exitFlag = false;
 		do {
 			int choice = userUnitMenu.select();
 			switch(choice) {
 				case 0:
+					log.write(Strings.LOG_EXIT_MENU);
 					exitFlag = true;
 					break;
 				case 1:
+					//visualizza descrizione unita immobiliare
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_DESCR_HOUSE);
 					OutputHandler.printHousingUnit(dataHandler.getHousingUnitString(selectedHouse));
 					break;
 				case 2:
+					//visualizza stanza
 					OutputHandler.clearOutput();
 					if(dataHandler.getRoomList(selectedHouse).length == 0) {
 						System.out.println(Strings.NO_ROOM);
@@ -401,6 +453,7 @@ public class InterfaceHandler {
 					showUserRoomMenu(selectedHouse, selectedRoom);
 					break;
 				case 3:
+					//visualizza categorie di sensori
 					OutputHandler.clearOutput();
 					if(dataHandler.getSensorCategoryList().length == 0) {
 						System.out.println(Strings.NO_SENSOR_CATEGORY);
@@ -410,9 +463,11 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					String selectedSensCategory = inputHandler.safeInsertSensorCategory();			
+					log.write(Strings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
 					OutputHandler.printSensorCategory(dataHandler.getSensorCategoryString(selectedSensCategory));
 					break;
 				case 4:
+					//visualizza categorie di attuatori
 					OutputHandler.clearOutput();
 					if(dataHandler.getActuatorCategoryList().length == 0) {
 						System.out.println(Strings.NO_ACTUATOR_CATEGORY);
@@ -423,30 +478,37 @@ public class InterfaceHandler {
 					System.out.println();
 					
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
+					log.write(Strings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
 					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
 				case 5:
 					//aggiungi regola
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_INSERT_NEW_RULE);
 					inputHandler.readRuleFromUser(selectedHouse);
+					log.write(Strings.LOG_INSERT_NEW_RULE_SUCCESS);
 					break;
 				case 6:
 					//visualizza regole attive
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_SHOW_ENABLED_RULES);
 					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getEnabledRulesList());
 					break;
 				case 7: 
 					//visualizza tutte le regole
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_SHOW_ALL_RULES);
 					OutputHandler.printListOfString(dataHandler.getHousingUnit(selectedHouse).getAllRulesList());
 					break;
 				case 8:
 					//attiva/disattiva regola
 					OutputHandler.clearOutput();
+					log.write(Strings.LOG_ENABLE_DISABLE_RULE);
 					inputHandler.setRuleState(selectedHouse);
 					break;
 				case 9:
 					//aggiorna ora
+					log.write(Strings.LOG_REFRESH_HOUR);
 					OutputHandler.clearOutput();
 					break;
 			}
@@ -461,19 +523,24 @@ public class InterfaceHandler {
 		assert roomMenu != null;
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
+		log.write(Strings.LOG_SHOW_USER_ROOM_MENU);
 		OutputHandler.clearOutput();
 		boolean exitFlag = false;
 		do {
 			int choice = roomMenu.select();
 			switch(choice) {
 			case 0:
+				log.write(Strings.LOG_EXIT_MENU);
 				exitFlag = true;
 				break;
 			case 1:
+				//visualizza descrizione stanza
 				OutputHandler.clearOutput();
+				log.write(Strings.LOG_SHOW_DESCR_ROOM + selectedRoom);
 				OutputHandler.printRoom(dataHandler.getRoomString(selectedHouse, selectedRoom));
 				break;
 			case 2:
+				//visualizza sensore
 				OutputHandler.clearOutput();
 				if(dataHandler.getSensorNames(selectedHouse, selectedRoom).length == 0) {
 					System.out.println(Strings.NO_SENSOR);
@@ -483,9 +550,11 @@ public class InterfaceHandler {
 				System.out.println();
 				System.out.println();
 				String selectedSensor = inputHandler.safeInsertSensor(selectedHouse);
+				log.write(Strings.LOG_SHOW_SENSOR + selectedSensor);
 				OutputHandler.printSensor(dataHandler.getSensorString(selectedHouse, selectedSensor));
 				break;
 			case 3:
+				//visualizza attuatore
 				OutputHandler.clearOutput();
 				if(dataHandler.getActuatorNames(selectedHouse, selectedRoom).length == 0) {
 					System.out.println(Strings.NO_ACTUATOR);
@@ -495,9 +564,11 @@ public class InterfaceHandler {
 				System.out.println();
 				System.out.println();
 				String selectedActuator = inputHandler.safeInsertActuator(selectedHouse);
+				log.write(Strings.LOG_SHOW_ACTUATOR + selectedActuator);
 				OutputHandler.printActuator(dataHandler.getActuatorString(selectedHouse, selectedActuator));
 				break;
 			case 4:
+				//aziona attuatore
 				OutputHandler.clearOutput();
 				if(dataHandler.getActuatorNames(selectedHouse, selectedRoom).length == 0) {
 					System.out.println(Strings.NO_ACTUATOR);
@@ -506,9 +577,11 @@ public class InterfaceHandler {
 				OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedHouse, selectedRoom));
 				String selectedAct = inputHandler.safeInsertActuator(selectedHouse);
 				inputHandler.setOperatingMode(selectedHouse, selectedRoom, selectedAct);
+				log.write(Strings.LOG_ACTUATOR_ACTION + selectedAct);
 				dataHandler.updateRulesState();
 				break;
 			case 5:
+				//visualizza artefatto
 				OutputHandler.clearOutput();
 				if(dataHandler.getArtifactNames(selectedHouse, selectedRoom).length == 0) {
 					System.out.println(Strings.NO_ARTIFACT);
@@ -518,15 +591,18 @@ public class InterfaceHandler {
 				System.out.println();
 				System.out.println();			
 				String selectedArtifact = inputHandler.safeInsertArtifact(selectedHouse);
+				log.write(Strings.LOG_SHOW_ARTIFACT);
 				OutputHandler.printArtifact(dataHandler.getArtifactString(selectedHouse, selectedArtifact));
 				break;
 			case 6:
-				//attiva/disattiva disp
+				//attiva/disattiva dispositivo
 				inputHandler.setDeviceState(selectedHouse, selectedRoom);
+				log.write(Strings.LOG_ENABLE_DISABLE_DISP);
 				dataHandler.updateRulesState();
 				break;
 			case 7:
 				//aggiorna ora
+				log.write(Strings.LOG_REFRESH_HOUR);
 				OutputHandler.clearOutput();
 				break;
 			}
@@ -540,19 +616,24 @@ public class InterfaceHandler {
 		assert selectedRoom != null;
 		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
+		log.write(Strings.LOG_SHOW_MAINTAINTER_ROOM_MENU + selectedRoom);
 		OutputHandler.clearOutput();
 		boolean exitFlag = false;
 		do {
 			int choice = maintainerRoomMenu.select();
 			switch(choice) {
 				case 0:
+					log.write(Strings.LOG_EXIT_MENU);
 					exitFlag = true;
 					break;
 				case 1:
+					//visualizza descrizione stanza
 					OutputHandler.clearOutput();
 					OutputHandler.printRoom(dataHandler.getRoomString(selectedHouse, selectedRoom));
+					log.write(Strings.LOG_SHOW_DESCR_ROOM);
 					break;
 				case 2:
+					//visualizza sensore
 					OutputHandler.clearOutput();
 					if(dataHandler.getSensorNames(selectedHouse, selectedRoom).length == 0) {
 						System.out.println(Strings.NO_SENSOR);
@@ -562,9 +643,11 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();			
 					String selectedSensor = inputHandler.safeInsertSensor(selectedHouse);
+					log.write(Strings.LOG_SHOW_SENSOR + selectedSensor);
 					OutputHandler.printSensor(dataHandler.getSensorString(selectedHouse, selectedSensor));
 					break;
 				case 3:
+					//visualizza attuatore
 					OutputHandler.clearOutput();
 					if(dataHandler.getActuatorNames(selectedHouse, selectedRoom).length == 0) {
 						System.out.println(Strings.NO_ACTUATOR);
@@ -573,9 +656,11 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					String selectedActuator = inputHandler.safeInsertActuator(selectedHouse);
+					log.write(Strings.LOG_SHOW_ACTUATOR + selectedActuator);
 					OutputHandler.printActuator(dataHandler.getActuatorString(selectedHouse, selectedActuator));
 					break;
 				case 4:
+					//aziona attuatore
 					OutputHandler.clearOutput();
 					if(dataHandler.getActuatorNames(selectedHouse, selectedRoom).length == 0) {
 						System.out.println(Strings.NO_ACTUATOR);
@@ -584,9 +669,11 @@ public class InterfaceHandler {
 					OutputHandler.printListOfString(dataHandler.getActuatorNames(selectedHouse, selectedRoom));
 					String selectedAct = inputHandler.safeInsertActuator(selectedHouse);
 					inputHandler.setOperatingMode(selectedHouse, selectedRoom, selectedAct);
+					log.write(Strings.LOG_ACTUATOR_ACTION);
 					dataHandler.updateRulesState();
 					break;
 				case 5:
+					//visualizza artefatto
 					OutputHandler.clearOutput();
 					if(dataHandler.getArtifactNames(selectedHouse, selectedRoom).length == 0) {
 						System.out.println(Strings.NO_ARTIFACT);
@@ -595,27 +682,41 @@ public class InterfaceHandler {
 					System.out.println();
 					System.out.println();
 					String selectedArtifact = inputHandler.safeInsertArtifact(selectedHouse);
+					log.write(Strings.LOG_SHOW_ACTUATOR + selectedArtifact);
 					OutputHandler.printArtifact(dataHandler.getArtifactString(selectedHouse, selectedArtifact));
 					break;	
 				case 6:
+					//modifica descrizione stanza
+					log.write(Strings.LOG_CHANGE_ROOM_DESCR);
 					inputHandler.changeRoomDescription(selectedHouse, selectedRoom);
 					break;
-				case 7:		
+				case 7:
+					//inserisci sensore
+					log.write(Strings.LOG_INSERT_SENSOR);
 					inputHandler.readSensorFromUser(selectedHouse, selectedRoom);
+					log.write(Strings.LOG_INSERT_SENSOR_SUCCESS);
 					break;
 				case 8:
+					//inserisci attuatore
+					log.write(Strings.LOG_INSERT_ACTUATOR);
 					inputHandler.readActuatorFromUser(selectedHouse, selectedRoom);
+					log.write(Strings.LOG_INSERT_ACTUATOR_SUCCESS);
 					break;
 				case 9:
+					//inserisci artefatto
+					log.write(Strings.LOG_INSERT_ARTIFACT);
 					inputHandler.readArtifactFromUser(selectedHouse, selectedRoom);
+					log.write(Strings.LOG_INSERT_ARTIFACT_SUCCESS);
 					break;
 				case 10:
 					//attiva/dis disp
 					inputHandler.setDeviceState(selectedHouse, selectedRoom);
+					log.write(Strings.LOG_ENABLE_DISABLE_DISP);
 					dataHandler.updateRulesState();
 					break;
 				case 11:
 					//aggiorna ora
+					log.write(Strings.LOG_REFRESH_HOUR);
 					OutputHandler.clearOutput();
 					break;
 			}

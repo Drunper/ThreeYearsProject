@@ -182,6 +182,55 @@ public class Strings {
 	public static final String DETECTABLE_INFOS = "Informazioni rilevabili:";
 	public static final String DEFAULT_MODE = "Modalità di default: ";
 	public static final String OPERATING_MODES = "Modalità operative:";
+	public static final String SUCCESS_IMPORT_FILE = "File di libreria importato correttamente!";
+	
+	//Log Strings
+	public static final String LOG_SHOW_MAIN_MENU = "Visualizzazione del menù principale";
+	public static final String LOG_FIRST_ACCESS = "Primo accesso al programma";
+	public static final String LOG_SYSTEM_ACCESS = " ha effettuato l'accesso al sistema";
+	public static final String LOG_BASIC_FILE_CREATION = "Creazione dei file di base";
+	public static final String LOG_EXIT_MENU = "Uscita dal menù corrente";
+	public static final String LOG_SHOW_USER_MENU = "Visualizzazione del menù principale Fruitore";
+	public static final String LOG_SHOW_MAINTAINTER_MENU = "Visualizzazione del menù principale Manutentore";
+	public static final String LOG_INSERT_HOUSE = "Inserimento di una nuova unità immobiliare...";
+	public static final String LOG_INSERT_SENSOR_CATEGORY = "Inserimento di una nuova categoria di sensori...";
+	public static final String LOG_INSERT_ACTUATOR_CATEGORY = "Inserimento di una nuova categoria di attuatori...";
+	public static final String LOG_INSERT_SENSOR_CATEGORY_SUCCESS = "Inserimento di una nuova categoria di sensori avvenuta correttamente";
+	public static final String LOG_INSERT_ACTUATOR_CATEGORY_SUCCESS = "Inserimento di una nuova categoria di attuatori avvenuta correttamente";
+	public static final String LOG_SAVING_DATA = "Salvataggio dei dati ...";
+	public static final String LOG_IMPORTING_FILE = "Importazione file...";
+	public static final String LOG_ERROR_IMPORT = "Errore riscontrato : ";
+	public static final String LOG_SHOW_MAINTAINTER_UNIT_MENU = "Visualizzazione del menù dell'unità immobiliare (versione Manutentore) ";
+	public static final String LOG_INSERT_HOUSE_SUCCESS = "Inserimento di una nuova unità immobiliare avvenuto correttamente";
+	public static final String LOG_DESCR_HOUSE = "Visualizzazione della descrizione dell'unità immobiliare";
+	public static final String LOG_CHANGE_DESCR_HOUSE = "Visualizzazione della descrizione dell'unità immobiliare";
+	public static final String LOG_SHOW_MAINTAINTER_ROOM_MENU = "Visualizzazione del menu della stanza (Versione Manutentore) ";
+	public static final String LOG_SHOW_USER_ROOM_MENU = "Visualizzazione del menu della stanza (Versione Fruitore) ";
+	public static final String LOG_INSERT_ROOM = "Inserimento di una nuova stanza...";
+	public static final String LOG_INSERT_ROOM_SUCCESS = "Inserimento della nuova stanza avvenuto correttamente!";
+	public static final String LOG_SHOW_SENSOR_CATEGORY = "Visualizzazione della categoria di sensore ";
+	public static final String LOG_SHOW_ACTUATOR_CATEGORY = "Visualizzazione della categoria di attuatore ";
+	public static final String LOG_INSERT_NEW_RULE = "Inserimento di una nuova regola...";
+	public static final String LOG_INSERT_NEW_RULE_SUCCESS = "Inserimento della nuova regola avvenuto correttamnete";
+	public static final String LOG_SHOW_ENABLED_RULES = "Visualizzazione delle regole attive";
+	public static final String LOG_SHOW_ALL_RULES = "Visualizzazione di tutte le regole";
+	public static final String LOG_ENABLE_DISABLE_RULE = "Attivazione o disattivazione di una regola";
+	public static final String LOG_REFRESH_HOUR = "Aggiornamento della visualizzazione dell'orario";
+	public static final String LOG_SHOW_USER_UNIT_MENU = "Visualizzazione del menu dell'unità immobiliare (Versione Fruitore) ";
+	public static final String LOG_SHOW_DESCR_ROOM = "Visualazzazione della descrizioned della stanza ";
+	public static final String LOG_SHOW_SENSOR = "Visualizzazione del sensore ";
+	public static final String LOG_SHOW_ACTUATOR = "Visualizzazione dell'attuatore ";
+	public static final String LOG_SHOW_ARTIFACT = "Visualizzazione dell'artefatto ";
+	public static final String LOG_ACTUATOR_ACTION = "Azionamento dell'attuatore ";
+	public static final String LOG_ENABLE_DISABLE_DISP = "Attivazione o disattivazione del dispositivo";
+	public static final String LOG_CHANGE_ROOM_DESCR = "Modifica della descrizione della stanza ";
+	public static final String LOG_INSERT_SENSOR = "Inserimento di un nuovo sensore...";
+	public static final String LOG_INSERT_SENSOR_SUCCESS = "Inserimento di un nuovo sensore avvenuto correttamente";
+	public static final String LOG_INSERT_ACTUATOR = "Inserimento di un nuovo attuatore...";
+	public static final String LOG_INSERT_ACTUATOR_SUCCESS = "Inserimento di un nuovo attuatore avvenuto correttamente";
+	public static final String LOG_INSERT_ARTIFACT = "Inserimento di un nuovo artefatto...";
+	public static final String LOG_INSERT_ARTIFACT_SUCCESS = "Inserimento di un nuovo artefatto avvenuto correttamente";
+	
 	
 	public static int FIRST_TOKEN = 0;
 	public static int SECOND_TOKEN = 1;

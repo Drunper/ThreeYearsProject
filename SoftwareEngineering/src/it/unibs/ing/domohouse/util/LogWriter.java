@@ -21,7 +21,7 @@ public class LogWriter {
     	  
           fw = new FileWriter(Strings.LOG_PATH + Strings.LOG_NAME_FILE, true);
           bw = new BufferedWriter(fw);
-          bw.write("[" + dateFormat.format(date) + "] "+ toWrite);
+          bw.write("[" + dateFormat.format(date) + "] "+ toWrite + "\n");
 
       } catch (IOException e) {
     	  
