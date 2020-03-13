@@ -1,0 +1,22 @@
+housing_unit:casa automatica del signor Rossi, la casa importata automaticamente
+room:casa automatica del signor Rossi,sogg,sogg imported,20,20,20,20,true
+numeric_sensor_category:importedsensor, is, Sensors&Co,1#50#gradi,temperatura
+non_numeric_sensor_category:importedsensor2, is2, Sensors&Co,verde;rosso;giallo,colore
+actuator_category:importedactuator, ia, Actuators&Co, mantenimentoTemperatura;idle , idle
+actuator:casa automatica del signor Rossi,act1,importedactuator,true,sogg,sogg
+numeric_sensor:casa automatica del signor Rossi,impsens1, importedsensor,true,sogg,sogg
+non_numeric_sensor:casa automatica del signor Rossi,impsens2, importedsensor2,true,sogg,sogg
+artifact:casa automatica del signor Rossi, importedartifact,artefatto importato,sogg
+rule:casa automatica del signor Rossi, importedRule, impsens1_importedsensor.temperatura>10 && time > 10.00, act1_importedactuator := mantenimentoTemperatura(9),false
+default:ciao,ciao,ciao
+housing_unit:casa automatica del signor Rossi, la casa importata automaticamente
+housing_unit:casa automatica del signor Rossi1, la casa importata automaticamente,
+housing_unitcasa automatica del signor Rossi2, la casa importata automaticamente
+housing_unit:casa automatica del signor Rossi3 la casa importata automaticamente
+actuator:casa automatica del signor Rossi,act1,importedactuator,true,importedartifact,sogg
+actuator:casa automatica del signor Rossi,act1,importedactuator,true,importedartifact,sogg2
+actuator:casa automatica del signor Rossi,,act1,,importedactuator,true,importedartifact,sogg
+actuator:casa automatica del signor Rossi,,act1,importedactuator,true,importedartifact,sogg
+actuator:casa automatica del signor Rossi;act1,importedactuator,true,importedartifact,sogg
+actuator6:casa automatica del signor Rossi,act1,importedactuator,true,importedartifact,sogg
+actuator::casa automatica del signor Rossi,act1,importedactuator,true,importedartifact,sogg
