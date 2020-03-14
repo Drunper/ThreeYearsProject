@@ -73,7 +73,7 @@ public class Actuator implements Manageable, Serializable {
 	public void addEntry(Room toAdd) {
 		assert toAdd != null : "toAdd è null";
 		int size = controlledObjects.size();
-		controlledObjects.addEntry(toAdd);
+		controlledObjects.addElement(toAdd);
 		assert controlledObjects.size() == size + 1;
 		assert actuatorInvariant();
 	}
@@ -81,7 +81,7 @@ public class Actuator implements Manageable, Serializable {
 	public void addEntry(Artifact toAdd) {
 		assert toAdd != null : "toAdd è null";
 		int size = controlledObjects.size();
-		controlledObjects.addEntry(toAdd);
+		controlledObjects.addElement(toAdd);
 		assert controlledObjects.size() == size + 1;
 		assert actuatorInvariant();
 	}
@@ -101,7 +101,7 @@ public class Actuator implements Manageable, Serializable {
 		this.operatingMode = operatingMode;
 		running = true;
 		Consumer<Gettable> mode = category.getOperatingMode(operatingMode);
-		for(String object : controlledObjects.namesList())
+		for(String object : controlledObjects.getListOfElements())
 		{
 			mode.accept((Gettable)controlledObjects.getElementByName(object));
 		}
@@ -115,7 +115,7 @@ public class Actuator implements Manageable, Serializable {
 		running = true;
 		BiConsumer<Gettable, Object> mode = category.getParametricOperatingMode(operatingMode);
 		
-		for(String object : controlledObjects.namesList())
+		for(String object : controlledObjects.getListOfElements())
 		{
 			mode.accept((Gettable)controlledObjects.getElementByName(object), o);
 		}
@@ -135,7 +135,7 @@ public class Actuator implements Manageable, Serializable {
 			status = "acceso";
 		else
 			status = "spento";
-		for(String measuredObject : controlledObjects.namesList())
+		for(String measuredObject : controlledObjects.getListOfElements())
 		{
 			unformattedText = unformattedText+"ce:"+measuredObject+':';
 		}

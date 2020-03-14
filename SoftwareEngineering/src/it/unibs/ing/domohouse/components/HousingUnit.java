@@ -3,7 +3,6 @@ package it.unibs.ing.domohouse.components;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import it.unibs.ing.domohouse.interfaces.Manageable;
 import it.unibs.ing.domohouse.util.Association;
 import it.unibs.ing.domohouse.util.AssociationHandler;
@@ -11,7 +10,6 @@ import it.unibs.ing.domohouse.util.Manager;
 
 public class HousingUnit implements Serializable, Manageable {
 	
-
 	private static final long serialVersionUID = -4272512019548783815L;
 	private String name;
 	private String descr;
@@ -26,7 +24,6 @@ public class HousingUnit implements Serializable, Manageable {
 	/*
 	 * invariante name > 0, descr > 0, diversi da null. Manager != null
 	 */
-	
 	public HousingUnit(String name, String descr) {
 		this.name = name;
 		this.descr = descr;
@@ -64,20 +61,20 @@ public class HousingUnit implements Serializable, Manageable {
 		int pre_size_roomManager = roomManager.size();
 		int pre_size_associationManager = associationManager.size();
 		
-		roomManager.addEntry(toAdd);
+		roomManager.addElement(toAdd);
 		Association assoc = new Association(toAdd.getName());
-		assoc.setIsElementARoom(true);
+		assoc.setRoomOrArtifact(true);
 		associationManager.addAssociation(assoc);
 		
 		assert roomManager.size() >= pre_size_roomManager;
 		assert associationManager.size() >= pre_size_associationManager;
-		assert assoc.isElementARoom() == true && associationManager.hasEntry(assoc.getElementName());
+		assert assoc.isElementARoom() == true && associationManager.hasAssociation(assoc.getElementName());
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public String [] roomList() {
+	public String [] getRoomList() {
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		return roomManager.namesList();
+		return roomManager.getListOfElements();
 	}
 	
 	public Room getRoom(String name) {
@@ -89,7 +86,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public boolean hasRoom(String name) {
 		assert name != null;
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		return roomManager.hasEntry(name);
+		return roomManager.hasElement(name);
 	}
 
 	public String getRoomString(String selectedRoom) {
@@ -98,15 +95,6 @@ public class HousingUnit implements Serializable, Manageable {
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		String result = roomManager.getElementString(selectedRoom);
 		assert result != null && result.length() > 0;
-		return result;
-	}
-	
-	public String toString() {
-		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		String roomNames = String.join(":", roomList());
-		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		String result = name+':'+descr+':'+roomNames;
-		assert result.length() > 0;
 		return result;
 	}
 	
@@ -138,7 +126,6 @@ public class HousingUnit implements Serializable, Manageable {
 		assert art != null : "artifact result è null";
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		return art;
-		
 	}
 	
 	public String getSensorString(String selectedSensor) {
@@ -181,7 +168,7 @@ public class HousingUnit implements Serializable, Manageable {
 		int pre_size = sensorManager.size();
 		Room room = (Room)roomManager.getElementByName(location);
 		room.addSensor(toAdd);
-		sensorManager.addEntry(toAdd);
+		sensorManager.addElement(toAdd);
 		assert sensorManager.size() >= pre_size;
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -189,25 +176,25 @@ public class HousingUnit implements Serializable, Manageable {
 	public boolean hasRoomOrArtifact(String name) {
 		assert name != null && name.length() > 0;
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		return associationManager.hasEntry(name);
+		return associationManager.hasAssociation(name);
 	}
 
 	public boolean hasSensor(String name) {
 		assert name != null && name.length() > 0;
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		return sensorManager.hasEntry(name);
+		return sensorManager.hasElement(name);
 	}
 
 	public boolean hasActuator(String name) {
 		assert name != null && name.length() > 0;
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		return actuatorManager.hasEntry(name);
+		return actuatorManager.hasElement(name);
 	}
 
 	public boolean hasArtifact(String name) {
 		assert name != null && name.length() > 0;
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		return artifactManager.hasEntry(name);
+		return artifactManager.hasElement(name);
 	}
 
 	public boolean isElementARoom(String toAssoc) {
@@ -216,16 +203,16 @@ public class HousingUnit implements Serializable, Manageable {
 		return associationManager.isElementARoom(toAssoc);
 	}
 
-	public boolean isAssociated(String toAssoc, String category) {
+	public boolean isAssociatedWith(String toAssoc, String category) {
 		assert toAssoc != null && category != null;
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		return associationManager.isAssociated(toAssoc, category);
+		return associationManager.isElementAssociatedWith(toAssoc, category);
 	}
 
-	public void addAssociation(String object, String category) {
+	public void addAssociationWith(String object, String category) {
 		assert object != null && category != null;
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		associationManager.addAssociation(object, category);
+		associationManager.addAssociationBetween(object, category);
 	}
 
 	public void addArtifact(Artifact toAdd, String location) {
@@ -237,7 +224,7 @@ public class HousingUnit implements Serializable, Manageable {
 		
 		Room room = (Room)roomManager.getElementByName(location);
 		room.addArtifact(toAdd);
-		artifactManager.addEntry(toAdd);
+		artifactManager.addElement(toAdd);
 		associationManager.addAssociation(new Association(toAdd.getName()));
 		
 		assert artifactManager.size() >= pre_size_artifactManager;
@@ -254,7 +241,7 @@ public class HousingUnit implements Serializable, Manageable {
 
 		Room room = (Room)roomManager.getElementByName(location);
 		room.addActuator(toAdd);
-		actuatorManager.addEntry(toAdd);
+		actuatorManager.addElement(toAdd);
 
 		assert actuatorManager.size() >= pre_size;
 		assert room.hasActuator(toAdd.getName());
@@ -262,24 +249,27 @@ public class HousingUnit implements Serializable, Manageable {
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	public boolean isThereRoomOrArtifact() {
+	public boolean doesRoomOrArtifactExist() {
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		
-		if(roomManager.size() != 0 || artifactManager.size() != 0) return true;
+		if(roomManager.size() != 0 || artifactManager.size() != 0) 
+			return true;
 		return false;
 	}
 	
-	public boolean isThereRoom() {
+	public boolean doesRoomExist() {
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		
-		if(roomManager.size() != 0) return true;
+		if(roomManager.size() != 0) 
+			return true;
 		return false;
 	}
 	
-	public boolean isThereArtifact() {
+	public boolean doesArtifactExist() {
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		
-		if(artifactManager.size() != 0) return true;
+		if(artifactManager.size() != 0) 
+			return true;
 		return false;
 	}
 	
@@ -290,7 +280,7 @@ public class HousingUnit implements Serializable, Manageable {
 		Sensor sens = (Sensor) sensorManager.getElementByName(selectedSensor);
 		
 		if(sens.isMeasuringRoom()) {
-			String [] rooms = roomManager.namesList();
+			String [] rooms = roomManager.getListOfElements();
 			for(int i = 0; i < rooms.length; i++) {
 				if(sens.getElementByName(rooms[i]) != null) {
 					Room room = (Room) roomManager.getElementByName(rooms[i]);
@@ -299,8 +289,9 @@ public class HousingUnit implements Serializable, Manageable {
 					return result;
 				}
 			}
-		}else {
-			String [] artifacts = artifactManager.namesList();
+		}
+		else {
+			String [] artifacts = artifactManager.getListOfElements();
 			for(int i=0; i < artifacts.length; i++) {
 				if(sens.getElementByName(artifacts[i]) != null) {
 					Artifact art = (Artifact) artifactManager.getElementByName(artifacts[i]);
@@ -311,7 +302,6 @@ public class HousingUnit implements Serializable, Manageable {
 			}
 		}
 		return "";
-		
 	}
 	
 	public double getSensorValue(String selectedSensor, String info) {
@@ -321,15 +311,16 @@ public class HousingUnit implements Serializable, Manageable {
 		Sensor sens = (Sensor) sensorManager.getElementByName(selectedSensor);
 
 		if(sens.isMeasuringRoom()) {
-			String [] rooms = roomManager.namesList();
+			String [] rooms = roomManager.getListOfElements();
 			for(int i=0; i<rooms.length; i++) {
 				if(sens.getElementByName(rooms[i]) != null) {
 					Room room = (Room) roomManager.getElementByName(rooms[i]);
 						return room.getNumericProperty(info);
 				}
 			}	
-		}else {
-			String [] artifacts = artifactManager.namesList();
+		}
+		else {
+			String [] artifacts = artifactManager.getListOfElements();
 			for(int i=0; i < artifacts.length; i++) {
 				if(sens.getElementByName(artifacts[i]) != null) {
 					Artifact art = (Artifact) artifactManager.getElementByName(artifacts[i]);
@@ -381,7 +372,6 @@ public class HousingUnit implements Serializable, Manageable {
 		
 		assert pre_size >= queuedRules.size();
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-
 	}
 	
 	public boolean containsQueuedRule(Rule rule) {
@@ -429,7 +419,6 @@ public class HousingUnit implements Serializable, Manageable {
 		}
 		
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		
 		return enabledRulesPrintFormat;
 	}
 	
@@ -449,12 +438,10 @@ public class HousingUnit implements Serializable, Manageable {
 		}
 		
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		
 		return enabledRulesNames;
 	}
 	
 	public String [] getDisabledRulesList() {
-		
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		
 		ArrayList<Rule> disabledRules = new ArrayList<>();
@@ -470,12 +457,10 @@ public class HousingUnit implements Serializable, Manageable {
 		}
 		
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		
 		return disabledRulesPrintFormat;
 	}
 	
 	public String [] getDisabledRulesListNames() {
-		
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		
 		ArrayList<Rule> enabledRules = new ArrayList<>();
@@ -491,12 +476,10 @@ public class HousingUnit implements Serializable, Manageable {
 		}
 		
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		
 		return disabledRulesNames;
 	}
 	
 	public String [] getAllRulesList() {
-		
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 		
 		String [] rulesPrintFormat = new String[rules.size()];
@@ -506,7 +489,6 @@ public class HousingUnit implements Serializable, Manageable {
 		}
 		
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		
 		return rulesPrintFormat;
 	}
 	
@@ -522,12 +504,12 @@ public class HousingUnit implements Serializable, Manageable {
 	
 	public String[] getSensorNames() {
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		return sensorManager.namesList();
+		return sensorManager.getListOfElements();
 	}
 	
 	public String[] getActuatorNames() {
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
-		return actuatorManager.namesList();
+		return actuatorManager.getListOfElements();
 	}
 	
 	public String[] getCategoriesOfASensor(String selectedSensor) {
@@ -560,6 +542,14 @@ public class HousingUnit implements Serializable, Manageable {
 		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
+	public String toString() {
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		String roomNames = String.join(":", getRoomList());
+		assert housingUnitInvariant() : "Invariante della classe non soddisfatto";
+		String result = name+':'+descr+':'+roomNames;
+		assert result.length() > 0;
+		return result;
+	}
 	
 	private boolean housingUnitInvariant() {
 		boolean checkName = name != null && name.length() > 0 ;

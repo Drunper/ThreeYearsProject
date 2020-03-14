@@ -81,7 +81,7 @@ public class Room implements Gettable, Serializable {
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		int pre_size = actuatorManager.size();
 		
-		actuatorManager.addEntry(toAdd);
+		actuatorManager.addElement(toAdd);
 		
 		assert actuatorManager.size() >= pre_size;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
@@ -90,11 +90,11 @@ public class Room implements Gettable, Serializable {
 	public void removeActuator(String toRemove) {
 		assert toRemove != null && toRemove.length() > 0;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
-		boolean prec = actuatorManager.hasEntry(toRemove);
+		boolean prec = actuatorManager.hasElement(toRemove);
 		assert prec : "actuatorManger non contiene " + toRemove + " e dunque non può rimuoverlo";
 		int pre_size = actuatorManager.size();
 		
-		actuatorManager.remove(toRemove);
+		actuatorManager.removeElement(toRemove);
 		
 		assert actuatorManager.size() <= pre_size;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
@@ -102,7 +102,7 @@ public class Room implements Gettable, Serializable {
 	
 	public Actuator getActuatorByName(String toGet) {
 		assert toGet != null && toGet.length() > 0;
-		boolean prec = actuatorManager.hasEntry(toGet);
+		boolean prec = actuatorManager.hasElement(toGet);
 		assert prec : "actuatorManager non contiente " + toGet;
 		int pre_size = actuatorManager.size();
 		
@@ -117,33 +117,33 @@ public class Room implements Gettable, Serializable {
 	public void changeActuatorName(String oldName, String newName) {
 		assert oldName != null && oldName.length() > 0;
 		assert newName != null && newName.length() > 0;
-		assert actuatorManager.hasEntry(oldName) : "actuatorManager non contiene " + oldName;
+		assert actuatorManager.hasElement(oldName) : "actuatorManager non contiene " + oldName;
 		int pre_size = actuatorManager.size();
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		
 		actuatorManager.changeElementName(oldName, newName);
 		
 		assert actuatorManager.size() == pre_size;
-		assert actuatorManager.hasEntry(newName) : "actuatorManager non contiene " + newName;
+		assert actuatorManager.hasElement(newName) : "actuatorManager non contiene " + newName;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public boolean hasActuator(String name) {
 		assert name != null && name.length() > 0; 
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
-		return actuatorManager.hasEntry(name);
+		return actuatorManager.hasElement(name);
 	}
 	
 	public String [] getActuatorsNames() {
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
-		return actuatorManager.namesList();
+		return actuatorManager.getListOfElements();
 	}
 	
 	public void addSensor(Sensor toAdd) {
 		assert toAdd != null; 
 		int pre_size = sensorManager.size();
 		
-		sensorManager.addEntry(toAdd);
+		sensorManager.addElement(toAdd);
 		
 		assert sensorManager.size() >= pre_size;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
@@ -154,7 +154,7 @@ public class Room implements Gettable, Serializable {
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		int pre_size = sensorManager.size();
 		
-		sensorManager.remove(toRemove);
+		sensorManager.removeElement(toRemove);
 		
 		assert sensorManager.size() <= pre_size;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
@@ -162,7 +162,7 @@ public class Room implements Gettable, Serializable {
 	
 	public Sensor getSensorByName(String toGet) {
 		assert toGet != null && toGet.length() > 0; 
-		assert sensorManager.hasEntry(toGet) : "sensorManager non contiene " + toGet;
+		assert sensorManager.hasElement(toGet) : "sensorManager non contiene " + toGet;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		
 		Sensor s = (Sensor)sensorManager.getElementByName(toGet);
@@ -175,26 +175,26 @@ public class Room implements Gettable, Serializable {
 	public void changeSensorName(String oldName, String newName) {
 		assert oldName != null && oldName.length() > 0;
 		assert newName != null && newName.length() > 0;
-		assert sensorManager.hasEntry(oldName) : "sensorManager non contiene " + oldName;
+		assert sensorManager.hasElement(oldName) : "sensorManager non contiene " + oldName;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		int pre_size = sensorManager.size();
 		
 		sensorManager.changeElementName(oldName, newName);
 		
 		assert sensorManager.size() == pre_size;
-		assert sensorManager.hasEntry(newName) : "sensorManager non contiene " + newName;
+		assert sensorManager.hasElement(newName) : "sensorManager non contiene " + newName;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public boolean hasSensor(String name) {
 		assert name != null && name.length() > 0;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
-		return sensorManager.hasEntry(name);
+		return sensorManager.hasElement(name);
 	}
 	
 	public String [] getSensorsNames() {
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
-		return sensorManager.namesList();
+		return sensorManager.getListOfElements();
 	}
 	
 	public void addArtifact(Artifact toAdd) {
@@ -202,7 +202,7 @@ public class Room implements Gettable, Serializable {
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		int pre_size = artifactManager.size();
 		
-		artifactManager.addEntry(toAdd);
+		artifactManager.addElement(toAdd);
 		
 		assert artifactManager.size() >= pre_size;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
@@ -211,10 +211,10 @@ public class Room implements Gettable, Serializable {
 	public void removeArtifact(String toRemove) {
 		assert toRemove != null && toRemove.length() > 0;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
-		assert artifactManager.hasEntry(toRemove) : "artifactManager non contiene " + toRemove +" e dunque non può rimuoverlo";
+		assert artifactManager.hasElement(toRemove) : "artifactManager non contiene " + toRemove +" e dunque non può rimuoverlo";
 		int pre_size = artifactManager.size();
 		
-		artifactManager.remove(toRemove);
+		artifactManager.removeElement(toRemove);
 		
 		assert artifactManager.size() <= pre_size;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
@@ -236,25 +236,25 @@ public class Room implements Gettable, Serializable {
 		assert oldName != null && oldName.length() > 0;
 		assert newName != null && newName.length() > 0;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
-		assert artifactManager.hasEntry(oldName) : "artifactManager non contiene "+ oldName;
+		assert artifactManager.hasElement(oldName) : "artifactManager non contiene "+ oldName;
 		int pre_size = artifactManager.size();
 		
 		artifactManager.changeElementName(oldName, newName);
 		
 		assert artifactManager.size() == pre_size;
-		assert artifactManager.hasEntry(newName) : "artifactManager non contiene "+ newName;
+		assert artifactManager.hasElement(newName) : "artifactManager non contiene "+ newName;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	public boolean hasArtifact(String name) {
 		assert name != null && name.length() > 0;
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
-		return artifactManager.hasEntry(name);
+		return artifactManager.hasElement(name);
 	}
 	
 	public String [] getArtifactsNames() {
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
-		return artifactManager.namesList();
+		return artifactManager.getListOfElements();
 	}
 	
 	public boolean hasNumericProperty(String variableName) {
@@ -338,7 +338,7 @@ public class Room implements Gettable, Serializable {
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		
 		ArrayList<String> enabledSens = new ArrayList<>();
-		for(String s : sensorManager.namesList()) {
+		for(String s : sensorManager.getListOfElements()) {
 			Sensor sens = (Sensor) sensorManager.getElementByName(s);
 			if(sens.isState()) enabledSens.add(s);
 		}
@@ -358,7 +358,7 @@ public class Room implements Gettable, Serializable {
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		
 		ArrayList<String> disabledSens = new ArrayList<>();
-		for(String s : sensorManager.namesList()) {
+		for(String s : sensorManager.getListOfElements()) {
 			Sensor sens = (Sensor) sensorManager.getElementByName(s);
 			if(!sens.isState()) disabledSens.add(s);
 		}
@@ -378,7 +378,7 @@ public class Room implements Gettable, Serializable {
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		
 		ArrayList<String> enabledActuator = new ArrayList<>();
-		for(String s : actuatorManager.namesList()) {
+		for(String s : actuatorManager.getListOfElements()) {
 			Actuator act = (Actuator) actuatorManager.getElementByName(s);
 			if(act.isState()) enabledActuator.add(s);
 		}
@@ -398,7 +398,7 @@ public class Room implements Gettable, Serializable {
 		assert roomInvariant() : "Invariante della classe non soddisfatto";
 		
 		ArrayList<String> disabledActuators = new ArrayList<>();
-		for(String s : actuatorManager.namesList()) {
+		for(String s : actuatorManager.getListOfElements()) {
 			Actuator act = (Actuator) actuatorManager.getElementByName(s);
 			if(!act.isState()) disabledActuators.add(s);
 		}

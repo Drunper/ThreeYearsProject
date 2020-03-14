@@ -2,23 +2,11 @@ package it.unibs.ing.domohouse.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import it.unibs.ing.domohouse.components.Actuator;
-import it.unibs.ing.domohouse.components.ActuatorCategory;
-import it.unibs.ing.domohouse.components.Artifact;
-import it.unibs.ing.domohouse.components.HousingUnit;
-import it.unibs.ing.domohouse.components.NonNumericSensor;
-import it.unibs.ing.domohouse.components.NonNumericSensorCategory;
-import it.unibs.ing.domohouse.components.NumericSensor;
-import it.unibs.ing.domohouse.components.Room;
-import it.unibs.ing.domohouse.components.Rule;
-import it.unibs.ing.domohouse.components.Sensor;
-import it.unibs.ing.domohouse.components.SensorCategory;
-import it.unibs.ing.domohouse.components.NumericSensorCategory;
+import it.unibs.ing.domohouse.components.*;
 
 public class InputHandler {
-
 	private DataHandler dataHandler;
+	
 	/*
 	 * invariante dataHandler != null
 	 */
@@ -31,15 +19,15 @@ public class InputHandler {
 		
 		String name;
 		do {
-		name = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_NAME);
-		if(dataHandler.hasHouse(name)) System.out.println(Strings.NAME_ALREADY_EXISTENT);
-		}while(dataHandler.hasHouse(name));
+			name = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_NAME);
+			if(dataHandler.hasHousingUnit(name)) 
+				System.out.println(Strings.NAME_ALREADY_EXISTENT);
+		}
+		while(dataHandler.hasHousingUnit(name));
 		
 		String descr = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
-		{
 			createHouse(name, descr);	
-		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -48,10 +36,10 @@ public class InputHandler {
 		assert selectedHouse != null && location != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
-		boolean choice = RawInputHandler.yesOrNo(Strings.SENSOR_CHOICE);
-		
-		if(choice) readNumericSensorFromUser(selectedHouse, location);
-		else readNonNumericSensorFromUser(selectedHouse, location);
+		if(RawInputHandler.yesOrNo(Strings.SENSOR_CHOICE)) 
+			readNumericSensorFromUser(selectedHouse, location);
+		else 
+			readNonNumericSensorFromUser(selectedHouse, location);
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -69,11 +57,10 @@ public class InputHandler {
 				System.out.println(Strings.ARTIFACT_ROOM_NAME_ASSIGNED);
 		}
 		while(dataHandler.hasRoomOrArtifact(selectedHouse, name));
+		
 		String descr = RawInputHandler.readNotVoidString(Strings.ARTIFACT_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
-		{
 			createArtifact(selectedHouse, name, descr, location);
-		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -85,131 +72,136 @@ public class InputHandler {
 		
 		if(dataHandler.hasNonNumericSensorCategory() && dataHandler.getSensorCategoryList().length != 0) {
 				
-		ArrayList<String> categoryList = new ArrayList<String>();
-		String category;
-		do
-		{ 
-		do 
-		{
-		do
-		{
-		do
-		{
-			category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
-			if (!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER))
-				System.out.println(Strings.CATEGORY_NON_EXISTENT);
-		}
-		while(!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER));
-		
-		if(category.equalsIgnoreCase(Strings.BACK_CHARACTER)) break; //break per uscire dal while per non generare eccezione del tipo getSensorCategory("^")
-		if(dataHandler.getSensorCategory(category).getIsNumeric()) System.out.println(Strings.ERROR_TYPE_CATEGORY);
-		}
-		while(dataHandler.getSensorCategory(category).getIsNumeric());
-			
-		if(!category.equalsIgnoreCase(Strings.BACK_CHARACTER)) categoryList.add(category);
-		}
-		while(!category.equalsIgnoreCase(Strings.BACK_CHARACTER));
-		if(categoryList.size() == 0) System.out.println(Strings.NO_CATEGORY_INSERTED);
-		}
-		while(categoryList.size() == 0);
-		
-		String name;
-		String toCheck;
-		do
-		{
-			name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
-			toCheck = name;
-			for(String elem : categoryList) {
-				toCheck = toCheck + "_" + elem;
-			}
-			if (dataHandler.hasSensor(selectedHouse, toCheck))
-				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
-		}
-		while(dataHandler.hasSensor(selectedHouse, toCheck));
-		
-		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
-		
-		category = "";
-		for(String elem : categoryList) category = category + "_" + elem;
-			
-		boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
-		boolean isThereArtifact = dataHandler.isThereArtifact(selectedHouse);
-		boolean roomOrArtifact;
-		
-		do {	
-		roomOrArtifact = RawInputHandler.yesOrNo(Strings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
-			
-		if((roomOrArtifact && !isThereRoom)) 
-			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
-		else if ((!roomOrArtifact && !isThereArtifact))
-			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
-		
-		}while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
-		
-		if(roomOrArtifact) {
-			boolean ok = false;
-			for(int i=0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
-				if(!dataHandler.isAssociated(selectedHouse, dataHandler.getRoomList(selectedHouse)[i], category)) ok = true;
-				
-			}
-			
-			if(!ok) {
-				System.out.println(Strings.NO_ROOM_TO_ASSOC);
-				return;
-			}
-		}else {
-			boolean ok = false;
-			for(int i=0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
-				for(int k = 0; k < dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomList(selectedHouse)[i])).length; k++){
-					String artifact = dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomList(selectedHouse))[i])[k];
-					if(!dataHandler.isAssociated(selectedHouse, artifact, category)) ok = true;
+			ArrayList<String> categoryList = new ArrayList<String>();
+			String category;
+			do
+			{ 
+				do 
+				{
+					do
+					{
+						do
+						{
+							category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
+							if (!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER))
+								System.out.println(Strings.CATEGORY_NON_EXISTENT);
+						}
+						while(!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER));
+					
+						if(category.equalsIgnoreCase(Strings.BACK_CHARACTER)) 
+							break; //break per uscire dal while per non generare eccezione del tipo getSensorCategory("^")
+						if(dataHandler.getSensorCategory(category).getIsNumeric()) 
+							System.out.println(Strings.ERROR_TYPE_CATEGORY);
+					}
+					while(dataHandler.getSensorCategory(category).getIsNumeric());
+					
+					if(!category.equalsIgnoreCase(Strings.BACK_CHARACTER)) 
+						categoryList.add(category);
 				}
+				while(!category.equalsIgnoreCase(Strings.BACK_CHARACTER));
+				if(categoryList.size() == 0) 
+					System.out.println(Strings.NO_CATEGORY_INSERTED);
 			}
-			if(!ok) {
-				System.out.println(Strings.NO_ARTIFACT_TO_ASSOC);
-				return;
-			}
-		}
-		
-		
-		ArrayList<String> objectList = new ArrayList<>();
-		
-		do
-		{
-			String toAssoc;
+			while(categoryList.size() == 0);
+			
+			String name;
+			String toCheck;
 			do
 			{
-				if (roomOrArtifact)
-					toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ROOM_ASSOCIATION);
-				else
-					toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ARTIFACT_ASSOCIATION);
-				if (!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc))
-					System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
-				else
-				{
-					if (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc))
-						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ROOM);
-					else if (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc))
-						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ARTIFACT);
-					else if (dataHandler.isAssociated(selectedHouse, toAssoc, category))
-						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_CATEGORY);
+				name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
+				toCheck = name;
+				for(String elem : categoryList) {
+					toCheck = toCheck + "_" + elem;
 				}
+				if (dataHandler.hasSensor(selectedHouse, toCheck))
+					System.out.println(Strings.SENSOR_NAME_ASSIGNED);
 			}
-			while(!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc)) 
-					|| (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc)) || dataHandler.isAssociated(selectedHouse, toAssoc, category));
-			objectList.add(toAssoc);
+			while(dataHandler.hasSensor(selectedHouse, toCheck));
+			
+			if(dataHandler.doesRoomOrArtifactExist(selectedHouse)) {
+			
+				category = "";
+				for(String elem : categoryList) 
+					category = category + "_" + elem;
+				
+				boolean isThereRoom = dataHandler.doesRoomExist(selectedHouse);
+				boolean isThereArtifact = dataHandler.doesArtifactExist(selectedHouse);
+				boolean roomOrArtifact;
+			
+				do {	
+					roomOrArtifact = RawInputHandler.yesOrNo(Strings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
+					
+					if((roomOrArtifact && !isThereRoom)) 
+						System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+					else if ((!roomOrArtifact && !isThereArtifact))
+						System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+				
+				}
+				while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
+				
+				if(roomOrArtifact) {
+					boolean ok = false;
+					for(int i=0; i < dataHandler.getRoomsList(selectedHouse).length; i++) {
+						if(!dataHandler.isAssociated(selectedHouse, dataHandler.getRoomsList(selectedHouse)[i], category)) 
+							ok = true;
+					}
+					
+					if(!ok) {
+						System.out.println(Strings.NO_ROOM_TO_ASSOC);
+						return;
+					}
+				}
+				else {
+					boolean ok = false;
+					for(int i=0; i < dataHandler.getRoomsList(selectedHouse).length; i++) {
+						for(int k = 0; k < dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomsList(selectedHouse)[i])).length; k++){
+							String artifact = dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomsList(selectedHouse))[i])[k];
+							if(!dataHandler.isAssociated(selectedHouse, artifact, category)) 
+								ok = true;
+						}
+					}
+					if(!ok) {
+						System.out.println(Strings.NO_ARTIFACT_TO_ASSOC);
+						return;
+					}
+				}
+				
+				
+				ArrayList<String> objectList = new ArrayList<>();
+				
+				do
+				{
+					String toAssoc;
+					do
+					{
+						if (roomOrArtifact)
+							toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ROOM_ASSOCIATION);
+						else
+							toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ARTIFACT_ASSOCIATION);
+						if (!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc))
+							System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
+						else {
+							if (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc))
+								System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ROOM);
+							else if (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc))
+								System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ARTIFACT);
+							else if (dataHandler.isAssociated(selectedHouse, toAssoc, category))
+								System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_CATEGORY);
+						}
+					}
+					while(!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc)) 
+							|| (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc)) || dataHandler.isAssociated(selectedHouse, toAssoc, category));
+					objectList.add(toAssoc);
+				}
+				while(RawInputHandler.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
+				if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
+					createNonNumericSensor(selectedHouse, name, categoryList, roomOrArtifact, objectList, location);
+			}
+			else 
+				System.out.println(Strings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
 		}
-		while(RawInputHandler.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
-		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
-		{
-			createNonNumericSensor(selectedHouse, name, categoryList, roomOrArtifact, objectList, location);
-		}
-	}else {
-		System.out.println(Strings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
-		}
-	}else{
-		System.out.println(Strings.NO_SENSOR_CATEGORY_ERROR);
-	}
+		else 
+			System.out.println(Strings.NO_SENSOR_CATEGORY_ERROR);
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
@@ -219,132 +211,138 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		if(dataHandler.hasNumericSensorCategory() && dataHandler.getSensorCategoryList().length != 0) {
 		
-		ArrayList<String> categoryList = new ArrayList<String>();
-		String category;
-		do
-		{
-		do 
-		{
-		do
-		{
-		do
-		{
-			category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
-			if ((!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER)))
-				System.out.println(Strings.CATEGORY_NON_EXISTENT);
-		}
-		while(!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER));
-		
-		if(category.equalsIgnoreCase(Strings.BACK_CHARACTER)) break; //break per uscire dal while per non generare eccezione del tipo getSensorCategory("^")
-		
-		if(!dataHandler.getSensorCategory(category).getIsNumeric()) System.out.println(Strings.ERROR_TYPE_CATEGORY);
-		}while(!dataHandler.getSensorCategory(category).getIsNumeric());
-			
-		if(!category.equalsIgnoreCase(Strings.BACK_CHARACTER)) categoryList.add(category);
-		}
-		while(!category.equalsIgnoreCase(Strings.BACK_CHARACTER));
-		
-		if(categoryList.size() == 0) System.out.println(Strings.NO_CATEGORY_INSERTED);
-		}
-		while(categoryList.size() == 0);
-		
-		String name;
-		String toCheck;
-		do
-		{
-			name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
-			toCheck = name;
-			for(String elem : categoryList) {
-				toCheck = toCheck + "_" + elem;
-			}
-			if (dataHandler.hasSensor(selectedHouse, toCheck))
-				System.out.println(Strings.SENSOR_NAME_ASSIGNED);
-		}
-		while(dataHandler.hasSensor(selectedHouse, toCheck));
-		
-		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
-		
-		category = "";
-		for(String elem : categoryList) category = category + "_" + elem;	
-		
-		boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
-		boolean isThereArtifact = dataHandler.isThereArtifact(selectedHouse);
-		boolean roomOrArtifact;
-		
-		do {	
-		roomOrArtifact = RawInputHandler.yesOrNo(Strings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
-			
-		if((roomOrArtifact && !isThereRoom)) 
-			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
-		else if ((!roomOrArtifact && !isThereArtifact))
-			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
-		
-		}while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
-		
-		if(roomOrArtifact) {
-			boolean ok = false;
-			for(int i=0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
-				if(!dataHandler.isAssociated(selectedHouse, dataHandler.getRoomList(selectedHouse)[i], category)) ok = true;
-				
-			}
-			
-			if(!ok) {
-				System.out.println(Strings.NO_ROOM_TO_ASSOC);
-				return;
-			}
-		}else {
-			boolean ok = false;
-			for(int i=0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
-				for(int k = 0; k < dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomList(selectedHouse)[i])).length; k++){
-					String artifact = dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomList(selectedHouse))[i])[k];
-					if(!dataHandler.isAssociated(selectedHouse, artifact, category)) ok = true;
-				}
-			}
-			if(!ok) {
-				System.out.println(Strings.NO_ARTIFACT_TO_ASSOC);
-				return;
-			}
-		}
-		
-		
-		ArrayList<String> objectList = new ArrayList<>();
-		
-		do
-		{
-			String toAssoc;
+			ArrayList<String> categoryList = new ArrayList<String>();
+			String category;
 			do
 			{
-				if (roomOrArtifact)
-					toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ROOM_ASSOCIATION);
-				else
-					toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ARTIFACT_ASSOCIATION);
-				if (!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc))
-					System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
-				else
+				do 
 				{
-					if (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc))
-						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ROOM);
-					else if (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc))
-						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ARTIFACT);
-					else if (dataHandler.isAssociated(selectedHouse, toAssoc, category))
-						System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_CATEGORY);
+					do
+					{
+						do
+						{
+							category = RawInputHandler.readNotVoidString(Strings.INSERT_CATEGORY);
+							if ((!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER)))
+								System.out.println(Strings.CATEGORY_NON_EXISTENT);
+						}
+						while(!dataHandler.hasSensorCategory(category) && !category.equalsIgnoreCase(Strings.BACK_CHARACTER));
+						
+						if(category.equalsIgnoreCase(Strings.BACK_CHARACTER)) 
+							break; //break per uscire dal while per non generare eccezione del tipo getSensorCategory("^")
+						
+						if(!dataHandler.getSensorCategory(category).getIsNumeric()) 
+							System.out.println(Strings.ERROR_TYPE_CATEGORY);
+					}
+					while(!dataHandler.getSensorCategory(category).getIsNumeric());
+							
+					if(!category.equalsIgnoreCase(Strings.BACK_CHARACTER)) 
+						categoryList.add(category);
 				}
+				while(!category.equalsIgnoreCase(Strings.BACK_CHARACTER));
+				
+				if(categoryList.size() == 0) 
+					System.out.println(Strings.NO_CATEGORY_INSERTED);
 			}
-			while(!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc)) 
-					|| (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc)) || dataHandler.isAssociated(selectedHouse, toAssoc, category));
-			objectList.add(toAssoc);
+			while(categoryList.size() == 0);
+			
+			String name;
+			String toCheck;
+			do
+			{
+				name = RawInputHandler.readNotVoidString(Strings.SENSOR_INPUT_NAME);
+				toCheck = name;
+				for(String elem : categoryList) {
+					toCheck = toCheck + "_" + elem;
+				}
+				if (dataHandler.hasSensor(selectedHouse, toCheck))
+					System.out.println(Strings.SENSOR_NAME_ASSIGNED);
+			}
+			while(dataHandler.hasSensor(selectedHouse, toCheck));
+			
+			if(dataHandler.doesRoomOrArtifactExist(selectedHouse)) {
+			
+				category = "";
+				for(String elem : categoryList) category = category + "_" + elem;	
+				
+				boolean isThereRoom = dataHandler.doesRoomExist(selectedHouse);
+				boolean isThereArtifact = dataHandler.doesArtifactExist(selectedHouse);
+				boolean roomOrArtifact;
+			
+				do 
+				{	
+					roomOrArtifact = RawInputHandler.yesOrNo(Strings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
+						
+					if((roomOrArtifact && !isThereRoom)) 
+						System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+					else if ((!roomOrArtifact && !isThereArtifact))
+						System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+				
+				}
+				while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
+			
+				if(roomOrArtifact) {
+					boolean ok = false;
+					for(int i=0; i < dataHandler.getRoomsList(selectedHouse).length; i++) {
+						if(!dataHandler.isAssociated(selectedHouse, dataHandler.getRoomsList(selectedHouse)[i], category)) 
+							ok = true;
+						
+					}
+					
+					if(!ok) {
+						System.out.println(Strings.NO_ROOM_TO_ASSOC);
+						return;
+					}
+				}
+				else {
+					boolean ok = false;
+					for(int i=0; i < dataHandler.getRoomsList(selectedHouse).length; i++) {
+						for(int k = 0; k < dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomsList(selectedHouse)[i])).length; k++){
+							String artifact = dataHandler.getArtifactNames(selectedHouse, (dataHandler.getRoomsList(selectedHouse))[i])[k];
+							if(!dataHandler.isAssociated(selectedHouse, artifact, category)) 
+								ok = true;
+						}
+					}
+					if(!ok) {
+						System.out.println(Strings.NO_ARTIFACT_TO_ASSOC);
+						return;
+					}
+				}
+			
+				ArrayList<String> objectList = new ArrayList<>();
+				
+				do
+				{
+					String toAssoc;
+					do
+					{
+						if (roomOrArtifact)
+							toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ROOM_ASSOCIATION);
+						else
+							toAssoc = RawInputHandler.readNotVoidString(Strings.SENSOR_ARTIFACT_ASSOCIATION);
+						if (!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc))
+							System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
+						else {
+							if (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc))
+								System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ROOM);
+							else if (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc))
+								System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_ARTIFACT);
+							else if (dataHandler.isAssociated(selectedHouse, toAssoc, category))
+								System.out.println(Strings.SENSOR_WRONG_ASSOCIATION_CATEGORY);
+						}
+					}
+					while(!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc)) 
+							|| (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc)) || dataHandler.isAssociated(selectedHouse, toAssoc, category));
+					objectList.add(toAssoc);
+				}
+				while(RawInputHandler.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
+				if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
+					createNumericSensor(selectedHouse, name, categoryList, roomOrArtifact, objectList, location);
+			}
+			else
+				System.out.println(Strings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
 		}
-		while(RawInputHandler.yesOrNo(Strings.SENSOR_ANOTHER_ASSOCIATION));
-		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
-		{
-			createNumericSensor(selectedHouse, name, categoryList, roomOrArtifact, objectList, location);
-		}
-	}else {
-		System.out.println(Strings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
-		}
-	}else {
-		System.out.println(Strings.NO_SENSOR_CATEGORY_ERROR);
-	}
+		else 
+			System.out.println(Strings.NO_SENSOR_CATEGORY_ERROR);
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
@@ -355,103 +353,104 @@ public class InputHandler {
 		
 		if(dataHandler.getActuatorCategoryList().length != 0) {
 		
-		String category;
-		do
-		{
-			category = RawInputHandler.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_NAME);
-			if (!dataHandler.hasActuatorCategory(category))
-					System.out.println(Strings.CATEGORY_NON_EXISTENT);
-		}
-		while(!dataHandler.hasActuatorCategory(category));
-			
-			
-		String name;
-		do
-		{
-			name = RawInputHandler.readNotVoidString(Strings.ACTUATOR_INPUT_NAME); 
-			if (dataHandler.hasActuator(selectedHouse, name + "_" + category))						
-				System.out.println(Strings.ACTUATOR_NAME_ASSIGNED);
-		}
-		while(dataHandler.hasActuator(selectedHouse, name + "_" + category));
-		
-		
-		if(dataHandler.isThereRoomOrArtifact(selectedHouse)) {
-			boolean isThereRoom = dataHandler.isThereRoom(selectedHouse);
-			boolean isThereArtifact = dataHandler.isThereArtifact(selectedHouse);
-			boolean roomOrArtifact;
-			
-		do {
-		roomOrArtifact = RawInputHandler.yesOrNo(Strings.ACTUATOR_ARTIFACT_OR_ROOM_ASSOCIATION);
-		
-		if((roomOrArtifact && !isThereRoom)) 
-			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
-		else if ((!roomOrArtifact && !isThereArtifact))
-			System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
-		
-		}while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
-		
-		if(roomOrArtifact) {
-			boolean ok = false;
-			for(int i = 0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
-			if(!dataHandler.isAssociated(selectedHouse, dataHandler.getRoomList(selectedHouse)[i], category)) ok = true;
-			}
-
-			if(!ok) {
-			System.out.println(Strings.NO_ROOM_TO_ASSOC);
-			return;
-			}
-		}else{
-			boolean ok = false;
-			for(int i = 0; i < dataHandler.getRoomList(selectedHouse).length; i++) {
-				for(int j = 0; j < dataHandler.getArtifactNames(selectedHouse, dataHandler.getRoomList(selectedHouse)[i]).length; j++) {
-					String artifact = dataHandler.getArtifactNames(selectedHouse, dataHandler.getRoomList(selectedHouse)[i])[j];
-					if(!dataHandler.isAssociated(selectedHouse, artifact , category)) ok = true;
-				}
-			}
-			
-			if(!ok) {
-				System.out.println(Strings.NO_ARTIFACT_TO_ASSOC);
-				return;
-			}
-		}
-		
-		ArrayList<String> objectList = new ArrayList<>();
-		do
-		{
-			String toAssoc;
+			String category;
 			do
 			{
-				if (roomOrArtifact)
-					toAssoc = RawInputHandler.readNotVoidString(Strings.ACTUATOR_ROOM_ASSOCIATION);
-				else
-					toAssoc = RawInputHandler.readNotVoidString(Strings.ACTUATOR_ARTIFACT_ASSOCIATION);
-				if (!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc))
-					System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
-				else
-				{
-					if (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc))
-						System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_ROOM);
-					else if (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc))
-						System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_ARTIFACT);
-					else if (dataHandler.isAssociated(selectedHouse, toAssoc, category))
-						System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_CATEGORY);
-				}
+				category = RawInputHandler.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_NAME);
+				if (!dataHandler.hasActuatorCategory(category))
+						System.out.println(Strings.CATEGORY_NON_EXISTENT);
 			}
-			while(!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc)) 
-					|| (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc)) || dataHandler.isAssociated(selectedHouse, toAssoc, category));
-			objectList.add(toAssoc);
+			while(!dataHandler.hasActuatorCategory(category));
+			
+			String name;
+			do
+			{
+				name = RawInputHandler.readNotVoidString(Strings.ACTUATOR_INPUT_NAME); 
+				if (dataHandler.hasActuator(selectedHouse, name + "_" + category))						
+					System.out.println(Strings.ACTUATOR_NAME_ASSIGNED);
+			}
+			while(dataHandler.hasActuator(selectedHouse, name + "_" + category));
+		
+		
+			if(dataHandler.doesRoomOrArtifactExist(selectedHouse)) {
+				boolean isThereRoom = dataHandler.doesRoomExist(selectedHouse);
+				boolean isThereArtifact = dataHandler.doesArtifactExist(selectedHouse);
+				boolean roomOrArtifact;
+			
+				do 
+				{
+					roomOrArtifact = RawInputHandler.yesOrNo(Strings.ACTUATOR_ARTIFACT_OR_ROOM_ASSOCIATION);
+				
+					if((roomOrArtifact && !isThereRoom)) 
+						System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+					else if ((!roomOrArtifact && !isThereArtifact))
+						System.out.println(Strings.NO_ASSOCIABLE_ELEMENT);
+				}
+				while((roomOrArtifact && !isThereRoom) || (!roomOrArtifact && !isThereArtifact));
+		
+				if(roomOrArtifact) {
+					boolean ok = false;
+					for(int i = 0; i < dataHandler.getRoomsList(selectedHouse).length; i++) {
+					if(!dataHandler.isAssociated(selectedHouse, dataHandler.getRoomsList(selectedHouse)[i], category)) 
+						ok = true;
+					}
+		
+					if(!ok) {
+						System.out.println(Strings.NO_ROOM_TO_ASSOC);
+						return;
+					}
+				}
+				else {
+					boolean ok = false;
+					for(int i = 0; i < dataHandler.getRoomsList(selectedHouse).length; i++) {
+						for(int j = 0; j < dataHandler.getArtifactNames(selectedHouse, dataHandler.getRoomsList(selectedHouse)[i]).length; j++) {
+							String artifact = dataHandler.getArtifactNames(selectedHouse, dataHandler.getRoomsList(selectedHouse)[i])[j];
+							if(!dataHandler.isAssociated(selectedHouse, artifact , category)) 
+								ok = true;
+						}
+					}
+					
+					if(!ok) {
+						System.out.println(Strings.NO_ARTIFACT_TO_ASSOC);
+						return;
+					}
+				}
+		
+			ArrayList<String> objectList = new ArrayList<>();
+			do
+			{
+				String toAssoc;
+				do
+				{
+					if (roomOrArtifact)
+						toAssoc = RawInputHandler.readNotVoidString(Strings.ACTUATOR_ROOM_ASSOCIATION);
+					else
+						toAssoc = RawInputHandler.readNotVoidString(Strings.ACTUATOR_ARTIFACT_ASSOCIATION);
+					if (!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc))
+						System.out.println(Strings.ROOM_OR_ARTIFACT_NON_EXISTENT);
+					else {
+						if (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc))
+							System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_ROOM);
+						else if (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc))
+							System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_ARTIFACT);
+						else if (dataHandler.isAssociated(selectedHouse, toAssoc, category))
+							System.out.println(Strings.ACTUATOR_WRONG_ASSOCIATION_CATEGORY);
+					}
+				}
+				while(!dataHandler.hasRoomOrArtifact(selectedHouse, toAssoc) || (roomOrArtifact && !dataHandler.isElementARoom(selectedHouse, toAssoc)) 
+						|| (!roomOrArtifact && dataHandler.isElementARoom(selectedHouse, toAssoc)) || dataHandler.isAssociated(selectedHouse, toAssoc, category));
+				
+				objectList.add(toAssoc);
+			}
+			while(RawInputHandler.yesOrNo(Strings.ACTUATOR_ANOTHER_ASSOCIATION));
+			if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
+				createActuator(selectedHouse, name, category, roomOrArtifact, objectList, location);
+			}
+			else 
+				System.out.println(Strings.NO_ACTUATOR_ROOM_OR_ARTIFACT_ERROR);
 		}
-		while(RawInputHandler.yesOrNo(Strings.ACTUATOR_ANOTHER_ASSOCIATION));
-		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
-		{
-			createActuator(selectedHouse, name, category, roomOrArtifact, objectList, location);
-		}
-		}else {
-			System.out.println(Strings.NO_ACTUATOR_ROOM_OR_ARTIFACT_ERROR);
-		}
-		}else {
+		else 
 			System.out.println(Strings.NO_ACTUATOR_CATEGORY_ERROR);
-		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -468,6 +467,7 @@ public class InputHandler {
 				System.out.println(Strings.NAME_ALREADY_EXISTENT);
 		}
 		while(dataHandler.hasRoomOrArtifact(selectedHouse, name));
+		
 		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
 		double temp = RawInputHandler.readDouble(Strings.ROOM_INPUT_TEMPERATURE);
 		double umidita = RawInputHandler.readDouble(Strings.ROOM_INPUT_HUMIDITY);
@@ -475,13 +475,13 @@ public class InputHandler {
 		double vento = RawInputHandler.readDouble(Strings.ROOM_INPUT_WIND);
 		boolean presenza = RawInputHandler.yesOrNo("Sono presenti persone?");
 		String presenza_persone;
-		if(presenza) presenza_persone = "presenza di persone";
-		else presenza_persone = "assenza di persone";
+		if(presenza) 
+			presenza_persone = "presenza di persone";
+		else 
+			presenza_persone = "assenza di persone";
 		
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
-		{
 			createRoom(selectedHouse, name, descr, temp, umidita, pressione, vento, presenza_persone);
-		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -489,9 +489,10 @@ public class InputHandler {
 	public void readSensorCategoryFromUser() {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
-		boolean choice = RawInputHandler.yesOrNo(Strings.SENSOR_CATEGORY_CHOICE);
-		if(choice) readNumericSensorCategoryFromUser();
-		else readNonNumericSensorCategoryFromUser();
+		if(RawInputHandler.yesOrNo(Strings.SENSOR_CATEGORY_CHOICE)) 
+			readNumericSensorCategoryFromUser();
+		else 
+			readNonNumericSensorCategoryFromUser();
 	}
 	
 	public void readNonNumericSensorCategoryFromUser() {
@@ -513,14 +514,13 @@ public class InputHandler {
 			s = RawInputHandler.readNotVoidString(Strings.INPUT_NON_NUMERIC_DOMAIN);
 			if(!s.equals(Strings.BACK_CHARACTER)) domain.add(s);
 			
-		}while(!s.equals(Strings.BACK_CHARACTER));
+		}
+		while(!s.equals(Strings.BACK_CHARACTER));
 		
 		String detectableInfo = RawInputHandler.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_INFO);
 		
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
-		{
 			createNonNumericSensorCategory(name, abbreviation, constructor, domain, detectableInfo);
-		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -546,9 +546,7 @@ public class InputHandler {
 		String detectableInfo = RawInputHandler.readNotVoidString(Strings.SENSOR_CATEGORY_INPUT_INFO);
 		
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
-		{
 			createNumericSensorCategory(name, abbreviation, constructor, domain, detectableInfo);
-		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -583,9 +581,7 @@ public class InputHandler {
 		String defaultMode = RawInputHandler.readNotVoidString(Strings.ACTUATOR_CATEGORY_INPUT_DEFAULT_MODE);
 		
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_CREATION))
-		{
 			createActuatorCategory(name, abbreviation, constructor, listOfModes, defaultMode);
-		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -602,12 +598,14 @@ public class InputHandler {
 		do {
 			op = RawInputHandler.readNotVoidString(Strings.INSERT_OPERATING_MODE);
 			if(!act.getCategory().hasOperatingMode(op)) System.out.println(Strings.ERR_OPERATING_MODE);	
-		}while(!act.getCategory().hasOperatingMode(op));
+		}
+		while(!act.getCategory().hasOperatingMode(op));
 				
 		if(act.getCategory().hasNonParametricOperatingMode(op)) {
 			//Gestisce mod operativa non parametrica
 			act.setNonParametricOperatingMode(op);
-		}else {
+		}
+		else {
 			//Gestisce mod operativa paramerica
 			String info = OperatingModesHandler.getParameterInfo(op); //in questa stringa abbiamo il tipo di parametro
 			/*La stringa sarà del tipo "Double:1", che richiede un Double . Oppure "String:2" che richiede 2 stringhe
@@ -641,8 +639,7 @@ public class InputHandler {
 				act.setParametricOperatingMode(op,sParamList);
 				break;
 			}
-		}
-		
+		}	
 	}
 	
 	public void changeHouseDescription(String selectedHouse) {
@@ -651,9 +648,7 @@ public class InputHandler {
 		
 		String descr = RawInputHandler.readNotVoidString(Strings.HOUSE_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_SAVING))
-		{
 			dataHandler.changeHouseDescription(selectedHouse, descr);
-		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -664,9 +659,7 @@ public class InputHandler {
 		
 		String descr = RawInputHandler.readNotVoidString(Strings.ROOM_INPUT_DESCRIPTION);
 		if (RawInputHandler.yesOrNo(Strings.PROCEED_WITH_SAVING))
-		{
 			dataHandler.changeRoomDescription(selectedHouse, selectedRoom, descr);
-		}
 		
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 	}
@@ -677,7 +670,7 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		HousingUnit house = new HousingUnit(name, descr);
-		dataHandler.addHouse(house);
+		dataHandler.addHousingUnit(house);
 		
 		assert house != null;
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
@@ -887,10 +880,10 @@ public class InputHandler {
 		assert inputHandlerInvariant() : "Invariante della classe non soddisfatto";
 		
 		String selectedHouse = RawInputHandler.readNotVoidString(Strings.INSERT_HOUSE);
-		if(dataHandler.hasHouse(selectedHouse)) return selectedHouse;
+		if(dataHandler.hasHousingUnit(selectedHouse)) return selectedHouse;
 		else do {
 			selectedHouse = RawInputHandler.readNotVoidString(Strings.ERROR_NON_EXISTENT_HOUSE + " " + Strings.INSERT_HOUSE);
-		}while(!dataHandler.hasHouse(selectedHouse));
+		}while(!dataHandler.hasHousingUnit(selectedHouse));
 		return selectedHouse;
 	}
 	

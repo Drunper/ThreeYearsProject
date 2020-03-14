@@ -41,7 +41,7 @@ public class Sensor implements Manageable, Serializable{
 		assert sensorInvariant() : "Invariante della classe non soddisfatto";
 		int pre_size = measuredObjects.size();
 		
-		measuredObjects.addEntry(toAdd);
+		measuredObjects.addElement(toAdd);
 
 		assert measuredObjects.size() >= pre_size;
 		assert sensorInvariant() : "Invariante della classe non soddisfatto";
@@ -52,7 +52,7 @@ public class Sensor implements Manageable, Serializable{
 		int pre_size = measuredObjects.size();
 		assert sensorInvariant() : "Invariante della classe non soddisfatto";
 		
-		measuredObjects.addEntry(toAdd);
+		measuredObjects.addElement(toAdd);
 		
 		assert measuredObjects.size() >= pre_size;
 		assert sensorInvariant() : "Invariante della classe non soddisfatto";
@@ -60,7 +60,7 @@ public class Sensor implements Manageable, Serializable{
 	
 	public String [] measuredObjectsList() {
 		assert sensorInvariant() : "Invariante della classe non soddisfatto";
-		return measuredObjects.namesList();
+		return measuredObjects.getListOfElements();
 	}
 	
 	public Gettable getElementByName(String name) {

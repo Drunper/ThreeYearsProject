@@ -511,7 +511,7 @@ public class LibImporter {
 	private boolean hasHousingUnit(String house) {
 		boolean flag = false;
 		house = house.toLowerCase();
-		for(String h : dataHandler.getHouseList()) {
+		for(String h : dataHandler.getHousingUnitsList()) {
 			if(house.equalsIgnoreCase(h)) flag = true;
 		}
 		return flag;
@@ -558,7 +558,7 @@ public class LibImporter {
 		boolean flag = false;
 		room = room.toLowerCase();
 		if(hasHousingUnit(selectedHouse)) {
-			for(String r : dataHandler.getRoomList(selectedHouse)) {
+			for(String r : dataHandler.getRoomsList(selectedHouse)) {
 				if(room.equalsIgnoreCase(r)) flag = true;
 			}
 		}else return false;
@@ -570,7 +570,7 @@ public class LibImporter {
 		boolean flag = false; 
 		name = name.toLowerCase();
 		if(hasHousingUnit(selectedHouse)) {
-			for(String r : dataHandler.getRoomList(selectedHouse)) {
+			for(String r : dataHandler.getRoomsList(selectedHouse)) {
 				for(String act : dataHandler.getActuatorNames(selectedHouse, r)) {
 					if(name.equalsIgnoreCase(act)) flag = true;
 				}
@@ -585,7 +585,7 @@ public class LibImporter {
 		boolean flag = false;
 		name = name.toLowerCase();
 		if(hasHousingUnit(selectedHouse)) {
-			for(String r : dataHandler.getRoomList(selectedHouse)) {
+			for(String r : dataHandler.getRoomsList(selectedHouse)) {
 				for(String art : dataHandler.getArtifactNames(selectedHouse, r)) {
 					if(name.equalsIgnoreCase(art)) flag = true;
 				}
@@ -599,7 +599,7 @@ public class LibImporter {
 		boolean flag = false;
 		name = name.toLowerCase();
 		if(hasHousingUnit(selectedHouse)) {
-			for(String r : dataHandler.getRoomList(selectedHouse)) {
+			for(String r : dataHandler.getRoomsList(selectedHouse)) {
 				for(String sens : dataHandler.getSensorNames(selectedHouse, r)) {
 					if(name.equalsIgnoreCase(sens)) flag = true;
 				}

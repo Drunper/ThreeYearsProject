@@ -1,19 +1,15 @@
 package it.unibs.ing.domohouse.util;
 
 import java.util.TreeMap;
-
 import it.unibs.ing.domohouse.interfaces.Manageable;
-
 import java.io.Serializable;
 import java.util.Set;
 
 public class Manager implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5803882506409735012L;
 	private TreeMap<String, Manageable> elementMap;
+	
 	/*
 	 * invariante elementMap != null;
 	 */
@@ -38,7 +34,7 @@ public class Manager implements Serializable{
 		return elem;
 	}
 	
-	public void addEntry(Manageable element) {
+	public void addElement(Manageable element) {
 		assert element != null;
 		assert managerInvariant() : "Invariante di classe non soddisfatto";
 		int pre_size = elementMap.size();
@@ -49,7 +45,7 @@ public class Manager implements Serializable{
 		assert managerInvariant() : "Invariante di classe non soddisfatto";
 	}
 	
-	public void remove(String toRemove) {
+	public void removeElement(String toRemove) {
 		assert toRemove != null;
 		assert managerInvariant() : "Invariante di classe non soddisfatto";
 		assert elementMap.containsKey(toRemove);
@@ -70,7 +66,7 @@ public class Manager implements Serializable{
 		Manageable element = elementMap.get(oldName);
 		elementMap.remove(oldName);
 		element.setName(newName);
-		addEntry(element);
+		addElement(element);
 		
 		assert elementMap.size() == pre_size;
 		assert element != null;
@@ -79,14 +75,14 @@ public class Manager implements Serializable{
 		
 	}
 	
-	public boolean hasEntry(String name) {
+	public boolean hasElement(String name) {
 		assert name != null;
 		assert managerInvariant() : "Invariante di classe non soddisfatto";
 		
 		return elementMap.containsKey(name);
 	}
 	
-	public String [] namesList () {
+	public String [] getListOfElements () {
 		assert managerInvariant() : "Invariante di classe non soddisfatto";
 		Set<String> namesSet = elementMap.keySet();
 		

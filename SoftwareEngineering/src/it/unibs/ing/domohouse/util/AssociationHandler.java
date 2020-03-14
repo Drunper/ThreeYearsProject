@@ -5,11 +5,7 @@ import java.util.ArrayList;
 
 public class AssociationHandler implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1194017378304880890L;
-	//Forse si può usare la classe Manager, valuterò
 	private ArrayList<Association> associationList;
 	
 	public AssociationHandler() {
@@ -31,29 +27,29 @@ public class AssociationHandler implements Serializable{
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 	
-	public void removeAssociation(Association assoc) {
-		assert assoc != null;
+	public void removeAssociation(Association toRemove) {
+		assert toRemove != null;
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
-		assert associationList.contains(assoc) : "associationList non contiente " + assoc + " e dunque non può rimuoverlo";
+		assert associationList.contains(toRemove) : "associationList non contiente " + toRemove + " e dunque non può rimuoverlo";
 		int pre_size = associationList.size();
 		
-		associationList.remove(assoc);
+		associationList.remove(toRemove);
 		
 		assert associationList.size() <= pre_size;
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}
 	
-	public Association getAssociation(String name) {
-		assert name != null;
+	public Association getAssociation(String toGet) {
+		assert toGet != null;
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
 		for(Association assoc : associationList) {
-			if (assoc.getElementName().equalsIgnoreCase(name))
+			if (assoc.getElementName().equalsIgnoreCase(toGet))
 				return assoc;
 		}
 		return null;
 	}
 	
-	public boolean hasEntry(String name) {
+	public boolean hasAssociation(String name) {
 		assert name != null;
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
@@ -64,7 +60,7 @@ public class AssociationHandler implements Serializable{
 		return false;
 	}
 	
-	public String [] objectNameList() {
+	public String [] associatedElementsList() {
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 		String [] nameList = new String[associationList.size()];
@@ -87,7 +83,7 @@ public class AssociationHandler implements Serializable{
 		return element.isElementARoom();
 	}
 
-	public boolean isAssociated(String name, String category) {
+	public boolean isElementAssociatedWith(String name, String category) {
 		assert name != null && category != null;
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
@@ -95,16 +91,16 @@ public class AssociationHandler implements Serializable{
 		
 		assert element != null;
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
-		return element.isAssociated(category);
+		return element.isAssociatedWith(category);
 	}
 
-	public void addAssociation(String name, String category) {
+	public void addAssociationBetween(String name, String category) {
 		assert name != null && category != null;
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
 		
 		Association element = getAssociation(name);
 		assert element != null;
-		element.addAssociation(category);
+		element.addAssociationWith(category);
 		
 		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
 	}

@@ -47,7 +47,7 @@ public class InterfaceHandler {
 		checkThread.scheduleAtFixedRate(new Runnable() {
 			public void run() {
 				try {
-					for(String houseName : dataHandler.getHouseList()) {
+					for(String houseName : dataHandler.getHousingUnitsList()) {
 						HousingUnit h = (HousingUnit) dataHandler.getHousingUnit(houseName);
 						h.checkRules();
 					}
@@ -153,8 +153,8 @@ public class InterfaceHandler {
 					break;
 				case 1:
 					OutputHandler.clearOutput();
-					if(dataHandler.getHouseList().length > 0) {
-						OutputHandler.printListOfString(dataHandler.getHouseList());
+					if(dataHandler.getHousingUnitsList().length > 0) {
+						OutputHandler.printListOfString(dataHandler.getHousingUnitsList());
 						String selectedHouse = inputHandler.safeInsertHouse();
 						showUserUnitMenu(selectedHouse);
 					}else{
@@ -217,8 +217,8 @@ public class InterfaceHandler {
 					break;
 				case 1:
 					OutputHandler.clearOutput();
-					if(dataHandler.getHouseList().length > 0) {
-						OutputHandler.printListOfString(dataHandler.getHouseList());
+					if(dataHandler.getHousingUnitsList().length > 0) {
+						OutputHandler.printListOfString(dataHandler.getHousingUnitsList());
 						String selectedHouse = inputHandler.safeInsertHouse();
 						showMaintainerUnitMenu(selectedHouse);
 					}else{
@@ -336,11 +336,11 @@ public class InterfaceHandler {
 				case 3:
 					//visualizza room menu
 					OutputHandler.clearOutput();
-					if(dataHandler.getRoomList(selectedHouse).length == 0) {
+					if(dataHandler.getRoomsList(selectedHouse).length == 0) {
 						System.out.println(Strings.NO_ROOM);
 						break;
 					}
-					OutputHandler.printListOfString(dataHandler.getRoomList(selectedHouse));
+					OutputHandler.printListOfString(dataHandler.getRoomsList(selectedHouse));
 					System.out.println();
 					System.out.println();
 					
@@ -442,11 +442,11 @@ public class InterfaceHandler {
 				case 2:
 					//visualizza stanza
 					OutputHandler.clearOutput();
-					if(dataHandler.getRoomList(selectedHouse).length == 0) {
+					if(dataHandler.getRoomsList(selectedHouse).length == 0) {
 						System.out.println(Strings.NO_ROOM);
 						break;
 					}
-					OutputHandler.printListOfString(dataHandler.getRoomList(selectedHouse));
+					OutputHandler.printListOfString(dataHandler.getRoomsList(selectedHouse));
 					System.out.println();
 					System.out.println();
 					String selectedRoom = inputHandler.safeInsertRoom(selectedHouse);
