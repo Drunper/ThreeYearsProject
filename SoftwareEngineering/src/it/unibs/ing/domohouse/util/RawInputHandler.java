@@ -111,6 +111,7 @@ public class RawInputHandler {
 		return readValue;
 	}
 	  
+	@SuppressWarnings("unused")
 	public static int readInt (String message) {
 		assert message != null;
 		
@@ -173,6 +174,7 @@ public class RawInputHandler {
 		return readValue;
 	}
  
+	@SuppressWarnings("unused")
 	public static double readDouble (String message) {
 		assert message != null;
 		

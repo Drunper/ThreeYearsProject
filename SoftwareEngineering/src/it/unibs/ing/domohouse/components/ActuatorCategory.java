@@ -110,23 +110,23 @@ public class ActuatorCategory implements Manageable, Serializable {
 	}
 	
 	
-	public boolean hasOperatingMode(String op) {
+	public boolean hasOperatingMode(String operating_mode) {
 		assert operatingModesMap !=null && parametricOperatingModesMap != null;
 		
-		if(parametricOperatingModesMap.containsKey(op) || operatingModesMap.containsKey(op)) return true;
+		if(parametricOperatingModesMap.containsKey(operating_mode) || operatingModesMap.containsKey(operating_mode)) return true;
 		return false;
 	}
 	
-	public boolean hasParametricOperatingMode(String op) {
+	public boolean hasParametricOperatingMode(String operating_mode) {
 		assert parametricOperatingModesMap != null;
-		if(parametricOperatingModesMap.containsKey(op)) return true;
+		if(parametricOperatingModesMap.containsKey(operating_mode)) return true;
 		return false;
 	}
 	
 	
-	public boolean hasNonParametricOperatingMode(String op) {
+	public boolean hasNonParametricOperatingMode(String operating_mode) {
 		assert operatingModesMap !=null;
-		if(operatingModesMap.containsKey(op)) return true;
+		if(operatingModesMap.containsKey(operating_mode)) return true;
 		return false;
 	}
 	

@@ -1,7 +1,5 @@
 package it.unibs.ing.domohouse.components;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

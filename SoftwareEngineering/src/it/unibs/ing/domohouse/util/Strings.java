@@ -185,6 +185,7 @@ public class Strings {
 	public static final String SUCCESS_IMPORT_FILE = "File di libreria importato correttamente!";
 	
 	//Log Strings
+	public static final String LOG_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss";
 	public static final String LOG_SHOW_MAIN_MENU = "Visualizzazione del menù principale";
 	public static final String LOG_FIRST_ACCESS = "Primo accesso al programma";
 	public static final String LOG_SYSTEM_ACCESS = " ha effettuato l'accesso al sistema";

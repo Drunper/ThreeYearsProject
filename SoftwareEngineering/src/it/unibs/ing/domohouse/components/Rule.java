@@ -14,33 +14,33 @@ public class Rule implements Serializable{
 	private static final long serialVersionUID = -3835080225181052479L;
 	private HousingUnit housingUnit;
 	private String name;
-	private String antString; //stringa antecedente regola
-	private String consString; //stringa conseguente regola
-	private String startString;
+	private String antecedentRuleString; //stringa antecedente regola
+	private String consequentRuleString; //stringa conseguente regola
+	private String startConsequentString;
 	
 	//dispositivi coinvolti nella regola
-	private ArrayList<String> sensors;
-	private String actuator;
+	private ArrayList<String> involvedSensorsInRule;
+	private String involvedActuatorInRule;
 
 
 	private boolean state;
-	private boolean getStart;//contiene la key word "start"
+	private boolean hasStartConsequent;//contiene la key word "start"
 	
-	private Map<String, Operator> numericOpMap = new HashMap<String, Operator>();
-	private Map<String, StringOperator> nonNumericOpMap = new HashMap<String, StringOperator>();
+	private Map<String, Operator> numericOperatingModeMap = new HashMap<String, Operator>();
+	private Map<String, StringOperator> nonNumericOperatingModeMap = new HashMap<String, StringOperator>();
 	
 	/*
-	 * invariante name != null, antString !=null, consString != null, numericOpMap != null, nonNumericOpMap != null
+	 * invariante name != null, antString !=null, consequentRuleString != null, numericOperatingModeMap != null, nonNumericOperatingModeMap != null
 	 */
-	public Rule(HousingUnit housingUnit, String name, String antString, String consString, ArrayList<String> sensors, String actuator, boolean state) {
+	public Rule(HousingUnit housingUnit, String name, String antecedentRuleString, String consequentRuleString, ArrayList<String> involvedSensorsInRule, String involvedActuatorInRule, boolean ruleState) {
 		this.name = name;
-		this.antString = antString;
-		this.consString = consString;
-		this.state = state;
+		this.antecedentRuleString = antecedentRuleString;
+		this.consequentRuleString = consequentRuleString;
+		this.state = ruleState;
 		this.housingUnit = housingUnit;
-		this.sensors = sensors;
-		this.actuator = actuator;
-		this.getStart = false;
+		this.involvedSensorsInRule = involvedSensorsInRule;
+		this.involvedActuatorInRule = involvedActuatorInRule;
+		this.hasStartConsequent = false;
 		fillMap();
 	}
 	
@@ -49,7 +49,7 @@ public class Rule implements Serializable{
 	 */
 	public void checkRule() {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
-		if(state && getAntecedente()) actuateConseguente();
+		if(state && getAntecedent()) actuateConsequent();
 	}
 	
 	public void setState(boolean state) {
@@ -70,35 +70,35 @@ public class Rule implements Serializable{
 	public String getCompleteRule() {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		String result;
-		if(getStart) {
-			result = "[if]   " + antString + "   \n\t\t\t[then]   " + consString +", "+ startString;
-		}else result = "[if]   " + antString + "   \n\t\t\t[then]   " + consString;
+		if(hasStartConsequent) {
+			result = "[if]   " + antecedentRuleString + "   \n\t\t\t[then]   " + consequentRuleString +", "+ startConsequentString;
+		}else result = "[if]   " + antecedentRuleString + "   \n\t\t\t[then]   " + consequentRuleString;
 		
 		return result;
 	}
 	
-	public void actuateConseguente() {
+	public void actuateConsequent() {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
-		consMode(this.consString);
+		consequentMode(this.consequentRuleString);
 	}
 	
-	public String getAntString() {
+	public String getAntecedentString() {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
-		return this.antString;
+		return this.antecedentRuleString;
 	}
 	
-	public String getConsString() {
+	public String getConsequentString() {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
-		return this.consString;
+		return this.consequentRuleString;
 	}
 	
 	public String [] getInvolvedSensors() {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		
-		String [] result = new String[sensors.size()];
+		String [] result = new String[involvedSensorsInRule.size()];
 		
-		for(int i = 0; i < sensors.size(); i++) {
-			result[i] = sensors.get(i);
+		for(int i = 0; i < involvedSensorsInRule.size(); i++) {
+			result[i] = involvedSensorsInRule.get(i);
 		}
 		
 		assert result != null;
@@ -108,68 +108,69 @@ public class Rule implements Serializable{
 	
 	public String getInvolvedActuator() {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
-		return this.actuator;
+		return this.involvedActuatorInRule;
 	}
+	
 	/*
 	 * Metodi privati
 	 */
-	private boolean getAntecedente() {
+	private boolean getAntecedent() {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
-		return getAntValue(this.antString);
+		return getAntecedentValue(this.antecedentRuleString);
 	}
 	
 
 	
-	//i1_igrometro.umiditaRelativa > 30 
-	private boolean getAntValue(String antString) {
+	//i1_igrometro.umiditaRelativa > 30
+	//antecedente è costituito da condizioni
+	private boolean getAntecedentValue(String antString) {
 		assert antString != null;
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		
 		boolean res;
 		
 		if(antString.contains("&&") || antString.contains("||")) {
-			res = getCostValue(antString.split("[\\&\\&|\\|\\|]")[0]);
+			res = getConditionBooleanValue(antString.split("[\\&\\&|\\|\\|]")[0]);
 		antString = antString.replace(antString.split("[\\&\\&|\\|\\|]")[0], "");
 		if(antString.startsWith("&&")) { 
 			antString = antString.replace("&&", "");
-			return res && getAntValue(antString);
+			return res && getAntecedentValue(antString);
 		}else {
 			antString = antString.replace("||", "");
-			return res || getAntValue(antString);
+			return res || getAntecedentValue(antString);
 			}
 		}else {
-			return getCostValue(antString);
+			return getConditionBooleanValue(antString);
 		}
 	}
 	
 	//i1_igrometro.umiditaRelativa > 30 
 	//v1_videocamera.presenza == "presenza di persone"
 	//time < 6.00
-	private boolean getCostValue(String s) {
-		assert s != null;
+	private boolean getConditionBooleanValue(String condition) {
+		assert condition != null;
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		
-		if(!s.contains("time")) {
-		if(housingUnit.getSensor(s.split("\\.")[0]).isNumeric()) {		
+		if(!condition.contains("time")) {
+		if(housingUnit.getSensor(condition.split("\\.")[0]).isNumeric()) {		
 			String value1;
-			String info;
 			String op = "";
 			String value2;
 		
-			value1 = s.split("<|>|>=|<=|==|!=")[0];
+			value1 = condition.split("<|>|>=|<=|==|!=")[0];
 			double num1 = getValue(value1);
 		
-			value2 = s.split("<|>|>=|<=|==|!=")[1];
+			value2 = condition.split("<|>|>=|<=|==|!=")[1];
 			double num2 = getValue(value2);
 		
-			if(s.contains(">=")) op = ">=";
-			else if(s.contains("<=")) op = "<=";
-			else if(s.contains(">")) op = ">";
-			else if(s.contains("<")) op = "<";
-			else if(s.contains("==")) op = "==";
-			else if(s.contains("!=")) op = "!=";
+			if(condition.contains(">=")) op = ">=";
+			else if(condition.contains("<=")) op = "<=";
+			else if(condition.contains(">")) op = ">";
+			else if(condition.contains("<")) op = "<";
+			else if(condition.contains("==")) op = "==";
+			else if(condition.contains("!=")) op = "!=";
 			
-			return numericOpMap.get(op).compare(num1, num2);
+			return numericOperatingModeMap.get(op).compare(num1, num2);
 		}else {
 			//v1_videocamera.presenza == "presenza di persone"
 			String sensor;
@@ -177,36 +178,36 @@ public class Rule implements Serializable{
 			String op ="";
 			String value;
 			
-			sensor = s.split("\\.")[0];
-			s = s.split("\\.")[1]; //presenza == presenza di persone
-			info = s.split("==|!=")[0];
+			sensor = condition.split("\\.")[0];
+			condition = condition.split("\\.")[1]; //presenza == presenza di persone
+			info = condition.split("==|!=")[0];
 			
-			if(s.contains("==")) {
+			if(condition.contains("==")) {
 				op = "==";
-				value = s.split("==")[1];
+				value = condition.split("==")[1];
 			}
 			else {
 				op = "!=";
-				value = s.split("!=")[1];
+				value = condition.split("!=")[1];
 			}
 			
 			String temp = housingUnit.getNonNumericSensorValue(sensor, info);
 			
-			return nonNumericOpMap.get(op).compare(temp, value);
+			return nonNumericOperatingModeMap.get(op).compare(temp, value);
 			}
 		}else {
 			double currentTime = Double.parseDouble(Clock.getCurrentTime());
-			double value = Double.parseDouble(s.split("<|>|>=|<=|==|!=")[1]);
+			double value = Double.parseDouble(condition.split("<|>|>=|<=|==|!=")[1]);
 			
 			String op = "";
-			if(s.contains(">=")) op = ">=";
-			else if(s.contains("<=")) op = "<=";
-			else if(s.contains(">")) op = ">";
-			else if(s.contains("<")) op = "<";
-			else if(s.contains("==")) op = "==";
-			else if(s.contains("!=")) op = "!=";
+			if(condition.contains(">=")) op = ">=";
+			else if(condition.contains("<=")) op = "<=";
+			else if(condition.contains(">")) op = ">";
+			else if(condition.contains("<")) op = "<";
+			else if(condition.contains("==")) op = "==";
+			else if(condition.contains("!=")) op = "!=";
 		
-			return numericOpMap.get(op).compare(currentTime, value);
+			return numericOperatingModeMap.get(op).compare(currentTime, value);
 		}
 	}
 	
@@ -217,7 +218,7 @@ public class Rule implements Serializable{
 		
 		String sensor;
 		String info;
-		if(toElaborate.matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$")) {      //deve prendere Double non integer
+		if(toElaborate.matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$")) {    //deve prendere Double non integer
 			return Double.parseDouble(toElaborate);
 		}else {	
 			sensor = toElaborate.split("\\.")[0];
@@ -236,38 +237,38 @@ public class Rule implements Serializable{
 	 */
 	
 	//b1_attCancelloBattente := apertura, start := 10
-	private void consMode(String toElaborate) {
+	private void consequentMode(String toElaborate) {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		
 		if(toElaborate.contains("start")) {
-			this.consString = toElaborate.split(",")[0];
-			this.getStart = true;
+			this.consequentRuleString = toElaborate.split(",")[0];
+			this.hasStartConsequent = true;
 			toElaborate = toElaborate.split(",")[1];
-			startString = toElaborate;
+			startConsequentString = toElaborate;
 			double time = Double.parseDouble(toElaborate.split(":=")[1]);
 			housingUnit.addQueuedRule(this, time);
 		}
-		else consElaboration(toElaborate);
+		else consequentElaboration(toElaborate);
 		
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
-	private void consElaboration(String toElaborate) {
+	private void consequentElaboration(String toElaborate) {
 		assert toElaborate != null;
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		
 		toElaborate.replace(" ", ""); //elimino gli spazi
-		String act;
-		String cat;
-		String modOp;
-		String param;
-		double paramValue;
+		String actuator;
+		String category;
+		String operatingMode;
+		String parameter;
+		double parameterValue;
 		
-		act = toElaborate.split("_")[0];
+		actuator = toElaborate.split("_")[0];
 		toElaborate = toElaborate.split("_")[1];
-		cat = toElaborate.split(":=")[0];
+		category = toElaborate.split(":=")[0];
 		toElaborate = toElaborate.split(":=")[1]; 
-		modOp = toElaborate; //da verificare che sia parametrica o no
+		operatingMode = toElaborate; //da verificare che sia parametrica o no
 		
 		if(housingUnit.containsQueuedRule(this)){
 			//se l'attuatore su cui stiamo lavorando viene azionato e era presente nella coda di attuatori
@@ -279,105 +280,113 @@ public class Rule implements Serializable{
 		ArrayList<String> paramString = new ArrayList<>(); //array string da passare per azionare op Mod
 		
 		//si assume che una modOp parametrica sia nella forma "mantenimentoTemperatura(param)"
-		if(modOp.contains("(")) { //se paramatrica
-			modOp = toElaborate.split("\\(")[0]; //modOp = mantenimentoTemperatura
+		if(operatingMode.contains("(")) { //se paramatrica
+			operatingMode = toElaborate.split("\\(")[0]; //modOp = mantenimentoTemperatura
 			toElaborate = toElaborate.split("\\(")[1]; //toElaborate = param)
-			param = toElaborate.split("\\)")[0]; //toElaborate = param
+			parameter = toElaborate.split("\\)")[0]; //toElaborate = param
 			
-			if(!param.contains(",")) { //se è mono parametrica
+			if(!parameter.contains(",")) { //se è mono parametrica
 				//param può essere una stringa oppure un double
-				if(param.matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$")) { //se fa match con double regex allora è double
-				paramValue = Double.parseDouble(param);
-				paramDouble.add(paramValue);
-				housingUnit.getActuator(act + "_" + cat).setParametricOperatingMode(modOp, paramDouble);
+				if(parameter.matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$")) { //se fa match con double regex allora è double
+				parameterValue = Double.parseDouble(parameter);
+				paramDouble.add(parameterValue);
+				housingUnit.getActuator(actuator + "_" + category).setParametricOperatingMode(operatingMode, paramDouble);
 				}else {//altrimenti è una stringa e possiamo tenere param	
-				paramString.add(param);
-				housingUnit.getActuator(act + "_" + cat).setParametricOperatingMode(modOp, paramString);
+				paramString.add(parameter);
+				housingUnit.getActuator(actuator + "_" + category).setParametricOperatingMode(operatingMode, paramString);
 				}
 			}else {
-				if(param.split(",")[0].matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$")) { //se sono parametri Double
+				if(parameter.split(",")[0].matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$")) { //se sono parametri Double
 					do { //12,31,42
-					paramDouble.add(Double.parseDouble(param.split(",")[0]));
-					param = param.split(",")[1];
+					paramDouble.add(Double.parseDouble(parameter.split(",")[0]));
+					parameter = parameter.split(",")[1];
 					
-					}while(param.contains(","));
+					}while(parameter.contains(","));
 					
-					paramDouble.add(Double.parseDouble(param)); //aggiungo ultimo valore che rimarrebe fuori
+					paramDouble.add(Double.parseDouble(parameter)); //aggiungo ultimo valore che rimarrebe fuori
 					
-					housingUnit.getActuator(act + "_" + cat).setParametricOperatingMode(modOp, paramDouble);
+					housingUnit.getActuator(actuator + "_" + category).setParametricOperatingMode(operatingMode, paramDouble);
 					
 				}else {//sono parametri String
 					do {
-					paramString.add(param.split(",")[0]);
-					param = param.split(",")[1];
+					paramString.add(parameter.split(",")[0]);
+					parameter = parameter.split(",")[1];
 					
-					}while(param.contains(","));
+					}while(parameter.contains(","));
 					
-					paramString.add(param); //aggiungo ultimo valore che rimarrebe fuori
+					paramString.add(parameter); //aggiungo ultimo valore che rimarrebe fuori
 					
-					housingUnit.getActuator(act + "_" + cat).setParametricOperatingMode(modOp, paramString);
+					housingUnit.getActuator(actuator + "_" + category).setParametricOperatingMode(operatingMode, paramString);
 					
 				}
 			}
 		}else {//se non è parametrica
-			housingUnit.getActuator(act + "_" + cat).setNonParametricOperatingMode(modOp);	
+			housingUnit.getActuator(actuator + "_" + category).setNonParametricOperatingMode(operatingMode);	
 		}	
 	}
 
 	private void fillMap() {
 		assert ruleInvariant() : "Invariante della classe non soddisfatto";
 		
-		numericOpMap.put(">", new Operator() {
-            @Override public boolean compare(double a, double b) {
+		numericOperatingModeMap.put(">", new Operator() {
+			private static final long serialVersionUID = -5250726407104602586L;
+			@Override public boolean compare(double a, double b) {
                 return a > b;
             }
         });
-        numericOpMap.put("<", new Operator() {
-            @Override public boolean compare(double a, double b) {
+        numericOperatingModeMap.put("<", new Operator() {
+			private static final long serialVersionUID = 9045164402111710193L;
+			@Override public boolean compare(double a, double b) {
                 return a < b;
             }
         });
-        numericOpMap.put("==", new Operator() {
-            @Override public boolean compare(double a, double b) {
+        numericOperatingModeMap.put("==", new Operator() {
+			private static final long serialVersionUID = -3971340992796446174L;
+			@Override public boolean compare(double a, double b) {
                 return a == b;
             }
         });
-        numericOpMap.put(">=", new Operator() {
-            @Override public boolean compare(double a, double b) {
+        numericOperatingModeMap.put(">=", new Operator() {
+        	private static final long serialVersionUID = -5488945513794521410L;
+			@Override public boolean compare(double a, double b) {
                 return a >= b;
             }
         });
-        numericOpMap.put("<=", new Operator() {
-            @Override public boolean compare(double a, double b) {
+        numericOperatingModeMap.put("<=", new Operator() {
+			private static final long serialVersionUID = 6812440109872863492L;
+			@Override public boolean compare(double a, double b) {
                 return a <= b;
             }
         });
-        numericOpMap.put("!=", new Operator() {
-            @Override public boolean compare(double a, double b) {
+        numericOperatingModeMap.put("!=", new Operator() {
+			private static final long serialVersionUID = -3807829785337361890L;
+			@Override public boolean compare(double a, double b) {
                 return a != b;
             }
         });
-        nonNumericOpMap.put("==", new StringOperator() {
-            @Override public boolean compare(String a, String b) {
+        nonNumericOperatingModeMap.put("==", new StringOperator() {
+			private static final long serialVersionUID = -2287384876050549224L;
+			@Override public boolean compare(String a, String b) {
                 return a.equalsIgnoreCase(b);
             }
         });
-        nonNumericOpMap.put("!=", new StringOperator() {
-            @Override public boolean compare(String a, String b) {
+        nonNumericOperatingModeMap.put("!=", new StringOperator() {
+			private static final long serialVersionUID = 5161859393054128838L;
+			@Override public boolean compare(String a, String b) {
                 return !a.equalsIgnoreCase(b);
             }
         });
         
         
-        assert numericOpMap.size() > 0 && nonNumericOpMap.size() > 0;
+        assert numericOperatingModeMap.size() > 0 && nonNumericOperatingModeMap.size() > 0;
         assert ruleInvariant() : "Invariante della classe non soddisfatto";
 	}
 	
 	private boolean ruleInvariant() {
 		boolean checkName = name != null;
-		boolean checkAntString = antString != null;
-		boolean checkConsString = consString != null;
-		boolean checkMaps = numericOpMap != null && nonNumericOpMap != null;
+		boolean checkAntString = antecedentRuleString != null;
+		boolean checkConsString = consequentRuleString != null;
+		boolean checkMaps = numericOperatingModeMap != null && nonNumericOperatingModeMap != null;
 		
 		if(checkName && checkAntString && checkConsString && checkMaps) return true;
 		return false;

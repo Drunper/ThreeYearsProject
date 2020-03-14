@@ -5,6 +5,7 @@ import java.io.Serializable;
 import it.unibs.ing.domohouse.interfaces.Manageable;
 
 public class SensorCategory implements Manageable, Serializable{
+	private static final long serialVersionUID = 3198680539714650299L;
 	private String name;
 	private String text;
 	private boolean isNumeric;

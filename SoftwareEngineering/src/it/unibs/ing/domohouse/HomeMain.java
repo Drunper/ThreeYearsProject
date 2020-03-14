@@ -8,9 +8,8 @@ public class HomeMain {
 	private static InterfaceHandler interfaceHandler;
 
 	
-	//version  4
 	public static void main(String[] args) {
-		Clock.startClock();
+		Clock.startClock(); //start system clock
 		interfaceHandler = new InterfaceHandler();
 		interfaceHandler.show();
 	}

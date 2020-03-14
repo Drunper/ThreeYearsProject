@@ -1,9 +1,6 @@
 package it.unibs.ing.domohouse.components;
 
-import java.io.Serializable;
 import java.util.HashMap;
-
-import it.unibs.ing.domohouse.interfaces.Manageable;
 
 public class NumericSensorCategory extends SensorCategory {
 	

@@ -35,6 +35,7 @@ public class OperatingModesHandler implements Serializable{
 	/*
 	 * invariante operatingModesMap != null, parametricOperatingModesMap != null, paramMap != null
 	 */
+	@SuppressWarnings("unchecked")
 	public static void fillOperatingModes() {
 		
 		SerializableConsumer<Gettable> idle = g -> { };
@@ -89,23 +90,20 @@ public class OperatingModesHandler implements Serializable{
 		
 		SerializableBiConsumer<Gettable, Object> mantenimentoTemperatura = (g, paramList) ->{
 			//Otterremo un arrayList di double contenente un valore ma meglio comunque fare controlli
-			try {
-				//In questo caso l'utente avrà inserito solamente un valore nell'arraylist e andremo a prendere quello
+			//In questo caso l'utente avrà inserito solamente un valore nell'arraylist e andremo a prendere quello
+				if(paramList instanceof ArrayList && ((ArrayList<?>) paramList).get(0) instanceof Double) {
 				double num = ((ArrayList<Double>) paramList).get(0);
 				g.setNumericProperty("temperatura", num);
-				}catch(Exception ex) {
-					//Gestione eccezione
-			}
+				}
 		};
 		
 		SerializableBiConsumer<Gettable, Object> coloreLuci = (g, paramList) ->{
-			try {
-				//In questo caso l'utente avrà inserito solamente un valore nell'arraylist e andremo a prendere quello
+			 //In questo caso l'utente avrà inserito solamente un valore nell'arraylist e andremo a prendere quello
+			if(paramList instanceof ArrayList && ((ArrayList<?>) paramList).get(0) instanceof String) {
 				String color = ((ArrayList<String>) paramList).get(0);
 				g.setNonNumericProperty("coloreLuce", color);
-				}catch(Exception ex) {
-					//Gestione eccezione
 			}
+
 		};
 		
 		SerializableConsumer<Gettable> spegnimento = (g) ->{

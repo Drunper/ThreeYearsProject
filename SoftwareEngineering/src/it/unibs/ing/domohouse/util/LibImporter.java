@@ -19,7 +19,6 @@ public class LibImporter {
 	public LibImporter(DataHandler dataHandler, InputHandler inputHandler) {
 		this.dataHandler = dataHandler;
 		this.inputHandler = inputHandler;
-		//errorString = "";
 	}
 	
 	public boolean importFile() {
@@ -626,6 +625,7 @@ public class LibImporter {
 		return flag;
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean verifySyntaxRuleCondition(String selectedHouse, String condition) {
 		//controlli preliminari (contiente operatore, valore, time, punto...)
 		String test;

@@ -11,6 +11,7 @@ public class HomeLogin {
 	private MessageDigest md;
 	private byte[] hash;
 	private String hexHash;
+	
 	/*
 	 * invariante: maintainers != null 
 	 */

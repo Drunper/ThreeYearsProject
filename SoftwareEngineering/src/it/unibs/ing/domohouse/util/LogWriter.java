@@ -1,7 +1,6 @@
 package it.unibs.ing.domohouse.util;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -9,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LogWriter {
-	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	DateFormat dateFormat = new SimpleDateFormat(Strings.LOG_DATE_FORMAT);
 	
 	public void write(String toWrite) {
 		

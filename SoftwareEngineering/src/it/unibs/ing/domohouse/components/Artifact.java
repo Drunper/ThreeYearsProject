@@ -8,9 +8,7 @@ import it.unibs.ing.domohouse.interfaces.Gettable;
 
 public class Artifact implements Gettable, Serializable {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 643544508558962880L;
 	private String name;
 	private String text;
