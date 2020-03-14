@@ -705,4 +705,11 @@ public class LibImporter {
 		
 		return sensors;
 	}
+	
+	private boolean libImporterInvariant() {
+		boolean checkDataHandler = dataHandler != null;
+		boolean checkInputHandler = inputHandler != null;
+		
+		return checkDataHandler && checkInputHandler;
+	}
 }
