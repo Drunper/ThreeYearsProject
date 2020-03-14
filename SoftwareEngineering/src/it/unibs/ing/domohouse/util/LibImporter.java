@@ -91,6 +91,7 @@ public class LibImporter {
 		if(checkTokens(6, parameters)){
 			selectedHouse = parameters.split(",")[0];
 			name = parameters.split(",")[1];
+			name = name.replace("_", ""); //il nome non può contenere underscore
 			category = parameters.split(",")[2];
 			bool = parameters.split(",")[3];
 			elements = fromStringToArrayList(parameters.split(",")[4]);
@@ -135,6 +136,7 @@ public class LibImporter {
 		String defaultMode;
 		if(checkTokens(5, parameters)) {
 			name = parameters.split(",")[0];
+			name = name.replace("_", ""); //il nome non può contenere underscore
 			abbreviation = parameters.split(",")[1];
 			constructor = parameters.split(",")[2];
 			listOfModes = fromStringToArrayList(parameters.split(",")[3]);
@@ -204,6 +206,7 @@ public class LibImporter {
 		if(checkTokens(6, parameters)) {
 			selectedHouse = parameters.split(",")[0];
 			name = parameters.split(",")[1];
+			name = name.replace("_", ""); //il nome non può contenere underscore
 			categoryList = fromStringToArrayList(parameters.split(",")[2]);
 			bool = parameters.split(",")[3];
 			elements = fromStringToArrayList(parameters.split(",")[4]);
@@ -248,6 +251,7 @@ public class LibImporter {
 		String info;
 		if(checkTokens(5, parameters)) {
 			name = parameters.split(",")[0];
+			name = name.replace("_", ""); //il nome non può contenere underscore
 			abbreviation = parameters.split(",")[1];
 			constructor = parameters.split(",")[2];
 			domains = fromStringToArrayList(parameters.split(",")[3]);
@@ -274,6 +278,7 @@ public class LibImporter {
 		if(checkTokens(6, parameters)) {
 			selectedHouse = parameters.split(",")[0];
 			name = parameters.split(",")[1];
+			name = name.replace("_", ""); //il nome non può contenere underscore
 			categoryList = fromStringToArrayList(parameters.split(",")[2]);
 			bool = parameters.split(",")[3];
 			elements = fromStringToArrayList(parameters.split(",")[4]);
@@ -318,6 +323,7 @@ public class LibImporter {
 		String info;
 		if(checkTokens(5, parameters)) {
 			name = parameters.split(",")[0];
+			name = name.replace("_", ""); //il nome non può contenere underscore
 			abbreviation = parameters.split(",")[1];
 			constructor = parameters.split(",")[2];
 			domain = parameters.split(",")[3]; //domain = 1#10#gradi

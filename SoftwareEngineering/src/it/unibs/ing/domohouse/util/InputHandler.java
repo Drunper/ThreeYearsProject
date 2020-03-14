@@ -245,6 +245,7 @@ public class InputHandler {
 					System.out.println(Strings.SENSOR_NAME_ASSIGNED);
 			}
 			while(dataHandler.hasSensor(selectedHouse, toCheck));
+			name = name.replace("_", ""); //il nome non può contenere underscore
 			
 			if(dataHandler.doesRoomOrArtifactExist(selectedHouse)) {
 			
@@ -352,7 +353,7 @@ public class InputHandler {
 					System.out.println(Strings.ACTUATOR_NAME_ASSIGNED);
 			}
 			while(dataHandler.hasActuator(selectedHouse, name + "_" + category));
-		
+			name = name.replace("_", ""); //il nome non può contenere underscore
 		
 			if(dataHandler.doesRoomOrArtifactExist(selectedHouse)) {
 				boolean isThereRoom = dataHandler.doesRoomExist(selectedHouse);
@@ -483,6 +484,8 @@ public class InputHandler {
 				System.out.println(Strings.NAME_ALREADY_EXISTENT);
 		}
 		while(dataHandler.hasSensorCategory(name));
+		name = name.replace("_", ""); //il nome non può contenere underscore
+		
 		String abbreviation = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_ABBREVIATION);
 		String constructor = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_MANUFACTURER);
 		ArrayList<String> domain = new ArrayList<>();
@@ -512,6 +515,8 @@ public class InputHandler {
 				System.out.println(Strings.NAME_ALREADY_EXISTENT);
 		}
 		while(dataHandler.hasSensorCategory(name));
+		name = name.replace("_", ""); //il nome non può contenere underscore
+		
 		String abbreviation = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_ABBREVIATION);
 		String constructor = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_MANUFACTURER);
 		String min = RawInputHandler.readNotVoidString(Strings.INSERT_SENSOR_CATEGORY_MIN_VALUE);
@@ -537,6 +542,8 @@ public class InputHandler {
 				System.out.println(Strings.NAME_ALREADY_EXISTENT);
 		}
 		while(dataHandler.hasActuatorCategory(name));
+		name = name.replace("_", ""); //il nome non può contenere underscore
+		
 		String abbreviation = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_ABBREVIATION);
 		String constructor = RawInputHandler.readNotVoidString(Strings.INPUT_CATEGORY_MANUFACTURER);
 		ArrayList<String> listOfModes = new ArrayList<>();
