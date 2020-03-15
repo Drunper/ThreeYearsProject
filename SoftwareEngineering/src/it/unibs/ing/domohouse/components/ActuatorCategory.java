@@ -5,13 +5,10 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 import it.unibs.ing.domohouse.interfaces.*;
+import it.unibs.ing.domohouse.util.Strings;
 
 public class ActuatorCategory implements Manageable, Serializable {
 
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3544838050806873679L;
 	private String name;
 	private String text;
@@ -20,7 +17,6 @@ public class ActuatorCategory implements Manageable, Serializable {
 	//di modificare il metodo hasOperatingMode
 	private HashMap<String, SerializableBiConsumer<Gettable,Object>> parametricOperatingModesMap;
 
-	
 	/*
 	 * invariante name > 0, text > 0 name != null, text != null
 	 */
@@ -32,30 +28,30 @@ public class ActuatorCategory implements Manageable, Serializable {
 	}
 	
 	public String getName() {
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
 		return this.name;
 	}
 	
 	public String getDescr() {
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
 		return this.text;
 	}
 	
 	public void setName(String newName) {
 		assert newName.length() > 0 && newName != null;
 		this.name = newName;
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public void setDescr(String text) {
 		assert text.length() > 0 && text != null;
 		this.text = text;
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public String [] listOfOperatingModes() {
 		assert operatingModesMap !=null && parametricOperatingModesMap != null;
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
 		String[] op1 = operatingModesMap.keySet().toArray(new String[0]);
 		String[] op2 = parametricOperatingModesMap.keySet().toArray(new String[0]);
 		
@@ -70,7 +66,6 @@ public class ActuatorCategory implements Manageable, Serializable {
 		for(int i=0; i <op2.length; i++) {
 			result[op1.length + i] = op2[i];
 		}
-		
 		return result;
 	}
 	
@@ -81,7 +76,7 @@ public class ActuatorCategory implements Manageable, Serializable {
 		operatingModesMap.put(name, operatingMode);
 		
 		assert operatingModesMap.size() >= pre_size;
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public void putParametricOperatingMode(String name, SerializableBiConsumer<Gettable, Object> operatingMode) {
@@ -91,58 +86,55 @@ public class ActuatorCategory implements Manageable, Serializable {
 		parametricOperatingModesMap.put(name, operatingMode);
 		
 		assert parametricOperatingModesMap.size() >= pre_size;
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	
 	public Consumer<Gettable> getOperatingMode(String name) {
-		assert operatingModesMap.containsKey(name) : "operatingModesMap non contiene il nome richiesto";
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		assert operatingModesMap.containsKey(name) : Strings.OPERATING_MODE_PRECONDITION;
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
 		
 		return operatingModesMap.get(name);
 	}
 	
 	public SerializableBiConsumer<Gettable, Object> getParametricOperatingMode(String name) {
-		assert parametricOperatingModesMap.containsKey(name) : "doubleOperatingModesMap non contiene il nome richiesto";
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
+		assert parametricOperatingModesMap.containsKey(name) : Strings.PARAMETRIC_OPERATING_MODE_PRECONDITION;
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
 		
 		return parametricOperatingModesMap.get(name);
 	}
 	
 	
 	public boolean hasOperatingMode(String operating_mode) {
-		assert operatingModesMap !=null && parametricOperatingModesMap != null;
+		assert operatingModesMap != null && parametricOperatingModesMap != null;
 		
-		if(parametricOperatingModesMap.containsKey(operating_mode) || operatingModesMap.containsKey(operating_mode)) return true;
-		return false;
+		return parametricOperatingModesMap.containsKey(operating_mode) || operatingModesMap.containsKey(operating_mode);
 	}
 	
 	public boolean hasParametricOperatingMode(String operating_mode) {
 		assert parametricOperatingModesMap != null;
-		if(parametricOperatingModesMap.containsKey(operating_mode)) return true;
-		return false;
+		return parametricOperatingModesMap.containsKey(operating_mode);
 	}
 	
 	
 	public boolean hasNonParametricOperatingMode(String operating_mode) {
 		assert operatingModesMap !=null;
-		if(operatingModesMap.containsKey(operating_mode)) return true;
-		return false;
+		return operatingModesMap.containsKey(operating_mode);
 	}
 	
 	public String getDefaultMode() {
-		assert text.contains(":");
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
-		return text.split(":")[2];
+		assert text.contains(Strings.SEPARATOR);
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
+		return text.split(Strings.SEPARATOR)[2];
 	}
 	
 	public String toString() {
-		assert actuatorCategoryInvariant() : "Invariante della classe non soddisfatto";
-		return name+':'+text;
+		assert actuatorCategoryInvariant() : Strings.WRONG_INVARIANT;
+		return name+Strings.SEPARATOR+text;
 	}
 	
 	private boolean actuatorCategoryInvariant() {
-		if(name.length() > 0 && name != null && text.length() > 0 && text != null && operatingModesMap !=null && parametricOperatingModesMap != null) return true;
-		return false;
+		return name.length() > 0 && name != null && text.length() > 0 && text != null 
+				&& operatingModesMap !=null && parametricOperatingModesMap != null;
 	}
 }

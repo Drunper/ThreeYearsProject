@@ -2,7 +2,6 @@ package it.unibs.ing.domohouse.util;
 
 public class OutputHandler {
 	
-
 	public static void printHousingUnit(String housingUnitText) {
 		assert housingUnitText != null;
 		assert housingUnitText.contains(Strings.SEPARATOR);
@@ -51,8 +50,7 @@ public class OutputHandler {
 		System.out.println(Strings.CATEGORY+splitted[Strings.SECOND_TOKEN]);
 		System.out.println(Strings.CONTROLLED_ELEMENTS);
 		int i = Strings.THIRD_TOKEN;
-		while(splitted[i].equalsIgnoreCase(Strings.CONTROLLED_ELEMENT_TAG))
-		{
+		while(splitted[i].equalsIgnoreCase(Strings.CONTROLLED_ELEMENT_TAG)) {
 			i++;
 			System.out.println(splitted[i++]);
 		}
@@ -70,14 +68,12 @@ public class OutputHandler {
 		System.out.println(Strings.CATEGORY+splitted[Strings.SECOND_TOKEN]);
 		System.out.println(Strings.MEASURED_ELEMENTS);
 		int i = Strings.THIRD_TOKEN;
-		while(splitted[i].equalsIgnoreCase(Strings.MEASURED_ELEMENT_TAG))
-		{
+		while(splitted[i].equalsIgnoreCase(Strings.MEASURED_ELEMENT_TAG)) {
 			i++;
 			System.out.println(splitted[i++]);
 		}
 
-		while(splitted[i].equalsIgnoreCase(Strings.MEASURED_VALUE_TAG))
-		{
+		while(splitted[i].equalsIgnoreCase(Strings.MEASURED_VALUE_TAG)) {
 			i++;
 			System.out.println(Strings.LAST_MEASURED_VALUE+splitted[i++]);
 		}
@@ -102,18 +98,18 @@ public class OutputHandler {
 		System.out.println(Strings.ABBREVATION+splitted[Strings.SECOND_TOKEN]);
 		System.out.println(Strings.MANUFACTURER+splitted[Strings.THIRD_TOKEN]);
 		int i = Strings.FOURTH_TOKEN;
-		do
-		{
+		do {
 			int k = i - 2; // we are starting from the fourth token but it's the first information
 			System.out.println(Strings.INFO_DOMAIN+k+Strings.SEPARATOR_WITH_SPACE+splitted[i]);
 			i++;
 		}
 		while(splitted[i].equalsIgnoreCase(Strings.END_DOMAIN_TAG));
 		System.out.println(Strings.DETECTABLE_INFOS);
-		do{
+		do {
 			System.out.println(splitted[i]);
 			i++;
-		}while(i < splitted.length);
+		}
+		while(i < splitted.length);
 	}
 	
 	public static void printActuatorCategory(String actuatorCategoryText) {
@@ -127,14 +123,12 @@ public class OutputHandler {
 		System.out.println(Strings.MANUFACTURER+splitted[Strings.THIRD_TOKEN]);
 		System.out.println(Strings.DEFAULT_MODE+splitted[Strings.FOURTH_TOKEN]);
 		System.out.println(Strings.OPERATING_MODES);
-		for(int i = Strings.FIFTH_TOKEN; i < splitted.length; i++)
-		{
+		for(int i = Strings.FIFTH_TOKEN; i < splitted.length; i++) {
 			System.out.println(splitted[i]);
 		}
 	}
 
-	public final static void clearOutput()
-	{
+	public final static void clearOutput() {
 		for (int i = 0; i < Strings.SPACING_COSTANT; ++i) System.out.println();
 	}
 }

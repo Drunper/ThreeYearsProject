@@ -9,37 +9,14 @@ import java.util.Date;
 
 public class LogWriter {
 	DateFormat dateFormat = new SimpleDateFormat(Strings.LOG_DATE_FORMAT);
-	
+
 	public void write(String toWrite) {
-		
-	  Date date = new Date();
-	  BufferedWriter bw = null;
-      FileWriter fw = null;
-
-      try {
-    	  
-          fw = new FileWriter(Strings.LOG_PATH + Strings.LOG_NAME_FILE, true);
-          bw = new BufferedWriter(fw);
-          bw.write("[" + dateFormat.format(date) + "] "+ toWrite + "\n");
-
-      } catch (IOException e) {
-    	  
-    	  e.printStackTrace();
-    	  
-      } finally {
-    	  
-          try {
-        	  
-              if (bw != null)	bw.close();
-              if (fw != null)	fw.close();
-              
-          } catch (IOException ex) {
-        	  
-              ex.printStackTrace();
-          }
-      }
+		Date date = new Date();
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(Strings.LOG_PATH + Strings.LOG_NAME_FILE, true))) {
+			bw.write("[" + dateFormat.format(date) + "] "+ toWrite + "\n");
+		} 
+		catch (IOException e) {  
+			e.printStackTrace();
+		}
 	}
-
 }
-
-

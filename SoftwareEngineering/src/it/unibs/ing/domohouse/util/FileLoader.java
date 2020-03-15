@@ -8,10 +8,7 @@ import java.io.ObjectInputStream;
 public class FileLoader {
 	
 	public DataHandler getDataHandler() {
-		if(safeReadDataHandler() == null)
-			return null;
-		else
-			return safeReadDataHandler();
+		return safeReadDataHandler();
 	}
 	
 	private DataHandler safeReadDataHandler() {		
@@ -19,17 +16,14 @@ public class FileLoader {
 				
 		File f = new File(filePath);
 		if(f.isFile() && f.canRead()) {
-			try (ObjectInputStream objectIn = new ObjectInputStream(new FileInputStream(f)))
-			{
+			try (ObjectInputStream objectIn = new ObjectInputStream(new FileInputStream(f))) {
 				return (DataHandler) objectIn.readObject();
 			}
-			catch(IOException ex)
-			{
+			catch(IOException ex) {
 				System.out.println(Strings.ERROR_LOAD_FILE);
 				ex.printStackTrace();
 			}
-			catch(ClassNotFoundException ex) 
-			{
+			catch(ClassNotFoundException ex) {
 				ex.printStackTrace();
 			}
 		}

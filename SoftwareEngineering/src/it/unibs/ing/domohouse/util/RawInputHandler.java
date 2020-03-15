@@ -43,8 +43,7 @@ public class RawInputHandler {
 		
 		boolean endFlag = false;
 		String rdString = null;
-		do
-		{
+		do {
 			rdString = readString(message);
 			rdString = rdString.trim();
 			if (rdString.length() > 0)
@@ -61,8 +60,7 @@ public class RawInputHandler {
 		
 		boolean endFlag = false;
 		String rdString = null;
-		do
-		{
+		do {
 			rdString = readNotVoidString(message);
 			if (rdString.length() < maxLength)
 				endFlag = true;
@@ -78,11 +76,9 @@ public class RawInputHandler {
 		
 		boolean endFlag = false;
 		char readValue = '\0';
-		do
-	    {
+		do {
 			String rdString = readString(message);
-			if (rdString.length() > 0)
-			{
+			if (rdString.length() > 0) {
 				readValue = rdString.charAt(0);
 				endFlag = true;
 			}
@@ -98,8 +94,7 @@ public class RawInputHandler {
 		
 		boolean endFlag = false;
 		char readValue = '\0';
-		do
-		{
+		do {
 			readValue = readChar(message);
 			readValue = Character.toUpperCase(readValue);
 			if (usableChars.indexOf(readValue) != -1)
@@ -117,16 +112,13 @@ public class RawInputHandler {
 		
 		boolean endflag = false;
 		int readValue = 0;
-		do
-		{
+		do {
 			System.out.print(message);
-			try
-			{
+			try {
 				readValue = reader.nextInt();
 				endflag = true;
 			}
-			catch (InputMismatchException e)
-			{
+			catch (InputMismatchException e) {
 				System.out.println(FORMAT_ERROR);
 				String toEliminate = reader.next(); //To avoid problems with the readings after
 			}
@@ -135,14 +127,12 @@ public class RawInputHandler {
 		return readValue;
 	}
   
-	public static int readIntWithMinimum(String message, int minimumValue)
-	{
+	public static int readIntWithMinimum(String message, int minimumValue) {
 	   assert message != null;
 	   
 	   boolean endFlag = false;
 	   int readValue = 0;
-	   do
-	   {
+	   do {
 		   readValue = readInt(message);
 		   if (readValue >= minimumValue)
 			   endFlag = true;
@@ -153,14 +143,12 @@ public class RawInputHandler {
 	   return readValue;
 	}
 
-	public static int readIntWithBounds(String message, int minimumValue, int maximumValue)
-	{
+	public static int readIntWithBounds(String message, int minimumValue, int maximumValue) {
 		assert message != null;
 		
 		boolean endFlag = false;
 		int readValue = 0;
-		do
-		{
+		do {
 			readValue = readInt(message);
 			if (readValue >= minimumValue && readValue<= maximumValue)
 				endFlag = true;
@@ -180,16 +168,13 @@ public class RawInputHandler {
 		
 		boolean endFlag = false;
 		double readValue = 0;
-		do
-		{
+		do {
 			System.out.print(message);
-			try
-			{
+			try {
 				readValue = reader.nextDouble();
 				endFlag = true;
 			}
-			catch (InputMismatchException e)
-			{
+			catch (InputMismatchException e) {
 				System.out.println(FORMAT_ERROR);
 				String toEliminate = reader.next(); //To avoid problems with the readings after
 			}
@@ -200,13 +185,11 @@ public class RawInputHandler {
 	  
 	public int readPositiveInteger(String message) {
 		assert message != null;
-		
 		return readIntWithMinimum(message,POSITIVE_NUMBER_MINIMUM_VALUE);
 	}
 	  
 	public static int readNonNegativeInteger(String message) {
-		assert message != null;
-		
+		assert message != null;	
 		return readIntWithMinimum(message,NON_NEGATIVE_MINIMUM_VALUE);
 	}
 	 
@@ -215,8 +198,7 @@ public class RawInputHandler {
 		
 		boolean endFlag = false;
 		double readValue = 0;
-		do
-		{
+		do {
 			readValue = readDouble(message);
 			if (readValue >= minimumValue)
 				endFlag = true;
@@ -230,7 +212,7 @@ public class RawInputHandler {
 	public static boolean yesOrNo(String message) {
 		assert message != null;
 		
-		String myMessage = message + "("+ANSWER_YES+"/"+ANSWER_NO+")";
+		String myMessage = message + Strings.OPEN_BRACKET+ANSWER_YES+"/"+ANSWER_NO+Strings.CLOSED_BRACKET;
 		char valoreLetto = readUpperChar(myMessage,String.valueOf(ANSWER_YES)+String.valueOf(ANSWER_NO));
 		  
 		if (valoreLetto == ANSWER_YES)

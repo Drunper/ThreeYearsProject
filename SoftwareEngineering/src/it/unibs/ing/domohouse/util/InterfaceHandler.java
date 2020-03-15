@@ -51,7 +51,8 @@ public class InterfaceHandler {
 						HousingUnit h = (HousingUnit) dataHandler.getHousingUnit(houseName);
 						h.checkRules();
 					}
-				} catch (Exception e) {
+				} 
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -68,57 +69,52 @@ public class InterfaceHandler {
 			loader = new FileLoader();
 			firstStart = false;
 			System.out.println(Strings.LOADED);
-		}else { //Se non è presente		
+		}
+		else { //Se non è presente		
 			System.out.println(Strings.NO_FILE);
 			firstStart = true;
 		}
 		
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public void show() {
 		assert menu != null;
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		log.write(Strings.LOG_SHOW_MAIN_MENU);
 		OutputHandler.clearOutput();
 		String user;
 		int scelta;
-		do
-		{
+		do {
 			scelta = menu.select();
-			switch(scelta)
-			{
+			switch(scelta) {
 				case 1: 
 					if(firstStart) {
 						log.write(Strings.LOG_FIRST_ACCESS);
 						System.out.println(Strings.USER_FIRST_ACCESS_PROHIBITED);}
 					else {
 						user = RawInputHandler.readNotVoidString(Strings.INSERT_USER);
-						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
-						{
+						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER)) {
 							System.out.println(Strings.WELCOME + user);
 							log.write(user + Strings.LOG_SYSTEM_ACCESS);
 							showUserMenu();
 						}
 					}
 					break;
-					
 				case 2:
 					String password;
 					boolean ok;
-					do
-					{
+					do {
 						ok = false;
 						user = RawInputHandler.readNotVoidString(Strings.INSERT_USER);
-						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER))
-						{	
+						if(!user.equalsIgnoreCase(Strings.BACK_CHARACTER)) {	
 							password = RawInputHandler.readNotVoidString(Strings.INSERT_PASSWORD);
 							ok = login.checkPassword(user, password);
 							if(!ok)
 								System.out.println(Strings.USER_OR_PASSWORD_ERROR);
 						}
-						log.write("Il manutentore "+ user + Strings.LOG_SYSTEM_ACCESS);
+						log.write(Strings.MAINTAINER + user + Strings.LOG_SYSTEM_ACCESS);
 					}
 					while (!user.equalsIgnoreCase(Strings.BACK_CHARACTER) && !ok);
 					if (ok) {
@@ -132,19 +128,17 @@ public class InterfaceHandler {
 			}
 		}
 		while (scelta != 0);
-		
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	private void showUserMenu() {
 		assert userMenu != null; 
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		log.write(Strings.LOG_SHOW_USER_MENU);
 		OutputHandler.clearOutput();
 		boolean exitFlag = false;
-		do
-		{
+		do {
 			int choice = userMenu.select();
 			switch(choice) {
 				case 0: 
@@ -157,9 +151,9 @@ public class InterfaceHandler {
 						OutputHandler.printListOfString(dataHandler.getHousingUnitsList());
 						String selectedHouse = inputHandler.safeInsertHouse();
 						showUserUnitMenu(selectedHouse);
-					}else{
-						System.out.println(Strings.NO_HOUSE);
 					}
+					else
+						System.out.println(Strings.NO_HOUSE);
 					break;
 				case 2:
 					OutputHandler.clearOutput();
@@ -186,7 +180,7 @@ public class InterfaceHandler {
 					System.out.println();
 					
 					String selectedActuCategory = inputHandler.safeInsertActuatorCategory();
-					log.write("Strings.LOG_SHOW_ACTUATOR_CATEGORY  " + selectedActuCategory);
+					log.write(Strings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
 					OutputHandler.printActuatorCategory(dataHandler.getActuatorCategoryString(selectedActuCategory));
 					break;
 				case 4:
@@ -195,20 +189,19 @@ public class InterfaceHandler {
 					log.write(Strings.LOG_REFRESH_HOUR);
 					break;
 			}
-		}while(exitFlag != true);
-		
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		}
+		while(exitFlag != true);
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	private void showMaintainerMenu() {
 		assert maintainerMenu != null;
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		log.write(Strings.LOG_SHOW_MAINTAINTER_MENU);
 		OutputHandler.clearOutput();
 		boolean exitFlag = false;
-		do 
-		{
+		do {
 			int choice = maintainerMenu.select();
 			switch(choice) {
 				case 0:
@@ -221,9 +214,9 @@ public class InterfaceHandler {
 						OutputHandler.printListOfString(dataHandler.getHousingUnitsList());
 						String selectedHouse = inputHandler.safeInsertHouse();
 						showMaintainerUnitMenu(selectedHouse);
-					}else{
-						System.out.println(Strings.NO_HOUSE);
 					}
+					else
+						System.out.println(Strings.NO_HOUSE);
 					break;
 				case 2:
 					OutputHandler.clearOutput();
@@ -290,7 +283,8 @@ public class InterfaceHandler {
 						String error = libImporter.getErrorsString();
 						System.out.println(error);
 						log.write(Strings.LOG_ERROR_IMPORT + error);
-					}else {
+					}
+					else {
 						log.write(Strings.SUCCESS_IMPORT_FILE);
 						System.out.println(Strings.SUCCESS_IMPORT_FILE);
 					}
@@ -301,20 +295,19 @@ public class InterfaceHandler {
 					OutputHandler.clearOutput();
 					break;
 			}
-		}while(exitFlag != true);
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
-		
+		}
+		while(exitFlag != true);
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	private void showMaintainerUnitMenu(String selectedHouse) {
 		assert maintainerUnitMenu != null;
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		OutputHandler.clearOutput();
 		log.write(Strings.LOG_SHOW_MAINTAINTER_UNIT_MENU);
 		boolean exitFlag = false;
-		do
-		{
+		do {
 			int choice = maintainerUnitMenu.select();
 			switch(choice) {
 				case 0:
@@ -416,12 +409,12 @@ public class InterfaceHandler {
 			}
 		}
 		while(exitFlag != true);
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 
 	private void showUserUnitMenu(String selectedHouse) {
 		assert userUnitMenu != null;
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		log.write(Strings.LOG_SHOW_USER_UNIT_MENU + selectedHouse);
 		OutputHandler.clearOutput();
@@ -515,13 +508,13 @@ public class InterfaceHandler {
 		}
 		while(exitFlag!=true);
 		
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 
 	private void showUserRoomMenu(String selectedHouse, String selectedRoom) {
 		assert selectedRoom != null;
 		assert roomMenu != null;
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		log.write(Strings.LOG_SHOW_USER_ROOM_MENU);
 		OutputHandler.clearOutput();
@@ -608,13 +601,12 @@ public class InterfaceHandler {
 			}
 		}
 		while(exitFlag!=true);		
-		
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	private void showMaintainerRoomMenu(String selectedHouse, String selectedRoom) {
 		assert selectedRoom != null;
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		log.write(Strings.LOG_SHOW_MAINTAINTER_ROOM_MENU + selectedRoom);
 		OutputHandler.clearOutput();
@@ -677,6 +669,7 @@ public class InterfaceHandler {
 					OutputHandler.clearOutput();
 					if(dataHandler.getArtifactNames(selectedHouse, selectedRoom).length == 0) {
 						System.out.println(Strings.NO_ARTIFACT);
+						break;
 					}
 					OutputHandler.printListOfString(dataHandler.getArtifactNames(selectedHouse, selectedRoom));
 					System.out.println();
@@ -722,8 +715,7 @@ public class InterfaceHandler {
 			}
 		}
 		while(exitFlag!=true);
-		
-		assert interfaceHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert interfaceHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	private boolean interfaceHandlerInvariant() {

@@ -3,16 +3,13 @@ package it.unibs.ing.domohouse.components;
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
 import it.unibs.ing.domohouse.interfaces.Gettable;
 import it.unibs.ing.domohouse.interfaces.Manageable;
 import it.unibs.ing.domohouse.util.Manager;
+import it.unibs.ing.domohouse.util.Strings;
 
 public class Actuator implements Manageable, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8133324316964731994L;
 	private String name;
 	private Manager controlledObjects;
@@ -26,7 +23,6 @@ public class Actuator implements Manageable, Serializable {
 	/*
 	 * invariante: controlledObjects size > 0, name != null
 	 */
-
 	public Actuator(String name, ActuatorCategory category) {
 		super();
 		this.name = name;
@@ -39,21 +35,21 @@ public class Actuator implements Manageable, Serializable {
 	}
 	
 	public String getName() {
-		assert actuatorInvariant();
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 		return name;
 	}
 	
 	//info per sapere se l'attuatore sta attuando una modalità operativa
 	public boolean isRunning() {
-		assert actuatorInvariant();
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 		return this.running;
 	}
 
 	public void setName(String newName) {
-		assert newName.length() > 0 : "Il nuovo nome dell'attuatore non contiene caratteri";
+		assert newName.length() > 0 : Strings.ACTUATOR_NAME_PRECONDITION;
 		this.name = newName;
 		assert name.length() > 0 && name != null;
-		assert actuatorInvariant();
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public void setState(boolean flag) {
@@ -65,35 +61,35 @@ public class Actuator implements Manageable, Serializable {
 	}
 	
 	public ActuatorCategory getCategory() {
-		assert actuatorInvariant();
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 		return this.category;
 	}
 	
 	//Fatto per chiarezza, solo un artefatto o una stanza può essere controllato dall'attuatore
 	public void addEntry(Room toAdd) {
-		assert toAdd != null : "toAdd è null";
+		assert toAdd != null : Strings.TO_ADD_PRECONDITION;
 		int size = controlledObjects.size();
 		controlledObjects.addElement(toAdd);
 		assert controlledObjects.size() == size + 1;
-		assert actuatorInvariant();
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public void addEntry(Artifact toAdd) {
-		assert toAdd != null : "toAdd è null";
+		assert toAdd != null : Strings.TO_ADD_PRECONDITION;
 		int size = controlledObjects.size();
 		controlledObjects.addElement(toAdd);
 		assert controlledObjects.size() == size + 1;
-		assert actuatorInvariant();
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public boolean isControllingRoom() {
-		assert actuatorInvariant();
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 		return controllingRoom;
 	}
 
 	public void setControllingRoom(boolean controllingRoom) {
 		this.controllingRoom = controllingRoom;
-		assert actuatorInvariant();
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public void setNonParametricOperatingMode(String operatingMode) {
@@ -101,12 +97,11 @@ public class Actuator implements Manageable, Serializable {
 		this.operatingMode = operatingMode;
 		running = true;
 		Consumer<Gettable> mode = category.getOperatingMode(operatingMode);
-		for(String object : controlledObjects.getListOfElements())
-		{
+		for(String object : controlledObjects.getListOfElements()) {
 			mode.accept((Gettable)controlledObjects.getElementByName(object));
 		}
 		running = false;
-		assert actuatorInvariant();
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public void setParametricOperatingMode(String operatingMode, Object o) {
@@ -115,40 +110,36 @@ public class Actuator implements Manageable, Serializable {
 		running = true;
 		BiConsumer<Gettable, Object> mode = category.getParametricOperatingMode(operatingMode);
 		
-		for(String object : controlledObjects.getListOfElements())
-		{
+		for(String object : controlledObjects.getListOfElements()) {
 			mode.accept((Gettable)controlledObjects.getElementByName(object), o);
 		}
 		running = false;
-		assert actuatorInvariant();
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 	}
-	
 	
 	public String toString() {
 		assert name != null && name.length() > 0 && category != null 
 				&& category.getName().length() > 0 && controlledObjects != null;
 		
-		String n = name.split("_")[0];
-		String unformattedText = n +':'+category.getName()+':';
+		String n = name.split(Strings.UNDERSCORE)[0];
+		String unformattedText = n + Strings.SEPARATOR + category.getName() + Strings.SEPARATOR;
 		String status;
 		if (state) 
-			status = "acceso";
+			status = Strings.ON;
 		else
-			status = "spento";
-		for(String measuredObject : controlledObjects.getListOfElements())
-		{
-			unformattedText = unformattedText+"ce:"+measuredObject+':';
+			status = Strings.OFF;
+		for(String measuredObject : controlledObjects.getListOfElements()) {
+			unformattedText = unformattedText + Strings.CONTROLLED_ELEMENT_TAG + Strings.SEPARATOR + measuredObject + Strings.SEPARATOR;
 		}
-		unformattedText = unformattedText+operatingMode+':'+status;
-		assert unformattedText.contains(":");
-		assert unformattedText.contains("acceso") || unformattedText.contains("spento") : "unformattedText non contiene informazioni riguardo allo stato";
-		assert actuatorInvariant();
+		unformattedText = unformattedText+operatingMode+Strings.SEPARATOR+status;
+		assert unformattedText.contains(Strings.SEPARATOR);
+		assert unformattedText.contains(Strings.ON) || unformattedText.contains(Strings.OFF) : Strings.UNFORMATTED_TEXT_PRECONDITION;
+		assert actuatorInvariant() : Strings.WRONG_INVARIANT;
 		return unformattedText;
 	}
 	
 	private boolean actuatorInvariant() {
-		if(controlledObjects != null && name != null && name.length() > 0) return true;
-		return false;
+		return controlledObjects != null && name != null && name.length() > 0;
 	}
 
 }

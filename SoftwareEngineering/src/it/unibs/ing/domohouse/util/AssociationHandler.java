@@ -13,35 +13,35 @@ public class AssociationHandler implements Serializable{
 	}
 	
 	public int size() {
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		return associationList.size();
 	}
 	
 	public void addAssociation(Association association) {
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		int pre_size = associationList.size();
 		
 		associationList.add(association);
 		
 		assert associationList.size() >= pre_size;
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public void removeAssociation(Association toRemove) {
 		assert toRemove != null;
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		assert associationList.contains(toRemove) : "associationList non contiente " + toRemove + " e dunque non può rimuoverlo";
 		int pre_size = associationList.size();
 		
 		associationList.remove(toRemove);
 		
 		assert associationList.size() <= pre_size;
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public Association getAssociation(String toGet) {
 		assert toGet != null;
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		for(Association assoc : associationList) {
 			if (assoc.getElementName().equalsIgnoreCase(toGet))
 				return assoc;
@@ -51,7 +51,7 @@ public class AssociationHandler implements Serializable{
 	
 	public boolean hasAssociation(String name) {
 		assert name != null;
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		for(Association assoc : associationList) {
 			if (assoc.getElementName().equalsIgnoreCase(name))
@@ -61,14 +61,13 @@ public class AssociationHandler implements Serializable{
 	}
 	
 	public String [] associatedElementsList() {
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		String [] nameList = new String[associationList.size()];
-		for(int i = 0; i < nameList.length; i++)
-		{
+		for(int i = 0; i < nameList.length; i++) {
 			nameList[i] = associationList.get(i).getElementName();
 		}
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		return nameList;
 	}
 
@@ -78,37 +77,35 @@ public class AssociationHandler implements Serializable{
 		Association element = getAssociation(name);
 		
 		assert element != null; 
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		return element.isElementARoom();
 	}
 
 	public boolean isElementAssociatedWith(String name, String category) {
 		assert name != null && category != null;
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		Association element = getAssociation(name);
 		
 		assert element != null;
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		return element.isAssociatedWith(category);
 	}
 
 	public void addAssociationBetween(String name, String category) {
 		assert name != null && category != null;
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		Association element = getAssociation(name);
 		assert element != null;
 		element.addAssociationWith(category);
 		
-		assert associationHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert associationHandlerInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	private boolean associationHandlerInvariant() {
 		boolean check = associationList != null; 
 		return check;
-	}
-	
-	
+	}	
 }

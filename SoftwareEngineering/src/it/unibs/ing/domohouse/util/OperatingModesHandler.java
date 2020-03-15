@@ -3,7 +3,6 @@ package it.unibs.ing.domohouse.util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import it.unibs.ing.domohouse.components.Actuator;
 import it.unibs.ing.domohouse.components.Artifact;
 import it.unibs.ing.domohouse.components.Room;
@@ -11,8 +10,7 @@ import it.unibs.ing.domohouse.interfaces.Gettable;
 import it.unibs.ing.domohouse.interfaces.SerializableBiConsumer;
 import it.unibs.ing.domohouse.interfaces.SerializableConsumer;
 
-public class OperatingModesHandler implements Serializable{
-
+public class OperatingModesHandler implements Serializable {
 
 	private static final long serialVersionUID = -7032900220446234368L;
 	private static HashMap<String, SerializableConsumer<Gettable>> operatingModesMap = new HashMap<>();
@@ -46,55 +44,55 @@ public class OperatingModesHandler implements Serializable{
 			g.setNumericProperty("temperatura", temp);
 		};
 		
-		SerializableConsumer<Gettable> diminuzioneTemperatura10gradi = g ->{
+		SerializableConsumer<Gettable> diminuzioneTemperatura10gradi = g -> {
 			double temp = g.getNumericProperty("temperatura");
 			temp = temp - 10;
 			g.setNumericProperty("temperatura", temp);
 		};
 		
-		SerializableConsumer<Gettable> aumentoTemperatura5gradi = g ->{
+		SerializableConsumer<Gettable> aumentoTemperatura5gradi = g -> {
 			double temp = g.getNumericProperty("temperatura");
 			temp = temp + 5;
 			g.setNumericProperty("temperatura", temp);
 		};
 			
-		SerializableConsumer<Gettable> diminuzioneTemperatura5gradi = g ->{
-				double temp = g.getNumericProperty("temperatura");
-				temp = temp - 5;
-				g.setNumericProperty("temperatura", temp);
-			};
+		SerializableConsumer<Gettable> diminuzioneTemperatura5gradi = g -> {
+			double temp = g.getNumericProperty("temperatura");
+			temp = temp - 5;
+			g.setNumericProperty("temperatura", temp);
+		};
 			
-		SerializableConsumer<Gettable> aumentoTemperatura1gradi = g ->{
-				double temp = g.getNumericProperty("temperatura");
-				temp = temp + 1;
-				g.setNumericProperty("temperatura", temp);
-			};
+		SerializableConsumer<Gettable> aumentoTemperatura1gradi = g -> {
+			double temp = g.getNumericProperty("temperatura");
+			temp = temp + 1;
+			g.setNumericProperty("temperatura", temp);
+		};
 				
-		SerializableConsumer<Gettable> diminuzioneTemperatura1gradi = g ->{
-					double temp = g.getNumericProperty("temperatura");
-					temp = temp - 1;
-					g.setNumericProperty("temperatura", temp);
-				};
+		SerializableConsumer<Gettable> diminuzioneTemperatura1gradi = g -> {
+			double temp = g.getNumericProperty("temperatura");
+			temp = temp - 1;
+			g.setNumericProperty("temperatura", temp);
+		};
 				
-		SerializableConsumer<Gettable> diminuzioneUmidita = g ->{
-					double umidita = g.getNumericProperty("umidità");
-					umidita = umidita - 2;
-					g.setNumericProperty("umidità", umidita);
-				};
+		SerializableConsumer<Gettable> diminuzioneUmidita = g -> {
+			double umidita = g.getNumericProperty("umidità");
+			umidita = umidita - 2;
+			g.setNumericProperty("umidità", umidita);
+		};
 			
-		SerializableConsumer<Gettable> aumentoUmidita = g ->{
-					double umidita = g.getNumericProperty("umidità");
-					umidita = umidita + 2;
-					g.setNumericProperty("umidità", umidita);
-				};
+		SerializableConsumer<Gettable> aumentoUmidita = g -> {
+			double umidita = g.getNumericProperty("umidità");
+			umidita = umidita + 2;
+			g.setNumericProperty("umidità", umidita);
+		};
 		
-		SerializableBiConsumer<Gettable, Object> mantenimentoTemperatura = (g, paramList) ->{
+		SerializableBiConsumer<Gettable, Object> mantenimentoTemperatura = (g, paramList) -> {
 			//Otterremo un arrayList di double contenente un valore ma meglio comunque fare controlli
 			//In questo caso l'utente avrà inserito solamente un valore nell'arraylist e andremo a prendere quello
-				if(paramList instanceof ArrayList && ((ArrayList<?>) paramList).get(0) instanceof Double) {
+			if(paramList instanceof ArrayList && ((ArrayList<?>) paramList).get(0) instanceof Double) {
 				double num = ((ArrayList<Double>) paramList).get(0);
 				g.setNumericProperty("temperatura", num);
-				}
+			}
 		};
 		
 		SerializableBiConsumer<Gettable, Object> coloreLuci = (g, paramList) ->{
@@ -103,32 +101,27 @@ public class OperatingModesHandler implements Serializable{
 				String color = ((ArrayList<String>) paramList).get(0);
 				g.setNonNumericProperty("coloreLuce", color);
 			}
-
 		};
 		
-		SerializableConsumer<Gettable> spegnimento = (g) ->{
+		SerializableConsumer<Gettable> spegnimento = g -> {
 			if(g instanceof Room) {
 				Room room = (Room) g;
 				for(String act : room.getActuatorsNames()) {
 					Actuator actuator = room.getActuatorByName(act);
-					if(actuator.isRunning()) {
+					if(actuator.isRunning())
 						actuator.setState(false);
-					}
 				}
-			}else if(g instanceof Artifact) {
+			}
+			else if(g instanceof Artifact) {
 				Artifact artifact = (Artifact) g;
 				for(String act : artifact.getControllerActuatorsNames()) {
 					Actuator actuator = artifact.getActuatorByName(act);
-					if(actuator.isRunning()) {
+					if(actuator.isRunning())
 						actuator.setState(false);
-					}
 				}
 			}
 		};
-		
 
-		
-		
 		operatingModesMap.put("idle", idle);
 		operatingModesMap.put("aumentoTemperatura10gradi", aumentoTemperatura10gradi);
 		operatingModesMap.put("diminuzioneTemperatura10gradi", diminuzioneTemperatura10gradi);
@@ -144,64 +137,62 @@ public class OperatingModesHandler implements Serializable{
 		paramMap.put("mantenimentoTemperatura", "Double:1"); 
 		parametricOperatingModesMap.put("cambiaColore", coloreLuci);
 		paramMap.put("cambiaColore", "String:1");
-		
-		
 	}
 		
-	public static SerializableBiConsumer<Gettable, Object> getParametricOperatingMode(String name){
+	public static SerializableBiConsumer<Gettable, Object> getParametricOperatingMode(String name) {
 		assert name != null;
-		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert operatingModesHandlerInvariant() : Strings.WRONG_INVARIANT;
 		assert parametricOperatingModesMap.containsKey(name) : "operatingModesMap non contiente " + name;
 		
 		SerializableBiConsumer<Gettable, Object> g = parametricOperatingModesMap.get(name);
 		
 		assert g != null;
-		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert operatingModesHandlerInvariant() : Strings.WRONG_INVARIANT;
 		return g;
 	}
 	
 
 	public static String getParameterInfo(String name) {
 		assert name != null;
-		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert operatingModesHandlerInvariant() : Strings.WRONG_INVARIANT;
 		return paramMap.get(name);
 	}
 	
 	
 	public static SerializableConsumer<Gettable> getOperatingMode(String name) {
 		assert name != null;
-		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert operatingModesHandlerInvariant() : Strings.WRONG_INVARIANT;
 		assert operatingModesMap.containsKey(name) : "operatingModesMap non contiente " + name;
 		
 		SerializableConsumer<Gettable> g = operatingModesMap.get(name);
 		
 		assert g != null;
-		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert operatingModesHandlerInvariant() : Strings.WRONG_INVARIANT;
 		return g;
 	}
 	
 	public static boolean hasOperatingMode(String name) {
 		assert name != null;
-		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert operatingModesHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
-		if(operatingModesMap.containsKey(name) || parametricOperatingModesMap.containsKey(name)) return true;
+		if(operatingModesMap.containsKey(name) || parametricOperatingModesMap.containsKey(name)) 
+			return true;
 		return false;
 	}
 	
 	public static boolean hasParametricOperatingMode(String name) {
 		assert name != null;
-		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";	
+		assert operatingModesHandlerInvariant() : Strings.WRONG_INVARIANT;	
 		return parametricOperatingModesMap.containsKey(name);
 	}
 	public static boolean hasNonParametricOperatingMode(String name) {
 		assert name != null;
-		assert operatingModesHandlerInvariant() : "Invariante di classe non soddisfatto";
+		assert operatingModesHandlerInvariant() : Strings.WRONG_INVARIANT;
 		
 		return operatingModesMap.containsKey(name);
 	}
 	
 	private static boolean operatingModesHandlerInvariant() {
-		if(operatingModesMap != null && parametricOperatingModesMap != null && paramMap != null) return true;
-		return false;
+		return operatingModesMap != null && parametricOperatingModesMap != null && paramMap != null;
 	}
 }

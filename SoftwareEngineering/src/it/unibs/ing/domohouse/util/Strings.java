@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.util;
 
 public class Strings {
+	//PATHS, FILELOADER AND FILESAVER
 	public static final String DATA_HANDLER_PATH = "data"; 
 	public static final String DATA_HANDLER_NAME_FILE = "\\dataHandler.dat";
 	public static final String LOG_PATH = "data";
@@ -30,6 +31,9 @@ public class Strings {
 	public static final String INSERT_USER = "Inserisci il nome utente (^ per tornare indietro)";
 	public static final String PASSWORD = "6fcb473c563dc49628a187d2a590ff2c000da215d8cd914f7901df3bc2a2c626"; //pippo123456
 	public static final String MAINTAINER_USER = "prova";
+	public static final String MAINTAINER = "Il manutentore ";
+	public static final String SHA_256 = "SHA-256";
+	public static final String ALGORITHM_ERROR = "Algorithm not found";
 	
 	//MAINTAINER MENU
 	public static final String INSERT_HOUSE = "Inserisci il nome della casa su cui vuoi operare";
@@ -63,7 +67,7 @@ public class Strings {
 	public static final String ROOM_INPUT_PRESSURE = "Inserisci valore pressione della stanza della stanza (hPa)";
 	public static final String ROOM_INPUT_WIND = "Inserisci valore velocità del vento (km/h)";
 	
-	//INPUTHANDLER
+	//GENERIC INPUTHANDLER
 	public static final String PROCEED_WITH_CREATION = "Procedere con la creazione e salvataggio?";
 	public static final String NAME_ALREADY_EXISTENT = "Nome già inserito, prego reinserire altro nome";
 	public static final String PROCEED_WITH_SAVING = "Salvare le modifiche?";
@@ -135,7 +139,7 @@ public class Strings {
 	public static final String INSERT_OPERATING_MODE = "Inserisci la modalità operativa";
 	public static final String ERR_OPERATING_MODE = "La modalità operativa inserita è inesistente";
 	
-	//INPUT RULE 
+	//RULE INPUT
 	public static final String INPUT_RULE_NAME = "Inserisci il nome della regola";
 	public static final String INPUT_INFO_TO_DETECT = "Inserisci l'informazione da rilevare";
 	public static final String ERROR_INFO_NAME = "Inserisci il nome corretto dell'informazione da rilevare";
@@ -148,9 +152,6 @@ public class Strings {
 	public static final String ERROR_OPERATING_MODE = "Modalità operativa non presente";
 	public static final String INPUT_PARAMETER_VALUE = "Inserisci il valore del parametro";
 	public static final String INPUT_STRING_PARAMETER_VALUE = "Inserisci il valore del parametro (String)";
-	
-	
-	
 	
 	//DATA OUTPUT
 	public static final String SEPARATOR = ":";
@@ -184,7 +185,7 @@ public class Strings {
 	public static final String OPERATING_MODES = "Modalità operative:";
 	public static final String SUCCESS_IMPORT_FILE = "File di libreria importato correttamente!";
 	
-	//Log Strings
+	//LOG STRINGS
 	public static final String LOG_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss";
 	public static final String LOG_SHOW_MAIN_MENU = "Visualizzazione del menù principale";
 	public static final String LOG_FIRST_ACCESS = "Primo accesso al programma";
@@ -232,7 +233,7 @@ public class Strings {
 	public static final String LOG_INSERT_ARTIFACT = "Inserimento di un nuovo artefatto...";
 	public static final String LOG_INSERT_ARTIFACT_SUCCESS = "Inserimento di un nuovo artefatto avvenuto correttamente";
 	
-	
+	//INT CONSTANT
 	public static int FIRST_TOKEN = 0;
 	public static int SECOND_TOKEN = 1;
 	public static int THIRD_TOKEN = 2;
@@ -240,11 +241,39 @@ public class Strings {
 	public static int FIFTH_TOKEN = 4;
 	public static int SPACING_COSTANT = 50;
 	
-	//UTILS
+	//UTILS AND OTHERS
 	public static final String BACK_CHARACTER = "^";
+	public static final String UNDERSCORE = "_";
 	public static final String WELCOME = "Benvenuto ";
+	public static final String ON = "acceso";
+	public static final String OFF = "spento";
+	public static final String NULL_CHARACTER = "";
+	public static final String CHAR_ZERO = "0";
+	public static final String CHAR_POINT = ".";
+	public static final String ARROW = " -> ";
+	public static final String COMMA_WITH_SPACE = ", ";
+	public static final String SPACE = " ";
+	public static final String OPEN_BRACKET = "(";
+	public static final String CLOSED_BRACKET = ")";
+	public static final String TO = "-to-";
+	public static final String TO_WITH_SPACES = " -to- ";
 	
-	//STATIC MENU VOICES STRINGS
+	//INVARIANT, PRECONDITIONS, POSTCONDITIONS
+	public static final String WRONG_INVARIANT = "Invariante della classe non soddisfatto";
+	public static final String ACTUATOR_NAME_PRECONDITION = "Il nuovo nome dell'attuatore non contiene caratteri";
+	public static final String ELEMENT_MAP_PRECONDITION = "elementMap non contiene ";
+	public static final String TO_ADD_PRECONDITION = "toAdd è null";
+	public static final String UNFORMATTED_TEXT_PRECONDITION = "unformattedText non contiene informazioni riguardo allo stato";
+	public static final String OPERATING_MODE_PRECONDITION = "operatingModesMap non contiene il nome richiesto";
+	public static final String PARAMETRIC_OPERATING_MODE_PRECONDITION = "parametricOperatingModesMap non contiene il nome richiesto";
+	public static final String NUMERIC_PROPERTIES_PRECONDITION = "numericPropertiesMap non contiene ";
+	public static final String NON_NUMERIC_PROPERTIES_PRECONDITION = "nonNumericPropertiesMap non contiene ";
+	public static final String ARTIFACT_PRECONDITION = "L'artefatto ottenuto è null";
+	public static final String DOMAIN_PRECONDITION_1 = "domain non contiene \"(\" ";
+	public static final String DOMAIN_PRECONDITION_2 = "info non contiene \"to\" ";
+	public static final String DOMAIN_PRECONDITION_3 = "domain non contiene \")\" ";
+	
+	//MENU VOICES STRINGS
 	public static final String [] LOGIN_VOICES = {"Fruitore", "Manutentore"};
 	public static final String [] USER_VOICES = {"Visualizzare descrizione unità immobiliare", "Visualizza stanza", 
 			"Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Aggiungi regola", "Visualizza regole attive", "Visualizza tutte le regole", "Attiva/disattiva regola", "Aggiorna ora"};
@@ -256,6 +285,4 @@ public class Strings {
 	public static final String[] MAINTAINER_UNIT_MENU = {"Visualizza unità immobiliare", "Aggiungi unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Inserisci categoria di sensori", 
 			"Inserisci categoria di attuatori", "Salva dati", "Importa file di libreria", "Aggiorna ora"};
 	public static final String[] USER_UNIT_MENU = {"Visualizza unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Aggiorna ora"};
-
-
 }

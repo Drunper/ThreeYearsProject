@@ -23,7 +23,7 @@ public class LibImporter {
 	}
 	
 	public boolean importFile() {
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		String filePath = Strings.LIB_PATH + Strings.LIB_NAME;
 		File file = new File(filePath);
@@ -44,41 +44,55 @@ public class LibImporter {
 					}
 				}
 				errorString = errorString.substring(0, errorString.length() - 1);
-		}catch(Exception ex) {
+		}
+		catch(Exception ex) {
 			ex.printStackTrace();
 		}
 		
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return flag;
 	}
 	
 	public String getErrorsString() {
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return this.errorString;
 	}
 		
 	private boolean readLineOfFile(String line) {
 		assert line != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		line = line.replace(" ", "");
-		if(!line.contains(":")) return false;
-		if(line.indexOf(":") == line.length()) return false;
+		line = line.replace(Strings.SPACE, Strings.NULL_CHARACTER);
+		if(!line.contains(Strings.SEPARATOR)) 
+			return false;
+		if(line.indexOf(Strings.SEPARATOR) == line.length()) 
+			return false;
 		
-		String keyword = line.split(":")[0];
+		String keyword = line.split(Strings.SEPARATOR)[0];
 		
 		switch(keyword){
-			case "actuator": return importActuator(line);
-			case "actuator_category": return importActuatorCategory(line);
-			case "artifact": return importArtifact(line);
-			case "housing_unit": return importHousingUnit(line);
-			case "non_numeric_sensor": return importNonNumericSensor(line);
-			case "numeric_sensor": return importNumericSensor(line);
-			case "non_numeric_sensor_category": return importNonNumericSensorCategory(line);
-			case "numeric_sensor_category": return importNumericSensorCategory(line);
-			case "room": return importRoom(line);
-			case "rule": return importRule(line);
-			default: return false;
+			case "actuator": 
+				return importActuator(line);
+			case "actuator_category": 
+				return importActuatorCategory(line);
+			case "artifact": 
+				return importArtifact(line);
+			case "housing_unit": 
+				return importHousingUnit(line);
+			case "non_numeric_sensor": 
+				return importNonNumericSensor(line);
+			case "numeric_sensor": 
+				return importNumericSensor(line);
+			case "non_numeric_sensor_category": 
+				return importNonNumericSensorCategory(line);
+			case "numeric_sensor_category": 
+				return importNumericSensorCategory(line);
+			case "room": 
+				return importRoom(line);
+			case "rule": 
+				return importRule(line);
+			default: 
+				return false;
 		}
 		
 	}
@@ -89,9 +103,9 @@ public class LibImporter {
 	//return true se ha importato correttamente l'actuator, return false altrimenti
 	private boolean importActuator(String importedText) {
 		assert importedText != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		String parameters = importedText.split(":")[1]; //parameters = selectedHouse, name, category, true/false, element1;element2, room
+		String parameters = importedText.split(Strings.SEPARATOR)[1]; //parameters = selectedHouse, name, category, true/false, element1;element2, room
 		String selectedHouse;
 		String name;
 		String category;
@@ -99,29 +113,32 @@ public class LibImporter {
 		ArrayList<String> elements = new ArrayList<>();
 		String location;
 		
-		if(checkTokens(6, parameters)){
+		if(checkTokens(6, parameters)) {
 			selectedHouse = parameters.split(",")[0];
 			name = parameters.split(",")[1];
-			name = name.replace("_", ""); //il nome non può contenere underscore
+			name = name.replace(Strings.UNDERSCORE, Strings.NULL_CHARACTER); //il nome non può contenere underscore
 			category = parameters.split(",")[2];
 			bool = parameters.split(",")[3];
 			elements = fromStringToArrayList(parameters.split(",")[4]);
 			location = parameters.split(",")[5];
 			if(hasHousingUnit(selectedHouse) && hasRoom(selectedHouse, location) && hasActuatorCategory(category) 
-					&& !hasActuator(selectedHouse, name + "_" + category) && isBoolean(bool)) {
+					&& !hasActuator(selectedHouse, name + Strings.UNDERSCORE + category) && isBoolean(bool)) {
 				if(bool.equalsIgnoreCase("true")) {
 					//controllare che esistano stanze da associare
 					for(String room : elements) {
-						if(!hasRoom(selectedHouse, room)) return false;
+						if(!hasRoom(selectedHouse, room)) 
+							return false;
 					}
 					
 					inputHandler.createActuator(selectedHouse, name, category, true, elements, location);
 					return true;
 					
-				}else {
+				}
+				else {
 					//controllare che esistano artefatti da associare
 					for(String art : elements) {
-						if(!hasArtifact(selectedHouse, art)) return false;
+						if(!hasArtifact(selectedHouse, art)) 
+							return false;
 					}
 					
 					for(String art : elements) {
@@ -130,22 +147,21 @@ public class LibImporter {
 					
 					inputHandler.createActuator(selectedHouse, name, category, false, elements, location);
 
-					assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+					assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 					return true;
 				}
 			}
 		}
-		
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return false;
 	}
 	
 	//actuator_category:name,abbr,constr, mode1;mode2;mode3 ,mode1
 	private boolean importActuatorCategory(String importedText) {
 		assert importedText != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		String parameters = importedText.split(":")[1]; //parameters = name,abbr,constr,mode1;mode2;mode3,mode1
+		String parameters = importedText.split(Strings.SEPARATOR)[1]; //parameters = name,abbr,constr,mode1;mode2;mode3,mode1
 		String name;
 		String abbreviation;
 		String constructor;
@@ -153,7 +169,7 @@ public class LibImporter {
 		String defaultMode;
 		if(checkTokens(5, parameters)) {
 			name = parameters.split(",")[0];
-			name = name.replace("_", ""); //il nome non può contenere underscore
+			name = name.replace(Strings.UNDERSCORE, Strings.NULL_CHARACTER); //il nome non può contenere underscore
 			abbreviation = parameters.split(",")[1];
 			constructor = parameters.split(",")[2];
 			listOfModes = fromStringToArrayList(parameters.split(",")[3]);
@@ -162,28 +178,30 @@ public class LibImporter {
 			
 			if(!hasActuatorCategory(name)) {
 				for(String op : listOfModes) {
-					if(!hasOperatingMode(op)) return false;
+					if(!hasOperatingMode(op)) 
+						return false;
 				}
 				
-				if(!listOfModes.contains(defaultMode)) return false;
+				if(!listOfModes.contains(defaultMode)) 
+					return false;
 				
 				inputHandler.createActuatorCategory(name, abbreviation, constructor , listOfModes, defaultMode);
 
-				assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+				assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 				return true;
 			}
 		}
 
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return false;
 	}
 	
 	//artifact:selectedHouse,name,descr,location
 	private boolean importArtifact(String importedText) {
 		assert importedText != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		String parameters = importedText.split(":")[1]; //parameters = selectedHouse,name,descr,location
+		String parameters = importedText.split(Strings.SEPARATOR)[1]; //parameters = selectedHouse,name,descr,location
 		String selectedHouse;
 		String name;
 		String descr;
@@ -195,20 +213,20 @@ public class LibImporter {
 			location = parameters.split(",")[3];
 			if(hasHousingUnit(selectedHouse) && !hasArtifact(selectedHouse, name)) {
 				inputHandler.createArtifact(selectedHouse, name, descr, location);
-				assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+				assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 				return true;
 			}
 		}
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return false;	
 	}
 	
 	//housing_unit:name,descr
 	private boolean importHousingUnit(String importedText) {
 		assert importedText != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		String parameters = importedText.split(":")[1]; //parameters = name,descr
+		String parameters = importedText.split(Strings.SEPARATOR)[1]; //parameters = name,descr
 		String name;
 		String descr;
 		if(checkTokens(2, parameters)) {
@@ -216,23 +234,23 @@ public class LibImporter {
 			descr = parameters.split(",")[1];
 			if(!hasHousingUnit(name)) {
 				inputHandler.createHouse(name, descr);
-				assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+				assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 				return true;
 			}
 		}
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return false;	
 	}
 	
 	//non_numeric_sensor:selectedHouse,name,cate1;cate2,true/false,element1;element2,location
 	private boolean importNonNumericSensor(String importedText) {
 		assert importedText != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		String parameters = importedText.split(":")[1]; //parameters = selectedHouse,name,cate1;cate2,true/false,element1;element2,location
+		String parameters = importedText.split(Strings.SEPARATOR)[1]; //parameters = selectedHouse,name,cate1;cate2,true/false,element1;element2,location
 		String selectedHouse;
 		String name;
-		String categories = "";
+		String categories = Strings.NULL_CHARACTER;
 		ArrayList<String> categoryList = new ArrayList<>();
 		String bool;
 		ArrayList<String> elements = new ArrayList<>();
@@ -240,7 +258,7 @@ public class LibImporter {
 		if(checkTokens(6, parameters)) {
 			selectedHouse = parameters.split(",")[0];
 			name = parameters.split(",")[1];
-			name = name.replace("_", ""); //il nome non può contenere underscore
+			name = name.replace(Strings.UNDERSCORE, Strings.NULL_CHARACTER); //il nome non può contenere underscore
 			categoryList = fromStringToArrayList(parameters.split(",")[2]);
 			bool = parameters.split(",")[3];
 			elements = fromStringToArrayList(parameters.split(",")[4]);
@@ -248,41 +266,45 @@ public class LibImporter {
 			
 			for(String cat : categoryList) {
 				if(hasNonNumericSensorCategory(cat)) {
-					categories = categories + "_"+ cat;
-				}else return false;
+					categories = categories + Strings.UNDERSCORE+ cat;
+				}
+				else 
+					return false;
 			}
 			
 			if(hasHousingUnit(selectedHouse) && hasRoom(selectedHouse,location) && !hasSensor(selectedHouse, name + categories) && isBoolean(bool)) {
 				if(bool.equalsIgnoreCase("true")) {
 					//stanze
 					for(String room : elements) {
-						if(!hasRoom(selectedHouse, room)) return false;
+						if(!hasRoom(selectedHouse, room)) 
+							return false;
 					}
 					inputHandler.createNonNumericSensor(selectedHouse, name, categoryList, true , elements, location);
 					return true;
 					
-				}else {
+				}
+				else {
 					//artefatti
 					for(String art : elements) {
-						if(!hasArtifact(selectedHouse, art)) return false;
+						if(!hasArtifact(selectedHouse, art)) 
+							return false;
 					}
 					inputHandler.createNonNumericSensor(selectedHouse, name, categoryList, false , elements, location);
-					assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+					assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 					return true;
 				}
 			}
-			
 		}
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return false;
 	}
 	
 	//non_numeric_sensor_category:name,abbreviation,constructor,domain1;domain2,detectableInfo
 	private boolean importNonNumericSensorCategory(String importedText) {
 		assert importedText != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		String parameters = importedText.split(":")[1]; //parameters = name,abbreviation,constructor,domain1;domain2,detectableInfo
+		String parameters = importedText.split(Strings.SEPARATOR)[1]; //parameters = name,abbreviation,constructor,domain1;domain2,detectableInfo
 		String name;
 		String abbreviation;
 		String constructor;
@@ -290,7 +312,7 @@ public class LibImporter {
 		String info;
 		if(checkTokens(5, parameters)) {
 			name = parameters.split(",")[0];
-			name = name.replace("_", ""); //il nome non può contenere underscore
+			name = name.replace(Strings.UNDERSCORE, Strings.NULL_CHARACTER); //il nome non può contenere underscore
 			abbreviation = parameters.split(",")[1];
 			constructor = parameters.split(",")[2];
 			domains = fromStringToArrayList(parameters.split(",")[3]);
@@ -298,23 +320,23 @@ public class LibImporter {
 			
 			if(!hasNonNumericSensorCategory(name)) {
 				inputHandler.createNonNumericSensorCategory(name, abbreviation, constructor, domains, info);
-				assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+				assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 				return true;
 			}
 		}
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return false;
 	}
 	
 	//numeric_sensor:selectedHouse, name, cate1;cate2, true/false, element1;element2, location)
 	private boolean importNumericSensor(String importedText) {
 		assert importedText != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		String parameters = importedText.split(":")[1]; //parameters = selectedHouse,name,cate1;cate2,true/false,element1;element2,location
+		String parameters = importedText.split(Strings.SEPARATOR)[1]; //parameters = selectedHouse,name,cate1;cate2,true/false,element1;element2,location
 		String selectedHouse;
 		String name;
-		String categories = "";
+		String categories = Strings.NULL_CHARACTER;
 		ArrayList<String> categoryList = new ArrayList<>();
 		String bool;
 		ArrayList<String> elements = new ArrayList<>();
@@ -322,49 +344,52 @@ public class LibImporter {
 		if(checkTokens(6, parameters)) {
 			selectedHouse = parameters.split(",")[0];
 			name = parameters.split(",")[1];
-			name = name.replace("_", ""); //il nome non può contenere underscore
+			name = name.replace(Strings.UNDERSCORE, Strings.NULL_CHARACTER); //il nome non può contenere underscore
 			categoryList = fromStringToArrayList(parameters.split(",")[2]);
 			bool = parameters.split(",")[3];
 			elements = fromStringToArrayList(parameters.split(",")[4]);
 			location = parameters.split(",")[5];
 			
 			for(String cat : categoryList) {
-				if(hasNumericSensorCategory(cat)) {
-					categories = categories + "_"+ cat;
-				}else return false;
+				if(hasNumericSensorCategory(cat))
+					categories = categories + Strings.UNDERSCORE+ cat;
+				else 
+					return false;
 			}
 			
 			if(hasHousingUnit(selectedHouse) && hasRoom(selectedHouse,location) && !hasSensor(selectedHouse, name + categories) && isBoolean(bool)) {
 				if(bool.equalsIgnoreCase("true")) {
 					//stanze
 					for(String room : elements) {
-						if(!hasRoom(selectedHouse, room)) return false;
+						if(!hasRoom(selectedHouse, room)) 
+							return false;
 					}
 					inputHandler.createNumericSensor(selectedHouse, name, categoryList, true , elements, location);
 					return true;
 					
-				}else {
+				}
+				else {
 					//artefatti
 					for(String art : elements) {
-						if(!hasArtifact(selectedHouse, art)) return false;
+						if(!hasArtifact(selectedHouse, art)) 
+							return false;
 					}
 					inputHandler.createNumericSensor(selectedHouse, name, categoryList, false , elements, location);
-					assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+					assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 					return true;
 				}
 			}
-			
 		}
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return false;
 	}
 	
 	//numeric_sensor_category:name, abbr,constru, domain, detectableInfo [domain deve essere del tipo -> "1#10#gradi" ]
 	private boolean importNumericSensorCategory(String importedText) {
 		assert importedText != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		String parameters = importedText.split(":")[1]; //parameters = name,abbreviation,constructor,domain,detectableInfo
+		String parameters = importedText.split(Strings.SEPARATOR)[1]; //parameters = name,abbreviation,constructor,domain,detectableInfo
 		String name;
 		String abbreviation;
 		String constructor;
@@ -372,7 +397,7 @@ public class LibImporter {
 		String info;
 		if(checkTokens(5, parameters)) {
 			name = parameters.split(",")[0];
-			name = name.replace("_", ""); //il nome non può contenere underscore
+			name = name.replace(Strings.UNDERSCORE, Strings.NULL_CHARACTER); //il nome non può contenere underscore
 			abbreviation = parameters.split(",")[1];
 			constructor = parameters.split(",")[2];
 			domain = parameters.split(",")[3]; //domain = 1#10#gradi
@@ -380,7 +405,8 @@ public class LibImporter {
 			
 			int num = 0;
 			for(int i = 0; i < domain.length(); i++) {
-				if(domain.charAt(i) == '#') num++;
+				if(domain.charAt(i) == '#') 
+					num++;
 			}
 			
 			double min;
@@ -394,30 +420,35 @@ public class LibImporter {
 						&& unit_measurements.length() > 0){
 					min = Double.parseDouble(s_min);
 					max = Double.parseDouble(s_max);
-				}else return false;
+				}
+				else 
+					return false;
 				
-				if(min > max) return false;
+				if(min > max) 
+					return false;
 				
 				//min + " -to- " + max (unit_measurement);
-				domain = min + " -to- " + max + " (" + unit_measurements + ")";
-			}else return false;
+				domain = min + " -to- " + max + " (" + unit_measurements + Strings.CLOSED_BRACKET;
+			}
+			else 
+				return false;
 			
 			if(!hasNumericSensorCategory(name)) {
 				inputHandler.createNumericSensorCategory(name, abbreviation, constructor, domain, info);
-				assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+				assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 				return true;
 			}
 		}
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return false;
 	}
 	
 	//room:selectedHouse,name,descr,temp,umidita,pressione,vento,pres_pers
 	private boolean importRoom(String importedText) {
 		assert importedText != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		String parameters = importedText.split(":")[1];
+		String parameters = importedText.split(Strings.SEPARATOR)[1];
 		String selectedHouse;
 		String name;
 		String descr;
@@ -453,11 +484,11 @@ public class LibImporter {
 				else presenza_persone = "assenza di persone";
 	
 				inputHandler.createRoom(selectedHouse, name, descr, d_temp, d_umidita, d_pressione, d_vento, presenza_persone);
-				assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+				assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 				return true;
 			}
 		}
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return false;
 		
 	}
@@ -470,11 +501,12 @@ public class LibImporter {
 	 */
 	private boolean importRule(String importedText) {
 		assert importedText != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		if(!importedText.contains(":=")) return false;
+		if(!importedText.contains(":=")) 
+			return false;
 		importedText = importedText.replace(":=", "=");
-		String parameters = importedText.split(":")[1]; //parameters = selectedHouse, name, antString, consString, true/false
+		String parameters = importedText.split(Strings.SEPARATOR)[1]; //parameters = selectedHouse, name, antString, consString, true/false
 		parameters = parameters.replace("=", ":=");
 		String selectedHouse;
 		String rule_name;
@@ -501,7 +533,8 @@ public class LibImporter {
 				String[] ruleConditions = toElaborate.split("\\&\\&|\\|\\|");
 
 				for(String condition : ruleConditions) {
-					if(!verifySyntaxRuleCondition(selectedHouse, condition)) return false;
+					if(!verifySyntaxRuleCondition(selectedHouse, condition)) 
+						return false;
 				}
 				
 				
@@ -511,85 +544,92 @@ public class LibImporter {
 				sensors = getSensorFromAntString(toElaborate);
 				
 				//controllo consString
-				if(!consString.contains(":=")) return false;
+				if(!consString.contains(":=")) 
+					return false;
 				
 				//a1_categoria := mantenimentoTemperatura(19)
 				String test_actuator = consString.split(":=")[0];
 				String operating_mode = consString.split(":=")[1];
 				
-				if(operating_mode.contains("(")) {
+				if(operating_mode.contains(Strings.OPEN_BRACKET)) 
 					operating_mode = operating_mode.split("\\(")[0];
-				}
 				
-				if(hasActuator(selectedHouse, test_actuator)) {
+				if(hasActuator(selectedHouse, test_actuator))
 					actuator = test_actuator;
-				}else return false;
+				else 
+					return false;
 				
-				if(!OperatingModesHandler.hasOperatingMode(operating_mode)) return false;
-				if(isBoolean(state)) {
-				 rule_state = Boolean.parseBoolean(state);
-				}else return false;
+				if(!OperatingModesHandler.hasOperatingMode(operating_mode)) 
+					return false;
+				if(isBoolean(state))
+					rule_state = Boolean.parseBoolean(state);
+				else 
+					return false;
 				//creo Rule
 				Rule r = new Rule(dataHandler.getHousingUnit(selectedHouse), rule_name, antString, consString, sensors, actuator, rule_state);
 				dataHandler.getHousingUnit(selectedHouse).addRule(r);
-				assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+				assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 				return true;
 			}
-		
-
 		}
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return false;
 	}
 	
 	private boolean checkTokens(int num_tokens, String parameters) {
 		assert num_tokens >= 0 && parameters != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		int comma = 0;
 		int num_elements = 0;
 		for(int i = 0; i < parameters.length(); i++) {
-			if(parameters.charAt(i) == ',') comma ++;
-			if(i>0 && parameters.charAt(i-1) == ',' && parameters.charAt(i) == ',') return false;
+			if(parameters.charAt(i) == ',') 
+				comma ++;
+			if(i>0 && parameters.charAt(i-1) == ',' && parameters.charAt(i) == ',') 
+				return false;
 		}
 		comma++;
 		num_elements = comma;
 		if(num_tokens == num_elements) {
-			if(parameters.lastIndexOf(',') == parameters.length()) return false;
+			if(parameters.lastIndexOf(',') == parameters.length()) 
+				return false;
 			return true;
 		}
-		else return false;
+		else 
+			return false;
 	}
 	
 	private ArrayList<String> fromStringToArrayList(String elements){
 		assert elements != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		ArrayList<String> result;	
 		if(elements.contains(";")) {
 			String[] res = elements.split(";");
 			result = new ArrayList<>(Arrays.asList(res));
-		}else {
+		}
+		else {
 			result = new ArrayList<>();
 			result.add(elements);
 		}
 		
 		assert result != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return result;
 	}
 	
 	private boolean isBoolean(String bool) {
 		assert bool != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
-		if(bool.equalsIgnoreCase("true") || bool.equalsIgnoreCase("false")) return true;
+		if(bool.equalsIgnoreCase("true") || bool.equalsIgnoreCase("false")) 
+			return true;
 		return false;
 	}
 	//metodo verifica nome casa
 	private boolean hasHousingUnit(String house) {
 		assert house != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		boolean flag = false;
 		house = house.toLowerCase();
@@ -602,14 +642,15 @@ public class LibImporter {
 	//metodo verifica non num sens cat
 	private boolean hasNonNumericSensorCategory(String category) {
 		assert category != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		boolean flag = false;
 		category = category.toLowerCase();
 		for(String cat : dataHandler.getSensorCategoryList()) {
 			SensorCategory sens_cat = dataHandler.getSensorCategory(cat);
 			if(!sens_cat.getIsNumeric()) {
-				if(category.equalsIgnoreCase(cat)) flag = true;
+				if(category.equalsIgnoreCase(cat)) 
+					flag = true;
 			}
 		}
 		return flag;
@@ -618,14 +659,15 @@ public class LibImporter {
 	//metodo verifica num sens cat
 	private boolean hasNumericSensorCategory(String category) {
 		assert category != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		boolean flag = false;
 		category = category.toLowerCase();
 		for(String cat : dataHandler.getSensorCategoryList()) {
 			SensorCategory sens_cat = dataHandler.getSensorCategory(cat);
 			if(sens_cat.getIsNumeric()) {
-				if(category.equalsIgnoreCase(cat)) flag = true;
+				if(category.equalsIgnoreCase(cat)) 
+					flag = true;
 			}
 		}
 		return flag;
@@ -633,123 +675,141 @@ public class LibImporter {
 	
 	private boolean hasActuatorCategory(String category) {
 		assert category != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		boolean flag = false;
 		category = category.toLowerCase();
 		for(String cat : dataHandler.getActuatorCategoryList()) {
-			if(category.equalsIgnoreCase(cat)) flag = true;
+			if(category.equalsIgnoreCase(cat)) 
+				flag = true;
 		}
-		
 		return flag;
 	}
 	
 	//metodo verifica room
 	private boolean hasRoom(String selectedHouse, String room) {
 		assert selectedHouse != null && room != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		boolean flag = false;
 		room = room.toLowerCase();
 		if(hasHousingUnit(selectedHouse)) {
 			for(String r : dataHandler.getRoomsList(selectedHouse)) {
-				if(room.equalsIgnoreCase(r)) flag = true;
+				if(room.equalsIgnoreCase(r)) 
+					flag = true;
 			}
-		}else return false;
+		}
+		else 
+			return false;
 		
 		return flag;
 	}
 	
 	private boolean hasActuator(String selectedHouse, String name) {
 		assert selectedHouse != null && name != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		boolean flag = false; 
 		name = name.toLowerCase();
 		if(hasHousingUnit(selectedHouse)) {
 			for(String r : dataHandler.getRoomsList(selectedHouse)) {
 				for(String act : dataHandler.getActuatorNames(selectedHouse, r)) {
-					if(name.equalsIgnoreCase(act)) flag = true;
+					if(name.equalsIgnoreCase(act)) 
+						flag = true;
 				}
 			}
-		}else return false;
-		
-		
+		}
+		else 
+			return false;
+	
 		return flag;
 	}
 	
 	private boolean hasArtifact(String selectedHouse, String name) {
 		assert selectedHouse != null && name != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		boolean flag = false;
 		name = name.toLowerCase();
 		if(hasHousingUnit(selectedHouse)) {
 			for(String r : dataHandler.getRoomsList(selectedHouse)) {
 				for(String art : dataHandler.getArtifactNames(selectedHouse, r)) {
-					if(name.equalsIgnoreCase(art)) flag = true;
+					if(name.equalsIgnoreCase(art)) 
+						flag = true;
 				}
 			}
-		}else return false;
+		}
+		else 
+			return false;
 		
 		return flag;
 	}
 	
 	private boolean hasSensor(String selectedHouse, String name) {
 		assert selectedHouse != null && name != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		boolean flag = false;
 		name = name.toLowerCase();
 		if(hasHousingUnit(selectedHouse)) {
 			for(String r : dataHandler.getRoomsList(selectedHouse)) {
 				for(String sens : dataHandler.getSensorNames(selectedHouse, r)) {
-					if(name.equalsIgnoreCase(sens)) flag = true;
+					if(name.equalsIgnoreCase(sens)) 
+						flag = true;
 				}
 			}
-		}else return false;
+		}
+		else 
+			return false;
 		
 		return flag;
 	}
 	
 	private boolean hasOperatingMode(String operating_mode) {
 		assert operating_mode != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		boolean flag;
-		if(dataHandler.hasOperatingMode(operating_mode)) flag = true;
-		else flag = false;
+		if(dataHandler.hasOperatingMode(operating_mode)) 
+			flag = true;
+		else 
+			flag = false;
 		return flag;
 	}
 	
 	private boolean hasRule(String selectedHouse, String rule) {
 		assert selectedHouse != null && rule != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		boolean flag = false;
 		rule = rule.toLowerCase();
 		if(hasHousingUnit(selectedHouse)) {
-			if(dataHandler.getHousingUnit(selectedHouse).hasRule(rule)) flag = true;
-		}else return false;
+			if(dataHandler.getHousingUnit(selectedHouse).hasRule(rule)) 
+				flag = true;
+		}
+		else 
+			return false;
 		return flag;
 	}
 	
 	@SuppressWarnings("unused")
 	private boolean verifySyntaxRuleCondition(String selectedHouse, String condition) {
 		assert selectedHouse != null && condition != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		//controlli preliminari (contiente operatore, valore, time, punto...)
 		String test;
 		try {
 			if(condition.contains("time")) {
 				test = condition.split("<|>|>=|<=|==|!=")[0];
 				test = condition.split("<|>|>=|<=|==|!=")[1];
-			}else {
+			}
+			else {
 				test = condition.split("\\.")[0];
 				test = condition.split("\\.")[1].split("<|>|>=|<=|==|!=")[0];
 				test = condition.split("\\.")[1].split("<|>|>=|<=|==|!=")[1];
 			}
-		}catch(Exception ex){
+		}
+		catch(Exception ex){
 			return false;
 		}
 		
@@ -766,41 +826,51 @@ public class LibImporter {
 		
 				boolean sensorCategoryHasInfo = false;
 				for(String category : dataHandler.getCategoriesOfASensor(selectedHouse, sensor)){
-					if(category.equalsIgnoreCase(cat.getName())) sensorCategoryHasInfo = true;
+					if(category.equalsIgnoreCase(cat.getName())) 
+						sensorCategoryHasInfo = true;
 				}
-				if(!sensorCategoryHasInfo) return false;
+				if(!sensorCategoryHasInfo) 
+					return false;
 		
-				if(cat.getIsNumeric() && !value.matches(DOUBLE_REGEX)) return false; //se la categoria è numerica ma il valore non è double fine
-				if(!cat.getIsNumeric() && value.matches(DOUBLE_REGEX)) return false; //se la categoria è non num ma il valore è double fine (cambiare con String regex)
-				}else return false;
-				
-			}else {
-				//toElaborate.split("[\\&\\&|\\|\\|]")[0]; = time > 10
-				String time = condition.split("<|>|>=|<=|==|!=")[1]; //10.00
-				if(time.contains(".")) {
-					int hour;
-					int minute;
-					try{
-						hour = Integer.parseInt(time.split("\\.")[0]);
-						minute = Integer.parseInt(time.split("\\.")[1]);
-						}catch(Exception ex) {
-							hour = -1;
-							minute = -1;
-						}
-					if(hour < 0 || hour > 23 || minute < 0 || minute > 59) return false;
-				}else return false;
-			
+				if(cat.getIsNumeric() && !value.matches(DOUBLE_REGEX)) 
+					return false; //se la categoria è numerica ma il valore non è double fine
+				if(!cat.getIsNumeric() && value.matches(DOUBLE_REGEX)) 
+					return false; //se la categoria è non num ma il valore è double fine (cambiare con String regex)
+			}
+			else 
+				return false;		
+		}
+		else {
+			//toElaborate.split("[\\&\\&|\\|\\|]")[0]; = time > 10
+			String time = condition.split("<|>|>=|<=|==|!=")[1]; //10.00
+			if(time.contains(".")) {
+				int hour;
+				int minute;
+				try {
+					hour = Integer.parseInt(time.split("\\.")[0]);
+					minute = Integer.parseInt(time.split("\\.")[1]);
+				}
+				catch(Exception ex) {
+					hour = -1;
+					minute = -1;
+				}
+				if(hour < 0 || hour > 23 || minute < 0 || minute > 59) 
+					return false;
+			}
+			else 
+				return false;
 		}
 		//se va tutto bene arriviamo qui
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return true;
 	}
 	
 	private ArrayList<String> getSensorFromAntString(String antString) {
 		assert antString != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		
 		ArrayList<String> sensors = new ArrayList<>();
-		//sens1_ciao.temperatura > 10 && time < 10 || s1.colore == verde
+		//sens1_termometri.temperatura > 10 && time < 10 || s1.colore == verde
 		while(antString.contains("&&") || antString.contains("||")) {
 			String condition = antString.split("[\\&\\&|\\|\\|]")[0];
 			if(!condition.contains("time")) {
@@ -809,10 +879,11 @@ public class LibImporter {
 			}
 			antString = antString.split("[\\&\\&|\\|\\|]")[1];
 		}
-		if(!antString.contains("time")) sensors.add(antString.split("\\.")[0]);
+		if(!antString.contains("time")) 
+			sensors.add(antString.split("\\.")[0]);
 		
 		assert sensors != null;
-		assert libImporterInvariant() : "Invariante della classe non soddisfatto";
+		assert libImporterInvariant() : Strings.WRONG_INVARIANT;
 		return sensors;
 	}
 	

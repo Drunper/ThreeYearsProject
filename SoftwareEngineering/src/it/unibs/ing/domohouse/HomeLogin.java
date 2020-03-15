@@ -5,6 +5,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
+import it.unibs.ing.domohouse.util.Strings;
+
 public class HomeLogin {
 
 	private HashMap<String, String> maintainers;
@@ -18,10 +20,11 @@ public class HomeLogin {
 	public HomeLogin () {
 		maintainers = new HashMap<>();
 		try {
-			md = MessageDigest.getInstance("SHA-256");
-		} catch (NoSuchAlgorithmException e) {
+			md = MessageDigest.getInstance(Strings.SHA_256);
+		} 
+		catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
-			System.err.println("Algorithm not found");
+			System.err.println(Strings.ALGORITHM_ERROR);
 		}
 	}
 	
@@ -29,28 +32,27 @@ public class HomeLogin {
 		assert toHash != null;
 		hash = md.digest(toHash.getBytes(StandardCharsets.UTF_8));
 		hexHash = bytesToHex(hash);
-		assert homeLoginInvariant() : "Invariante di classe non soddisfatto";
+		assert homeLoginInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public void addEntry (String maintainerID, String passwordHash) {
-		assert homeLoginInvariant() : "Invariante di classe non soddisfatto";
+		assert homeLoginInvariant() : Strings.WRONG_INVARIANT;
 		assert maintainerID != null && passwordHash != null;
 		int pre_size = maintainers.size();
 		
 		maintainers.put(maintainerID, passwordHash);
 		
 		assert maintainers.size() >= pre_size;
-		assert homeLoginInvariant() : "Invariante di classe non soddisfatto";
+		assert homeLoginInvariant() : Strings.WRONG_INVARIANT;
 	}
 	
 	public boolean checkPassword (String maintainerID, String password) {
 		assert maintainerID != null && password != null;
-		assert homeLoginInvariant() : "Invariante di classe non soddisfatto";
+		assert homeLoginInvariant() : Strings.WRONG_INVARIANT;
 		
 		if (!maintainers.containsKey(maintainerID))
 			return false;
-		else
-		{
+		else {
 			hash(password);
 			return maintainers.get(maintainerID).equalsIgnoreCase(hexHash);
 		}
@@ -62,8 +64,8 @@ public class HomeLogin {
 	    StringBuffer hexString = new StringBuffer();
 	    for (int i = 0; i < hash.length; i++) {
 	    	String hex = Integer.toHexString(0xff & hash[i]);
-	    if(hex.length() == 1) hexString.append('0');
-	        hexString.append(hex);
+		    if(hex.length() == 1) hexString.append('0');
+		        hexString.append(hex);
 	    }
 	    
 	    String result = hexString.toString();
