@@ -185,3 +185,4 @@
 [14/03/2020 17:19:05] Inserimento di una nuova categoria di sensori...
 [14/03/2020 17:19:41] Inserimento di una nuova categoria di sensori avvenuta correttamente
 [14/03/2020 17:19:46] Visualizzazione della categoria di sensore nome
+[14/03/2020 17:25:17] Visualizzazione del menù principale
