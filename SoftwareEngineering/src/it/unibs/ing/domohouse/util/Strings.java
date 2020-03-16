@@ -5,8 +5,8 @@ public class Strings {
 	public static final String DATA_HANDLER_PATH = "data"; 
 	public static final String DATA_HANDLER_NAME_FILE = "\\dataHandler.dat";
 	public static final String HELP_PATH = "data";
-	public static final String USER_HELP_FILE_NAME = "\\Casi_uso.docx";
-	public static final String MAINTAINER_HELP_FILE_NAME = "\\Maintainer_Guide.docx";
+	public static final String USER_HELP_FILE_NAME = "\\User_Guide.pdf";
+	public static final String MAINTAINER_HELP_FILE_NAME = "\\Maintainer_Guide.pdf";
 	public static final String LOG_PATH = "data";
 	public static final String LOG_NAME_FILE = "\\log.txt";
 	public static final String LIB_PATH = "data";
