@@ -1,7 +1,5 @@
 package it.unibs.ing.domohouse.util;
 
-import java.awt.Desktop;
-import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -187,30 +185,9 @@ public class InterfaceHandler {
 					break;
 				case 4:
 					//mostra file di help
-					 try
-	                    {
-	                        File f = new File(Strings.HELP_PATH + Strings.MAINTAINER_HELP_FILE_NAME);
-	                        if (f.exists()) 
-	                        {
-	                            if (Desktop.isDesktopSupported()) 
-	                            {
-	                            Desktop.getDesktop().open(f);
-	                            } 
-	                            else
-	                            {
-	                            System.out.println(Strings.ERROR_HELP_FILE);
-	                            }           
-	                        }         
-	                        else
-                         {
-                         System.out.println(Strings.ERROR_HELP_FILE);
-                         }       
-	                    }
-	                    catch(Exception e)
-	                    {
-	                    	e.printStackTrace();
-	                    }
-					 break;
+					String fileName = Strings.HELP_PATH + Strings.USER_HELP_FILE_NAME;
+					loader.runFileFromName(fileName);
+					break;
 				case 5:
 					//aggiorna ora
 					OutputHandler.clearOutput();
@@ -319,30 +296,9 @@ public class InterfaceHandler {
 					break;
 				case 9:
 					//mostra file di help
-					 try
-	                    {
-	                        File f = new File(Strings.HELP_PATH + Strings.MAINTAINER_HELP_FILE_NAME);
-	                        if (f.exists()) 
-	                        {
-	                            if (Desktop.isDesktopSupported()) 
-	                            {
-	                            Desktop.getDesktop().open(f);
-	                            } 
-	                            else
-	                            {
-	                            System.out.println(Strings.ERROR_HELP_FILE);
-	                            }           
-	                        }         
-	                        else
-                            {
-                            System.out.println(Strings.ERROR_HELP_FILE);
-                            }       
-	                    }
-	                    catch(Exception e)
-	                    {
-	                    	e.printStackTrace();
-	                    }
-					 break;
+					String fileName = Strings.HELP_PATH + Strings.MAINTAINER_HELP_FILE_NAME;
+					loader.runFileFromName(fileName);
+					break;
 				case 10:
 					//aggiorna ora
 					log.write(Strings.LOG_REFRESH_HOUR);

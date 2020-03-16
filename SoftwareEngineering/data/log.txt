@@ -277,3 +277,12 @@
 [16/03/2020 15:38:34] Visualizzazione del menù principale
 [16/03/2020 15:38:46] Il manutentore prova ha effettuato l'accesso al sistema
 [16/03/2020 15:38:46] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:45:58] Visualizzazione del menù principale
+[16/03/2020 15:46:02] gj ha effettuato l'accesso al sistema
+[16/03/2020 15:46:02] Visualizzazione del menù principale Fruitore
+[16/03/2020 15:50:38] Visualizzazione del menù principale
+[16/03/2020 15:50:41] dsfg ha effettuato l'accesso al sistema
+[16/03/2020 15:50:41] Visualizzazione del menù principale Fruitore
+[16/03/2020 15:50:48] Uscita dal menù corrente
+[16/03/2020 15:50:54] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:50:54] Visualizzazione del menù principale Manutentore

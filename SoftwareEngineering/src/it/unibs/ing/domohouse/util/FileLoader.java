@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.util;
 
 import java.io.FileInputStream;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,5 +29,31 @@ public class FileLoader {
 			}
 		}
 		return null;
+	}
+	
+	public void runFileFromName(String fileName) {
+		 try
+         {
+             File f = new File(fileName);
+             if (f.exists()) 
+             {
+                 if (Desktop.isDesktopSupported()) 
+                 {
+                 Desktop.getDesktop().open(f);
+                 } 
+                 else
+                 {
+                 System.out.println(Strings.ERROR_HELP_FILE);
+                 }           
+             }         
+             else
+             {
+            	 System.out.println(Strings.ERROR_HELP_FILE);
+             }       
+         }
+         catch(Exception e)
+         {
+         	e.printStackTrace();
+         }
 	}
 }
