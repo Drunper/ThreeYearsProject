@@ -277,7 +277,6 @@ public class Rule implements Serializable{
 		String operatingMode;
 		String parameter;
 		double parameterValue;
-		System.out.println(toElaborate);
 		actuator = toElaborate.split(Strings.UNDERSCORE)[0];
 		toElaborate = toElaborate.split(Strings.UNDERSCORE)[1];
 		category = toElaborate.split(":=")[0];
