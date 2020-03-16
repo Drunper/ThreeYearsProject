@@ -186,3 +186,94 @@
 [14/03/2020 17:19:41] Inserimento di una nuova categoria di sensori avvenuta correttamente
 [14/03/2020 17:19:46] Visualizzazione della categoria di sensore nome
 [14/03/2020 17:25:17] Visualizzazione del menù principale
+[16/03/2020 14:44:53] Visualizzazione del menù principale
+[16/03/2020 14:45:05] Primo accesso al programma
+[16/03/2020 14:45:18] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 14:45:18] Creazione dei file di base
+[16/03/2020 14:45:18] Visualizzazione del menù principale Manutentore
+[16/03/2020 14:45:22] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 14:45:23] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 14:45:23] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 14:45:24] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 14:45:24] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 14:45:24] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 14:45:25] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 14:45:26] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 14:52:18] Visualizzazione del menù principale
+[16/03/2020 14:52:27] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 14:52:27] Creazione dei file di base
+[16/03/2020 14:52:27] Visualizzazione del menù principale Manutentore
+[16/03/2020 14:52:32] Inserimento di una nuova unità immobiliare...
+[16/03/2020 14:52:42] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[16/03/2020 14:52:44] Inserimento di una nuova unità immobiliare...
+[16/03/2020 14:52:54] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[16/03/2020 14:53:01] Visualizzazione del menù dell'unità immobiliare (versione Manutentore) 
+[16/03/2020 14:53:06] Uscita dal menù corrente
+[16/03/2020 14:53:25] Inserimento di una nuova categoria di sensori...
+[16/03/2020 14:55:12] Inserimento di una nuova categoria di sensori avvenuta correttamente
+[16/03/2020 14:55:26] Visualizzazione della categoria di sensore termometri
+[16/03/2020 14:55:57] Uscita dal menù corrente
+[16/03/2020 15:18:37] Visualizzazione del menù principale
+[16/03/2020 15:18:41] Primo accesso al programma
+[16/03/2020 15:18:57] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:18:57] Creazione dei file di base
+[16/03/2020 15:18:57] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:19:06] Inserimento di una nuova unità immobiliare...
+[16/03/2020 15:19:08] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[16/03/2020 15:19:09] Uscita dal menù corrente
+[16/03/2020 15:19:10] Primo accesso al programma
+[16/03/2020 15:19:17] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:19:17] Creazione dei file di base
+[16/03/2020 15:19:17] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:19:19] Inserimento di una nuova unità immobiliare...
+[16/03/2020 15:19:21] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[16/03/2020 15:19:24] Salvataggio dei dati ...
+[16/03/2020 15:19:24] Dati salvati correttamente nel sistema!
+[16/03/2020 15:19:32] Uscita dal menù corrente
+[16/03/2020 15:19:35] test ha effettuato l'accesso al sistema
+[16/03/2020 15:19:35] Visualizzazione del menù principale Fruitore
+[16/03/2020 15:19:38] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 15:22:39] Visualizzazione del menù principale
+[16/03/2020 15:22:45] pre ha effettuato l'accesso al sistema
+[16/03/2020 15:22:45] Visualizzazione del menù principale Fruitore
+[16/03/2020 15:22:53] Uscita dal menù corrente
+[16/03/2020 15:22:59] serina ha effettuato l'accesso al sistema
+[16/03/2020 15:22:59] Visualizzazione del menù principale Fruitore
+[16/03/2020 15:27:03] Uscita dal menù corrente
+[16/03/2020 15:27:07] kjj ha effettuato l'accesso al sistema
+[16/03/2020 15:27:07] Visualizzazione del menù principale Fruitore
+[16/03/2020 15:29:13] Visualizzazione del menù principale
+[16/03/2020 15:29:19] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:29:25] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:29:25] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:31:41] Visualizzazione del menù principale
+[16/03/2020 15:31:46] asd ha effettuato l'accesso al sistema
+[16/03/2020 15:31:46] Visualizzazione del menù principale Fruitore
+[16/03/2020 15:31:59] Uscita dal menù corrente
+[16/03/2020 15:32:06] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:32:06] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:33:17] Visualizzazione del menù principale
+[16/03/2020 15:33:24] Il manutentore proova ha effettuato l'accesso al sistema
+[16/03/2020 15:33:29] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:33:29] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:34:11] Visualizzazione del menù principale
+[16/03/2020 15:34:23] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:34:23] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:35:17] Visualizzazione del menù principale
+[16/03/2020 15:35:20] y ha effettuato l'accesso al sistema
+[16/03/2020 15:35:20] Visualizzazione del menù principale Fruitore
+[16/03/2020 15:36:27] Visualizzazione del menù principale
+[16/03/2020 15:36:29] ytg ha effettuato l'accesso al sistema
+[16/03/2020 15:36:29] Visualizzazione del menù principale Fruitore
+[16/03/2020 15:36:59] Visualizzazione del menù principale
+[16/03/2020 15:37:01] jh ha effettuato l'accesso al sistema
+[16/03/2020 15:37:01] Visualizzazione del menù principale Fruitore
+[16/03/2020 15:37:18] Uscita dal menù corrente
+[16/03/2020 15:37:25] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:37:25] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:37:54] Visualizzazione del menù principale
+[16/03/2020 15:38:03] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:38:03] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:38:34] Visualizzazione del menù principale
+[16/03/2020 15:38:46] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:38:46] Visualizzazione del menù principale Manutentore
