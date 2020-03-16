@@ -286,3 +286,14 @@
 [16/03/2020 15:50:48] Uscita dal menù corrente
 [16/03/2020 15:50:54] Il manutentore prova ha effettuato l'accesso al sistema
 [16/03/2020 15:50:54] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:53:36] Visualizzazione del menù principale
+[16/03/2020 15:53:46] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:53:46] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:53:48] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 15:53:57] Aggiornamento della visualizzazione dell'orario
+[16/03/2020 15:55:16] Visualizzazione del menù principale
+[16/03/2020 15:55:22] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:55:22] Visualizzazione del menù principale Manutentore
+[16/03/2020 15:55:54] Visualizzazione del menù principale
+[16/03/2020 15:56:02] Il manutentore prova ha effettuato l'accesso al sistema
+[16/03/2020 15:56:02] Visualizzazione del menù principale Manutentore

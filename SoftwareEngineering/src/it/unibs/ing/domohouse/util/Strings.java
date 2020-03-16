@@ -12,7 +12,7 @@ public class Strings {
 	public static final String LIB_PATH = "data";
 	public static final String LIB_NAME = "\\lib.txt";
 	public static final String ERROR_LOAD_FILE = "Non è stato possibile caricare il file! (ERROR: failed or interrupted I/O operations)";
-	public static final String ERROR_HELP_FILE = "Errore: File di help non supportato!";
+	public static final String ERROR_HELP_FILE = "Errore: File non supportato/non trovato!";
 	public static final String LOADING_FILE = "Caricamento file...";
 	public static final String LOADED = "Caricamento da file effettuato!";
 	public static final String NO_FILE = "Attenzione! Non è stato trovato alcun file di salvataggio. Chiamare un manutentore per configurare il sistema!";
@@ -287,6 +287,6 @@ public class Strings {
 	public static final String [] MAINTAINER_ROOM_VOICES = {"Visualizza descrizione stanza", "Visualizza sensore", "Visualizza attuatore", "Aziona attuatore", "Visualizza artefatto", 
 			"Modifica descrizione stanza", "Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto", "Attiva/disattiva dispositivo", "Aggiorna ora"};
 	public static final String[] MAINTAINER_UNIT_MENU = {"Visualizza unità immobiliare", "Aggiungi unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Inserisci categoria di sensori", 
-			"Inserisci categoria di attuatori", "Salva dati", "Importa file di libreria", "Apri Help","Aggiorna ora"};
+			"Inserisci categoria di attuatori", "Salva dati", "Importa file di libreria", "Apri Help", "Visualizza Log", "Aggiorna ora"};
 	public static final String[] USER_UNIT_MENU = {"Visualizza unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Apri Help", "Aggiorna ora"};
 }

@@ -296,10 +296,15 @@ public class InterfaceHandler {
 					break;
 				case 9:
 					//mostra file di help
-					String fileName = Strings.HELP_PATH + Strings.MAINTAINER_HELP_FILE_NAME;
-					loader.runFileFromName(fileName);
+					String helpFileName = Strings.HELP_PATH + Strings.MAINTAINER_HELP_FILE_NAME;
+					loader.runFileFromName(helpFileName);
 					break;
 				case 10:
+					//visualizza log
+					String logFileName = Strings.LOG_PATH + Strings.LOG_NAME_FILE;
+					loader.runFileFromName(logFileName);
+					break;
+				case 11:
 					//aggiorna ora
 					log.write(Strings.LOG_REFRESH_HOUR);
 					OutputHandler.clearOutput();
