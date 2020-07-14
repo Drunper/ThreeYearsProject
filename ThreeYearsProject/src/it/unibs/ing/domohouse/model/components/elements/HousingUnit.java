@@ -17,6 +17,7 @@ public class HousingUnit implements Serializable, Manageable {
 	private static final long serialVersionUID = -4272512019548783815L;
 	private String name;
 	private String descr;
+	private String type;
 	private Manager roomManager;
 	private Manager rulesManager;
 	private Manager sensorManager; // tutti i sensori della casa
