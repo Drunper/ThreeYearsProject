@@ -1,4 +1,4 @@
-package it.unibs.ing.domohouse.model.util;
+package it.unibs.ing.domohouse.model.file;
 
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.ObjectOutputStream;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
+import it.unibs.ing.domohouse.model.util.DataFacade;
+import it.unibs.ing.domohouse.model.util.Saver;
 
 public class FileSaver implements Saver {
 

@@ -36,8 +36,10 @@ public class MaintainerInputHandler extends UserInputHandler {
 		while (dataFacade.hasHousingUnit(name));
 
 		String descr = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_DESCRIPTION);
+		String type = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_TYPE);
+		String user = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_USER);
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			objectFabricator.createHouse(name, descr);
+			objectFabricator.createHouse(name, descr, type, user);
 
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}

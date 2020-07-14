@@ -6,6 +6,7 @@ public class ViewStrings {
 	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	public static final String NAME = "Nome: ";
 	public static final String HOUSING_UNIT = "Unità immobiliare";
+	public static final String HOUSING_UNIT_TYPE = "Tipo unità immobiliare: ";
 	public static final String ROOM = "Stanza";
 	public static final String ARTIFACT = "Artefatto";
 	public static final String ACTUATOR = "Attuatore";

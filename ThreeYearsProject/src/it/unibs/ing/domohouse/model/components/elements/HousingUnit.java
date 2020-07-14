@@ -18,6 +18,7 @@ public class HousingUnit implements Serializable, Manageable {
 	private String name;
 	private String descr;
 	private String type;
+	private String user;
 	private Manager roomManager;
 	private Manager rulesManager;
 	private Manager sensorManager; // tutti i sensori della casa
@@ -28,15 +29,33 @@ public class HousingUnit implements Serializable, Manageable {
 	/*
 	 * invariante name > 0, descr > 0, diversi da null. Manager != null
 	 */
-	public HousingUnit(String name, String descr) {
+	public HousingUnit(String name, String descr, String type, String user) {
 		this.name = name;
 		this.descr = descr;
+		this.type = type;
+		this.user = user;
 		roomManager = new Manager();
 		sensorManager = new Manager();
 		actuatorManager = new Manager();
 		artifactManager = new Manager();
 		associationManager = new AssociationManager();
 		rulesManager = new Manager();
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public String getUser() {
+		return user;
+	}
+	
+	public void setUser(String user) {
+		this.user = user;
 	}
 
 	public String getName() {

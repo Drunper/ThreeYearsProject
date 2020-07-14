@@ -30,12 +30,12 @@ public class ObjectFabricator {
 		this.ruleParser = ruleParser;
 	}
 
-	public void createHouse(String name, String descr) {
+	public void createHouse(String name, String descr, String type, String user) {
 		assert name != null && name.length() > 0;
 		assert descr != null;
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit house = new HousingUnit(name, descr);
+		HousingUnit house = new HousingUnit(name, descr, type, user);
 		dataFacade.addHousingUnit(house);
 
 		assert house != null;

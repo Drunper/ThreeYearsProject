@@ -110,6 +110,8 @@ public class ControllerStrings {
 	// HOUSE
 	public static final String HOUSE_INPUT_NAME = "Inserisci il nome dell'unità immobiliare";
 	public static final String HOUSE_INPUT_DESCRIPTION = "Inserisci la descrizione dell'unità immobiliare";
+	public static final String HOUSE_INPUT_TYPE = "Inserisci il tipo dell'unità immobiliare";
+	public static final String HOUSE_INPUT_USER = "Inserisci il proprietario dell'unità immobiliare";
 
 	// ROOM
 	public static final String ROOM_INPUT_NAME = "Inserisci il nome della stanza";

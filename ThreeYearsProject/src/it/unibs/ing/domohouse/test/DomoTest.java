@@ -106,7 +106,7 @@ public class DomoTest {
 		RawInputHandler input = new RawInputHandler(rawInput, writer);
 		DataFacade dataFacade = new DataFacade();
 
-		dataFacade.addHousingUnit(new HousingUnit("testHouse", "descrizione"));
+		dataFacade.addHousingUnit(new HousingUnit("testHouse", "descrizione", "residenziale", "signor Rossi"));
 
 		RuleParser ruleParser = new RuleParser(dataFacade);
 		ObjectFabricator objectFabricator = new ObjectFabricator(dataFacade, ruleParser);
@@ -124,7 +124,7 @@ public class DomoTest {
 		RawInputHandler input = new RawInputHandler(rawInput, writer);
 		DataFacade dataFacade = new DataFacade();
 
-		dataFacade.addHousingUnit(new HousingUnit("testHouse", "descrizione"));
+		dataFacade.addHousingUnit(new HousingUnit("testHouse", "descrizione", "residenziale", "signor Rossi"));
 		Map<String, String> propertyMap = new HashMap<>();
 		Room room = new Room("soggiorno", "descrizione", propertyMap);
 		dataFacade.addRoom("testHouse", room);
@@ -146,7 +146,7 @@ public class DomoTest {
 		RawInputHandler input = new RawInputHandler(rawInput, writer);
 		DataFacade dataFacade = new DataFacade();
 
-		dataFacade.addHousingUnit(new HousingUnit("testHouse", "descrizione"));
+		dataFacade.addHousingUnit(new HousingUnit("testHouse", "descrizione", "residenziale", "signor Rossi"));
 
 		RuleParser ruleParser = new RuleParser(dataFacade);
 		ObjectFabricator objectFabricator = new ObjectFabricator(dataFacade, ruleParser);
@@ -164,7 +164,7 @@ public class DomoTest {
 		RawInputHandler input = new RawInputHandler(rawInput, writer);
 		DataFacade dataFacade = new DataFacade();
 
-		dataFacade.addHousingUnit(new HousingUnit("testHouse", "descrizione"));
+		dataFacade.addHousingUnit(new HousingUnit("testHouse", "descrizione", "residenziale", "signor Rossi"));
 
 		RuleParser ruleParser = new RuleParser(dataFacade);
 		ObjectFabricator objectFabricator = new ObjectFabricator(dataFacade, ruleParser);

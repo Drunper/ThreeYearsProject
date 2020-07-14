@@ -1,4 +1,4 @@
-package it.unibs.ing.domohouse.model.util;
+package it.unibs.ing.domohouse.model.file;
 
 import java.io.FileInputStream;
 import java.awt.Desktop;
@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
+import it.unibs.ing.domohouse.model.util.DataFacade;
+import it.unibs.ing.domohouse.model.util.Loader;
 
 public class FileLoader implements Loader {
 
