@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.model.util;
 
 public interface Authenticator {
-	boolean checkPassword(String user, String password);
-	void addEntry(String user, String password);
+	boolean checkMaintainerPassword(String maintainer, String password);
+	void addMaintainer(String maintainer, String password);
+	boolean checkUser(String user);
 }

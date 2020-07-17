@@ -36,27 +36,27 @@ public class ObjectFabricator {
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		HousingUnit house = new HousingUnit(name, descr, type, user);
-		dataFacade.addHousingUnit(house);
+		dataFacade.addHousingUnit(user, house);
 
 		assert house != null;
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void createArtifact(String selectedHouse, String name, String descr, String location) {
+	public void createArtifact(String user, String selectedHouse, String name, String descr, String location, Map<String, String> propertiesMap) {
 		assert selectedHouse != null;
 		assert name != null && name.length() > 0;
 		assert descr != null;
 		assert location != null;
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Artifact art = new Artifact(name, descr);
-		dataFacade.addArtifact(selectedHouse, location, art);
+		Artifact art = new Artifact(name, descr, propertiesMap);
+		dataFacade.addArtifact(user, selectedHouse, location, art);
 
 		assert art != null;
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void createSensor(String selectedHouse, String name, String category, boolean roomOrArtifact,
+	public void createSensor(String user, String selectedHouse, String name, String category, boolean roomOrArtifact,
 			List<String> objectList, String location) {
 		assert selectedHouse != null;
 		assert name != null && name.length() > 0;
@@ -67,20 +67,20 @@ public class ObjectFabricator {
 
 		Sensor sensor = new Sensor(realName, dataFacade.getSensorCategory(category));
 		sensor.setMeasuringRoom(roomOrArtifact);
-		dataFacade.addSensor(selectedHouse, location, sensor);
+		dataFacade.addSensor(user, selectedHouse, location, sensor);
 		for (String object : objectList) {
-			dataFacade.addAssociation(selectedHouse, object, category);
+			dataFacade.addAssociation(user, selectedHouse, object, category);
 			if (roomOrArtifact)
-				sensor.addEntry(dataFacade.getRoom(selectedHouse, object));
+				sensor.addEntry(dataFacade.getRoom(user, selectedHouse, object));
 			else
-				sensor.addEntry(dataFacade.getArtifact(selectedHouse, object));
+				sensor.addEntry(dataFacade.getArtifact(user, selectedHouse, object));
 		}
 
 		assert sensor != null;
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void createActuator(String selectedHouse, String name, String category, boolean roomOrArtifact,
+	public void createActuator(String user, String selectedHouse, String name, String category, boolean roomOrArtifact,
 			List<String> objectList, String location) {
 		assert selectedHouse != null;
 		assert name != null && name.length() > 0;
@@ -90,13 +90,13 @@ public class ObjectFabricator {
 		String realName = name + ModelStrings.UNDERSCORE + category;
 		Actuator actuator = new Actuator(realName, dataFacade.getActuatorCategory(category));
 		actuator.setControllingRoom(roomOrArtifact);
-		dataFacade.addActuator(selectedHouse, location, actuator);
+		dataFacade.addActuator(user, selectedHouse, location, actuator);
 		for (String object : objectList) {
-			dataFacade.addAssociation(selectedHouse, object, category);
+			dataFacade.addAssociation(user, selectedHouse, object, category);
 			if (roomOrArtifact)
-				actuator.addEntry(dataFacade.getRoom(selectedHouse, object));
+				actuator.addEntry(dataFacade.getRoom(user, selectedHouse, object));
 			else {
-				actuator.addEntry(dataFacade.getArtifact(selectedHouse, object));
+				actuator.addEntry(dataFacade.getArtifact(user, selectedHouse, object));
 			}
 		}
 
@@ -104,13 +104,13 @@ public class ObjectFabricator {
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void createRoom(String selectedHouse, String name, String descr, Map<String, String> propertiesMap) {
+	public void createRoom(String user, String selectedHouse, String name, String descr, Map<String, String> propertiesMap) {
 		assert selectedHouse != null;
 		assert name != null && descr != null;
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		Room room = new Room(name, descr, propertiesMap);
-		dataFacade.addRoom(selectedHouse, room);
+		dataFacade.addRoom(user, selectedHouse, room);
 
 		assert room != null;
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -153,20 +153,20 @@ public class ObjectFabricator {
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void createRule(String selectedHouse, String name, String antString, String consString,
+	public void createRule(String user, String selectedHouse, String name, String antString, String consString,
 			List<String> involvedSensors, List<String> involvedActuators) {
 		assert name != null && name.length() > 0;
 		State state = new ActiveState();
 		for (String sensor : involvedSensors)
-			if (!dataFacade.getSensor(selectedHouse, sensor).getState().isActive())
+			if (!dataFacade.getSensor(user, selectedHouse, sensor).getState().isActive())
 				state = new InactiveState();
 		for (String actuator : involvedActuators)
-			if (!dataFacade.getActuator(selectedHouse, actuator).getState().isActive())
+			if (!dataFacade.getActuator(user, selectedHouse, actuator).getState().isActive())
 				state = new InactiveState();
-		createRule(selectedHouse, name, antString, consString, involvedSensors, involvedActuators, state);
+		createRule(user, selectedHouse, name, antString, consString, involvedSensors, involvedActuators, state);
 	}
 
-	public void createRule(String selectedHouse, String name, String antString, String consString,
+	public void createRule(String user, String selectedHouse, String name, String antString, String consString,
 			List<String> involvedSensors, List<String> involvedActuators, State state) {
 		Rule rule = null;
 		try {
@@ -178,7 +178,7 @@ public class ObjectFabricator {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		dataFacade.addRule(selectedHouse, rule);
+		dataFacade.addRule(user, selectedHouse, rule);
 	}
 
 	private boolean objectFabricatorInvariant() {

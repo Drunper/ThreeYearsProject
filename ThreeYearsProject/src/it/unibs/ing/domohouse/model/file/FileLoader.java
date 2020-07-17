@@ -10,7 +10,7 @@ import it.unibs.ing.domohouse.model.ModelStrings;
 import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.Loader;
 
-public class FileLoader implements Loader {
+public class FileLoader {
 
 	public DataFacade loadDataFacade() {
 		return safeReadDataFacade();

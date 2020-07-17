@@ -88,7 +88,7 @@ public class DomoTest {
 	@Test
 	public void shouldCreateDeviceCorrectly() {
 		Scanner input = buildInput("2", "prova", "pippo123456", "5", "igrometri", "igr", "Sensors&Co", "s", "umidità",
-				"0", "100", "%", "n", "s", "2", "casa", "descrizione", "s", "1", "casa", "4", "soggiorno",
+				"0", "100", "%", "n", "s", "2", "casa", "descrizione","residenziale","signor Rossi", "s", "1", "casa", "4", "soggiorno",
 				"descrizione", "20", "20", "20", "20", "n", "s", "3", "soggiorno", "7", "igrometri", "i1", "s",
 				"soggiorno", "n", "s", "2", "i1_igrometri", "0", "0", "0", "0");
 		MasterController controller = new MasterController(input, writer);

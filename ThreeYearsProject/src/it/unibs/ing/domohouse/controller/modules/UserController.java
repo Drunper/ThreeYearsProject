@@ -87,10 +87,12 @@ public class UserController {
 						output.println(ControllerStrings.NO_ACTUATOR_CATEGORY);
 					break;
 				case 4:
+					/*
 					// mostra file di help
 					menuManager.clearOutput();
 					loader.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.USER_HELP_FILE_NAME);
 					break;
+					*/
 				case 5:
 					// aggiorna ora
 					menuManager.clearOutput();

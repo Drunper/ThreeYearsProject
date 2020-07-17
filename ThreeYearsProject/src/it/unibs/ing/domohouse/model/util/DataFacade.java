@@ -10,6 +10,7 @@ import it.unibs.ing.domohouse.model.components.elements.Artifact;
 import it.unibs.ing.domohouse.model.components.elements.HousingUnit;
 import it.unibs.ing.domohouse.model.components.elements.Room;
 import it.unibs.ing.domohouse.model.components.elements.Sensor;
+import it.unibs.ing.domohouse.model.components.elements.User;
 import it.unibs.ing.domohouse.model.components.properties.ActuatorCategory;
 import it.unibs.ing.domohouse.model.components.properties.OperatingModesManager;
 import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
@@ -21,7 +22,7 @@ public class DataFacade implements Serializable {
 	private static final long serialVersionUID = 830399600665259268L;
 	private Manager sensorCategoryManager;
 	private Manager actuatorCategoryManager;
-	private Manager housingUnitManager;
+	private Manager userManager;
 	private boolean firstStart;
 
 	/*
@@ -31,7 +32,7 @@ public class DataFacade implements Serializable {
 	public DataFacade() {
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
-		housingUnitManager = new Manager();
+		userManager = new Manager();
 		this.firstStart = true;
 	}
 
@@ -42,57 +43,62 @@ public class DataFacade implements Serializable {
 	public boolean getFirstStart() {
 		return this.firstStart;
 	}
-
-	public boolean hasHousingUnit(String selectedHouse) {
+	
+	public void addUser(User user) {
+		userManager.addElement(user);
+	}
+	
+	public boolean hasUser(String selectedUser) {
+		return userManager.hasElement(selectedUser);
+	}
+	
+	public User getUser(String selectedUser) {
+		return (User) userManager.getElementByName(selectedUser);
+	}
+	
+	public Set<String> getUserSet() {
+		return userManager.getListOfElements();
+	}
+	
+	public boolean hasHousingUnit(String selectedUser, String selectedHouse) {
 		assert selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		return housingUnitManager.hasElement(selectedHouse);
+		return getUser(selectedUser).hasHousingUnit(selectedHouse);
 	}
 
-	public Set<String> getHousingUnitsList() {
+	public Set<String> getHousingUnitsList(String selectedUser) {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return housingUnitManager.getListOfElements();
+		return getUser(selectedUser).getHousingUnitsList();
 	}
 
-	public boolean doesHousingUnitExist() {
+	public boolean doesHousingUnitExist(String selectedUser) {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return !housingUnitManager.isEmpty();
+		return getUser(selectedUser).doesHousingUnitExist();
 	}
 
-	public HousingUnit getHousingUnit(String selectedHouse) {
+	public HousingUnit getHousingUnit(String selectedUser, String selectedHouse) {
 		assert selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return getUser(selectedUser).getHousingUnit(selectedHouse);
 	}
 
-	public void addHousingUnit(HousingUnit toAdd) {
+	public void addHousingUnit(String selectedUser, HousingUnit toAdd) {
 		assert toAdd != null;
-		housingUnitManager.addElement(toAdd);
+		getUser(selectedUser).addHousingUnit(toAdd);
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public Set<String> getRoomsList(String selectedHouse) {
+	public Set<String> getRoomsList(String selectedUser, String selectedHouse) {
 		assert selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		assert (HousingUnit) housingUnitManager.getElementByName(selectedHouse) != null;
 
-		HousingUnit selected = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-
-		return selected.getRoomList();
+		return getUser(selectedUser).getRoomsList(selectedHouse);
 	}
 
 	public Set<String> getSensorCategoryList() {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 		return sensorCategoryManager.getListOfElements();
-	}
-
-	public String getCategoryOfASensor(String selectedHouse, String selectedSensor) {
-		assert selectedHouse != null && selectedSensor != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-
-		HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return house.getCategoryOfASensor(selectedSensor);
 	}
 
 	public boolean doesSensorCategoryExist() {
@@ -185,249 +191,203 @@ public class DataFacade implements Serializable {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 		return act;
 	}
+	
+	public String getCategoryOfASensor(String selectedUser, String selectedHouse, String selectedSensor) {
+		assert selectedHouse != null && selectedSensor != null;
+		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-	public Sensor getSensor(String selectedHouse, String selectedSensor) {
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return _selectedHouse.getSensor(selectedSensor);
+		return getUser(selectedUser).getCategoryOfASensor(selectedHouse, selectedSensor);
 	}
 
-	public Set<String> getSensorNames(String selectedHouse, String selectedRoom) {
+
+	public Sensor getSensor(String selectedUser, String selectedHouse, String selectedSensor) {
+		return getUser(selectedUser).getSensor(selectedHouse, selectedSensor);
+	}
+
+	public Set<String> getSensorNames(String selectedUser, String selectedHouse, String selectedRoom) {
 		assert selectedRoom != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		Room room = _selectedHouse.getRoom(selectedRoom);
-
-		assert room != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return room.getSensorsNames();
+		return getUser(selectedUser).getSensorNames(selectedHouse, selectedRoom);
 	}
 
-	public boolean doesSensorExist(String selectedHouse, String selectedRoom) {
+	public boolean doesSensorExist(String selectedUser, String selectedHouse, String selectedRoom) {
 		assert selectedRoom != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return house.doesSensorExist(selectedRoom);
+		return getUser(selectedUser).doesSensorExist(selectedHouse, selectedRoom);
 	}
 
-	public Actuator getActuator(String selectedHouse, String selectedActuator) {
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return _selectedHouse.getActuator(selectedActuator);
+	public Actuator getActuator(String selectedUser, String selectedHouse, String selectedActuator) {
+		return getUser(selectedUser).getActuator(selectedHouse, selectedActuator);
 	}
 
-	public Set<String> getActuatorNames(String selectedHouse, String selectedRoom) {
+	public Set<String> getActuatorNames(String selectedUser, String selectedHouse, String selectedRoom) {
 		assert selectedHouse != null;
 		assert selectedRoom != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		Room room = _selectedHouse.getRoom(selectedRoom);
-
-		assert room != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-
-		return room.getActuatorsNames();
+		return getUser(selectedUser).getActuatorNames(selectedHouse, selectedRoom);
 	}
 
-	public boolean doesActuatorExist(String selectedHouse, String selectedRoom) {
+	public boolean doesActuatorExist(String selectedUser, String selectedHouse, String selectedRoom) {
 		assert selectedRoom != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return house.doesActuatorExist(selectedRoom);
+		return getUser(selectedUser).doesActuatorExist(selectedHouse, selectedRoom);
 	}
 	
-	public Set<String> getActuatorOperatingModes(String selectedHouse, String selectedActuator) {
-		return getHousingUnit(selectedHouse).getActuatorOperatingModes(selectedActuator);
+	public Set<String> getActuatorOperatingModes(String selectedUser, String selectedHouse, String selectedActuator) {
+		return getUser(selectedUser).getActuatorOperatingModes(selectedHouse, selectedActuator);
 	}
 
-	public boolean doesArtifactExist(String selectedHouse, String selectedRoom) {
+	public boolean doesArtifactExist(String selectedUser, String selectedHouse, String selectedRoom) {
 		assert selectedRoom != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return house.doesArtifactExist(selectedRoom);
+		return getUser(selectedUser).doesArtifactExist(selectedHouse, selectedRoom);
 	}
 
-	public Set<String> getArtifactNames(String selectedHouse, String selectedRoom) {
+	public Set<String> getArtifactNames(String selectedUser, String selectedHouse, String selectedRoom) {
 		assert selectedRoom != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		Room room = _selectedHouse.getRoom(selectedRoom);
-
-		assert room != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return room.getArtifactsNames();
+		return getUser(selectedUser).getArtifactNames(selectedHouse, selectedRoom);
 	}
 
-	public void changeHouseDescription(String selectedHouse, String descr) {
+	public void changeHouseDescription(String selectedUser, String selectedHouse, String descr) {
 		assert descr != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		_selectedHouse.setDescr(descr);
+		getUser(selectedUser).changeHouseDescription(selectedHouse, descr);
 
-		assert _selectedHouse.getDescr() != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public boolean hasRoom(String selectedHouse, String name) {
-		assert name != null && selectedHouse != null;
+	public boolean hasRoom(String selectedUser, String selectedHouse, String selectedRoom) {
+		assert selectedRoom != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return _selectedHouse.hasRoom(name);
+		return getUser(selectedUser).hasRoom(selectedHouse, selectedRoom);
 	}
 
-	public void addRoom(String selectedHouse, Room toAdd) {
+	public void addRoom(String selectedUser, String selectedHouse, Room toAdd) {
 		assert toAdd != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		_selectedHouse.addRoom(toAdd);
+		getUser(selectedUser).addRoom(selectedHouse, toAdd);
 
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void changeRoomDescription(String selectedHouse, String selectedRoom, String descr) {
+	public void changeRoomDescription(String selectedUser, String selectedHouse, String selectedRoom, String descr) {
 		assert selectedHouse != null;
 		assert selectedRoom != null && descr != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		_selectedHouse.setRoomDescription(selectedRoom, descr);
+		
+		getUser(selectedUser).changeRoomDescription(selectedHouse, selectedRoom, descr);
 
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void addSensor(String selectedHouse, String location, Sensor sensor) {
+	public void addSensor(String selectedUser, String selectedHouse, String location, Sensor sensor) {
 		assert selectedHouse != null;
 		assert location != null && sensor != null && sensor.getName() != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		_selectedHouse.addSensor(location, sensor);
+		getUser(selectedUser).addSensor(selectedHouse, location, sensor);
 
-		assert _selectedHouse.getRoom(location).getSensorByName(sensor.getName()) != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public boolean hasRoomOrArtifact(String selectedHouse, String name) {
+	public boolean hasRoomOrArtifact(String selectedUser, String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return _selectedHouse.hasRoomOrArtifact(name);
+		return getUser(selectedUser).hasRoomOrArtifact(selectedHouse, name);
 	}
 
-	public boolean hasSensor(String selectedHouse, String name) {
+	public boolean hasSensor(String selectedUser, String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return _selectedHouse.hasSensor(name);
+		return getUser(selectedUser).hasSensor(selectedHouse, name);
 	}
 
-	public boolean hasActuator(String selectedHouse, String name) {
+	public boolean hasActuator(String selectedUser, String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return _selectedHouse.hasActuator(name);
+		return getUser(selectedUser).hasActuator(selectedHouse, name);
 	}
 
-	public boolean hasArtifact(String selectedHouse, String name) {
+	public boolean hasArtifact(String selectedUser, String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return _selectedHouse.hasArtifact(name);
+		return getUser(selectedUser).hasArtifact(selectedHouse, name);
 	}
 
-	public boolean hasRule(String selectedHouse, String rule) {
+	public boolean hasRule(String selectedUser, String selectedHouse, String rule) {
 		assert selectedHouse != null && rule != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-
-		assert _selectedHouse != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return _selectedHouse.hasRule(rule);
+		return getUser(selectedUser).hasRule(selectedHouse, rule);
 	}
 
-	public boolean isElementARoom(String selectedHouse, String toAssoc) {
+	public boolean isElementARoom(String selectedUser, String selectedHouse, String toAssoc) {
 		assert toAssoc != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return _selectedHouse.isElementARoom(toAssoc);
+		return getUser(selectedUser).isElementARoom(selectedHouse, toAssoc);
 	}
 
-	public boolean isAssociated(String selectedHouse, String toAssoc, String category) {
+	public boolean isAssociated(String selectedUser, String selectedHouse, String toAssoc, String category) {
 		assert toAssoc != null && category != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		return _selectedHouse.isAssociatedWith(toAssoc, category);
+		return getUser(selectedUser).isAssociated(selectedHouse, toAssoc, category);
 	}
 
-	public void addAssociation(String selectedHouse, String object, String category) {
+	public void addAssociation(String selectedUser, String selectedHouse, String object, String category) {
 		assert object != null && category != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		assert housingUnitManager.getElementByName(selectedHouse) != null;
+		
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		_selectedHouse.addAssociationWith(object, category);
+		getUser(selectedUser).addAssociation(selectedHouse, object, category);
 
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public Room getRoom(String selectedHouse, String name) {
-		assert name != null && selectedHouse != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		assert housingUnitManager.getElementByName(selectedHouse) != null;
-
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		Room room = _selectedHouse.getRoom(name);
-
-		assert room != null;
+	public Room getRoom(String selectedUser, String selectedHouse, String selectedRoom) {
+		assert selectedRoom != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		return room;
+		return getUser(selectedUser).getRoom(selectedHouse, selectedRoom);
 	}
 
-	public Artifact getArtifact(String selectedHouse, String name) {
-		assert name != null && selectedHouse != null;
+	public Artifact getArtifact(String selectedUser, String selectedHouse, String selectedArtifact) {
+		assert selectedArtifact != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		Artifact art = _selectedHouse.getArtifact(name);
-
-		assert art != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return art;
+		return getUser(selectedUser).getArtifact(selectedHouse, selectedArtifact);
 	}
 
-	public void addArtifact(String selectedHouse, String location, Artifact toAdd) {
+	public void addArtifact(String selectedUser, String selectedHouse, String location, Artifact toAdd) {
 		assert location != null && toAdd != null && toAdd.getName() != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		_selectedHouse.addArtifact(toAdd, location);
+		getUser(selectedUser).addArtifact(selectedHouse, location, toAdd);
 
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void addActuator(String selectedHouse, String location, Actuator toAdd) {
+	public void addActuator(String selectedUser, String selectedHouse, String location, Actuator toAdd) {
 		assert location != null && toAdd != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
+		
+		getUser(selectedUser).addActuator(selectedHouse, location, toAdd);
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		_selectedHouse.addActuator(toAdd, location);
-
-		assert _selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
@@ -437,79 +397,65 @@ public class DataFacade implements Serializable {
 		return OperatingModesManager.hasOperatingMode(name);
 	}
 
-	public boolean doesRoomOrArtifactExist(String selectedHouse) {
+	public boolean doesRoomOrArtifactExist(String selectedUser, String selectedHouse) {
 		assert selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-
-		assert _selectedHouse != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return _selectedHouse.doesRoomOrArtifactExist();
+		return getUser(selectedUser).doesRoomOrArtifactExist(selectedHouse);
 	}
 
-	public boolean doesRoomExist(String selectedHouse) {
+	public boolean doesRoomExist(String selectedUser, String selectedHouse) {
 		assert selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-
-		assert _selectedHouse != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return _selectedHouse.doesRoomExist();
+		return getUser(selectedUser).doesRoomExist(selectedHouse);
 	}
 
-	public boolean doesArtifactExist(String selectedHouse) {
+	public boolean doesArtifactExist(String selectedUser, String selectedHouse) {
 		assert selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-
-		assert _selectedHouse != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return _selectedHouse.doesArtifactExist();
+		return getUser(selectedUser).doesArtifactExist(selectedHouse);
 	}
 
-	public void updateRulesState(String selectedHouse) {
+	public void updateRulesState(String selectedUser, String selectedHouse) {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
-		house.updateRulesState();
+		getUser(selectedUser).updateRulesState(selectedHouse);
 	}
 
 	public List<Rule> getEnabledRulesList() {
 		List<Rule> rules = new ArrayList<>();
-		for (String house : getHousingUnitsList())
-			rules.addAll(getHousingUnit(house).getEnabledRulesList());
+		for (String user : getUserSet())
+			rules.addAll(getUser(user).getEnabledRulesList());
 		return rules;
 	}
 
-	public List<String> getEnabledRulesStrings(String selectedHouse) {
-		return getHousingUnit(selectedHouse).getEnabledRulesStrings();
+	public List<String> getEnabledRulesStrings(String selectedUser, String selectedHouse) {
+		return getUser(selectedUser).getEnabledRulesStrings(selectedHouse);
 	}
 
-	public List<String> getRulesStrings(String selectedHouse) {
-		return getHousingUnit(selectedHouse).getRulesStrings();
+	public List<String> getRulesStrings(String selectedUser, String selectedHouse) {
+		return getUser(selectedUser).getRulesStrings(selectedHouse);
 	}
 
-	public void addRule(String selectedHouse, Rule toAdd) {
-		HousingUnit house = getHousingUnit(selectedHouse);
-		house.addRule(toAdd);
+	public void addRule(String selectedUser, String selectedHouse, Rule toAdd) {
+		getUser(selectedUser).addRule(selectedHouse, toAdd);
 	}
 
-	public Set<String> getRulesNames(String selectedHouse) {
-		return getHousingUnit(selectedHouse).getRulesNames();
+	public Set<String> getRulesNames(String selectedUser, String selectedHouse) {
+		return getUser(selectedUser).getRulesNames(selectedHouse);
 	}
 
-	public void changeRuleState(String selectedHouse, String rule) {
-		getHousingUnit(selectedHouse).changeRuleState(rule);
+	public void changeRuleState(String selectedUser, String selectedHouse, String rule) {
+		getUser(selectedUser).changeRuleState(selectedHouse, rule);
 	}
 
-	public boolean doesRuleExist(String selectedHouse) {
-		return getHousingUnit(selectedHouse).doesRuleExist();
+	public boolean doesRuleExist(String selectedUser, String selectedHouse) {
+		return getUser(selectedUser).doesRuleExist(selectedHouse);
 	}
 
 	private boolean dataFacadeInvariant() {
-		return sensorCategoryManager != null && actuatorCategoryManager != null && housingUnitManager != null;
+		return sensorCategoryManager != null && actuatorCategoryManager != null && userManager != null;
 	}
 }

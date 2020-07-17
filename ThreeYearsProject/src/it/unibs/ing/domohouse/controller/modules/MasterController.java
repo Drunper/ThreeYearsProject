@@ -10,6 +10,7 @@ import it.unibs.ing.domohouse.model.components.clock.ClockStrategy;
 import it.unibs.ing.domohouse.model.components.properties.OperatingModesManager;
 import it.unibs.ing.domohouse.model.components.rule.RuleParser;
 import it.unibs.ing.domohouse.model.components.rule.RulesWorker;
+import it.unibs.ing.domohouse.model.db.Connector;
 import it.unibs.ing.domohouse.model.file.FileLoader;
 import it.unibs.ing.domohouse.model.file.FileSaver;
 import it.unibs.ing.domohouse.model.util.Authenticator;
@@ -17,7 +18,8 @@ import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.LibImporter;
 import it.unibs.ing.domohouse.model.util.Loader;
 import it.unibs.ing.domohouse.model.util.LogWriter;
-import it.unibs.ing.domohouse.model.util.SimpleAuthenticator;
+import it.unibs.ing.domohouse.model.db.DatabaseAuthenticator;
+import it.unibs.ing.domohouse.model.util.HashCalculator;
 import it.unibs.ing.domohouse.model.util.ObjectFabricator;
 import it.unibs.ing.domohouse.model.util.Saver;
 import it.unibs.ing.domohouse.view.ActuatorCategoryRenderer;
@@ -46,9 +48,9 @@ public class MasterController {
 	private Loader loader;
 	private Saver saver;
 	private LogWriter log;
-
 	private RuleParser ruleParser;
 	private RulesWorker rulesWorker;
+	private Connector connector;
 
 	// Controllers
 	private LoginController loginController;
@@ -71,8 +73,8 @@ public class MasterController {
 	private ManageableRenderer renderer;
 
 	public MasterController(Scanner in, PrintWriter output) {
-		authenticator = new SimpleAuthenticator();
-		authenticator.addEntry(ControllerStrings.MAINTAINER_USER, ControllerStrings.PASSWORD);
+		connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
+		authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
 		loader = new FileLoader();
 		saver = new FileSaver();
 		log = new LogWriter();

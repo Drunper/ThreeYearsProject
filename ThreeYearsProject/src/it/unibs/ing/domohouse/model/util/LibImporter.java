@@ -239,16 +239,12 @@ public class LibImporter {
 		String parameters = importedText.split(ModelStrings.SEPARATOR)[1]; // parameters = name,descr
 		String name;
 		String descr;
-		String type;
-		String user;
-		if (checkTokens(4, parameters)) {
+		if (checkTokens(2, parameters)) {
 			String[] tokens = tokenTrimmer(parameters.split(","));
 			name = tokens[0];
 			descr = tokens[1];
-			type = tokens[2];
-			user = tokens[4];
 			if (!dataFacade.hasHousingUnit(name)) {
-				objectFabricator.createHouse(name, descr, type, user);
+				objectFabricator.createHouse(name, descr, "sono un placeholder", "sono un placeholder");
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
 			}

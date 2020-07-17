@@ -84,8 +84,7 @@ public class MaintainerController {
 						output.println();
 						output.println();
 
-						String selectedSensCategory = maintainerInputHandler.safeInsertSensorCategory(); // bisogna
-																											// rifarlo
+						String selectedSensCategory = maintainerInputHandler.safeInsertSensorCategory(); 
 						log.write(ControllerStrings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
 						output.println(renderer.render(dataFacade.getSensorCategory(selectedSensCategory)));
 					}
@@ -97,11 +96,10 @@ public class MaintainerController {
 					menuManager.clearOutput();
 					if (!dataFacade.doesActuatorCategoryExist()) {
 						menuManager.printListOfString(dataFacade.getActuatorCategoryList());
-						output.println(); // deve essere in outputhandler
+						output.println(); 
 						output.println();
 
-						String selectedActuCategory = maintainerInputHandler.safeInsertActuatorCategory(); // bisogna
-																											// rifarlo
+						String selectedActuCategory = maintainerInputHandler.safeInsertActuatorCategory(); 
 						log.write(ControllerStrings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
 						output.println(renderer.render(dataFacade.getActuatorCategory(selectedActuCategory)));
 					}
@@ -143,13 +141,17 @@ public class MaintainerController {
 					}
 					break;
 				case 9:
+					/*
 					// mostra file di help
 					loader.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.MAINTAINER_HELP_FILE_NAME);
 					break;
+					*/
 				case 10:
+					/*
 					// visualizza log
 					loader.runFileFromSource(ControllerStrings.LOG_PATH + ControllerStrings.LOG_NAME_FILE);
 					break;
+					*/
 				case 11:
 					// aggiorna ora
 					log.write(ControllerStrings.LOG_REFRESH_HOUR);

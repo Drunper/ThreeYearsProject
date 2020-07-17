@@ -72,7 +72,7 @@ public class LoginController {
 						user = input.readNotVoidString(ControllerStrings.INSERT_USER);
 						if (!user.equalsIgnoreCase(ControllerStrings.BACK_CHARACTER)) {
 							password = input.readNotVoidString(ControllerStrings.INSERT_PASSWORD);
-							ok = authenticator.checkPassword(user, password);
+							ok = authenticator.checkMaintainerPassword(user, password);
 							if (!ok)
 								output.println(ControllerStrings.USER_OR_PASSWORD_ERROR);
 						}
