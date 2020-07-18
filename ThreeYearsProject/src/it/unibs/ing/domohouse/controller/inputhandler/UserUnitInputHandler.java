@@ -28,26 +28,26 @@ public class UserUnitInputHandler {
 		this.objectFabricator = objectFabricator;
 	}
 
-	public String safeInsertRoom(String selectedHouse) {
+	public String safeInsertRoom(String user, String selectedHouse) {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String selectedRoom = input.readNotVoidString(ControllerStrings.INSERT_ROOM);
-		if (dataFacade.hasRoom(selectedHouse, selectedRoom))
+		if (dataFacade.hasRoom(user, selectedHouse, selectedRoom))
 			return selectedRoom;
 		else
 			do {
 				selectedRoom = input.readNotVoidString(ControllerStrings.ERROR_NON_EXISTENT_ROOM
 						+ ControllerStrings.SPACE + ControllerStrings.INSERT_ROOM);
 			}
-			while (!dataFacade.hasRoom(selectedHouse, selectedRoom));
+			while (!dataFacade.hasRoom(user, selectedHouse, selectedRoom));
 
 		assert selectedRoom != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 		return selectedRoom;
 	}
 
-	public void readRuleFromUser(String selectedHouse, MenuManager view) {
+	public void readRuleFromUser(String user, String selectedHouse, MenuManager view) {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
@@ -55,7 +55,7 @@ public class UserUnitInputHandler {
 		do {
 			name = input.readNotVoidString(ControllerStrings.INPUT_RULE_NAME);
 		}
-		while (dataFacade.hasRule(selectedHouse, name));
+		while (dataFacade.hasRule(user, selectedHouse, name));
 
 		String antString = ControllerStrings.NULL_CHARACTER;
 		String consString = ControllerStrings.NULL_CHARACTER;
@@ -71,12 +71,12 @@ public class UserUnitInputHandler {
 				String sensor;
 				String info;
 
-				view.printListOfString(dataFacade.getHousingUnit(selectedHouse).getSensorNames());
-				sensor = safeInsertSensor(selectedHouse);
+				view.printListOfString(dataFacade.getHousingUnit(user, selectedHouse).getSensorNames());
+				sensor = safeInsertSensor(user, selectedHouse);
 				sensors.add(sensor);
 
 				SensorCategory category = dataFacade
-						.getSensorCategory(dataFacade.getCategoryOfASensor(selectedHouse, sensor));
+						.getSensorCategory(dataFacade.getCategoryOfASensor(user, selectedHouse, sensor));
 				Set<String> infos = category.getDetectableInfoList();
 
 				view.printListOfString(infos);
@@ -138,12 +138,12 @@ public class UserUnitInputHandler {
 		cont = false;
 
 		do {
-			view.printListOfString(dataFacade.getHousingUnit(selectedHouse).getActuatorNames());
-			String actuator = safeInsertActuator(selectedHouse);
+			view.printListOfString(dataFacade.getHousingUnit(user, selectedHouse).getActuatorNames());
+			String actuator = safeInsertActuator(user, selectedHouse);
 
-			view.printListOfString(dataFacade.getActuatorOperatingModes(selectedHouse, actuator));
+			view.printListOfString(dataFacade.getActuatorOperatingModes(user, selectedHouse, actuator));
 
-			Set<String> modOp = dataFacade.getActuatorOperatingModes(selectedHouse, actuator);
+			Set<String> modOp = dataFacade.getActuatorOperatingModes(user, selectedHouse, actuator);
 
 			String operatingMode;
 			do {
@@ -175,19 +175,19 @@ public class UserUnitInputHandler {
 			consString = "start :=" + time + "," + consString;
 		}
 
-		objectFabricator.createRule(selectedHouse, name, antString, consString, sensors, actuators);
+		objectFabricator.createRule(user, selectedHouse, name, antString, consString, sensors, actuators);
 
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readRuleStateFromUser(String selectedHouse, MenuManager view) {
+	public void readRuleStateFromUser(String user, String selectedHouse, MenuManager view) {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
-		if (!dataFacade.doesRuleExist(selectedHouse))
+		if (!dataFacade.doesRuleExist(user, selectedHouse))
 			output.println(ControllerStrings.NO_SUCH_RULES_IN_HOUSE);
 		else {
-			Set<String> rules = dataFacade.getRulesNames(selectedHouse);
+			Set<String> rules = dataFacade.getRulesNames(user, selectedHouse);
 			view.printListOfString(rules);
 			String rule;
 
@@ -202,43 +202,43 @@ public class UserUnitInputHandler {
 			}
 			while (!rules.contains(rule));
 
-			dataFacade.changeRuleState(selectedHouse, rule);
+			dataFacade.changeRuleState(user, selectedHouse, rule);
 		}
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public String safeInsertSensor(String selectedHouse) {
+	public String safeInsertSensor(String user, String selectedHouse) {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String selectedSensor = input.readNotVoidString(ControllerStrings.INSERT_SENSOR);
-		if (dataFacade.hasSensor(selectedHouse, selectedSensor))
+		if (dataFacade.hasSensor(user, selectedHouse, selectedSensor))
 			return selectedSensor;
 		else
 			do {
 				selectedSensor = input.readNotVoidString(ControllerStrings.ERROR_NON_EXISTENT_SENSOR
 						+ ControllerStrings.SPACE + ControllerStrings.INSERT_SENSOR);
 			}
-			while (!dataFacade.hasSensor(selectedHouse, selectedSensor));
+			while (!dataFacade.hasSensor(user, selectedHouse, selectedSensor));
 
 		assert selectedSensor != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 		return selectedSensor;
 	}
 
-	public String safeInsertActuator(String selectedHouse) {
+	public String safeInsertActuator(String user, String selectedHouse) {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String selectedActuator = input.readNotVoidString(ControllerStrings.INSERT_ACTUATOR);
-		if (dataFacade.hasActuator(selectedHouse, selectedActuator))
+		if (dataFacade.hasActuator(user, selectedHouse, selectedActuator))
 			return selectedActuator;
 		else
 			do {
 				selectedActuator = input.readNotVoidString(ControllerStrings.ERROR_NON_EXISTENT_ACTUATOR
 						+ ControllerStrings.SPACE + ControllerStrings.INSERT_ACTUATOR);
 			}
-			while (!dataFacade.hasActuator(selectedHouse, selectedActuator));
+			while (!dataFacade.hasActuator(user, selectedHouse, selectedActuator));
 
 		assert selectedActuator != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;

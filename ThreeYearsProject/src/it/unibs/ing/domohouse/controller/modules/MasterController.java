@@ -19,6 +19,7 @@ import it.unibs.ing.domohouse.model.util.LibImporter;
 import it.unibs.ing.domohouse.model.util.Loader;
 import it.unibs.ing.domohouse.model.util.LogWriter;
 import it.unibs.ing.domohouse.model.db.DatabaseAuthenticator;
+import it.unibs.ing.domohouse.model.db.DatabaseLoader;
 import it.unibs.ing.domohouse.model.util.HashCalculator;
 import it.unibs.ing.domohouse.model.util.ObjectFabricator;
 import it.unibs.ing.domohouse.model.util.Saver;
@@ -73,18 +74,23 @@ public class MasterController {
 	private ManageableRenderer renderer;
 
 	public MasterController(Scanner in, PrintWriter output) {
+		OperatingModesManager.fillOperatingModes();
+		dataFacade = new DataFacade();
+		ruleParser = new RuleParser(dataFacade);
+		checkConfigFileExistence(output);
+		rulesWorker = new RulesWorker(dataFacade, clock);
+		objectFabricator = new ObjectFabricator(dataFacade, ruleParser);
+		libImporter = new LibImporter(dataFacade, objectFabricator);
+		log = new LogWriter();
+		renderer = buildChain();
+
 		connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
 		authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
-		loader = new FileLoader();
+		loader = new DatabaseLoader(connector, objectFabricator);
 		saver = new FileSaver();
-		log = new LogWriter();
-		OperatingModesManager.fillOperatingModes();//
-		checkFileExistence(output);
-		ruleParser = new RuleParser(dataFacade);
-		rulesWorker = new RulesWorker(dataFacade, clock);
-		objectFabricator = new ObjectFabricator(dataFacade, ruleParser);//
-		libImporter = new LibImporter(dataFacade, objectFabricator);//
-		renderer = buildChain();
+		loadFromDB();
+
+		
 		RawInputHandler input = new RawInputHandler(in, output);
 		buildInputHandlers(output, input);
 		setControllers(output, input);
@@ -115,8 +121,8 @@ public class MasterController {
 				input);
 		userUnitController = new UserUnitController(dataFacade, log, renderer, userUnitInputHandler, clock, output,
 				input);
-		userController = new UserController(dataFacade, log, renderer, loader, userInputHandler, clock, output, input);
-		loginController = new LoginController(dataFacade, log, authenticator, clock, output, input);
+		userController = new UserController(dataFacade, log, renderer, userInputHandler, clock, output, input);
+		loginController = new LoginController(dataFacade, log, authenticator, loader, clock, output, input);
 
 		loginController.setMaintainerController(maintainerController);
 		loginController.setUserController(userController);
@@ -125,38 +131,23 @@ public class MasterController {
 		maintainerController.setMaintainerUnitController(maintainerUnitController);
 		maintainerUnitController.setMaintainerRoomController(maintainerRoomController);
 	}
-
-	private void checkFileExistence(PrintWriter output) {
-		checkConfigFileExistence(output);
-		checkDataFacadeExistence(output);
-	}
 	
-	private void checkDataFacadeExistence(PrintWriter output) {
+	private void loadFromDB() {
 		assert loader != null;
 
-		if (loader.loadDataFacade() != null) { // Se è presente un file dataFacade lo carico
-			output.println(ControllerStrings.LOADING_FILE);
-			dataFacade = loader.loadDataFacade();
-			ruleParser = new RuleParser(dataFacade);
-			objectFabricator = new ObjectFabricator(dataFacade, ruleParser);
-			dataFacade.setFirstStart(false);
-			output.println(ControllerStrings.LOADED);
-		}
-		else { // Se non è presente
-			output.println(ControllerStrings.NO_FILE);
-			dataFacade = new DataFacade();
-			dataFacade.setFirstStart(true);
-		}
+		loader.loadSensorCategories();
+		loader.loadActuatorCategories();
 
 		assert controllerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 	
 	private void checkConfigFileExistence(PrintWriter output) {
-		if (!loader.loadConfigFile()) {
+		FileLoader fileLoader = new FileLoader();
+		if (!fileLoader.loadConfigFile()) {
 			output.println(ControllerStrings.CONFIG_FILE_LOADING_FAILED);
 			saver.createConfigFile();
 			output.println(ControllerStrings.CONFIG_FILE_CREATED);
-			loader.loadConfigFile();
+			fileLoader.loadConfigFile();
 		}
 		loadClockType();
 		output.println(ControllerStrings.LOADED_CLOCK_STRATEGY);

@@ -3,6 +3,7 @@ package it.unibs.ing.domohouse.controller.modules;
 import it.unibs.ing.domohouse.model.components.clock.ClockStrategy;
 import it.unibs.ing.domohouse.model.util.Authenticator;
 import it.unibs.ing.domohouse.model.util.DataFacade;
+import it.unibs.ing.domohouse.model.util.Loader;
 import it.unibs.ing.domohouse.model.util.LogWriter;
 import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
@@ -27,13 +28,15 @@ public class LoginController {
 	private DataFacade dataFacade;
 	private LogWriter log;
 	private Authenticator authenticator;
+	private Loader loader;
 
-	public LoginController(DataFacade dataFacade, LogWriter log, Authenticator authenticator, ClockStrategy clock,
+	public LoginController(DataFacade dataFacade, LogWriter log, Authenticator authenticator, Loader loader, ClockStrategy clock,
 			PrintWriter output, RawInputHandler input) {
 		menu = new MenuManager(ControllerStrings.LOGIN_MENU_TITLE, ControllerStrings.LOGIN_MENU_VOICES, output, input);
 		this.dataFacade = dataFacade;
 		this.log = log;
 		this.authenticator = authenticator;
+		this.loader = loader;
 		this.clock = clock;
 		this.output = output;
 		this.input = input;
@@ -56,11 +59,13 @@ public class LoginController {
 					}
 					else {
 						String user = input.readNotVoidString(ControllerStrings.INSERT_USER);
-						if (!user.equalsIgnoreCase(ControllerStrings.BACK_CHARACTER)) {
-							output.println(ControllerStrings.WELCOME + user);
-							log.write(user + ControllerStrings.LOG_SYSTEM_ACCESS);
-							userController.show();
+						loader.loadUser(user);
+						if(dataFacade.hasUser(user)) {
+							loader.loadHousingUnits(user);
+							userController.show(user);
 						}
+						else
+							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
 					break;
 				case 2: // login manutentore

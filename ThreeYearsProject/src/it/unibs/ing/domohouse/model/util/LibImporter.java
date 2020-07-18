@@ -25,7 +25,7 @@ public class LibImporter {
 		this.objectFabricator = objectFabricator;
 	}
 
-	public boolean importFile() {
+	public boolean importFile(String user) {
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		String filePath = ModelStrings.LIB_PATH + ModelStrings.LIB_NAME;
@@ -41,7 +41,7 @@ public class LibImporter {
 			String line;
 			while ((line = br.readLine()) != null) {
 				numberOfLine++;
-				if (readLineOfFile(line) == false) {
+				if (readLineOfFile(user, line) == false) {
 					flag = false;
 					errorString = errorString + numberOfLine + ",";
 				}
@@ -61,7 +61,7 @@ public class LibImporter {
 		return this.errorString;
 	}
 
-	private boolean readLineOfFile(String line) {
+	private boolean readLineOfFile(String user, String line) {
 		assert line != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -74,21 +74,21 @@ public class LibImporter {
 
 		switch (keyword) {
 			case "actuator":
-				return importActuator(line);
+				return importActuator(user, line);
 			case "actuator_category":
-				return importActuatorCategory(line);
+				return importActuatorCategory(user, line);
 			case "artifact":
-				return importArtifact(line);
+				return importArtifact(user, line);
 			case "housing_unit":
-				return importHousingUnit(line);
+				return importHousingUnit(user, line);
 			case "sensor":
-				return importSensor(line);
+				return importSensor(user, line);
 			case "sensor_category":
-				return importSensorCategory(line);
+				return importSensorCategory(user, line);
 			case "room":
-				return importRoom(line);
+				return importRoom(user, line);
 			case "rule":
-				return importRule(line);
+				return importRule(user, line);
 			default:
 				return false;
 		}
@@ -97,7 +97,7 @@ public class LibImporter {
 
 	// actuator:selectedHouse, name, category, true/false, element1;element2, room
 	// return true se ha importato correttamente l'actuator, return false altrimenti
-	private boolean importActuator(String importedText) {
+	private boolean importActuator(String user, String importedText) {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -121,37 +121,37 @@ public class LibImporter {
 			bool = tokens[3];
 			elements = fromStringToList(tokens[4]);
 			location = tokens[5];
-			if (dataFacade.hasHousingUnit(selectedHouse) && dataFacade.hasRoom(selectedHouse, location)
+			if (dataFacade.hasHousingUnit(user, selectedHouse) && dataFacade.hasRoom(user, selectedHouse, location)
 					&& dataFacade.hasActuatorCategory(category)
-					&& !dataFacade.hasActuator(selectedHouse, name + ModelStrings.UNDERSCORE + category)
+					&& !dataFacade.hasActuator(user, selectedHouse, name + ModelStrings.UNDERSCORE + category)
 					&& isBoolean(bool)) {
 				if (bool.equalsIgnoreCase("true")) {
 					// controllare che esistano stanze da associare
 					for (String room : elements) {
-						if (!dataFacade.hasRoom(selectedHouse, room))
+						if (!dataFacade.hasRoom(user, selectedHouse, room))
 							return false;
-						if (dataFacade.isAssociated(selectedHouse, room, category))
+						if (dataFacade.isAssociated(user, selectedHouse, room, category))
 							return false;
 					}
 
-					objectFabricator.createActuator(selectedHouse, name, category, true, elements, location);
+					objectFabricator.createActuator(user, selectedHouse, name, category, true, elements, location);
 					return true;
 
 				}
 				else {
 					// controllare che esistano artefatti da associare
 					for (String art : elements) {
-						if (!dataFacade.hasArtifact(selectedHouse, art))
+						if (!dataFacade.hasArtifact(user, selectedHouse, art))
 							return false;
-						if (dataFacade.isAssociated(selectedHouse, art, category))
+						if (dataFacade.isAssociated(user, selectedHouse, art, category))
 							return false;
 					}
 
 					for (String art : elements) {
-						dataFacade.addAssociation(selectedHouse, art, category);
+						dataFacade.addAssociation(user, selectedHouse, art, category);
 					}
 
-					objectFabricator.createActuator(selectedHouse, name, category, false, elements, location);
+					objectFabricator.createActuator(user, selectedHouse, name, category, false, elements, location);
 
 					assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 					return true;
@@ -163,7 +163,7 @@ public class LibImporter {
 	}
 
 	// actuator_category:name,abbr,constr, mode1;mode2;mode3 ,mode1
-	private boolean importActuatorCategory(String importedText) {
+	private boolean importActuatorCategory(String user, String importedText) {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -205,7 +205,7 @@ public class LibImporter {
 	}
 
 	// artifact:selectedHouse,name,descr,location
-	private boolean importArtifact(String importedText) {
+	private boolean importArtifact(String user, String importedText) {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -221,8 +221,8 @@ public class LibImporter {
 			name = tokens[1];
 			descr = tokens[2];
 			location = tokens[3];
-			if (dataFacade.hasHousingUnit(selectedHouse) && !dataFacade.hasArtifact(selectedHouse, name)) {
-				objectFabricator.createArtifact(selectedHouse, name, descr, location);
+			if (dataFacade.hasHousingUnit(user, selectedHouse) && !dataFacade.hasArtifact(user, selectedHouse, name)) {
+				objectFabricator.createArtifact(user, selectedHouse, name, descr, location, new HashMap<String, String>());
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
 			}
@@ -232,19 +232,19 @@ public class LibImporter {
 	}
 
 	// housing_unit:name,descr
-	private boolean importHousingUnit(String importedText) {
+	private boolean importHousingUnit(String user, String importedText) {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		String parameters = importedText.split(ModelStrings.SEPARATOR)[1]; // parameters = name,descr
-		String name;
+		String selectedHouse;
 		String descr;
 		if (checkTokens(2, parameters)) {
 			String[] tokens = tokenTrimmer(parameters.split(","));
-			name = tokens[0];
+			selectedHouse = tokens[0];
 			descr = tokens[1];
-			if (!dataFacade.hasHousingUnit(name)) {
-				objectFabricator.createHouse(name, descr, "sono un placeholder", "sono un placeholder");
+			if (!dataFacade.hasHousingUnit(user, selectedHouse)) {
+				objectFabricator.createHouse(selectedHouse, descr, "sono un placeholder", "sono un placeholder");
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
 			}
@@ -259,7 +259,7 @@ public class LibImporter {
 	 * ] sensor_category:name,abbreviation,manufacturer,detectableInfo;type;domain1;
 	 * domain2;domain3...
 	 */
-	private boolean importSensorCategory(String importedText) {
+	private boolean importSensorCategory(String user, String importedText) {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -338,7 +338,7 @@ public class LibImporter {
 
 	// numeric_sensor:selectedHouse, name, cate1;cate2, true/false,
 	// element1;element2, location)
-	private boolean importSensor(String importedText) {
+	private boolean importSensor(String user, String importedText) {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -363,28 +363,28 @@ public class LibImporter {
 			if (!dataFacade.hasSensorCategory(category))
 				return false;
 
-			if (dataFacade.hasHousingUnit(selectedHouse) && dataFacade.hasRoom(selectedHouse, location)
-					&& !dataFacade.hasSensor(selectedHouse, name + ModelStrings.UNDERSCORE + category)
+			if (dataFacade.hasHousingUnit(user, selectedHouse) && dataFacade.hasRoom(user, selectedHouse, location)
+					&& !dataFacade.hasSensor(user, selectedHouse, name + ModelStrings.UNDERSCORE + category)
 					&& isBoolean(bool)) {
 				if (bool.equalsIgnoreCase("true")) {
 					for (String room : elements) {
-						if (!dataFacade.hasRoom(selectedHouse, room))
+						if (!dataFacade.hasRoom(user, selectedHouse, room))
 							return false;
-						if (dataFacade.isAssociated(selectedHouse, room, category))
+						if (dataFacade.isAssociated(user, selectedHouse, room, category))
 							return false;
 					}
-					objectFabricator.createSensor(selectedHouse, name, category, true, elements, location);
+					objectFabricator.createSensor(user, selectedHouse, name, category, true, elements, location);
 					return true;
 
 				}
 				else {
 					for (String artifact : elements) {
-						if (!dataFacade.hasArtifact(selectedHouse, artifact))
+						if (!dataFacade.hasArtifact(user, selectedHouse, artifact))
 							return false;
-						if (dataFacade.isAssociated(selectedHouse, artifact, category))
+						if (dataFacade.isAssociated(user, selectedHouse, artifact, category))
 							return false;
 					}
-					objectFabricator.createSensor(selectedHouse, name, category, false, elements, location);
+					objectFabricator.createSensor(user, selectedHouse, name, category, false, elements, location);
 					assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 					return true;
 				}
@@ -395,7 +395,7 @@ public class LibImporter {
 	}
 
 	// room:selectedHouse,name,descr,temp,umidita,pressione,vento,pres_pers
-	private boolean importRoom(String importedText) {
+	private boolean importRoom(String user, String importedText) {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -420,7 +420,7 @@ public class LibImporter {
 			vento = tokens[6];
 			bool_pres_pers = tokens[7];
 
-			if (dataFacade.hasHousingUnit(selectedHouse) && !dataFacade.hasRoom(selectedHouse, name)
+			if (dataFacade.hasHousingUnit(user, selectedHouse) && !dataFacade.hasRoom(user, selectedHouse, name)
 					&& temp.matches(DOUBLE_REGEX) && umidita.matches(DOUBLE_REGEX) && pressione.matches(DOUBLE_REGEX)
 					&& vento.matches(DOUBLE_REGEX) && isBoolean(bool_pres_pers)) {
 				Map<String, String> propertiesMap = new TreeMap<>();
@@ -442,7 +442,7 @@ public class LibImporter {
 				propertiesMap.put("vento", String.valueOf(d_vento));
 				propertiesMap.put("presenza_persone", presenza_persone);
 
-				objectFabricator.createRoom(selectedHouse, name, descr, propertiesMap);
+				objectFabricator.createRoom(user, selectedHouse, name, descr, propertiesMap);
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
 			}
@@ -454,11 +454,11 @@ public class LibImporter {
 
 	/*
 	 * Controlla nomi Controlla consistenza tra array sensor, attuatore e antString
-	 * consString Rule r = new Rule(dataFacade.getHousingUnit(selectedHouse), name,
+	 * consString Rule r = new Rule(dataFacade.getHousingUnit(user, selectedHouse), name,
 	 * antString, consString, sensors, act, state); Chiamare metodo
-	 * dataFacade.getHousingUnit(selectedHouse).addRule(r)
+	 * dataFacade.getHousingUnit(user, selectedHouse).addRule(r)
 	 */
-	private boolean importRule(String importedText) {
+	private boolean importRule(String user, String importedText) {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -488,7 +488,7 @@ public class LibImporter {
 			List<String> sensors = new ArrayList<>();
 			List<String> actuators = new ArrayList<>();
 
-			if (dataFacade.hasHousingUnit(selectedHouse) && !dataFacade.hasRule(selectedHouse, rule_name)) {
+			if (dataFacade.hasHousingUnit(user, selectedHouse) && !dataFacade.hasRule(user, selectedHouse, rule_name)) {
 				// procedo a controllare antString, consString e costruire ArrayList<String>
 				// sensors, e String actuator
 				String toElaborate = antString;
@@ -499,14 +499,14 @@ public class LibImporter {
 				String[] ruleConditions = tokenTrimmer(toElaborate.split("\\&\\&|\\|\\|"));
 
 				for (String condition : ruleConditions) {
-					if (!verifySyntaxRuleCondition(selectedHouse, condition))
+					if (!verifySyntaxRuleCondition(user, selectedHouse, condition))
 						return false;
 				}
 
 				toElaborate = antString;
 				sensors = getSensorFromAntString(toElaborate);
 
-				if (!verifyConsSyntax(selectedHouse, consString))
+				if (!verifyConsSyntax(user, selectedHouse, consString))
 					return false;
 
 				actuators = getActuatorsFromConsString(consString);
@@ -516,7 +516,7 @@ public class LibImporter {
 				else
 					return false;
 				consString = consString.replace("; ", ", ");
-				objectFabricator.createRule(selectedHouse, rule_name, antString, consString, sensors, actuators,
+				objectFabricator.createRule(user, selectedHouse, rule_name, antString, consString, sensors, actuators,
 						rule_state);
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
@@ -585,7 +585,7 @@ public class LibImporter {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean verifySyntaxRuleCondition(String selectedHouse, String condition) {
+	private boolean verifySyntaxRuleCondition(String user, String selectedHouse, String condition) {
 		assert selectedHouse != null && condition != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 		// controlli preliminari (contiene operatore, valore, time, punto...)
@@ -614,12 +614,12 @@ public class LibImporter {
 			if (!value.matches("^[-+]?\\d+(\\.{0,1}(\\d+?))?$") && !value.matches("^[a-zA-Z]+$"))
 				return false;
 
-			if (dataFacade.hasSensor(selectedHouse, sensor)) {
+			if (dataFacade.hasSensor(user, selectedHouse, sensor)) {
 
 				SensorCategory cat = dataFacade.getSensorCategoryByInfo(info);
 
 				boolean sensorCategoryHasInfo = false;
-				String category = dataFacade.getCategoryOfASensor(selectedHouse, sensor);
+				String category = dataFacade.getCategoryOfASensor(user, selectedHouse, sensor);
 				if (category.equalsIgnoreCase(cat.getName()))
 					sensorCategoryHasInfo = true;
 				if (!sensorCategoryHasInfo)
@@ -653,7 +653,7 @@ public class LibImporter {
 
 	// start := 4.00;trm1_termoregolatore := mantenimentoTemperatura(20);l1_luciRGB
 	// := cambiaColore(verde)
-	private boolean verifyConsSyntax(String selectedHouse, String consString) {
+	private boolean verifyConsSyntax(String user, String selectedHouse, String consString) {
 		boolean hasStart = false;
 		for (String action : consString.split(";")) {
 			if (action.contains("start")) {
@@ -662,7 +662,7 @@ public class LibImporter {
 				if (verifyStartSyntax(action))
 					hasStart = true;
 			}
-			else if (!verifyActionSyntax(selectedHouse, action))
+			else if (!verifyActionSyntax(user, selectedHouse, action))
 				return false;
 		}
 		return true;
@@ -690,9 +690,9 @@ public class LibImporter {
 			return false;
 	}
 
-	private boolean verifyActionSyntax(String selectedHouse, String action) {
+	private boolean verifyActionSyntax(String user, String selectedHouse, String action) {
 		String actuator = action.split(":=")[0].trim();
-		if (!dataFacade.hasActuator(selectedHouse, actuator))
+		if (!dataFacade.hasActuator(user, selectedHouse, actuator))
 			return false;
 		String opMode = action.split(":=")[1].trim();
 		if (opMode.contains("(")) {

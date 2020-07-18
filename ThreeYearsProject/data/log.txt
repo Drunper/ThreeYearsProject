@@ -7440,3 +7440,250 @@
 [03/07/2020 10:30:39] Uscita dal menù corrente
 [03/07/2020 10:30:39] pluto ha effettuato l'accesso al sistema
 [03/07/2020 10:30:39] Uscita dal menù corrente
+[17/07/2020 15:20:57] Primo accesso al programma
+[17/07/2020 15:22:59] Primo accesso al programma
+[17/07/2020 15:23:36] Primo accesso al programma
+[17/07/2020 15:24:06] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:24:06] Creazione dei file di base
+[17/07/2020 15:24:06] Importazione file...
+[17/07/2020 15:24:06] File di libreria importato correttamente!
+[17/07/2020 15:24:06] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:24:06] Creazione dei file di base
+[17/07/2020 15:24:06] Importazione file...
+[17/07/2020 15:24:06] File di libreria importato correttamente!
+[17/07/2020 15:24:06] Uscita dal menù corrente
+[17/07/2020 15:24:06] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:24:06] Creazione dei file di base
+[17/07/2020 15:24:06] Inserimento di una nuova categoria di sensori...
+[17/07/2020 15:24:06] Inserimento di una nuova categoria di sensori avvenuta correttamente
+[17/07/2020 15:24:06] Inserimento di una nuova unità immobiliare...
+[17/07/2020 15:24:06] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[17/07/2020 15:24:06] Visualizzazione della categoria di sensore igrometri
+[17/07/2020 15:24:06] Inserimento di una nuova unità immobiliare...
+[17/07/2020 15:24:06] Primo accesso al programma
+[17/07/2020 15:24:06] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:24:06] Creazione dei file di base
+[17/07/2020 15:24:06] Importazione file...
+[17/07/2020 15:24:06] File di libreria importato correttamente!
+[17/07/2020 15:24:06] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:24:06] Creazione dei file di base
+[17/07/2020 15:24:06] Importazione file...
+[17/07/2020 15:24:06] File di libreria importato correttamente!
+[17/07/2020 15:24:06] Salvataggio dei dati ...
+[17/07/2020 15:24:06] Dati salvati correttamente nel sistema!
+[17/07/2020 15:24:06] Uscita dal menù corrente
+[17/07/2020 15:24:06] pluto ha effettuato l'accesso al sistema
+[17/07/2020 15:24:06] Uscita dal menù corrente
+[17/07/2020 15:27:58] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:27:58] Importazione file...
+[17/07/2020 15:27:58] File di libreria importato correttamente!
+[17/07/2020 15:27:58] Azionamento dell'attuatore act1_importedactuator
+[17/07/2020 15:27:58] Visualizzazione del sensore impsens1_importedsensor
+[17/07/2020 15:27:58] Azionamento dell'attuatore act1_importedactuator
+[17/07/2020 15:27:58] Visualizzazione del sensore impsens1_importedsensor
+[17/07/2020 15:27:58] Uscita dal menù corrente
+[17/07/2020 15:27:58] Uscita dal menù corrente
+[17/07/2020 15:27:58] Uscita dal menù corrente
+[17/07/2020 15:27:58] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:27:58] Importazione file...
+[17/07/2020 15:27:58] File di libreria importato correttamente!
+[17/07/2020 15:27:58] Visualizzazione della descrizione dell'unità immobiliare
+[17/07/2020 15:27:58] Uscita dal menù corrente
+[17/07/2020 15:27:58] Uscita dal menù corrente
+[17/07/2020 15:27:58] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:27:58] Inserimento di una nuova categoria di sensori...
+[17/07/2020 15:27:58] Inserimento di una nuova categoria di sensori avvenuta correttamente
+[17/07/2020 15:27:58] Inserimento di una nuova unità immobiliare...
+[17/07/2020 15:27:58] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[17/07/2020 15:27:58] Visualizzazione della categoria di sensore igrometri
+[17/07/2020 15:27:58] Inserimento di una nuova unità immobiliare...
+[17/07/2020 15:27:58] Primo accesso al programma
+[17/07/2020 15:27:58] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:27:58] Creazione dei file di base
+[17/07/2020 15:27:58] Importazione file...
+[17/07/2020 15:27:58] File di libreria importato correttamente!
+[17/07/2020 15:27:58] Azionamento dell'attuatore act1_importedactuator
+[17/07/2020 15:27:58] Visualizzazione del sensore impsens1_importedsensor
+[17/07/2020 15:27:58] Uscita dal menù corrente
+[17/07/2020 15:27:58] Uscita dal menù corrente
+[17/07/2020 15:27:58] Uscita dal menù corrente
+[17/07/2020 15:27:59] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:27:59] Creazione dei file di base
+[17/07/2020 15:27:59] Importazione file...
+[17/07/2020 15:27:59] File di libreria importato correttamente!
+[17/07/2020 15:27:59] Salvataggio dei dati ...
+[17/07/2020 15:27:59] Dati salvati correttamente nel sistema!
+[17/07/2020 15:27:59] Uscita dal menù corrente
+[17/07/2020 15:27:59] pluto ha effettuato l'accesso al sistema
+[17/07/2020 15:27:59] Uscita dal menù corrente
+[17/07/2020 15:28:43] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:29:13] Inserimento di un nuovo sensore...
+[17/07/2020 15:30:16] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:30:16] Creazione dei file di base
+[17/07/2020 15:30:16] Importazione file...
+[17/07/2020 15:30:16] File di libreria importato correttamente!
+[17/07/2020 15:30:16] Azionamento dell'attuatore act1_importedactuator
+[17/07/2020 15:30:16] Visualizzazione del sensore impsens1_importedsensor
+[17/07/2020 15:30:16] Azionamento dell'attuatore act1_importedactuator
+[17/07/2020 15:30:16] Visualizzazione del sensore impsens1_importedsensor
+[17/07/2020 15:30:16] Uscita dal menù corrente
+[17/07/2020 15:30:16] Uscita dal menù corrente
+[17/07/2020 15:30:16] Uscita dal menù corrente
+[17/07/2020 15:30:16] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:30:16] Creazione dei file di base
+[17/07/2020 15:30:16] Importazione file...
+[17/07/2020 15:30:16] File di libreria importato correttamente!
+[17/07/2020 15:30:16] Visualizzazione della descrizione dell'unità immobiliare
+[17/07/2020 15:30:16] Uscita dal menù corrente
+[17/07/2020 15:30:16] Uscita dal menù corrente
+[17/07/2020 15:30:16] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:30:16] Creazione dei file di base
+[17/07/2020 15:30:16] Inserimento di una nuova categoria di sensori...
+[17/07/2020 15:30:16] Inserimento di una nuova categoria di sensori avvenuta correttamente
+[17/07/2020 15:30:16] Inserimento di una nuova unità immobiliare...
+[17/07/2020 15:30:16] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[17/07/2020 15:30:16] Visualizzazione della categoria di sensore igrometri
+[17/07/2020 15:30:16] Inserimento di una nuova unità immobiliare...
+[17/07/2020 15:30:16] Primo accesso al programma
+[17/07/2020 15:30:16] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:30:16] Creazione dei file di base
+[17/07/2020 15:30:16] Importazione file...
+[17/07/2020 15:30:16] File di libreria importato correttamente!
+[17/07/2020 15:30:16] Azionamento dell'attuatore act1_importedactuator
+[17/07/2020 15:30:16] Visualizzazione del sensore impsens1_importedsensor
+[17/07/2020 15:30:16] Uscita dal menù corrente
+[17/07/2020 15:30:16] Uscita dal menù corrente
+[17/07/2020 15:30:16] Uscita dal menù corrente
+[17/07/2020 15:30:16] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:30:16] Creazione dei file di base
+[17/07/2020 15:30:16] Importazione file...
+[17/07/2020 15:30:16] File di libreria importato correttamente!
+[17/07/2020 15:30:16] Salvataggio dei dati ...
+[17/07/2020 15:30:16] Dati salvati correttamente nel sistema!
+[17/07/2020 15:30:16] Uscita dal menù corrente
+[17/07/2020 15:30:16] pluto ha effettuato l'accesso al sistema
+[17/07/2020 15:30:16] Uscita dal menù corrente
+[17/07/2020 15:31:07] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:31:07] Creazione dei file di base
+[17/07/2020 15:31:09] Importazione file...
+[17/07/2020 15:31:09] File di libreria importato correttamente!
+[17/07/2020 15:31:41] Inserimento di un nuovo sensore...
+[17/07/2020 15:32:08] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:32:08] Creazione dei file di base
+[17/07/2020 15:32:10] Inserimento di una nuova categoria di sensori...
+[17/07/2020 15:32:28] Inserimento di una nuova categoria di sensori avvenuta correttamente
+[17/07/2020 15:32:29] Inserimento di una nuova unità immobiliare...
+[17/07/2020 15:33:08] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:33:08] Creazione dei file di base
+[17/07/2020 15:33:08] Importazione file...
+[17/07/2020 15:33:08] File di libreria importato correttamente!
+[17/07/2020 15:33:08] Azionamento dell'attuatore act1_importedactuator
+[17/07/2020 15:33:08] Visualizzazione del sensore impsens1_importedsensor
+[17/07/2020 15:33:08] Azionamento dell'attuatore act1_importedactuator
+[17/07/2020 15:33:08] Visualizzazione del sensore impsens1_importedsensor
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:33:08] Creazione dei file di base
+[17/07/2020 15:33:08] Importazione file...
+[17/07/2020 15:33:08] File di libreria importato correttamente!
+[17/07/2020 15:33:08] Visualizzazione della descrizione dell'unità immobiliare
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:33:08] Creazione dei file di base
+[17/07/2020 15:33:08] Inserimento di una nuova categoria di sensori...
+[17/07/2020 15:33:08] Inserimento di una nuova categoria di sensori avvenuta correttamente
+[17/07/2020 15:33:08] Inserimento di una nuova unità immobiliare...
+[17/07/2020 15:33:08] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[17/07/2020 15:33:08] Inserimento di una nuova stanza...
+[17/07/2020 15:33:08] Inserimento della nuova stanza avvenuto correttamente!
+[17/07/2020 15:33:08] Inserimento di un nuovo sensore...
+[17/07/2020 15:33:08] Inserimento di un nuovo sensore avvenuto correttamente
+[17/07/2020 15:33:08] Visualizzazione del sensore i1_igrometri
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Primo accesso al programma
+[17/07/2020 15:33:08] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:33:08] Creazione dei file di base
+[17/07/2020 15:33:08] Importazione file...
+[17/07/2020 15:33:08] File di libreria importato correttamente!
+[17/07/2020 15:33:08] Azionamento dell'attuatore act1_importedactuator
+[17/07/2020 15:33:08] Visualizzazione del sensore impsens1_importedsensor
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] Il manutentore prova ha effettuato l'accesso al sistema
+[17/07/2020 15:33:08] Creazione dei file di base
+[17/07/2020 15:33:08] Importazione file...
+[17/07/2020 15:33:08] File di libreria importato correttamente!
+[17/07/2020 15:33:08] Salvataggio dei dati ...
+[17/07/2020 15:33:08] Dati salvati correttamente nel sistema!
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[17/07/2020 15:33:08] pluto ha effettuato l'accesso al sistema
+[17/07/2020 15:33:08] Uscita dal menù corrente
+[18/07/2020 11:57:09] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 11:57:09] Creazione dei file di base
+[18/07/2020 11:58:48] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 11:58:48] Creazione dei file di base
+[18/07/2020 11:59:22] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 11:59:22] Creazione dei file di base
+[18/07/2020 11:59:28] Visualizzazione della categoria di sensore termometri
+[18/07/2020 11:59:56] Uscita dal menù corrente
+[18/07/2020 12:04:40] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:04:40] Creazione dei file di base
+[18/07/2020 12:08:24] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:08:24] Creazione dei file di base
+[18/07/2020 12:09:34] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:09:34] Creazione dei file di base
+[18/07/2020 12:10:16] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:10:16] Creazione dei file di base
+[18/07/2020 12:10:25] Visualizzazione della categoria di attuatore termoregolatori
+[18/07/2020 12:12:04] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:12:04] Creazione dei file di base
+[18/07/2020 12:13:03] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:13:03] Creazione dei file di base
+[18/07/2020 12:14:37] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:14:37] Creazione dei file di base
+[18/07/2020 12:19:32] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:19:32] Creazione dei file di base
+[18/07/2020 12:22:08] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:22:08] Creazione dei file di base
+[18/07/2020 12:23:50] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:23:50] Creazione dei file di base
+[18/07/2020 12:24:28] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:24:28] Creazione dei file di base
+[18/07/2020 12:28:02] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 12:28:02] Creazione dei file di base
+[18/07/2020 23:26:07] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 23:26:07] Creazione dei file di base
+[18/07/2020 23:27:18] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 23:27:18] Creazione dei file di base
+[18/07/2020 23:30:36] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 23:30:36] Creazione dei file di base
+[18/07/2020 23:32:38] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 23:32:38] Creazione dei file di base
+[18/07/2020 23:39:54] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 23:39:54] Creazione dei file di base
+[18/07/2020 23:40:07] Visualizzazione della descrizione dell'unità immobiliare
+[18/07/2020 23:40:24] Uscita dal menù corrente
+[18/07/2020 23:40:28] Visualizzazione delle regole attive
+[18/07/2020 23:40:45] Visualizzazione del sensore t1_termometri
+[18/07/2020 23:42:03] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 23:42:03] Creazione dei file di base
+[18/07/2020 23:45:52] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 23:45:52] Creazione dei file di base
+[18/07/2020 23:46:30] Visualizzazione dell'artefatto 
+[18/07/2020 23:46:42] Visualizzazione dell'attuatore trm1_termoregolatori
+[18/07/2020 23:47:54] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 23:47:54] Creazione dei file di base
+[18/07/2020 23:50:35] Il manutentore prova ha effettuato l'accesso al sistema
+[18/07/2020 23:50:35] Creazione dei file di base
+[18/07/2020 23:51:20] Azionamento dell'attuatore trm1_termoregolatori
+[18/07/2020 23:51:26] Visualizzazione del sensore t1_termometri
+[18/07/2020 23:51:49] Azionamento dell'attuatore trm1_termoregolatori
+[18/07/2020 23:51:55] Visualizzazione del sensore t1_termometri
+[18/07/2020 23:52:19] Azionamento dell'attuatore trm1_termoregolatori
+[18/07/2020 23:52:25] Visualizzazione del sensore t1_termometri

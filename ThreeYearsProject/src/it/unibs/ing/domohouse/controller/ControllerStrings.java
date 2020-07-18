@@ -58,6 +58,8 @@ public class ControllerStrings {
 	public static final String INSERT_PASSWORD = "Inserisci la password";
 	public static final String USER_OR_PASSWORD_ERROR = "Nome utente o password errati";
 	public static final String INSERT_USER = "Inserisci il nome utente (^ per tornare indietro)";
+	public static final String INSERT_USER_DB = "Inserisci il nome dell'utente su cui si vuole operare";
+	public static final String ERROR_NON_EXISTENT_USER = "L'utente inserito non esiste";
 	public static final String PASSWORD = "6fcb473c563dc49628a187d2a590ff2c000da215d8cd914f7901df3bc2a2c626"; // pippo123456
 	public static final String MAINTAINER_USER = "prova";
 	public static final String MAINTAINER = "Il manutentore ";

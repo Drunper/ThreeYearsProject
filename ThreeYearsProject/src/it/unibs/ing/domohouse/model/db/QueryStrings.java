@@ -2,19 +2,20 @@ package it.unibs.ing.domohouse.model.db;
 
 public class QueryStrings {
 
-	public static final String GET_SENSOR_CATEGORIES = "SELECT * FROM categorie_sensori";
-	public static final String GET_NUMERIC_INFO_OF_A_CATEGORY = "SELECT id_informazione, nome_proprietà, minimo, massimo"
+	public static final String GET_USER = "SELECT * FROM utente WHERE nome_utente =?";
+	public static final String GET_SENSOR_CATEGORIES = "SELECT * FROM categoria_sensori";
+	public static final String GET_NUMERIC_INFO_OF_A_CATEGORY = "SELECT informazione_rilevabile.id_informazione, informazione_rilevabile.nome_proprietà, minimo, massimo"
 			+ " FROM informazione_rilevabile JOIN misura_informazioni ON informazione_rilevabile.id_informazione = misura_informazioni.id_informazione"
 			+ " WHERE selettore_informazione = 0 AND nome_categoria_sensori =?";
-	public static final String GET_MEASUREMENT_UNIT = "SELECT id_informazione, nome_proprietà, unità_di_misura"
+	public static final String GET_MEASUREMENT_UNIT = "SELECT informazione_rilevabile.id_informazione, informazione_rilevabile.nome_proprietà, unità_di_misura"
 			+ " FROM informazione_rilevabile JOIN misura_informazioni ON informazione_rilevabile.id_informazione = misura_informazioni.id_informazione"
 			+ " WHERE selettore_informazione = 0 AND nome_categoria_sensori =?";
-	public static final String GET_NON_NUMERIC_INFO_OF_A_CATEGORY = "SELECT id_informazione, nome_proprietà"
+	public static final String GET_NON_NUMERIC_INFO_OF_A_CATEGORY = "SELECT informazione_rilevabile.id_informazione, informazione_rilevabile.nome_proprietà"
 			+ " FROM informazione_rilevabile JOIN misura_informazioni ON informazione_rilevabile.id_informazione = misura_informazioni.id_informazione"
 			+ " WHERE selettore_informazione = 1 AND nome_categoria_sensori =?";
 	public static final String GET_NON_NUMERIC_DOMAIN_VALUE = "SELECT nome_valore FROM valore_dominio"
 			+ " WHERE id_informazione =? AND nome_proprietà =?";
-	public static final String GET_ACTUATOR_CATEGORIES = "SELECT * FROM categorie_attuatori";
+	public static final String GET_ACTUATOR_CATEGORIES = "SELECT * FROM categoria_attuatori";
 	public static final String GET_OPERATING_MODES_OF_A_CATEGORY = "SELECT nome_modalità FROM possiede_modalità"
 			+ " WHERE nome_categoria_attuatori =?";
 	public static final String GET_USER_HOUSING_UNITS = "SELECT nome_unità, descrizione, tipo"
@@ -28,7 +29,7 @@ public class QueryStrings {
 			+ " WHERE nome_utente =? AND nome_unità =?";
 	public static final String GET_ARTIFACT_PROPERTIES = "SELECT proprietà.nome_proprietà, tipo, valore_di_default"
 			+ " FROM proprietà JOIN proprietà_artefatti ON proprietà.nome_proprietà = proprietà_artefatti.nome_proprietà"
-			+ " WHERE nome_utente =? AND nome_unità =? AND nome_stanza =?";
+			+ " WHERE nome_utente =? AND nome_unità =? AND nome_artefatto =?";
 	public static final String GET_SENSORS = "SELECT nome_sensore, stato, stanze_o_artefatti, nome_categoria_sensori, posizione"
 			+ " FROM sensore WHERE nome_utente =? AND nome_unità =?";
 	public static final String GET_MEASURED_OBJECTS = "SELECT nome_artefatto AS nome_oggetto"
@@ -43,7 +44,7 @@ public class QueryStrings {
 			+ " FROM controlla_artefatti JOIN attuatore ON (controlla_artefatti.nome_utente = attuatore.nome_utente AND controlla_artefatti.nome_unità = attuatore.nome_unità AND controlla_artefatti.nome_attuatore = attuatore.nome_attuatore)"
 			+ " WHERE controlla_artefatti.nome_utente =? AND controlla_artefatti.nome_unità =? AND controlla_artefatti.nome_attuatore =? AND attuatore.stanze_o_artefatti = 0"
 			+ " UNION" + " SELECT nome_stanza AS nome_oggetto"
-			+ " FROM controlla_stanze JOIN sensore ON (controlla_stanze.nome_utente = attuatore.nome_utente AND controlla_stanze.nome_unità = attuatore.nome_unità AND controlla_stanze.nome_attuatore = attuatore.nome_attuatore)"
+			+ " FROM controlla_stanze JOIN attuatore ON (controlla_stanze.nome_utente = attuatore.nome_utente AND controlla_stanze.nome_unità = attuatore.nome_unità AND controlla_stanze.nome_attuatore = attuatore.nome_attuatore)"
 			+ " WHERE controlla_stanze.nome_utente =? AND controlla_stanze.nome_unità =? AND controlla_stanze.nome_attuatore =? AND attuatore.stanze_o_artefatti = 1";
 	public static final String GET_RULES = "SELECT nome_regola, stato, testo_antecedente, testo_conseguente"
 			+ " FROM regola" 

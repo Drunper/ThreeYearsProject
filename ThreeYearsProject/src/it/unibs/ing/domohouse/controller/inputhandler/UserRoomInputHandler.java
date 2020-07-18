@@ -24,49 +24,49 @@ public class UserRoomInputHandler {
 		this.input = input;
 	}
 
-	public String safeInsertSensor(String selectedHouse, String selectedRoom) {
+	public String safeInsertSensor(String user, String selectedHouse, String selectedRoom) {
 		assert selectedHouse != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String selectedSensor = input.readNotVoidString(ControllerStrings.INSERT_SENSOR);
-		if (dataFacade.getRoom(selectedHouse, selectedRoom).hasSensor(selectedSensor))
+		if (dataFacade.getRoom(user, selectedHouse, selectedRoom).hasSensor(selectedSensor))
 			return selectedSensor;
 		else
 			do {
 				selectedSensor = input.readNotVoidString(ControllerStrings.ERROR_NON_EXISTENT_SENSOR
 						+ ControllerStrings.SPACE + ControllerStrings.INSERT_SENSOR);
 			}
-			while (!dataFacade.getRoom(selectedHouse, selectedRoom).hasSensor(selectedSensor));
+			while (!dataFacade.getRoom(user, selectedHouse, selectedRoom).hasSensor(selectedSensor));
 
 		assert selectedSensor != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 		return selectedSensor;
 	}
 
-	public String safeInsertActuator(String selectedHouse, String selectedRoom) {
+	public String safeInsertActuator(String user, String selectedHouse, String selectedRoom) {
 		assert selectedHouse != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String selectedActuator = input.readNotVoidString(ControllerStrings.INSERT_ACTUATOR);
-		if (dataFacade.getRoom(selectedHouse, selectedRoom).hasActuator(selectedActuator))
+		if (dataFacade.getRoom(user, selectedHouse, selectedRoom).hasActuator(selectedActuator))
 			return selectedActuator;
 		else
 			do {
 				selectedActuator = input.readNotVoidString(ControllerStrings.ERROR_NON_EXISTENT_ACTUATOR
 						+ ControllerStrings.SPACE + ControllerStrings.INSERT_ACTUATOR);
 			}
-			while (!dataFacade.getRoom(selectedHouse, selectedRoom).hasActuator(selectedActuator));
+			while (!dataFacade.getRoom(user, selectedHouse, selectedRoom).hasActuator(selectedActuator));
 
 		assert selectedActuator != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 		return selectedActuator;
 	}
 
-	public void setOperatingMode(String selectedHouse, String selectedRoom, String selectedActuator, MenuManager view) {
+	public void setOperatingMode(String user, String selectedHouse, String selectedRoom, String selectedActuator, MenuManager view) {
 		assert selectedHouse != null && selectedRoom != null && selectedActuator != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
-		Actuator act = dataFacade.getActuator(selectedHouse, selectedActuator);
+		Actuator act = dataFacade.getActuator(user, selectedHouse, selectedActuator);
 
 		view.printListOfString(act.getCategory().listOfOperatingModes());
 
@@ -86,36 +86,36 @@ public class UserRoomInputHandler {
 		act.setOperatingMode(op, parameters);
 	}
 
-	public String safeInsertArtifact(String selectedHouse, String selectedRoom) {
+	public String safeInsertArtifact(String user, String selectedHouse, String selectedRoom) {
 		assert selectedHouse != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String selectedArtifact = input.readNotVoidString(ControllerStrings.INSERT_ARTIFACT);
-		if (dataFacade.getRoom(selectedHouse, selectedRoom).hasArtifact(selectedArtifact))
+		if (dataFacade.getRoom(user, selectedHouse, selectedRoom).hasArtifact(selectedArtifact))
 			return selectedArtifact;
 		else
 			do {
 				selectedArtifact = input.readNotVoidString(ControllerStrings.ERROR_NON_EXISTENT_ARTIFACT
 						+ ControllerStrings.SPACE + ControllerStrings.INSERT_ARTIFACT);
 			}
-			while (!dataFacade.getRoom(selectedHouse, selectedRoom).hasArtifact(selectedArtifact));
+			while (!dataFacade.getRoom(user, selectedHouse, selectedRoom).hasArtifact(selectedArtifact));
 
 		assert selectedArtifact != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 		return selectedArtifact;
 	}
 
-	public void readDeviceStateFromUser(String selectedHouse, String selectedRoom, MenuManager view) {
+	public void readDeviceStateFromUser(String user, String selectedHouse, String selectedRoom, MenuManager view) {
 		assert selectedHouse != null && selectedRoom != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		boolean choiceDev = input.yesOrNo(ControllerStrings.DEVICE_CHANGE_STATE);
 
 		if (choiceDev) {
-			if (!dataFacade.doesSensorExist(selectedHouse, selectedRoom))
+			if (!dataFacade.doesSensorExist(user, selectedHouse, selectedRoom))
 				output.println(ControllerStrings.ROOM_NO_SENSORS);
 			else {
-				Set<String> sensors = dataFacade.getSensorNames(selectedHouse, selectedRoom);
+				Set<String> sensors = dataFacade.getSensorNames(user, selectedHouse, selectedRoom);
 				view.printListOfString(sensors);
 				String sensor;
 
@@ -130,14 +130,14 @@ public class UserRoomInputHandler {
 				}
 				while (!sensors.contains(sensor));
 				if (!sensor.equalsIgnoreCase(ControllerStrings.BACK_CHARACTER))
-					dataFacade.getSensor(selectedHouse, sensor).trigger();
+					dataFacade.getSensor(user, selectedHouse, sensor).trigger();
 			}
 		}
 		else {
-			if (!dataFacade.doesActuatorExist(selectedHouse, selectedRoom))
+			if (!dataFacade.doesActuatorExist(user, selectedHouse, selectedRoom))
 				output.println(ControllerStrings.ROOM_NO_ACTUATORS);
 			else {
-				Set<String> actuators = dataFacade.getActuatorNames(selectedHouse, selectedRoom);
+				Set<String> actuators = dataFacade.getActuatorNames(user, selectedHouse, selectedRoom);
 				view.printListOfString(actuators);
 				String actuator;
 				do {
@@ -151,7 +151,7 @@ public class UserRoomInputHandler {
 				}
 				while (!actuators.contains(actuator));
 				if (!actuator.equalsIgnoreCase(ControllerStrings.BACK_CHARACTER))
-					dataFacade.getActuator(selectedHouse, actuator).trigger();
+					dataFacade.getActuator(user, selectedHouse, actuator).trigger();
 			}
 		}
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;

@@ -55,18 +55,18 @@ public class UserInputHandler {
 		return selectedActuCategory;
 	}
 
-	public String safeInsertHouse() {
+	public String safeInsertHouse(String user) {
 		assert userInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String selectedHouse = input.readNotVoidString(ControllerStrings.INSERT_HOUSE);
-		if (dataFacade.hasHousingUnit(selectedHouse))
+		if (dataFacade.hasHousingUnit(user, selectedHouse))
 			return selectedHouse;
 		else
 			do {
 				selectedHouse = input.readNotVoidString(ControllerStrings.ERROR_NON_EXISTENT_HOUSE
 						+ ControllerStrings.SPACE + ControllerStrings.INSERT_HOUSE);
 			}
-			while (!dataFacade.hasHousingUnit(selectedHouse));
+			while (!dataFacade.hasHousingUnit(user, selectedHouse));
 		return selectedHouse;
 	}
 

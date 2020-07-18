@@ -27,17 +27,17 @@ public class MaintainerInputHandler extends UserInputHandler {
 	public void readHouseFromUser() {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
+		String user = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_USER);
 		String name;
 		do {
 			name = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_NAME);
-			if (dataFacade.hasHousingUnit(name))
+			if (dataFacade.hasHousingUnit(user, name))
 				output.println(ControllerStrings.NAME_ALREADY_EXISTENT);
 		}
-		while (dataFacade.hasHousingUnit(name));
+		while (dataFacade.hasHousingUnit(user, name));
 
 		String descr = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_DESCRIPTION);
 		String type = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_TYPE);
-		String user = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_USER);
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
 			objectFabricator.createHouse(name, descr, type, user);
 
@@ -156,6 +156,24 @@ public class MaintainerInputHandler extends UserInputHandler {
 			objectFabricator.createActuatorCategory(name, abbreviation, constructor, listOfModes, defaultMode);
 
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
+	}
+
+	public String safeInsertUser() {
+		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
+
+		String selectedUser = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
+		if (dataFacade.hasUser(selectedUser))
+			return selectedUser;
+		else
+			do {
+				selectedUser = input.readNotVoidString(ControllerStrings.ERROR_NON_EXISTENT_USER
+						+ ControllerStrings.SPACE + ControllerStrings.INSERT_USER_DB);
+			}
+			while (!dataFacade.hasUser(selectedUser));
+
+		assert selectedUser != null;
+		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
+		return selectedUser;
 	}
 
 	private boolean maintainerInputHandlerInvariant() {

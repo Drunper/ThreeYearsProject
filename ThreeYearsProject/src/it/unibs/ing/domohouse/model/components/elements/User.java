@@ -16,6 +16,7 @@ public class User implements Manageable {
 	
 	public User(String name) {
 		this.name = name;
+		housingUnitManager = new Manager();
 	}
 
 	@Override

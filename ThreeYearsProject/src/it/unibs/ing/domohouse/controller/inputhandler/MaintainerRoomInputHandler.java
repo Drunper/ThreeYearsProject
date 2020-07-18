@@ -2,6 +2,7 @@ package it.unibs.ing.domohouse.controller.inputhandler;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import it.unibs.ing.domohouse.model.util.DataFacade;
@@ -19,18 +20,18 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		this.objectFabricator = objectFabricator;
 	}
 
-	public void changeRoomDescription(String selectedHouse, String selectedRoom) {
+	public void changeRoomDescription(String user, String selectedHouse, String selectedRoom) {
 		assert selectedHouse != null && selectedRoom != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String descr = input.readNotVoidString(ControllerStrings.ROOM_INPUT_DESCRIPTION);
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_SAVING))
-			dataFacade.changeRoomDescription(selectedHouse, selectedRoom, descr);
+			dataFacade.changeRoomDescription(user, selectedHouse, selectedRoom, descr);
 
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readSensorFromUser(String selectedHouse, String location) {
+	public void readSensorFromUser(String user, String selectedHouse, String location) {
 		assert selectedHouse != null && location != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
@@ -53,17 +54,19 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 			do {
 				name = input.readNotVoidString(ControllerStrings.SENSOR_INPUT_NAME);
 				toCheck = name + ControllerStrings.UNDERSCORE + category;
-				if (!dataFacade.hasSensor(selectedHouse, toCheck))
+				if (!dataFacade.hasSensor(user, selectedHouse, toCheck)) {
 					remain = false;
+					name = toCheck;
+				}
 				else
 					output.println(ControllerStrings.SENSOR_NAME_ASSIGNED);
 			}
 			while (remain);
 
-			if (dataFacade.doesRoomOrArtifactExist(selectedHouse)) {
+			if (dataFacade.doesRoomOrArtifactExist(user, selectedHouse)) {
 
-				boolean isThereRoom = dataFacade.doesRoomExist(selectedHouse);
-				boolean isThereArtifact = dataFacade.doesArtifactExist(selectedHouse);
+				boolean isThereRoom = dataFacade.doesRoomExist(user, selectedHouse);
+				boolean isThereArtifact = dataFacade.doesArtifactExist(user, selectedHouse);
 				boolean roomOrArtifact;
 
 				roomOrArtifact = input.yesOrNo(ControllerStrings.SENSOR_ARTIFACT_OR_ROOM_ASSOCIATION);
@@ -79,8 +82,8 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 
 				if (roomOrArtifact) {
 					boolean canAssociate = false;
-					for (String room : dataFacade.getRoomsList(selectedHouse)) {
-						if (!dataFacade.isAssociated(selectedHouse, room, category))
+					for (String room : dataFacade.getRoomsList(user, selectedHouse)) {
+						if (!dataFacade.isAssociated(user, selectedHouse, room, category))
 							canAssociate = true;
 					}
 
@@ -91,9 +94,9 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 				}
 				else {
 					boolean canAssociate = false;
-					for (String room : dataFacade.getRoomsList(selectedHouse)) {
-						for (String artifact : dataFacade.getArtifactNames(selectedHouse, room)) {
-							if (!dataFacade.isAssociated(selectedHouse, artifact, category))
+					for (String room : dataFacade.getRoomsList(user, selectedHouse)) {
+						for (String artifact : dataFacade.getArtifactNames(user, selectedHouse, room)) {
+							if (!dataFacade.isAssociated(user, selectedHouse, artifact, category))
 								canAssociate = true;
 						}
 					}
@@ -113,14 +116,14 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 							toAssoc = input.readNotVoidString(ControllerStrings.SENSOR_ARTIFACT_ASSOCIATION);
 
 						if (!objectList.contains(toAssoc)) {
-							if (!dataFacade.hasRoomOrArtifact(selectedHouse, toAssoc))
+							if (!dataFacade.hasRoomOrArtifact(user, selectedHouse, toAssoc))
 								output.println(ControllerStrings.ROOM_OR_ARTIFACT_NON_EXISTENT);
 							else {
-								if (roomOrArtifact && !dataFacade.isElementARoom(selectedHouse, toAssoc))
+								if (roomOrArtifact && !dataFacade.isElementARoom(user, selectedHouse, toAssoc))
 									output.println(ControllerStrings.SENSOR_WRONG_ASSOCIATION_ROOM);
-								else if (!roomOrArtifact && dataFacade.isElementARoom(selectedHouse, toAssoc))
+								else if (!roomOrArtifact && dataFacade.isElementARoom(user, selectedHouse, toAssoc))
 									output.println(ControllerStrings.SENSOR_WRONG_ASSOCIATION_ARTIFACT);
-								else if (dataFacade.isAssociated(selectedHouse, toAssoc, category))
+								else if (dataFacade.isAssociated(user, selectedHouse, toAssoc, category))
 									output.println(ControllerStrings.SENSOR_WRONG_ASSOCIATION_CATEGORY);
 							}
 						}
@@ -129,16 +132,16 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 						}
 					}
 
-					while (!dataFacade.hasRoomOrArtifact(selectedHouse, toAssoc)
-							|| (roomOrArtifact && !dataFacade.isElementARoom(selectedHouse, toAssoc))
-							|| (!roomOrArtifact && dataFacade.isElementARoom(selectedHouse, toAssoc))
-							|| dataFacade.isAssociated(selectedHouse, toAssoc, category)
+					while (!dataFacade.hasRoomOrArtifact(user, selectedHouse, toAssoc)
+							|| (roomOrArtifact && !dataFacade.isElementARoom(user, selectedHouse, toAssoc))
+							|| (!roomOrArtifact && dataFacade.isElementARoom(user, selectedHouse, toAssoc))
+							|| dataFacade.isAssociated(user, selectedHouse, toAssoc, category)
 							|| objectList.contains(toAssoc));
 					objectList.add(toAssoc);
 				}
 				while (input.yesOrNo(ControllerStrings.SENSOR_ANOTHER_ASSOCIATION));
 				if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-					objectFabricator.createSensor(selectedHouse, name, category, roomOrArtifact, objectList, location);
+					objectFabricator.createSensor(user, selectedHouse, name, category, roomOrArtifact, objectList, location);
 			}
 			else
 				output.println(ControllerStrings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
@@ -148,7 +151,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readArtifactFromUser(String selectedHouse, String location) {
+	public void readArtifactFromUser(String user, String selectedHouse, String location) {
 		assert selectedHouse != null;
 		assert location != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
@@ -156,19 +159,19 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		String name;
 		do {
 			name = input.readNotVoidString(ControllerStrings.ARTIFACT_INPUT_NAME);
-			if (dataFacade.hasRoomOrArtifact(selectedHouse, name))
+			if (dataFacade.hasRoomOrArtifact(user, selectedHouse, name))
 				output.println(ControllerStrings.ARTIFACT_ROOM_NAME_ASSIGNED);
 		}
-		while (dataFacade.hasRoomOrArtifact(selectedHouse, name));
+		while (dataFacade.hasRoomOrArtifact(user, selectedHouse, name));
 
 		String descr = input.readNotVoidString(ControllerStrings.ARTIFACT_INPUT_DESCRIPTION);
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			objectFabricator.createArtifact(selectedHouse, name, descr, location);
+			objectFabricator.createArtifact(user, selectedHouse, name, descr, location, new HashMap<String, String>());
 
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readActuatorFromUser(String selectedHouse, String location) {
+	public void readActuatorFromUser(String user, String selectedHouse, String location) {
 		assert selectedHouse != null;
 		assert location != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
@@ -186,17 +189,16 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 			String name;
 			do {
 				name = input.readNotVoidString(ControllerStrings.ACTUATOR_INPUT_NAME);
-				if (dataFacade.hasActuator(selectedHouse, name + ControllerStrings.UNDERSCORE + category))
+				if (dataFacade.hasActuator(user, selectedHouse, name + ControllerStrings.UNDERSCORE + category))
 					output.println(ControllerStrings.ACTUATOR_NAME_ASSIGNED);
+				else
+					name = name + ControllerStrings.UNDERSCORE + category;
 			}
-			while (dataFacade.hasActuator(selectedHouse, name + ControllerStrings.UNDERSCORE + category));
-			name = name.replace(ControllerStrings.UNDERSCORE, ControllerStrings.NULL_CHARACTER); // il nome non può
-																									// contenere
-																									// underscore
+			while (dataFacade.hasActuator(user, selectedHouse, name + ControllerStrings.UNDERSCORE + category));
 
-			if (dataFacade.doesRoomOrArtifactExist(selectedHouse)) {
-				boolean isThereRoom = dataFacade.doesRoomExist(selectedHouse);
-				boolean isThereArtifact = dataFacade.doesArtifactExist(selectedHouse);
+			if (dataFacade.doesRoomOrArtifactExist(user, selectedHouse)) {
+				boolean isThereRoom = dataFacade.doesRoomExist(user, selectedHouse);
+				boolean isThereArtifact = dataFacade.doesArtifactExist(user, selectedHouse);
 				boolean roomOrArtifact;
 
 				do {
@@ -211,8 +213,8 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 
 				if (roomOrArtifact) {
 					boolean canAssociate = false;
-					for (String room : dataFacade.getRoomsList(selectedHouse)) {
-						if (!dataFacade.isAssociated(selectedHouse, room, category))
+					for (String room : dataFacade.getRoomsList(user, selectedHouse)) {
+						if (!dataFacade.isAssociated(user, selectedHouse, room, category))
 							canAssociate = true;
 					}
 
@@ -223,9 +225,9 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 				}
 				else {
 					boolean canAssociate = false;
-					for (String room : dataFacade.getRoomsList(selectedHouse)) {
-						for (String artifact : dataFacade.getArtifactNames(selectedHouse, room)) {
-							if (!dataFacade.isAssociated(selectedHouse, artifact, category))
+					for (String room : dataFacade.getRoomsList(user, selectedHouse)) {
+						for (String artifact : dataFacade.getArtifactNames(user, selectedHouse, room)) {
+							if (!dataFacade.isAssociated(user, selectedHouse, artifact, category))
 								canAssociate = true;
 						}
 					}
@@ -246,14 +248,14 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 							toAssoc = input.readNotVoidString(ControllerStrings.ACTUATOR_ARTIFACT_ASSOCIATION);
 
 						if (!objectList.contains(toAssoc)) {
-							if (!dataFacade.hasRoomOrArtifact(selectedHouse, toAssoc))
+							if (!dataFacade.hasRoomOrArtifact(user, selectedHouse, toAssoc))
 								output.println(ControllerStrings.ROOM_OR_ARTIFACT_NON_EXISTENT);
 							else {
-								if (roomOrArtifact && !dataFacade.isElementARoom(selectedHouse, toAssoc))
+								if (roomOrArtifact && !dataFacade.isElementARoom(user, selectedHouse, toAssoc))
 									output.println(ControllerStrings.ACTUATOR_WRONG_ASSOCIATION_ROOM);
-								else if (!roomOrArtifact && dataFacade.isElementARoom(selectedHouse, toAssoc))
+								else if (!roomOrArtifact && dataFacade.isElementARoom(user, selectedHouse, toAssoc))
 									output.println(ControllerStrings.ACTUATOR_WRONG_ASSOCIATION_ARTIFACT);
-								else if (dataFacade.isAssociated(selectedHouse, toAssoc, category))
+								else if (dataFacade.isAssociated(user, selectedHouse, toAssoc, category))
 									output.println(ControllerStrings.ACTUATOR_WRONG_ASSOCIATION_CATEGORY);
 							}
 						}
@@ -261,17 +263,17 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 							output.println(ControllerStrings.INPUT_ERROR_ALREADY_INSERTED);
 						}
 					}
-					while (!dataFacade.hasRoomOrArtifact(selectedHouse, toAssoc)
-							|| (roomOrArtifact && !dataFacade.isElementARoom(selectedHouse, toAssoc))
-							|| (!roomOrArtifact && dataFacade.isElementARoom(selectedHouse, toAssoc))
-							|| dataFacade.isAssociated(selectedHouse, toAssoc, category)
+					while (!dataFacade.hasRoomOrArtifact(user, selectedHouse, toAssoc)
+							|| (roomOrArtifact && !dataFacade.isElementARoom(user, selectedHouse, toAssoc))
+							|| (!roomOrArtifact && dataFacade.isElementARoom(user, selectedHouse, toAssoc))
+							|| dataFacade.isAssociated(user, selectedHouse, toAssoc, category)
 							|| objectList.contains(toAssoc));
 
 					objectList.add(toAssoc);
 				}
 				while (input.yesOrNo(ControllerStrings.ACTUATOR_ANOTHER_ASSOCIATION));
 				if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-					objectFabricator.createActuator(selectedHouse, name, category, roomOrArtifact, objectList,
+					objectFabricator.createActuator(user, selectedHouse, name, category, roomOrArtifact, objectList,
 							location);
 			}
 			else

@@ -37,7 +37,7 @@ public class MaintainerRoomController {
 		this.output = output;
 	}
 
-	public void show(String selectedHouse, String selectedRoom) {
+	public void show(String user, String selectedHouse, String selectedRoom) {
 		int selection;
 		do {
 			output.println(clock.getCurrentTime());
@@ -51,19 +51,19 @@ public class MaintainerRoomController {
 					// visualizza descrizione stanza
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_SHOW_DESCR_ROOM + selectedRoom);
-					output.println(renderer.render(dataFacade.getRoom(selectedHouse, selectedRoom)));
+					output.println(renderer.render(dataFacade.getRoom(user, selectedHouse, selectedRoom)));
 					break;
 				case 2:
 					// visualizza sensore
 					menuManager.clearOutput();
-					if (dataFacade.doesSensorExist(selectedHouse, selectedRoom)) {
-						menuManager.printListOfString(dataFacade.getSensorNames(selectedHouse, selectedRoom));
+					if (dataFacade.doesSensorExist(user, selectedHouse, selectedRoom)) {
+						menuManager.printListOfString(dataFacade.getSensorNames(user, selectedHouse, selectedRoom));
 						output.println();
 						output.println();
-						String selectedSensor = maintainerRoomInputHandler.safeInsertSensor(selectedHouse,
+						String selectedSensor = maintainerRoomInputHandler.safeInsertSensor(user, selectedHouse,
 								selectedRoom);
 						log.write(ControllerStrings.LOG_SHOW_SENSOR + selectedSensor);
-						output.println(renderer.render(dataFacade.getSensor(selectedHouse, selectedSensor)));
+						output.println(renderer.render(dataFacade.getSensor(user, selectedHouse, selectedSensor)));
 					}
 					else
 						output.println(ControllerStrings.NO_SENSOR);
@@ -71,14 +71,14 @@ public class MaintainerRoomController {
 				case 3:
 					// visualizza attuatore
 					menuManager.clearOutput();
-					if (dataFacade.doesActuatorExist(selectedHouse, selectedRoom)) {
-						menuManager.printListOfString(dataFacade.getActuatorNames(selectedHouse, selectedRoom));
+					if (dataFacade.doesActuatorExist(user, selectedHouse, selectedRoom)) {
+						menuManager.printListOfString(dataFacade.getActuatorNames(user, selectedHouse, selectedRoom));
 						output.println();
 						output.println();
-						String selectedActuator = maintainerRoomInputHandler.safeInsertActuator(selectedHouse,
+						String selectedActuator = maintainerRoomInputHandler.safeInsertActuator(user, selectedHouse,
 								selectedRoom);
 						log.write(ControllerStrings.LOG_SHOW_ACTUATOR + selectedActuator);
-						output.println(renderer.render(dataFacade.getActuator(selectedHouse, selectedActuator)));
+						output.println(renderer.render(dataFacade.getActuator(user, selectedHouse, selectedActuator)));
 					}
 					else
 						output.println(ControllerStrings.NO_ACTUATOR);
@@ -86,13 +86,13 @@ public class MaintainerRoomController {
 				case 4:
 					// aziona attuatore
 					menuManager.clearOutput();
-					if (dataFacade.doesActuatorExist(selectedHouse, selectedRoom)) {
-						menuManager.printListOfString(dataFacade.getActuatorNames(selectedHouse, selectedRoom));
-						String selectedAct = maintainerRoomInputHandler.safeInsertActuator(selectedHouse, selectedRoom);
-						maintainerRoomInputHandler.setOperatingMode(selectedHouse, selectedRoom, selectedAct,
+					if (dataFacade.doesActuatorExist(user, selectedHouse, selectedRoom)) {
+						menuManager.printListOfString(dataFacade.getActuatorNames(user, selectedHouse, selectedRoom));
+						String selectedAct = maintainerRoomInputHandler.safeInsertActuator(user, selectedHouse, selectedRoom);
+						maintainerRoomInputHandler.setOperatingMode(user, selectedHouse, selectedRoom, selectedAct,
 								menuManager);
 						log.write(ControllerStrings.LOG_ACTUATOR_ACTION + selectedAct);
-						dataFacade.updateRulesState(selectedHouse);
+						dataFacade.updateRulesState(user, selectedHouse);
 					}
 					else
 						output.println(ControllerStrings.NO_ACTUATOR);
@@ -100,14 +100,14 @@ public class MaintainerRoomController {
 				case 5:
 					// visualizza artefatto
 					menuManager.clearOutput();
-					if (dataFacade.doesArtifactExist(selectedHouse, selectedRoom)) {
-						menuManager.printListOfString(dataFacade.getArtifactNames(selectedHouse, selectedRoom));
+					if (dataFacade.doesArtifactExist(user, selectedHouse, selectedRoom)) {
+						menuManager.printListOfString(dataFacade.getArtifactNames(user, selectedHouse, selectedRoom));
 						output.println();
 						output.println();
-						String selectedArtifact = maintainerRoomInputHandler.safeInsertArtifact(selectedHouse,
+						String selectedArtifact = maintainerRoomInputHandler.safeInsertArtifact(user, selectedHouse,
 								selectedRoom);
 						log.write(ControllerStrings.LOG_SHOW_ARTIFACT);
-						output.println(renderer.render(dataFacade.getArtifact(selectedHouse, selectedArtifact)));
+						output.println(renderer.render(dataFacade.getArtifact(user, selectedHouse, selectedArtifact)));
 					}
 					else
 						output.println(ControllerStrings.NO_ARTIFACT);
@@ -115,31 +115,31 @@ public class MaintainerRoomController {
 				case 6:
 					// modifica descrizione stanza
 					log.write(ControllerStrings.LOG_CHANGE_ROOM_DESCR);
-					maintainerRoomInputHandler.changeRoomDescription(selectedHouse, selectedRoom);
+					maintainerRoomInputHandler.changeRoomDescription(user, selectedHouse, selectedRoom);
 					break;
 				case 7:
 					// inserisci sensore
 					log.write(ControllerStrings.LOG_INSERT_SENSOR);
-					maintainerRoomInputHandler.readSensorFromUser(selectedHouse, selectedRoom);
+					maintainerRoomInputHandler.readSensorFromUser(user, selectedHouse, selectedRoom);
 					log.write(ControllerStrings.LOG_INSERT_SENSOR_SUCCESS);
 					break;
 				case 8:
 					// inserisci attuatore
 					log.write(ControllerStrings.LOG_INSERT_ACTUATOR);
-					maintainerRoomInputHandler.readActuatorFromUser(selectedHouse, selectedRoom);
+					maintainerRoomInputHandler.readActuatorFromUser(user, selectedHouse, selectedRoom);
 					log.write(ControllerStrings.LOG_INSERT_ACTUATOR_SUCCESS);
 					break;
 				case 9:
 					// inserisci artefatto
 					log.write(ControllerStrings.LOG_INSERT_ARTIFACT);
-					maintainerRoomInputHandler.readArtifactFromUser(selectedHouse, selectedRoom);
+					maintainerRoomInputHandler.readArtifactFromUser(user, selectedHouse, selectedRoom);
 					log.write(ControllerStrings.LOG_INSERT_ARTIFACT_SUCCESS);
 					break;
 				case 10:
 					// attiva/dis disp
-					maintainerRoomInputHandler.readDeviceStateFromUser(selectedHouse, selectedRoom, menuManager);
+					maintainerRoomInputHandler.readDeviceStateFromUser(user, selectedHouse, selectedRoom, menuManager);
 					log.write(ControllerStrings.LOG_ENABLE_DISABLE_DISP);
-					dataFacade.updateRulesState(selectedHouse);
+					dataFacade.updateRulesState(user, selectedHouse);
 					break;
 				case 11:
 					// aggiorna ora

@@ -16,28 +16,28 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 		super(dataFacade, objectFabricator, output, input);
 	}
 
-	public void changeHouseDescription(String selectedHouse) {
+	public void changeHouseDescription(String user, String selectedHouse) {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String descr = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_DESCRIPTION);
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_SAVING))
-			dataFacade.changeHouseDescription(selectedHouse, descr);
+			dataFacade.changeHouseDescription(user, selectedHouse, descr);
 
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readRoomFromUser(String selectedHouse) {
+	public void readRoomFromUser(String user, String selectedHouse) {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String name;
 		do {
 			name = input.readNotVoidString(ControllerStrings.ROOM_INPUT_NAME);
-			if (dataFacade.hasRoomOrArtifact(selectedHouse, name))
+			if (dataFacade.hasRoomOrArtifact(user, selectedHouse, name))
 				output.println(ControllerStrings.NAME_ALREADY_EXISTENT);
 		}
-		while (dataFacade.hasRoomOrArtifact(selectedHouse, name));
+		while (dataFacade.hasRoomOrArtifact(user, selectedHouse, name));
 		String descr = input.readNotVoidString(ControllerStrings.ROOM_INPUT_DESCRIPTION);
 		Map<String, String> propertiesMap = new TreeMap<>();
 
@@ -60,7 +60,7 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 		propertiesMap.put("presenza_persone", String.valueOf(presenza_persone));
 
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			objectFabricator.createRoom(selectedHouse, name, descr, propertiesMap);
+			objectFabricator.createRoom(user, selectedHouse, name, descr, propertiesMap);
 
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}

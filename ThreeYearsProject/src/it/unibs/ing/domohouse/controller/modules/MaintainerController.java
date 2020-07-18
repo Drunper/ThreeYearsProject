@@ -4,7 +4,6 @@ import it.unibs.ing.domohouse.controller.inputhandler.MaintainerInputHandler;
 import it.unibs.ing.domohouse.model.components.clock.ClockStrategy;
 import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.LibImporter;
-import it.unibs.ing.domohouse.model.util.Loader;
 import it.unibs.ing.domohouse.model.util.LogWriter;
 import it.unibs.ing.domohouse.model.util.Saver;
 import it.unibs.ing.domohouse.view.MenuManager;
@@ -14,12 +13,14 @@ import it.unibs.ing.domohouse.view.ManageableRenderer;
 import java.io.PrintWriter;
 
 import it.unibs.ing.domohouse.controller.ControllerStrings;
+import it.unibs.ing.domohouse.model.util.Loader;
 
 public class MaintainerController {
 
 	// View
 	private MenuManager menuManager;
 	private PrintWriter output;
+	private RawInputHandler input;
 
 	// Controller collegati
 	private MaintainerUnitController maintainerUnitController;
@@ -29,8 +30,8 @@ public class MaintainerController {
 	private DataFacade dataFacade;
 	private LogWriter log;
 	private ManageableRenderer renderer;
-	private Loader loader;
 	private Saver saver;
+	private Loader loader;
 	private LibImporter libImporter;
 	private ClockStrategy clock;
 
@@ -41,8 +42,9 @@ public class MaintainerController {
 				ControllerStrings.MAINTAINER_MAIN_MENU_VOICES, output, input);
 		this.dataFacade = dataFacade;
 		this.log = log;
-		this.renderer = renderer;
+		this.input = input;
 		this.loader = loader;
+		this.renderer = renderer;
 		this.maintainerInputHandler = maintainerInputHandler;
 		this.saver = saver;
 		this.libImporter = libImporter;
@@ -62,19 +64,36 @@ public class MaintainerController {
 					break;
 				case 1:
 					menuManager.clearOutput();
-					if (dataFacade.doesHousingUnitExist()) {
-						menuManager.printListOfString(dataFacade.getHousingUnitsList());
-						String selectedHouse = maintainerInputHandler.safeInsertHouse();
-						maintainerUnitController.show(selectedHouse);
+					String user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
+					if(!dataFacade.hasUser(user))
+						loader.loadUser(user);
+					if(dataFacade.hasUser(user)) {
+						if (dataFacade.doesHousingUnitExist(user)) {
+							menuManager.printListOfString(dataFacade.getHousingUnitsList(user));
+							String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
+							maintainerUnitController.show(user, selectedHouse);
+						}
+						else {
+							loader.loadHousingUnits(user);
+							if(dataFacade.doesHousingUnitExist(user)) {
+								menuManager.printListOfString(dataFacade.getHousingUnitsList(user));
+								String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
+								maintainerUnitController.show(user, selectedHouse);
+							}
+							else
+								output.println(ControllerStrings.NO_HOUSE);
+						}
 					}
 					else
-						output.println(ControllerStrings.NO_HOUSE);
+						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					break;
 				case 2:
 					menuManager.clearOutput();
+					/*
 					log.write(ControllerStrings.LOG_INSERT_HOUSE);
 					maintainerInputHandler.readHouseFromUser();
 					log.write(ControllerStrings.LOG_INSERT_HOUSE_SUCCESS);
+					*/
 					break;
 				case 3:
 					// visualizza categorie di sensori
@@ -94,7 +113,7 @@ public class MaintainerController {
 				case 4:
 					// visualizza categoria di attuatore
 					menuManager.clearOutput();
-					if (!dataFacade.doesActuatorCategoryExist()) {
+					if (dataFacade.doesActuatorCategoryExist()) {
 						menuManager.printListOfString(dataFacade.getActuatorCategoryList());
 						output.println(); 
 						output.println();
@@ -128,9 +147,10 @@ public class MaintainerController {
 					break;
 				case 8:
 					// importa file
+					/*
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_IMPORTING_FILE);
-					if (libImporter.importFile()) {
+					if (libImporter.importFile(user)) {
 						log.write(ControllerStrings.SUCCESS_IMPORT_FILE);
 						output.println(ControllerStrings.SUCCESS_IMPORT_FILE);
 					}
@@ -139,6 +159,7 @@ public class MaintainerController {
 						output.println(error);
 						log.write(ControllerStrings.LOG_ERROR_IMPORT + error);
 					}
+					*/
 					break;
 				case 9:
 					/*

@@ -137,11 +137,24 @@ public class DatabaseLoader implements Loader {
 
 		return listOfModes;
 	}
+	
+	@Override
+	public void loadUser(String user) {
+		connector.submitParametrizedQuery(QueryStrings.GET_USER);
+		connector.setStringParameter(1, user);
+		try (ResultSet set = connector.executeQuery()) {
+			if (set.next())
+				objectFabricator.createUser(set.getString("nome_utente"));
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public void loadHousingUnits(String user) {
 		connector.submitParametrizedQuery(QueryStrings.GET_USER_HOUSING_UNITS);
-		connector.setStringParameter(0, user);
+		connector.setStringParameter(1, user);
 		try (ResultSet set = connector.executeQuery()) {
 			while (set.next()) {
 				String selectedHouse = set.getString("nome_unità");
@@ -215,7 +228,7 @@ public class DatabaseLoader implements Loader {
 	}
 
 	private void loadSensors(String user, String selectedHouse) {
-		connector.submitParametrizedQuery(QueryStrings.GET_ARTIFACTS);
+		connector.submitParametrizedQuery(QueryStrings.GET_SENSORS);
 		connector.setStringParameter(1, user);
 		connector.setStringParameter(2, selectedHouse);
 		try (ResultSet set = connector.executeQuery()) {

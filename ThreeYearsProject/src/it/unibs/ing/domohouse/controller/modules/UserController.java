@@ -3,7 +3,6 @@ package it.unibs.ing.domohouse.controller.modules;
 import it.unibs.ing.domohouse.controller.inputhandler.UserInputHandler;
 import it.unibs.ing.domohouse.model.components.clock.ClockStrategy;
 import it.unibs.ing.domohouse.model.util.DataFacade;
-import it.unibs.ing.domohouse.model.util.Loader;
 import it.unibs.ing.domohouse.model.util.LogWriter;
 import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
@@ -21,25 +20,23 @@ public class UserController {
 	private DataFacade dataFacade;
 	private LogWriter log;
 	private ManageableRenderer renderer;
-	private Loader loader;
 	private UserInputHandler userInputHandler;
 	private ClockStrategy clock;
 	private PrintWriter output;
 
-	public UserController(DataFacade dataFacade, LogWriter log, ManageableRenderer renderer, Loader loader,
+	public UserController(DataFacade dataFacade, LogWriter log, ManageableRenderer renderer,
 			UserInputHandler userInputHandler, ClockStrategy clock, PrintWriter output, RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.USER_MAIN_MENU_TILE, ControllerStrings.USER_MAIN_MENU_VOICES,
 				output, input);
 		this.dataFacade = dataFacade;
 		this.log = log;
 		this.renderer = renderer;
-		this.loader = loader;
 		this.userInputHandler = userInputHandler;
 		this.clock = clock;
 		this.output = output;
 	}
 
-	public void show() {
+	public void show(String user) {
 		int selection;
 		do {
 			output.println(clock.getCurrentTime());
@@ -51,10 +48,10 @@ public class UserController {
 					break;
 				case 1:
 					menuManager.clearOutput();
-					if (dataFacade.doesHousingUnitExist()) {
-						menuManager.printListOfString(dataFacade.getHousingUnitsList());
-						String selectedHouse = userInputHandler.safeInsertHouse();
-						userUnitController.show(selectedHouse);
+					if (dataFacade.doesHousingUnitExist(user)) {
+						menuManager.printListOfString(dataFacade.getHousingUnitsList(user));
+						String selectedHouse = userInputHandler.safeInsertHouse(user);
+						userUnitController.show(user, selectedHouse);
 					}
 					else
 						output.println(ControllerStrings.NO_HOUSE);

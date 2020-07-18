@@ -9,6 +9,7 @@ import it.unibs.ing.domohouse.model.components.elements.Artifact;
 import it.unibs.ing.domohouse.model.components.elements.HousingUnit;
 import it.unibs.ing.domohouse.model.components.elements.Room;
 import it.unibs.ing.domohouse.model.components.elements.Sensor;
+import it.unibs.ing.domohouse.model.components.elements.User;
 import it.unibs.ing.domohouse.model.components.properties.ActiveState;
 import it.unibs.ing.domohouse.model.components.properties.ActuatorCategory;
 import it.unibs.ing.domohouse.model.components.properties.InfoStrategy;
@@ -28,6 +29,11 @@ public class ObjectFabricator {
 	public ObjectFabricator(DataFacade dataFacade, RuleParser ruleParser) {
 		this.dataFacade = dataFacade;
 		this.ruleParser = ruleParser;
+	}
+	
+	public void createUser(String userName) {
+		User user = new User(userName);
+		dataFacade.addUser(user);
 	}
 
 	public void createHouse(String name, String descr, String type, String user) {
@@ -63,9 +69,7 @@ public class ObjectFabricator {
 		assert category != null && objectList != null && location != null;
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		String realName = name + ModelStrings.UNDERSCORE + category;
-
-		Sensor sensor = new Sensor(realName, dataFacade.getSensorCategory(category));
+		Sensor sensor = new Sensor(name, dataFacade.getSensorCategory(category));
 		sensor.setMeasuringRoom(roomOrArtifact);
 		dataFacade.addSensor(user, selectedHouse, location, sensor);
 		for (String object : objectList) {
@@ -87,8 +91,7 @@ public class ObjectFabricator {
 		assert category != null && objectList != null && location != null;
 		assert objectFabricatorInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		String realName = name + ModelStrings.UNDERSCORE + category;
-		Actuator actuator = new Actuator(realName, dataFacade.getActuatorCategory(category));
+		Actuator actuator = new Actuator(name, dataFacade.getActuatorCategory(category));
 		actuator.setControllingRoom(roomOrArtifact);
 		dataFacade.addActuator(user, selectedHouse, location, actuator);
 		for (String object : objectList) {
@@ -170,8 +173,8 @@ public class ObjectFabricator {
 			List<String> involvedSensors, List<String> involvedActuators, State state) {
 		Rule rule = null;
 		try {
-			rule = new Rule(name, ruleParser.parseAnt(selectedHouse, antString),
-					ruleParser.parseCons(selectedHouse, consString), involvedSensors, involvedActuators, state);
+			rule = new Rule(name, ruleParser.parseAnt(user, selectedHouse, antString),
+					ruleParser.parseCons(user, selectedHouse, consString), involvedSensors, involvedActuators, state);
 			if (consString.contains("start"))
 				rule.setTime(ruleParser.getTime(consString));
 		}

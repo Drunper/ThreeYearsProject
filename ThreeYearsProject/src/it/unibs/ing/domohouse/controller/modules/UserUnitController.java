@@ -37,7 +37,7 @@ public class UserUnitController {
 		this.output = output;
 	}
 
-	public void show(String selectedHouse) {
+	public void show(String user, String selectedHouse) {
 		int selection;
 		do {
 			output.println(clock.getCurrentTime());
@@ -51,17 +51,17 @@ public class UserUnitController {
 					// visualizza descrizione unita immobiliare
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_DESCR_HOUSE);
-					output.println(renderer.render(dataFacade.getHousingUnit(selectedHouse)));
+					output.println(renderer.render(dataFacade.getHousingUnit(user, selectedHouse)));
 					break;
 				case 2:
 					// visualizza stanza
 					menuManager.clearOutput();
-					if (dataFacade.doesRoomExist(selectedHouse)) {
-						menuManager.printListOfString(dataFacade.getRoomsList(selectedHouse));
+					if (dataFacade.doesRoomExist(user, selectedHouse)) {
+						menuManager.printListOfString(dataFacade.getRoomsList(user, selectedHouse));
 						output.println();
 						output.println();
-						String selectedRoom = userUnitInputHandler.safeInsertRoom(selectedHouse);
-						userRoomController.show(selectedHouse, selectedRoom);
+						String selectedRoom = userUnitInputHandler.safeInsertRoom(user, selectedHouse);
+						userRoomController.show(user, selectedHouse, selectedRoom);
 					}
 					else
 						output.println(ControllerStrings.NO_ROOM);
@@ -70,26 +70,26 @@ public class UserUnitController {
 					// aggiungi regola
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_INSERT_NEW_RULE);
-					userUnitInputHandler.readRuleFromUser(selectedHouse, menuManager);
+					userUnitInputHandler.readRuleFromUser(user, selectedHouse, menuManager);
 					log.write(ControllerStrings.LOG_INSERT_NEW_RULE_SUCCESS);
 					break;
 				case 4:
 					// visualizza regole attive
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_SHOW_ENABLED_RULES);
-					menuManager.printListOfString(dataFacade.getEnabledRulesStrings(selectedHouse));
+					menuManager.printListOfString(dataFacade.getEnabledRulesStrings(user, selectedHouse));
 					break;
 				case 5:
 					// visualizza tutte le regole
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_SHOW_ALL_RULES);
-					menuManager.printListOfString(dataFacade.getRulesStrings(selectedHouse));
+					menuManager.printListOfString(dataFacade.getRulesStrings(user, selectedHouse));
 					break;
 				case 6:
 					// attiva/disattiva regola
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_ENABLE_DISABLE_RULE);
-					userUnitInputHandler.readRuleStateFromUser(selectedHouse, menuManager);
+					userUnitInputHandler.readRuleStateFromUser(user, selectedHouse, menuManager);
 					break;
 				case 7:
 					// aggiorna ora
