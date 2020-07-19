@@ -20,44 +20,38 @@ public class DatabaseAuthenticator implements Authenticator {
 	@Override
 	public boolean checkMaintainerPassword(String user, String password) {
 		boolean result = false;
-		connector.submitParametrizedQuery("SELECT *" + 
-				" FROM manutentore" + 
-				" WHERE nome_manutentore =? AND password =?");
-		connector.setStringParameter(1, user);
-		connector.setStringParameter(2, hashCalculator.hash(password));
-		ResultSet set = connector.executeQuery();
-		try {
+		Query query = new Query(QueryStrings.CHECK_MAINTAINER);
+		query.setStringParameter(1, user);
+		query.setStringParameter(2, hashCalculator.hash(password));
+		try (ResultSet set = connector.executeQuery(query)) {
 			result = set.next();
 		}
 		catch (SQLException e) {
-			// log eccezione
+			e.printStackTrace();
 		}
 		return result;
 	}
 
 	@Override
 	public void addMaintainer(String user, String password) {
-		connector.submitParametrizedQuery("INSERT INTO manutentore (nome_manutentore, password) VALUES (?, ?)");
-		connector.setStringParameter(1, user);
-		connector.setStringParameter(2, hashCalculator.hash(password));
-		connector.execute();
-		connector.closeStatement();
+		Query query = new Query(QueryStrings.INSERT_MAINTAINER);
+		query.setStringParameter(1, user);
+		query.setStringParameter(2, hashCalculator.hash(password));
+		//aggiungere il sale
+		connector.executeQueryWithoutResult(query);
 		//gestire bene le eccezioni
 	}
 	
 	@Override
 	public boolean checkUser(String user) {
 		boolean result = false;
-		connector.submitParametrizedQuery("SELECT *" + 
-				" FROM utente" + 
-				" WHERE nome_utente =?");
-		connector.setStringParameter(1, user);
-		ResultSet set = connector.executeQuery();
-		try {
+		Query query = new Query(QueryStrings.CHECK_USER);
+		query.setStringParameter(1, user);
+		try (ResultSet set = connector.executeQuery(query);) {
 			result = set.next();
 		}
 		catch (SQLException e) {
-			// log eccezione
+			e.printStackTrace();
 		}
 		return result;
 	}

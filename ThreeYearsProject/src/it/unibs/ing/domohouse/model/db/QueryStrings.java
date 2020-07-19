@@ -2,6 +2,11 @@ package it.unibs.ing.domohouse.model.db;
 
 public class QueryStrings {
 
+	
+	public static final String CHECK_MAINTAINER = "SELECT * FROM manutentore" 
+			+ " WHERE nome_manutentore =? AND password =?";
+	public static final String CHECK_USER = "SELECT * FROM utente" 
+			+ " WHERE nome_utente =?";
 	public static final String GET_USER = "SELECT * FROM utente WHERE nome_utente =?";
 	public static final String GET_SENSOR_CATEGORIES = "SELECT * FROM categoria_sensori";
 	public static final String GET_NUMERIC_INFO_OF_A_CATEGORY = "SELECT informazione_rilevabile.id_informazione, informazione_rilevabile.nome_proprietà, minimo, massimo"
@@ -49,4 +54,46 @@ public class QueryStrings {
 	public static final String GET_RULES = "SELECT nome_regola, stato, testo_antecedente, testo_conseguente"
 			+ " FROM regola" 
 			+ " WHERE nome_utente =? AND nome_unità =?";
+	
+	//Query di inserimento
+	
+	public static final String INSERT_MAINTAINER = "INSERT INTO manutentore (nome_manutentore, password) VALUES (?, ?)";
+	
+	public static final String INSERT_USER = "INSERT INTO utente (nome_utente) VALUES (?)";
+	
+	public static final String INSERT_PROPERTY = "INSERT INTO proprietà (nome_proprietà, tipo, valore_default) VALUES (?, ?, ?)";
+
+	public static final String INSERT_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (nome_proprietà, selettore_informazione, minimo, massimo, unità_di_misura) VALUES  (?, ?, ?, ?, ?)";
+
+	public static final String INSERT_SENSOR_CATEGORY = "INSERT INTO categoria_sensori (nome_categoria_sensori, descrizione, sigla, costruttore) VALUES (?, ?, ?, ?)";
+
+	public static final String INSERT_MEASURED_INFO = "INSERT INTO misura_informazioni (nome_categoria_sensori, id_informazione, nome_proprietà) VALUES (?, ?, ?)";
+
+	public static final String INSERT_ACTUATOR_CATEGORY = "INSERT INTO categoria_attuatori (nome_categoria_attuatori, descrizione, sigla, costruttore, modalità_di_default) VALUES (?, ?, ?, ?, ?)";
+
+	public static final String INSERT_OPERATING_MODE = "INSERT INTO modalità_operativa (nome_modalità, parametrica) VALUES (?, ?)";
+
+	public static final String INSERT_CATEGORY_OPERATING_MODE = "INSERT INTO possiede_modalità (nome_categoria_attuatori, nome_modalità) VALUES (?, ?)";
+
+	public static final String INSERT_HOUSING_UNIT = "INSERT INTO unità_immobiliare (nome_unità, nome_utente, tipo, descr) VALUES (?, ?, ?, ?)";
+
+	public static final String INSERT_ROOM = "INSERT INTO stanza (nome_stanza, nome_unità, nome_utente, descr) VALUES (?, ?, ?, ?)";
+
+	public static final String INSERT_ROOM_PROPERTY = "INSERT INTO proprietà_stanze (nome_stanza, nome_unità, nome_utente, nome_proprietà) VALUES (?, ?, ?, ?)";
+
+	public static final String INSERT_ARTIFACT = "INSERT INTO artefatto (nome_artefatto, nome_unità, nome_utente, descrizione, posizione) VALUES (?, ?, ?, ?, ?)";
+
+	public static final String INSERT_ACTUATOR = "INSERT INTO attuatore (nome_attuatore, nome_unità, nome_utente, stato, stanze_o_artefatti, posizione, nome_categoria_attuatori) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+	public static final String INSERT_ACTUATOR_CONTROLLED_ROOM = "INSERT INTO controlla_stanze (nome_attuatore, nome_unità, nome_utente, nome_stanza) VALUES (?, ?, ?, ?)";
+
+	public static final String INSERT_ACTUATOR_CONTROLLED_ARTIFACT = "INSERT INTO controlla_artefatti (nome_attuatore, nome_unità, nome_utente, nome_artefatto) VALUES (?, ?, ?, ?)";
+
+	public static final String INSERT_SENSOR = "INSERT INTO sensore (nome_sensore, nome_unità, nome_utente, stato, stanze_o_artefatti, posizione, nome_categoria_sensori) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+	public static final String INSERT_SENSOR_MEASURED_ROOM = "INSERT INTO misura_stanze (nome_sensore, nome_unità, nome_utente, nome_stanza) VALUES (?, ?, ?, ?)";
+
+	public static final String INSERT_SENSOR_MEASURED_ARTIFACT = "INSERT INTO misura_artefatti (nome_sensore, nome_unità, nome_utente, nome_artefatto) VALUES (?, ?, ?, ?)";
+
+	public static final String INSERT_RULE = "INSERT INTO regola (nome_regola, nome_unità, nome_utente, stato, testo_antecedente, testo_conseguente) VALUES (?, ?, ?, ?, ?, ?)";
 }

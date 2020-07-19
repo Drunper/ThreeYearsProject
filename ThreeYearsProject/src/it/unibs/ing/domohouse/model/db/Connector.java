@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.model.db;
 
 import java.sql.*;
+import java.util.Map.Entry;
 
 public class Connector {
 
@@ -71,12 +72,60 @@ public class Connector {
 		}
 		return res;
 	}
+	
+	public ResultSet executeQuery(String query) {
+		ResultSet res = null;
+		try {
+			preparedStatement = connection.prepareStatement(query);
+			res = preparedStatement.executeQuery();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
 
 	public void execute() {
 		try {
 			preparedStatement.execute();
 		}
 		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void executeQueryWithoutResult(Query query) {
+		try {
+			setQuery(query);
+			preparedStatement.execute();
+			preparedStatement.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public ResultSet executeQuery(Query query) {
+		ResultSet set = null;
+		try {
+			setQuery(query);
+			set = preparedStatement.executeQuery();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return set;
+	}
+	
+	private void setQuery(Query query) {
+		try {
+			preparedStatement = connection.prepareStatement(query.getQuery());
+			for(Entry<Integer, Integer> param : query.getIntegerParameters().entrySet())
+				preparedStatement.setInt(param.getKey(), param.getValue());
+			for(Entry<Integer, String> param : query.getStringParameters().entrySet())
+				preparedStatement.setString(param.getKey(), param.getValue());
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
