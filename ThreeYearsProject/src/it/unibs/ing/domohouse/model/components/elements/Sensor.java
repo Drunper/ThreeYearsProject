@@ -53,21 +53,10 @@ public class Sensor implements Manageable, Serializable, Stateable {
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void addEntry(Room toAdd) {
+	public void addEntry(Gettable toAdd) {
 		assert toAdd != null;
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
 		int pre_size = measuredObjects.size();
-
-		measuredObjects.addElement(toAdd);
-
-		assert measuredObjects.size() >= pre_size;
-		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
-	}
-
-	public void addEntry(Artifact toAdd) {
-		assert toAdd != null;
-		int pre_size = measuredObjects.size();
-		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		measuredObjects.addElement(toAdd);
 

@@ -15,6 +15,8 @@ import it.unibs.ing.domohouse.model.components.properties.ActuatorCategory;
 import it.unibs.ing.domohouse.model.components.properties.OperatingModesManager;
 import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
 import it.unibs.ing.domohouse.model.components.rule.Rule;
+import it.unibs.ing.domohouse.model.db.Connector;
+import it.unibs.ing.domohouse.model.db.DatabaseLoader;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class DataFacade implements Serializable {
@@ -24,12 +26,16 @@ public class DataFacade implements Serializable {
 	private Manager actuatorCategoryManager;
 	private Manager userManager;
 	private boolean firstStart;
+	private DatabaseLoader databaseLoader;
+	private Connector connector;
 
 	/*
 	 * invariante sensorCategoryManager != null, actuatorCategoryManager != null,
 	 * housingUnitManager != null
 	 */
-	public DataFacade() {
+	public DataFacade(Connector connector) {
+		this.connector = connector;
+		databaseLoader = new DatabaseLoader(connector);
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
 		userManager = new Manager();

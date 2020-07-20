@@ -92,22 +92,14 @@ public class Actuator implements Manageable, Serializable, Stateable {
 
 	// Fatto per chiarezza, solo un artefatto o una stanza può essere controllato
 	// dall'attuatore
-	public void addEntry(Room toAdd) {
+	public void addEntry(Gettable toAdd) {
 		assert toAdd != null : ModelStrings.TO_ADD_PRECONDITION;
 		int size = controlledObjects.size();
 		controlledObjects.addElement(toAdd);
 		assert controlledObjects.size() == size + 1;
 		assert actuatorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
-
-	public void addEntry(Artifact toAdd) {
-		assert toAdd != null : ModelStrings.TO_ADD_PRECONDITION;
-		int size = controlledObjects.size();
-		controlledObjects.addElement(toAdd);
-		assert controlledObjects.size() == size + 1;
-		assert actuatorInvariant() : ModelStrings.WRONG_INVARIANT;
-	}
-
+	
 	public boolean isControllingRoom() {
 		assert actuatorInvariant() : ModelStrings.WRONG_INVARIANT;
 		return controllingRoom;

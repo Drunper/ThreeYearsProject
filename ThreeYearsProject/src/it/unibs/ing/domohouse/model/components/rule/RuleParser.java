@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
 import it.unibs.ing.domohouse.model.components.elements.Actuator;
 import it.unibs.ing.domohouse.model.components.elements.Sensor;
-import it.unibs.ing.domohouse.model.util.DataFacade;
 
 public class RuleParser implements Serializable {
 
@@ -39,13 +39,11 @@ public class RuleParser implements Serializable {
 		}
 	};
 
-	private DataFacade dataFacade;
 	private String lookahead;
 	private Stack<String> tokenStack;
 
-	public RuleParser(DataFacade dataFacade) {
+	public RuleParser() {
 		fillMap();
-		this.dataFacade = dataFacade;
 		this.tokenStack = new Stack<>();
 	}
 
@@ -79,7 +77,7 @@ public class RuleParser implements Serializable {
 			throw new Exception("Error " + lookahead + " does not match regex: " + regex);
 	}
 
-	public AntecedentNode parseAnt(String user, String selectedHouse, String antString) throws Exception {
+	public AntecedentNode parseAnt(String antString, List<Sensor> involvedSensors) throws Exception {
 		setStringToParse(antString);
 		AntecedentNode tree = null;
 		AntecedentNode left;
@@ -110,7 +108,7 @@ public class RuleParser implements Serializable {
 				tree = logop();
 				advance(); // legge il nuovo carattere di lookahead
 				tree.setLeftNode(left);
-				tree.setRightNode(logicNode(user, selectedHouse));
+				tree.setRightNode(logicNode(involvedSensors));
 			}
 			else if (lookahead.equals("")) {
 				tree = left;
@@ -119,7 +117,7 @@ public class RuleParser implements Serializable {
 				throw new Exception("Error unexpected token");
 		}
 		else if (lookahead.matches(SENS_VALUE_REGEX)) { // lookahead == sensore_categoria.informazione
-			tree = logicNode(user, selectedHouse);
+			tree = logicNode(involvedSensors);
 		}
 		return tree;
 	}
@@ -142,16 +140,16 @@ public class RuleParser implements Serializable {
 			throw new Exception("Error unexpected token");
 	}
 
-	private AntecedentNode logicNode(String user, String selectedHouse) throws Exception {
+	private AntecedentNode logicNode(List<Sensor> involvedSensors) throws Exception {
 		AntecedentNode left;
 		AntecedentNode logicNode;
 		AntecedentNode right;
-		left = condNode(user, selectedHouse);
+		left = condNode(involvedSensors);
 		if (lookahead.equals("&&") || lookahead.equals("||")) {
 			logicNode = logop();
 			advance();
 			logicNode.setLeftNode(left);
-			right = logicNode(user, selectedHouse);
+			right = logicNode(involvedSensors);
 			logicNode.setRightNode(right);
 			return logicNode;
 		}
@@ -161,10 +159,10 @@ public class RuleParser implements Serializable {
 			throw new Exception("Error unexpected token");
 	}
 
-	private AntecedentNode condNode(String user, String selectedHouse) throws Exception {
+	private AntecedentNode condNode(List<Sensor> involvedSensors) throws Exception {
 		String sensorValue = lookahead;
 		matchRegex(SENS_VALUE_REGEX);
-		Sensor sens = dataFacade.getSensor(user, selectedHouse, sensorValue.split("\\.")[ModelStrings.FIRST_TOKEN]);
+		Sensor sens = getSensorFromList(sensorValue.split("\\.")[ModelStrings.FIRST_TOKEN], involvedSensors);
 		String info = sensorValue.split("\\.")[ModelStrings.SECOND_TOKEN];
 		String operator = lookahead;
 		if (lookahead.matches(SRELOP_REGEX)) {
@@ -187,7 +185,7 @@ public class RuleParser implements Serializable {
 			else if (lookahead.matches(SENS_VALUE_REGEX)) {
 				advance();
 				return new StringTwoSensorsNode(sens, info,
-						dataFacade.getSensor(user, selectedHouse, secondOperand.split("\\.")[ModelStrings.FIRST_TOKEN]),
+						getSensorFromList(secondOperand.split("\\.")[ModelStrings.FIRST_TOKEN], involvedSensors),
 						secondOperand.split("\\.")[ModelStrings.SECOND_TOKEN], strOperator);
 			}
 			else if (lookahead.matches(DOUBLE_REGEX)) {
@@ -198,7 +196,7 @@ public class RuleParser implements Serializable {
 			else if (lookahead.matches(SENS_VALUE_REGEX)) {
 				advance();
 				return new DoubleTwoSensorsNode(sens, info,
-						dataFacade.getSensor(user, selectedHouse, secondOperand.split("\\.")[ModelStrings.FIRST_TOKEN]),
+						getSensorFromList(secondOperand.split("\\.")[ModelStrings.FIRST_TOKEN], involvedSensors),
 						secondOperand.split("\\.")[ModelStrings.SECOND_TOKEN], doubleOperatorsMap.get(operator));
 			}
 			else
@@ -215,7 +213,7 @@ public class RuleParser implements Serializable {
 			else if (lookahead.matches(SENS_VALUE_REGEX)) {
 				advance();
 				return new DoubleTwoSensorsNode(sens, info,
-						dataFacade.getSensor(user, selectedHouse, secondOperand.split("\\.")[ModelStrings.FIRST_TOKEN]),
+						getSensorFromList(secondOperand.split("\\.")[ModelStrings.FIRST_TOKEN], involvedSensors),
 						secondOperand.split("\\.")[ModelStrings.SECOND_TOKEN], doubleOperatorsMap.get(operator));
 			}
 			else
@@ -230,23 +228,23 @@ public class RuleParser implements Serializable {
 		return Double.parseDouble(start.split(":=")[ModelStrings.SECOND_TOKEN]);
 	}
 
-	public Action parseCons(String user, String selectedHouse, String consString) {
+	public Action parseCons(String consString, List<Actuator> involvedActuators) {
 		String[] tokenArray = consString.split(", ");
 		int start = consString.contains("start") ? ModelStrings.SECOND_TOKEN : ModelStrings.FIRST_TOKEN;
 
-		Action firstAction = parseAction(user, selectedHouse, tokenArray[start]);
+		Action firstAction = parseAction(tokenArray[start], involvedActuators);
 		Action previous = firstAction;
 		for (int i = start + 1; i < tokenArray.length; i++) {
-			Action next = parseAction(user, selectedHouse, tokenArray[i]);
+			Action next = parseAction(tokenArray[i], involvedActuators);
 			previous.setNextAction(next);
 			previous = next;
 		}
 		return firstAction;
 	}
 
-	private Action parseAction(String user, String selectedHouse, String actionString) {
+	private Action parseAction(String actionString, List<Actuator> involvedActuators) {
 		String[] tokens = actionString.split(" := ");
-		Actuator act = dataFacade.getActuator(user, selectedHouse, tokens[ModelStrings.FIRST_TOKEN]);
+		Actuator act = getActuatorFromList(tokens[ModelStrings.FIRST_TOKEN], involvedActuators);
 		String modop;
 		if (tokens[ModelStrings.SECOND_TOKEN].contains("(")) {
 			modop = tokens[ModelStrings.SECOND_TOKEN].split("\\(")[ModelStrings.FIRST_TOKEN];
@@ -257,6 +255,24 @@ public class RuleParser implements Serializable {
 			return new Action(act, tokens[ModelStrings.SECOND_TOKEN], new ArrayList<String>());
 	}
 
+	private Sensor getSensorFromList(String sensorName, List<Sensor> sensors) {
+		for(Sensor sensor : sensors) {
+			if(sensor.getName().equalsIgnoreCase(sensorName)) {
+				return sensor;
+			}
+		}
+		return null;
+	}
+	
+	private Actuator getActuatorFromList(String actuatorName, List<Actuator> actuators) {
+		for(Actuator sensor : actuators) {
+			if(sensor.getName().equalsIgnoreCase(actuatorName)) {
+				return sensor;
+			}
+		}
+		return null;
+	}
+	
 	private void fillMap() {
 		doubleOperatorsMap.put(">", new Operator() {
 
