@@ -7,4 +7,13 @@ public class DirtyObjectState implements ObjectState {
 		return context.getUpdateQuery();
 	}
 
+	@Override
+	public void modify(Saveable context) {
+	}
+
+	@Override
+	public void delete(Saveable context) {
+		context.setObjectState(new DeletedObjectState());
+	}
+
 }

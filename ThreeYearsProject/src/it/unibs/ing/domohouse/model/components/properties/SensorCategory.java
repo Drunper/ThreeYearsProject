@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import it.unibs.ing.domohouse.model.components.elements.Manageable;
+import it.unibs.ing.domohouse.model.db.Saveable;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class SensorCategory implements Manageable, Serializable {
@@ -15,6 +16,7 @@ public class SensorCategory implements Manageable, Serializable {
 	private String descr;
 	private Map<String, InfoStrategy> infoDomainMap;
 	private Map<String, String> measurementUnitMap;
+	private Saveable saveable;
 
 	public SensorCategory(String name, String descr, Map<String, InfoStrategy> infoDomainMap,
 			Map<String, String> measurementUnitMap) {
@@ -22,6 +24,18 @@ public class SensorCategory implements Manageable, Serializable {
 		this.descr = descr;
 		this.infoDomainMap = infoDomainMap;
 		this.measurementUnitMap = measurementUnitMap;
+	}
+	
+	public void setSaveable(Saveable saveable) {
+		this.saveable = saveable;
+	}
+	
+	public void modify() {
+		saveable.modify();
+	}
+	
+	public void delete() {
+		saveable.delete();
 	}
 
 	public String getName() {
@@ -55,8 +69,12 @@ public class SensorCategory implements Manageable, Serializable {
 		return info.getSingleValue(values);
 	}
 
-	public Set<String> getDetectableInfoList() {
+	public Set<String> getInfoStrategySet() {
 		return infoDomainMap.keySet();
+	}
+	
+	public int getInfoID(String property) {
+		return infoDomainMap.get(property).getID();
 	}
 
 	public String getMeasurementUnit(String info) {

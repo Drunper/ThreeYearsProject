@@ -18,7 +18,7 @@ public class SensorCategoryRenderer implements ManageableRenderer {
 		if (m instanceof SensorCategory) {
 			SensorCategory senscat = (SensorCategory) m;
 			String infos = senscat
-					.getDetectableInfoList().stream().map(s -> ViewStrings.INFO_NAME + s + ViewStrings.SPACE
+					.getInfoStrategySet().stream().map(s -> ViewStrings.INFO_NAME + s + ViewStrings.SPACE
 							+ ViewStrings.INFO_DOMAIN + senscat.getDomainString(s))
 					.collect(Collectors.joining(ViewStrings.LINE_SEPARATOR));
 			String result = String.format(

@@ -11,7 +11,7 @@ public class ActuatorCategoryRenderer implements ManageableRenderer {
 	public String render(Manageable m) {
 		if (m instanceof ActuatorCategory) {
 			ActuatorCategory actcat = (ActuatorCategory) m;
-			String operatingModes = actcat.listOfOperatingModes().stream()
+			String operatingModes = actcat.getOperatingModesSet().stream()
 					.collect(Collectors.joining(ViewStrings.LINE_SEPARATOR));
 			String result = String.format(ViewStrings.ACTUATOR_CATEGORY + ViewStrings.LINE_SEPARATOR + ViewStrings.NAME
 					+ "%s" + ViewStrings.LINE_SEPARATOR + ViewStrings.ABBREVATION + "%s" + ViewStrings.LINE_SEPARATOR

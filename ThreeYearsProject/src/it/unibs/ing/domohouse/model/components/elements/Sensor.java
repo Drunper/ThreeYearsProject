@@ -8,6 +8,7 @@ import java.util.Set;
 import it.unibs.ing.domohouse.model.components.properties.ActiveState;
 import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
 import it.unibs.ing.domohouse.model.components.properties.State;
+import it.unibs.ing.domohouse.model.db.Saveable;
 import it.unibs.ing.domohouse.model.util.Manager;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
@@ -20,12 +21,25 @@ public class Sensor implements Manageable, Serializable, Stateable {
 	private Manager measuredObjects;
 	private State state;
 	private boolean measuringRoom;
+	private Saveable saveable;
 
 	public Sensor(String name, SensorCategory category) {
 		this.name = name;
 		this.category = category;
 		measuredObjects = new Manager();
 		state = new ActiveState();
+	}
+	
+	public void setSaveable(Saveable saveable) {
+		this.saveable = saveable;
+	}
+	
+	public void modify() {
+		saveable.modify();
+	}
+	
+	public void delete() {
+		saveable.delete();
 	}
 
 	public String getName() {
@@ -61,7 +75,7 @@ public class Sensor implements Manageable, Serializable, Stateable {
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public Set<String> measuredObjectsList() {
+	public Set<String> getMeasuredObjectsSet() {
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
 		return measuredObjects.getListOfElements();
 	}
@@ -110,7 +124,7 @@ public class Sensor implements Manageable, Serializable, Stateable {
 
 	public String getMeasurementOf(String info) {
 		List<String> valuesFromObjects = new ArrayList<>();
-		Set<String> objectNames = measuredObjectsList();
+		Set<String> objectNames = getMeasuredObjectsSet();
 		for (String name : objectNames) {
 			Gettable element = getElementByName(name);
 			if (element.hasProperty(info)) { // Se è possibile rilevare informazioni allora le rileva
@@ -125,7 +139,7 @@ public class Sensor implements Manageable, Serializable, Stateable {
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		List<String> result = new ArrayList<>();
-		for (String info : category.getDetectableInfoList()) {
+		for (String info : category.getInfoStrategySet()) {
 			String measurement = getMeasurementOf(info);
 			if (category.hasMeasurementUnit(info))
 				measurement = measurement + ModelStrings.SPACE + category.getMeasurementUnit(info);

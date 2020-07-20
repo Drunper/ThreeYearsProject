@@ -8,10 +8,12 @@ public class DoubleInfoStrategy implements InfoStrategy, Serializable {
 	private static final long serialVersionUID = -2688053215017124980L;
 	private double lowerBound;
 	private double upperBound;
+	private int ID;
 
-	public DoubleInfoStrategy(double lowerBound, double upperBound) {
+	public DoubleInfoStrategy(double lowerBound, double upperBound, int ID) {
 		this.lowerBound = lowerBound;
 		this.upperBound = upperBound;
+		this.ID = ID;
 	}
 
 	@Override
@@ -27,6 +29,11 @@ public class DoubleInfoStrategy implements InfoStrategy, Serializable {
 		}
 		result /= values.size();
 		return String.valueOf(result);
+	}
+
+	@Override
+	public int getID() {
+		return ID;
 	}
 
 	public String toString() {

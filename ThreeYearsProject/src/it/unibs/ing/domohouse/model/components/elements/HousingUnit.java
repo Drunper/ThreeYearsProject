@@ -7,6 +7,7 @@ import it.unibs.ing.domohouse.model.components.properties.ActiveState;
 import it.unibs.ing.domohouse.model.components.properties.InactiveState;
 import it.unibs.ing.domohouse.model.components.properties.State;
 import it.unibs.ing.domohouse.model.components.rule.Rule;
+import it.unibs.ing.domohouse.model.db.Saveable;
 import it.unibs.ing.domohouse.model.util.Association;
 import it.unibs.ing.domohouse.model.util.AssociationManager;
 import it.unibs.ing.domohouse.model.util.Manager;
@@ -25,6 +26,7 @@ public class HousingUnit implements Serializable, Manageable {
 	private Manager actuatorManager; // tutti gli attuatori della casa
 	private Manager artifactManager; // tutti gli artefatti della casa
 	private AssociationManager associationManager; // per il controllo delle associazioni
+	private Saveable saveable;
 
 	/*
 	 * invariante name > 0, descr > 0, diversi da null. Manager != null
@@ -40,6 +42,18 @@ public class HousingUnit implements Serializable, Manageable {
 		artifactManager = new Manager();
 		associationManager = new AssociationManager();
 		rulesManager = new Manager();
+	}
+	
+	public void setSaveable(Saveable saveable) {
+		this.saveable = saveable;
+	}
+	
+	public void modify() {
+		saveable.modify();
+	}
+	
+	public void delete() {
+		saveable.delete();
 	}
 	
 	public String getType() {
@@ -77,6 +91,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public void setDescr(String descr) {
 		assert descr != null && descr.length() > 0;
 		this.descr = descr;
+		modify();
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 

@@ -8,6 +8,7 @@ import it.unibs.ing.domohouse.model.components.properties.ActiveState;
 import it.unibs.ing.domohouse.model.components.properties.ActuatorCategory;
 import it.unibs.ing.domohouse.model.components.properties.OperatingMode;
 import it.unibs.ing.domohouse.model.components.properties.State;
+import it.unibs.ing.domohouse.model.db.Saveable;
 import it.unibs.ing.domohouse.model.util.Manager;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
@@ -20,6 +21,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 	private String operatingMode;
 	private String defaultMode;
 	private State state;
+	private Saveable saveable;
 	private boolean controllingRoom;
 	private boolean performing;
 
@@ -66,13 +68,25 @@ public class Actuator implements Manageable, Serializable, Stateable {
 	public void trigger() {
 		state.trigger(this);
 	}
+	
+	public void setSaveable(Saveable saveable) {
+		this.saveable = saveable;
+	}
+	
+	public void modify() {
+		saveable.modify();
+	}
+	
+	public void delete() {
+		saveable.delete();
+	}
 
 	public ActuatorCategory getCategory() {
 		assert actuatorInvariant() : ModelStrings.WRONG_INVARIANT;
 		return this.category;
 	}
 
-	public Set<String> getControlledObjectsList() {
+	public Set<String> getControlledObjectsSet() {
 		return controlledObjects.getListOfElements();
 	}
 
@@ -109,7 +123,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 	}
 	
 	public Set<String> getOperatingModes() {
-		return category.listOfOperatingModes();
+		return category.getOperatingModesSet();
 	}
 
 	public void setOperatingMode(String operatingMode, List<String> parameters) {
@@ -119,7 +133,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 		OperatingMode mode = category.getOperatingMode(operatingMode);
 		for (String parameter : parameters)
 			mode.setParamaterValue(parameter);
-		for (String object : getControlledObjectsList())
+		for (String object : getControlledObjectsSet())
 			mode.operate((Gettable) controlledObjects.getElementByName(object));
 		performing = false;
 		assert actuatorInvariant() : ModelStrings.WRONG_INVARIANT;

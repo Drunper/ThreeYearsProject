@@ -5,6 +5,7 @@ import java.util.*;
 
 import it.unibs.ing.domohouse.model.util.Manager;
 import it.unibs.ing.domohouse.model.ModelStrings;
+import it.unibs.ing.domohouse.model.db.Saveable;
 
 public class Room implements Gettable, Serializable {
 
@@ -15,6 +16,7 @@ public class Room implements Gettable, Serializable {
 	private Manager actuatorManager;
 	private Manager artifactManager;
 	private Map<String, String> propertiesMap;
+	private Saveable saveable;
 
 	public Room(String name, String descr, Map<String, String> propertiesMap) {
 		this.name = name;
@@ -25,7 +27,20 @@ public class Room implements Gettable, Serializable {
 		this.propertiesMap = propertiesMap;
 
 	}
+	
+	public void setSaveable(Saveable saveable) {
+		this.saveable = saveable;
+	}
+	
+	public void modify() {
+		saveable.modify();
+	}
+	
+	public void delete() {
+		saveable.delete();
+	}
 
+	@Override
 	public String getName() {
 		assert roomInvariant() : ModelStrings.WRONG_INVARIANT;
 		return this.name;
@@ -36,6 +51,7 @@ public class Room implements Gettable, Serializable {
 		return this.descr;
 	}
 
+	@Override
 	public void setName(String roomName) {
 		assert roomName != null && roomName.length() > 0;
 
@@ -157,14 +173,22 @@ public class Room implements Gettable, Serializable {
 		return artifactManager.getListOfElements();
 	}
 
+	@Override
 	public boolean hasProperty(String variableName) {
 		return propertiesMap.containsKey(variableName);
 	}
+	
+	@Override
+	public boolean doesPropertyExist() {
+		return !propertiesMap.isEmpty();
+	}
 
+	@Override
 	public String getProperty(String variableName) {
 		return propertiesMap.get(variableName);
 	}
 
+	@Override
 	public void setProperty(String variableName, String newValue) {
 		assert variableName != null;
 		assert roomInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -174,6 +198,11 @@ public class Room implements Gettable, Serializable {
 
 		assert propertiesMap.size() >= pre_size;
 		assert roomInvariant() : ModelStrings.WRONG_INVARIANT;
+	}
+	
+	@Override
+	public Set<String> getPropertiesNameSet() {
+		return propertiesMap.keySet();
 	}
 
 	private boolean roomInvariant() {

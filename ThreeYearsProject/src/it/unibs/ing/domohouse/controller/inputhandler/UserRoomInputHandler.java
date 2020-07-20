@@ -68,7 +68,7 @@ public class UserRoomInputHandler {
 
 		Actuator act = dataFacade.getActuator(user, selectedHouse, selectedActuator);
 
-		view.printListOfString(act.getCategory().listOfOperatingModes());
+		view.printListOfString(act.getCategory().getOperatingModesSet());
 
 		String op;
 		do {

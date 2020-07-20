@@ -7,4 +7,12 @@ public class DeletedObjectState implements ObjectState {
 		return context.getDeleteQuery();
 	}
 
+	@Override
+	public void modify(Saveable context) {
+	}
+
+	@Override
+	public void delete(Saveable context) {
+	}
+
 }

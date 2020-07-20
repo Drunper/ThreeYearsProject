@@ -6,6 +6,7 @@ import java.util.List;
 import it.unibs.ing.domohouse.model.components.elements.Manageable;
 import it.unibs.ing.domohouse.model.components.elements.Stateable;
 import it.unibs.ing.domohouse.model.components.properties.State;
+import it.unibs.ing.domohouse.model.db.Saveable;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class Rule implements Serializable, Stateable, Manageable {
@@ -22,6 +23,7 @@ public class Rule implements Serializable, Stateable, Manageable {
 
 	private State state;
 	private boolean hasStartConsequent;
+	private Saveable saveable;
 
 	/*
 	 * invariante name != null, antString !=null, consequentRuleString != null,
@@ -36,6 +38,18 @@ public class Rule implements Serializable, Stateable, Manageable {
 		this.involvedSensors = involvedSensors;
 		this.involvedActuators = involvedActuators;
 		this.hasStartConsequent = false;
+	}
+	
+	public void setSaveable(Saveable saveable) {
+		this.saveable = saveable;
+	}
+	
+	public void modify() {
+		saveable.modify();
+	}
+	
+	public void delete() {
+		saveable.delete();
 	}
 
 	public double getTime() {
@@ -91,6 +105,14 @@ public class Rule implements Serializable, Stateable, Manageable {
 
 	public void doAction() {
 		firstAction.action();
+	}
+	
+	public String getAntecedentText() {
+		return antecedentRoot.toString();
+	}
+	
+	public String getConsequentText() {
+		return firstAction.toString();
 	}
 
 	private boolean ruleInvariant() {

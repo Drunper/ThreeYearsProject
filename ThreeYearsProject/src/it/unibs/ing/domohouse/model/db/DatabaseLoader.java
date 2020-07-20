@@ -48,7 +48,7 @@ public class DatabaseLoader implements Loader {
 		try (ResultSet set1 = connector.executeQuery(query)) {
 			while (set1.next()) {
 				infoDomainMap.put(set1.getString("nome_proprietà"),
-						new DoubleInfoStrategy(set1.getDouble("minimo"), set1.getDouble("massimo")));
+						new DoubleInfoStrategy(set1.getDouble("minimo"), set1.getDouble("massimo"), set1.getInt("id_informazione")));
 			}
 		}
 		catch (SQLException e) {
@@ -59,7 +59,7 @@ public class DatabaseLoader implements Loader {
 		try (ResultSet set2 = connector.executeQuery(query)) {
 			while (set2.next()) {
 				infoDomainMap.put(set2.getString("nome_proprietà"), new StringInfoStrategy(
-						getStringInfoDomainValues(set2.getInt("id_informazione"), set2.getString("nome_proprietà"))));
+						getStringInfoDomainValues(set2.getInt("id_informazione"), set2.getString("nome_proprietà")), set2.getInt("id_informazione")));
 			}
 		}
 		catch (SQLException e) {

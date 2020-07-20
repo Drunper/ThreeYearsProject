@@ -112,7 +112,7 @@ public class DataFacade implements Serializable {
 		for (String cat : sensorCategoryManager.getListOfElements()) {
 			SensorCategory sensCat = getSensorCategory(cat);
 
-			Set<String> detectableInfoList = sensCat.getDetectableInfoList();
+			Set<String> detectableInfoList = sensCat.getInfoStrategySet();
 			for (String inf : detectableInfoList) {
 				if (info.equalsIgnoreCase(inf)) {
 					assert sensCat != null;

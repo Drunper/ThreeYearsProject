@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import it.unibs.ing.domohouse.model.components.elements.Manageable;
+import it.unibs.ing.domohouse.model.db.Saveable;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class ActuatorCategory implements Manageable, Serializable {
@@ -14,6 +15,7 @@ public class ActuatorCategory implements Manageable, Serializable {
 	private String name;
 	private String descr;
 	private Map<String, OperatingMode> operatingModesMap;
+	private Saveable saveable;
 
 	/*
 	 * invariante name > 0, text > 0 name != null, text != null
@@ -22,6 +24,18 @@ public class ActuatorCategory implements Manageable, Serializable {
 		this.name = name;
 		this.descr = descr;
 		operatingModesMap = new HashMap<>();
+	}
+	
+	public void setSaveable(Saveable saveable) {
+		this.saveable = saveable;
+	}
+	
+	public void modify() {
+		saveable.modify();
+	}
+	
+	public void delete() {
+		saveable.delete();
 	}
 
 	public String getName() {
@@ -46,7 +60,7 @@ public class ActuatorCategory implements Manageable, Serializable {
 		assert actuatorCategoryInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public Set<String> listOfOperatingModes() {
+	public Set<String> getOperatingModesSet() {
 		assert operatingModesMap != null;
 		assert actuatorCategoryInvariant() : ModelStrings.WRONG_INVARIANT;
 		return operatingModesMap.keySet();

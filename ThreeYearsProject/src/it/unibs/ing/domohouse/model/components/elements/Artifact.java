@@ -2,8 +2,10 @@ package it.unibs.ing.domohouse.model.components.elements;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
+import it.unibs.ing.domohouse.model.db.Saveable;
 
 public class Artifact implements Gettable, Serializable {
 
@@ -11,6 +13,7 @@ public class Artifact implements Gettable, Serializable {
 	private String name;
 	private String text;
 	private Map<String, String> propertiesMap;
+	private Saveable saveable;
 
 	public Artifact(String name, String text, Map<String, String> propertiesMap) {
 		this.name = name;
@@ -18,6 +21,7 @@ public class Artifact implements Gettable, Serializable {
 		this.propertiesMap = propertiesMap;
 	}
 
+	@Override
 	public String getName() {
 		assert artifactInvariant() : ModelStrings.WRONG_INVARIANT;
 		return this.name;
@@ -28,6 +32,7 @@ public class Artifact implements Gettable, Serializable {
 		return this.text;
 	}
 	
+	@Override
 	public void setName(String newName) {
 		assert newName.length() > 0 && newName != null;
 		this.name = newName;
@@ -37,6 +42,7 @@ public class Artifact implements Gettable, Serializable {
 	public void setDescr(String text) {
 		assert text != null;
 		this.text = text;
+		modify();
 		assert artifactInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
@@ -44,7 +50,7 @@ public class Artifact implements Gettable, Serializable {
 	public String getProperty(String variableName) {
 		return propertiesMap.get(variableName);
 	}
-
+	
 	@Override
 	public void setProperty(String variableName, String newValue) {
 		propertiesMap.put(variableName, newValue);
@@ -53,6 +59,28 @@ public class Artifact implements Gettable, Serializable {
 	@Override
 	public boolean hasProperty(String variableName) {
 		return propertiesMap.containsKey(variableName);
+	}
+	
+	@Override
+	public boolean doesPropertyExist() {
+		return !propertiesMap.isEmpty();
+	}
+	
+	@Override
+	public Set<String> getPropertiesNameSet() {
+		return propertiesMap.keySet();
+	}
+	
+	public void setSaveable(Saveable saveable) {
+		this.saveable = saveable;
+	}
+	
+	public void modify() {
+		saveable.modify();
+	}
+	
+	public void delete() {
+		saveable.delete();
 	}
 
 	private boolean artifactInvariant() {

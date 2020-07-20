@@ -8,10 +8,12 @@ import it.unibs.ing.domohouse.model.ModelStrings;
 public class StringInfoStrategy implements InfoStrategy, Serializable {
 
 	private static final long serialVersionUID = 8997364281663305737L;
+	private int ID;
 	private List<String> domain;
 
-	public StringInfoStrategy(List<String> domain) {
+	public StringInfoStrategy(List<String> domain, int ID) {
 		this.domain = domain;
+		this.ID = ID;
 	}
 
 	@Override
@@ -23,6 +25,11 @@ public class StringInfoStrategy implements InfoStrategy, Serializable {
 			return "N/A";
 	}
 
+	@Override
+	public int getID() {
+		return ID;
+	}
+	
 	public String toString() {
 		return String.join(ModelStrings.COMMA_WITH_SPACE, domain);
 	}

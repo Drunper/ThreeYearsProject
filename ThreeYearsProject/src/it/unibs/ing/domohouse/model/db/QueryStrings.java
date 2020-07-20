@@ -2,7 +2,6 @@ package it.unibs.ing.domohouse.model.db;
 
 public class QueryStrings {
 
-	
 	public static final String CHECK_MAINTAINER = "SELECT * FROM manutentore" 
 			+ " WHERE nome_manutentore =? AND password =?";
 	public static final String CHECK_USER = "SELECT * FROM utente" 
@@ -63,37 +62,77 @@ public class QueryStrings {
 	
 	public static final String INSERT_PROPERTY = "INSERT INTO proprietà (nome_proprietà, tipo, valore_default) VALUES (?, ?, ?)";
 
-	public static final String INSERT_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (nome_proprietà, selettore_informazione, minimo, massimo, unità_di_misura) VALUES  (?, ?, ?, ?, ?)";
+	public static final String INSERT_NUMERIC_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (nome_proprietà, selettore_informazione, minimo, massimo, unità_di_misura) VALUES  (?, 0, ?, ?, ?)";
 
-	public static final String INSERT_SENSOR_CATEGORY = "INSERT INTO categoria_sensori (nome_categoria_sensori, descrizione, sigla, costruttore) VALUES (?, ?, ?, ?)";
+	public static final String INSERT_NON_NUMERIC_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (nome_proprietà, selettore_informazione) VALUES (?, 1)";
+	
+	public static final String INSERT_SENSOR_CATEGORY = "INSERT INTO categoria_sensori (nome_categoria_sensori, descrizione, sigla, costruttore) VALUES (?, ?, ?, ?);";
 
-	public static final String INSERT_MEASURED_INFO = "INSERT INTO misura_informazioni (nome_categoria_sensori, id_informazione, nome_proprietà) VALUES (?, ?, ?)";
+	public static final String INSERT_MEASURED_INFO = "INSERT INTO misura_informazioni (nome_categoria_sensori, id_informazione, nome_proprietà)";
 
-	public static final String INSERT_ACTUATOR_CATEGORY = "INSERT INTO categoria_attuatori (nome_categoria_attuatori, descrizione, sigla, costruttore, modalità_di_default) VALUES (?, ?, ?, ?, ?)";
+	public static final String INSERT_ACTUATOR_CATEGORY = "INSERT INTO categoria_attuatori (nome_categoria_attuatori, descrizione, sigla, costruttore, modalità_di_default) VALUES (?, ?, ?, ?, ?);";
 
 	public static final String INSERT_OPERATING_MODE = "INSERT INTO modalità_operativa (nome_modalità, parametrica) VALUES (?, ?)";
 
-	public static final String INSERT_CATEGORY_OPERATING_MODE = "INSERT INTO possiede_modalità (nome_categoria_attuatori, nome_modalità) VALUES (?, ?)";
+	public static final String INSERT_CATEGORY_OPERATING_MODE = "INSERT INTO possiede_modalità (nome_categoria_attuatori, nome_modalità)";
 
 	public static final String INSERT_HOUSING_UNIT = "INSERT INTO unità_immobiliare (nome_unità, nome_utente, tipo, descr) VALUES (?, ?, ?, ?)";
 
-	public static final String INSERT_ROOM = "INSERT INTO stanza (nome_stanza, nome_unità, nome_utente, descr) VALUES (?, ?, ?, ?)";
+	public static final String INSERT_ROOM = "INSERT INTO stanza (nome_stanza, nome_unità, nome_utente, descr) VALUES (?, ?, ?, ?);";
 
-	public static final String INSERT_ROOM_PROPERTY = "INSERT INTO proprietà_stanze (nome_stanza, nome_unità, nome_utente, nome_proprietà) VALUES (?, ?, ?, ?)";
+	public static final String INSERT_ROOM_PROPERTY = "INSERT INTO proprietà_stanze (nome_stanza, nome_unità, nome_utente, nome_proprietà)";
 
-	public static final String INSERT_ARTIFACT = "INSERT INTO artefatto (nome_artefatto, nome_unità, nome_utente, descrizione, posizione) VALUES (?, ?, ?, ?, ?)";
+	public static final String INSERT_ARTIFACT_PROPERTY = "INSERT INTO proprietà_artefatti (nome_artefatto, nome_unità, nome_utente, nome_proprietà)";
+	
+	public static final String INSERT_ARTIFACT = "INSERT INTO artefatto (nome_artefatto, nome_unità, nome_utente, descrizione, posizione) VALUES (?, ?, ?, ?, ?);";
 
-	public static final String INSERT_ACTUATOR = "INSERT INTO attuatore (nome_attuatore, nome_unità, nome_utente, stato, stanze_o_artefatti, posizione, nome_categoria_attuatori) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	public static final String INSERT_ACTUATOR = "INSERT INTO attuatore (nome_attuatore, nome_unità, nome_utente, stato, stanze_o_artefatti, posizione, nome_categoria_attuatori) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-	public static final String INSERT_ACTUATOR_CONTROLLED_ROOM = "INSERT INTO controlla_stanze (nome_attuatore, nome_unità, nome_utente, nome_stanza) VALUES (?, ?, ?, ?)";
+	public static final String INSERT_ACTUATOR_CONTROL_ROOM = "INSERT INTO controlla_stanze (nome_attuatore, nome_unità, nome_utente, nome_stanza)";
 
-	public static final String INSERT_ACTUATOR_CONTROLLED_ARTIFACT = "INSERT INTO controlla_artefatti (nome_attuatore, nome_unità, nome_utente, nome_artefatto) VALUES (?, ?, ?, ?)";
+	public static final String INSERT_ACTUATOR_CONTROL_ARTIFACT = "INSERT INTO controlla_artefatti (nome_attuatore, nome_unità, nome_utente, nome_artefatto)";
 
-	public static final String INSERT_SENSOR = "INSERT INTO sensore (nome_sensore, nome_unità, nome_utente, stato, stanze_o_artefatti, posizione, nome_categoria_sensori) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	public static final String INSERT_SENSOR = "INSERT INTO sensore (nome_sensore, nome_unità, nome_utente, stato, stanze_o_artefatti, posizione, nome_categoria_sensori) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-	public static final String INSERT_SENSOR_MEASURED_ROOM = "INSERT INTO misura_stanze (nome_sensore, nome_unità, nome_utente, nome_stanza) VALUES (?, ?, ?, ?)";
+	public static final String INSERT_SENSOR_MEASURE_ROOM = "INSERT INTO misura_stanze (nome_sensore, nome_unità, nome_utente, nome_stanza)";
 
-	public static final String INSERT_SENSOR_MEASURED_ARTIFACT = "INSERT INTO misura_artefatti (nome_sensore, nome_unità, nome_utente, nome_artefatto) VALUES (?, ?, ?, ?)";
+	public static final String INSERT_SENSOR_MEASURE_ARTIFACT = "INSERT INTO misura_artefatti (nome_sensore, nome_unità, nome_utente, nome_artefatto)";
 
 	public static final String INSERT_RULE = "INSERT INTO regola (nome_regola, nome_unità, nome_utente, stato, testo_antecedente, testo_conseguente) VALUES (?, ?, ?, ?, ?, ?)";
+
+	//Query di aggiornamento
+	
+	public static final String UPDATE_ROOM = "UPDATE stanza SET descrizione = ? WHERE nome_stanza = ? AND nome_unità = ? AND nome_utente = ?";
+	
+	public static final String UPDATE_HOUSING_UNIT = "UPDATE unità_immobiliare SET descrizione = ? WHERE nome_unità = ? AND nome_utente = ?";
+	
+	public static final String UPDATE_ARTIFACT = "UPDATE artefatto SET descrizione = ? WHERE nome_artefatto = ? AND nome_unità = ? AND nome_utente = ?";
+	
+	//Query di eliminazione
+	
+	public static final String DELETE_ROOM = "DELETE FROM stanza WHERE nome_stanza = ? AND nome_unità = ? AND nome_utente = ?";
+	
+	public static final String DELETE_ACTUATOR = "DELETE FROM actuator WHERE nome_attuatore = ? AND nome_unità = ? AND nome_utente = ?";
+	
+	public static final String DELETE_SENSOR = "DELETE FROM sensore WHERE nome_sensore = ? AND nome_unità = ? AND nome_utente = ?";
+	
+	public static final String DELETE_ARTIFACT = "DELETE FROM artefatto WHERE nome_artefatto = ? AND nome_unità = ? AND nome_utente = ?";
+	
+	public static final String DELETE_RULE = "DELETE FROM regola WHERE nome_regola = ? AND nome_unità = ? AND nome_utente = ?";
+	
+	public static final String DELETE_HOUSING_UNIT = "DELETE FROM unità_immobiliare WHERE nome_unità = ? AND nome_utente = ?";
+	
+	public static final String DELETE_USER = "DELETE FROM utente WHERE nome_utente = ?";
+
+	public static final String DELETE_SENSOR_CATEGORY = "DELETE FROM categoria_sensori WHERE nome_categoria_sensori = ?";
+	
+	public static final String DELETE_ACTUATOR_CATEGORY = "DELETE FROM categoria_attuatori WHERE nome_categoria_attuatori = ?";
+	
+	//Stringhe di utilità
+	
+	public static final String FOUR_VALUES = " VALUES (?, ?, ?, ?)";
+	
+	public static final String THREE_VALUES = " VALUES (?, ?, ?)";
+	
+	public static final String TWO_VALUES = " VALUES (?, ?)";
 }

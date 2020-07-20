@@ -7,4 +7,14 @@ public class OldObjectState implements ObjectState {
 		return null;
 	}
 
+	@Override
+	public void modify(Saveable context) {
+		context.setObjectState(new DirtyObjectState());
+	}
+
+	@Override
+	public void delete(Saveable context) {
+		context.setObjectState(new DeletedObjectState());
+	}
+
 }

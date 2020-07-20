@@ -2,22 +2,22 @@ package it.unibs.ing.domohouse.model.db;
 
 import java.util.Collections;
 
-import it.unibs.ing.domohouse.model.components.elements.Actuator;
+import it.unibs.ing.domohouse.model.components.elements.Sensor;
 
-public class SaveableActuator implements Saveable {
+public class SaveableSensor implements Saveable {
 
 	private String user;
 	private String housingUnit;
 	private String location;
-	private Actuator actuator;
+	private Sensor sensor;
 	private ObjectState objectState;
 	
-	public SaveableActuator(String user, String housingUnit, String location, Actuator actuator,
+	public SaveableSensor(String user, String housingUnit, String location, Sensor sensor,
 			ObjectState objectState) {
 		this.user = user;
 		this.housingUnit = housingUnit;
 		this.location = location;
-		this.actuator = actuator;
+		this.sensor = sensor;
 		this.objectState = objectState;
 	}
 
@@ -28,37 +28,37 @@ public class SaveableActuator implements Saveable {
 	
 	@Override
 	public Query getInsertionQuery() {
-		String queryString = QueryStrings.INSERT_ACTUATOR;
-		if(actuator.isControllingRoom())
-			queryString += QueryStrings.INSERT_ACTUATOR_CONTROL_ROOM;
+		String queryString = QueryStrings.INSERT_SENSOR;
+		if(sensor.isMeasuringRoom())
+			queryString += QueryStrings.INSERT_SENSOR_MEASURE_ROOM;
 		else
-			queryString += QueryStrings.INSERT_ACTUATOR_CONTROL_ARTIFACT;
+			queryString += QueryStrings.INSERT_SENSOR_MEASURE_ARTIFACT;
 		
 		Query query = new Query("");
-		query.setStringParameter(1, actuator.getName());
+		query.setStringParameter(1, sensor.getName());
 		query.setStringParameter(2, housingUnit);
 		query.setStringParameter(3, user);
-		query.setIntegerParameter(4, actuator.getState().isActive() ? 1 : 0);
-		query.setIntegerParameter(5, actuator.isControllingRoom() ? 1 : 0);
+		query.setIntegerParameter(4, sensor.getState().isActive() ? 1 : 0);
+		query.setIntegerParameter(5, sensor.isMeasuringRoom() ? 1 : 0);
 		query.setStringParameter(6, location);
-		query.setStringParameter(7, actuator.getCategory().getName());
+		query.setStringParameter(7, sensor.getCategory());
 		
 		int pos = 8;
-		for(String controlledObject : actuator.getControlledObjectsSet()) {
-			query.setStringParameter(pos++, actuator.getName());
+		for(String measuredObject : sensor.getMeasuredObjectsSet()) {
+			query.setStringParameter(pos++, sensor.getName());
 			query.setStringParameter(pos++, housingUnit);
 			query.setStringParameter(pos++, user);
-			query.setStringParameter(pos++, controlledObject);
+			query.setStringParameter(pos++, measuredObject);
 		}
-		queryString += String.join(", ", Collections.nCopies(actuator.getControlledObjectsSet().size(), QueryStrings.FOUR_VALUES))  + ";";
+		queryString += String.join(", ", Collections.nCopies(sensor.getMeasuredObjectsSet().size(), QueryStrings.FOUR_VALUES)) + ";";
 		query.setQuery(queryString);
 		return query;
 	}
 
 	@Override
 	public Query getDeleteQuery() {
-		Query query = new Query(QueryStrings.DELETE_ACTUATOR);
-		query.setStringParameter(1, actuator.getName());
+		Query query = new Query(QueryStrings.DELETE_SENSOR);
+		query.setStringParameter(1, sensor.getName());
 		query.setStringParameter(2, housingUnit);
 		query.setStringParameter(3, user);
 		return query;

@@ -17,7 +17,7 @@ public class SensorRenderer implements ManageableRenderer {
 	public String render(Manageable m) {
 		if (m instanceof Sensor) {
 			Sensor sensor = (Sensor) m;
-			String measuredElements = sensor.measuredObjectsList().stream()
+			String measuredElements = sensor.getMeasuredObjectsSet().stream()
 					.collect(Collectors.joining(ViewStrings.LINE_SEPARATOR));
 			String values = sensor.getMeasurements().stream().map(s -> ViewStrings.LAST_MEASURED_VALUE + s)
 					.collect(Collectors.joining(ViewStrings.LINE_SEPARATOR));

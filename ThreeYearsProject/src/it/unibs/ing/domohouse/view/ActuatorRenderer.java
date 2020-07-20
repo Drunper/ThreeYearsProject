@@ -17,7 +17,7 @@ public class ActuatorRenderer implements ManageableRenderer {
 	public String render(Manageable m) {
 		if (m instanceof Actuator) {
 			Actuator actuator = (Actuator) m;
-			String controlledElements = actuator.getControlledObjectsList().stream()
+			String controlledElements = actuator.getControlledObjectsSet().stream()
 					.collect(Collectors.joining(ViewStrings.LINE_SEPARATOR));
 			String result = String.format(ViewStrings.ACTUATOR + ViewStrings.LINE_SEPARATOR + ViewStrings.NAME + "%s"
 					+ ViewStrings.LINE_SEPARATOR + ViewStrings.CATEGORY + "%s" + ViewStrings.LINE_SEPARATOR

@@ -7,16 +7,30 @@ import java.util.Set;
 import it.unibs.ing.domohouse.model.ModelStrings;
 import it.unibs.ing.domohouse.model.components.properties.OperatingModesManager;
 import it.unibs.ing.domohouse.model.components.rule.Rule;
+import it.unibs.ing.domohouse.model.db.Saveable;
 import it.unibs.ing.domohouse.model.util.Manager;
 
 public class User implements Manageable {
 
 	private String name;
 	private Manager housingUnitManager;
+	private Saveable saveable;
 	
 	public User(String name) {
 		this.name = name;
 		housingUnitManager = new Manager();
+	}
+	
+	public void setSaveable(Saveable saveable) {
+		this.saveable = saveable;
+	}
+	
+	public void modify() {
+		saveable.modify();
+	}
+	
+	public void delete() {
+		saveable.delete();
 	}
 
 	@Override

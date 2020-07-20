@@ -77,7 +77,7 @@ public class UserUnitInputHandler {
 
 				SensorCategory category = dataFacade
 						.getSensorCategory(dataFacade.getCategoryOfASensor(user, selectedHouse, sensor));
-				Set<String> infos = category.getDetectableInfoList();
+				Set<String> infos = category.getInfoStrategySet();
 
 				view.printListOfString(infos);
 

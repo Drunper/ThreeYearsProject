@@ -4,5 +4,6 @@ import java.util.List;
 
 public interface InfoStrategy {
 	
-	public String getSingleValue(List<String> values);
+	String getSingleValue(List<String> values);
+	int getID();
 }
