@@ -24,6 +24,7 @@ public class QueryStrings {
 			+ " WHERE nome_categoria_attuatori =?";
 	public static final String GET_USER_HOUSING_UNITS = "SELECT nome_unità, descrizione, tipo"
 			+ " FROM Unità_immobiliare WHERE nome_utente =?";
+	public static final String GET_ALL_PROPERTIES = "SELECT * FROM proprietà";
 	public static final String GET_ROOMS = "SELECT nome_stanza, descrizione FROM stanza"
 			+ " WHERE nome_utente =? AND nome_unità =?";
 	public static final String GET_ROOM_PROPERTIES = "SELECT proprietà.nome_proprietà, tipo, valore_di_default"

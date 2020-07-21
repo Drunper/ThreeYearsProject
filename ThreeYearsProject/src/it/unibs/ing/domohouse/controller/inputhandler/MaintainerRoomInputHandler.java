@@ -4,15 +4,16 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.unibs.ing.domohouse.model.util.DataFacade;
+import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 
 public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 
-	public MaintainerRoomInputHandler(DataFacade dataFacade, PrintWriter output,
-			RawInputHandler input) {
+	public MaintainerRoomInputHandler(DataFacade dataFacade, PrintWriter output, RawInputHandler input) {
 		super(dataFacade, output, input);
 	}
 
@@ -147,7 +148,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readArtifactFromUser(String user, String selectedHouse, String location) {
+	public void readArtifactFromUser(String user, String selectedHouse, String location, MenuManager view) {
 		assert selectedHouse != null;
 		assert location != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
@@ -161,8 +162,35 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		while (dataFacade.hasRoomOrArtifact(user, selectedHouse, name));
 
 		String descr = input.readNotVoidString(ControllerStrings.ARTIFACT_INPUT_DESCRIPTION);
+
+		view.printCollectionOfString(dataFacade.getPropertiesSet());
+
+		Map<String, String> propertyMap = new HashMap<>();
+
+		boolean remain = true;
+		String propertyName;
+		do {
+			propertyName = input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_NAME, 20);
+			if (!propertyName.equals(ControllerStrings.BACK_CHARACTER) && !propertyMap.containsKey(propertyName)) {
+				String propertyValue;
+				if (dataFacade.hasProperty(propertyName)) {
+					propertyValue = (input.yesOrNo(ControllerStrings.PROPERTY_INPUT_VALUE_QUESTION))
+							? input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_VALUE, 20)
+							: dataFacade.getPropertyDefaultValue(propertyName);
+				}
+				else {
+					propertyValue = input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_VALUE, 20);
+					dataFacade.addProperty(propertyName, propertyValue);
+				}
+				propertyMap.put(propertyName, propertyValue);
+			}
+			else if(propertyName.equals(ControllerStrings.BACK_CHARACTER))
+				remain = false;
+		}
+		while (remain);
+
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			dataFacade.addArtifact(user, selectedHouse, name, descr, location, new HashMap<String, String>());
+			dataFacade.addArtifact(user, selectedHouse, name, descr, location, propertyMap);
 
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}

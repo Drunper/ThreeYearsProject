@@ -55,7 +55,7 @@ public class MenuManager {
 		return input.readNotVoidString(message);
 	}
 
-	public void printListOfString(Collection<String> list) {
+	public void printCollectionOfString(Collection<String> list) {
 		assert list != null;
 
 		for (String element : list)

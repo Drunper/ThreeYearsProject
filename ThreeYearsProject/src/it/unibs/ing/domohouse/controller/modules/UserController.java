@@ -49,7 +49,7 @@ public class UserController {
 				case 1:
 					menuManager.clearOutput();
 					if (dataFacade.doesHousingUnitExist(user)) {
-						menuManager.printListOfString(dataFacade.getHousingUnitsList(user));
+						menuManager.printCollectionOfString(dataFacade.getHousingUnitsList(user));
 						String selectedHouse = userInputHandler.safeInsertHouse(user);
 						userUnitController.show(user, selectedHouse);
 					}
@@ -59,7 +59,7 @@ public class UserController {
 				case 2:
 					menuManager.clearOutput();
 					if (dataFacade.doesSensorCategoryExist()) {
-						menuManager.printListOfString(dataFacade.getSensorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getSensorCategoryList());
 						output.println();
 						output.println();
 
@@ -73,7 +73,7 @@ public class UserController {
 				case 3:
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorCategoryExist()) {
-						menuManager.printListOfString(dataFacade.getActuatorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getActuatorCategoryList());
 						output.println();
 						output.println();
 						String selectedActuCategory = userInputHandler.safeInsertActuatorCategory();

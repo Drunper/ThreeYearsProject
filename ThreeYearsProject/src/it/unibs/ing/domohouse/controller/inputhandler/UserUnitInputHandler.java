@@ -68,7 +68,7 @@ public class UserUnitInputHandler {
 				String sensor;
 				String info;
 
-				view.printListOfString(dataFacade.getHousingUnit(user, selectedHouse).getSensorNames());
+				view.printCollectionOfString(dataFacade.getHousingUnit(user, selectedHouse).getSensorNames());
 				sensor = safeInsertSensor(user, selectedHouse);
 				sensors.add(sensor);
 
@@ -76,7 +76,7 @@ public class UserUnitInputHandler {
 						.getSensorCategory(dataFacade.getCategoryOfASensor(user, selectedHouse, sensor));
 				Set<String> infos = category.getInfoStrategySet();
 
-				view.printListOfString(infos);
+				view.printCollectionOfString(infos);
 
 				do {
 					info = input.readNotVoidString(ControllerStrings.INPUT_INFO_TO_DETECT);
@@ -135,10 +135,10 @@ public class UserUnitInputHandler {
 		cont = false;
 
 		do {
-			view.printListOfString(dataFacade.getHousingUnit(user, selectedHouse).getActuatorNames());
+			view.printCollectionOfString(dataFacade.getHousingUnit(user, selectedHouse).getActuatorNames());
 			String actuator = safeInsertActuator(user, selectedHouse);
 
-			view.printListOfString(dataFacade.getActuatorOperatingModes(user, selectedHouse, actuator));
+			view.printCollectionOfString(dataFacade.getActuatorOperatingModes(user, selectedHouse, actuator));
 
 			Set<String> modOp = dataFacade.getActuatorOperatingModes(user, selectedHouse, actuator);
 
@@ -185,7 +185,7 @@ public class UserUnitInputHandler {
 			output.println(ControllerStrings.NO_SUCH_RULES_IN_HOUSE);
 		else {
 			Set<String> rules = dataFacade.getRulesNames(user, selectedHouse);
-			view.printListOfString(rules);
+			view.printCollectionOfString(rules);
 			String rule;
 
 			do {

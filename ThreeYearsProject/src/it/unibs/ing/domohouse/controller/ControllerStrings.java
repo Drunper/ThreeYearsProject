@@ -264,4 +264,7 @@ public class ControllerStrings {
 	public static final String WRONG_INVARIANT = "Invariante della classe non soddisfatto";
 	public static final String USER_INPUT_NAME = "Inserisci il nome dell'utente";
 	public static final String ERROR_USER_ALREADY_EXISTENT = "Un nome utente con lo stesso nome esiste già";
+	public static final String PROPERTY_INPUT_NAME = "Inserisci il nome di una proprietà";
+	public static final String PROPERTY_INPUT_VALUE_QUESTION = "Vuoi inserire un valore per la proprietà? (NO inserirà il valore di default)";
+	public static final String PROPERTY_INPUT_VALUE = "Inserisci il valore della proprietà";
 }

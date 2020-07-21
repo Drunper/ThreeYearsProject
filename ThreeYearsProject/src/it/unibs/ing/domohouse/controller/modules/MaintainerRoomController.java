@@ -57,7 +57,7 @@ public class MaintainerRoomController {
 					// visualizza sensore
 					menuManager.clearOutput();
 					if (dataFacade.doesSensorExist(user, selectedHouse, selectedRoom)) {
-						menuManager.printListOfString(dataFacade.getSensorNames(user, selectedHouse, selectedRoom));
+						menuManager.printCollectionOfString(dataFacade.getSensorNames(user, selectedHouse, selectedRoom));
 						output.println();
 						output.println();
 						String selectedSensor = maintainerRoomInputHandler.safeInsertSensor(user, selectedHouse,
@@ -72,7 +72,7 @@ public class MaintainerRoomController {
 					// visualizza attuatore
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorExist(user, selectedHouse, selectedRoom)) {
-						menuManager.printListOfString(dataFacade.getActuatorNames(user, selectedHouse, selectedRoom));
+						menuManager.printCollectionOfString(dataFacade.getActuatorNames(user, selectedHouse, selectedRoom));
 						output.println();
 						output.println();
 						String selectedActuator = maintainerRoomInputHandler.safeInsertActuator(user, selectedHouse,
@@ -87,7 +87,7 @@ public class MaintainerRoomController {
 					// aziona attuatore
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorExist(user, selectedHouse, selectedRoom)) {
-						menuManager.printListOfString(dataFacade.getActuatorNames(user, selectedHouse, selectedRoom));
+						menuManager.printCollectionOfString(dataFacade.getActuatorNames(user, selectedHouse, selectedRoom));
 						String selectedAct = maintainerRoomInputHandler.safeInsertActuator(user, selectedHouse, selectedRoom);
 						maintainerRoomInputHandler.setOperatingMode(user, selectedHouse, selectedRoom, selectedAct,
 								menuManager);
@@ -101,7 +101,7 @@ public class MaintainerRoomController {
 					// visualizza artefatto
 					menuManager.clearOutput();
 					if (dataFacade.doesArtifactExist(user, selectedHouse, selectedRoom)) {
-						menuManager.printListOfString(dataFacade.getArtifactNames(user, selectedHouse, selectedRoom));
+						menuManager.printCollectionOfString(dataFacade.getArtifactNames(user, selectedHouse, selectedRoom));
 						output.println();
 						output.println();
 						String selectedArtifact = maintainerRoomInputHandler.safeInsertArtifact(user, selectedHouse,
@@ -132,7 +132,7 @@ public class MaintainerRoomController {
 				case 9:
 					// inserisci artefatto
 					log.write(ControllerStrings.LOG_INSERT_ARTIFACT);
-					maintainerRoomInputHandler.readArtifactFromUser(user, selectedHouse, selectedRoom);
+					maintainerRoomInputHandler.readArtifactFromUser(user, selectedHouse, selectedRoom, menuManager);
 					log.write(ControllerStrings.LOG_INSERT_ARTIFACT_SUCCESS);
 					break;
 				case 10:

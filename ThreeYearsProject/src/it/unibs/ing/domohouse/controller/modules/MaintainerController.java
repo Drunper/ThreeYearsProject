@@ -29,12 +29,11 @@ public class MaintainerController {
 	private DataFacade dataFacade;
 	private LogWriter log;
 	private ManageableRenderer renderer;
-	private Saver saver;
 	private LibImporter libImporter;
 	private ClockStrategy clock;
 
 	public MaintainerController(DataFacade dataFacade, LogWriter log, ManageableRenderer renderer,
-			MaintainerInputHandler maintainerInputHandler, Saver saver, LibImporter libImporter, ClockStrategy clock,
+			MaintainerInputHandler maintainerInputHandler, LibImporter libImporter, ClockStrategy clock,
 			PrintWriter output, RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.MAINTAINER_MAIN_MENU_TITLE,
 				ControllerStrings.MAINTAINER_MAIN_MENU_VOICES, output, input);
@@ -43,7 +42,6 @@ public class MaintainerController {
 		this.input = input;
 		this.renderer = renderer;
 		this.maintainerInputHandler = maintainerInputHandler;
-		this.saver = saver;
 		this.libImporter = libImporter;
 		this.clock = clock;
 		this.output = output;
@@ -68,7 +66,7 @@ public class MaintainerController {
 					String user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
 					if(dataFacade.hasUser(user)) {
 						if (dataFacade.doesHousingUnitExist(user)) {
-							menuManager.printListOfString(dataFacade.getHousingUnitsList(user));
+							menuManager.printCollectionOfString(dataFacade.getHousingUnitsList(user));
 							String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
 							maintainerUnitController.show(user, selectedHouse);
 						}
@@ -88,7 +86,7 @@ public class MaintainerController {
 					// visualizza categorie di sensori
 					menuManager.clearOutput();
 					if (dataFacade.doesSensorCategoryExist()) {
-						menuManager.printListOfString(dataFacade.getSensorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getSensorCategoryList());
 						output.println();
 						output.println();
 
@@ -103,7 +101,7 @@ public class MaintainerController {
 					// visualizza categoria di attuatore
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorCategoryExist()) {
-						menuManager.printListOfString(dataFacade.getActuatorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getActuatorCategoryList());
 						output.println(); 
 						output.println();
 

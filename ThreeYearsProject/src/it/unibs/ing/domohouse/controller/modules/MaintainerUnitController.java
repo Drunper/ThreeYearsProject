@@ -64,7 +64,7 @@ public class MaintainerUnitController {
 					// visualizza stanza
 					menuManager.clearOutput();
 					if (dataFacade.doesRoomExist(user, selectedHouse)) {
-						menuManager.printListOfString(dataFacade.getRoomsList(user, selectedHouse));
+						menuManager.printCollectionOfString(dataFacade.getRoomsList(user, selectedHouse));
 						output.println();
 						output.println();
 						String selectedRoom = maintainedUnitInputHandler.safeInsertRoom(user, selectedHouse);
@@ -76,7 +76,7 @@ public class MaintainerUnitController {
 				case 4:
 					// Inserisci stanza
 					log.write(ControllerStrings.LOG_INSERT_ROOM);
-					maintainedUnitInputHandler.readRoomFromUser(user, selectedHouse);
+					maintainedUnitInputHandler.readRoomFromUser(user, selectedHouse, menuManager);
 					log.write(ControllerStrings.LOG_INSERT_ROOM_SUCCESS);
 					break;
 				case 5:
@@ -90,13 +90,13 @@ public class MaintainerUnitController {
 					// visualizza regole attive
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_SHOW_ENABLED_RULES);
-					menuManager.printListOfString(dataFacade.getEnabledRulesStrings(user, selectedHouse));
+					menuManager.printCollectionOfString(dataFacade.getEnabledRulesStrings(user, selectedHouse));
 					break;
 				case 7:
 					// visualizza tutte le regole
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_SHOW_ALL_RULES);
-					menuManager.printListOfString(dataFacade.getRulesStrings(user, selectedHouse));
+					menuManager.printCollectionOfString(dataFacade.getRulesStrings(user, selectedHouse));
 					break;
 				case 8:
 					// attiva/disattiva regola

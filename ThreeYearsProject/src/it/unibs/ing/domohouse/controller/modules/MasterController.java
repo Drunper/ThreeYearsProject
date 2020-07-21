@@ -87,7 +87,7 @@ public class MasterController {
 		maintainerUnitController = new MaintainerUnitController(dataFacade, log, renderer, maintainerUnitInputHandler,
 				clock, output, input);
 		maintainerController = new MaintainerController(dataFacade, log, renderer, maintainerInputHandler,
-				saver, libImporter, clock, output, input);
+				libImporter, clock, output, input);
 		userRoomController = new UserRoomController(dataFacade, log, renderer, userRoomInputHandler, clock, output,
 				input);
 		userUnitController = new UserUnitController(dataFacade, log, renderer, userUnitInputHandler, clock, output,

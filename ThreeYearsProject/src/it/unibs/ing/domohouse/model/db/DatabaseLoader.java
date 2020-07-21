@@ -223,6 +223,19 @@ public class DatabaseLoader {
 		}
 		return rooms;
 	}
+	
+	public Map<String, String> getAllProperties() {
+		Map<String, String> propertyMap = new HashMap<>();
+		try (ResultSet set = connector.executeQuery(QueryStrings.GET_ALL_PROPERTIES)) {
+			while (set.next()) {
+				propertyMap.put(set.getString("nome_proprietà"), set.getString("valore_di_default"));
+			}
+		}
+		catch(SQLException e) {
+			
+		}
+		return propertyMap;
+	}
 
 	private Map<String, String> getProperties(String user, String selectedHouse, String object,
 			boolean roomOrArtifact) {

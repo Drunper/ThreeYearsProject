@@ -68,7 +68,7 @@ public class UserRoomInputHandler {
 
 		Actuator act = dataFacade.getActuator(user, selectedHouse, selectedActuator);
 
-		view.printListOfString(act.getCategory().getOperatingModesSet());
+		view.printCollectionOfString(act.getCategory().getOperatingModesSet());
 
 		String op;
 		do {
@@ -116,7 +116,7 @@ public class UserRoomInputHandler {
 				output.println(ControllerStrings.ROOM_NO_SENSORS);
 			else {
 				Set<String> sensors = dataFacade.getSensorNames(user, selectedHouse, selectedRoom);
-				view.printListOfString(sensors);
+				view.printCollectionOfString(sensors);
 				String sensor;
 
 				do {
@@ -138,7 +138,7 @@ public class UserRoomInputHandler {
 				output.println(ControllerStrings.ROOM_NO_ACTUATORS);
 			else {
 				Set<String> actuators = dataFacade.getActuatorNames(user, selectedHouse, selectedRoom);
-				view.printListOfString(actuators);
+				view.printCollectionOfString(actuators);
 				String actuator;
 				do {
 					actuator = input.readNotVoidString(ControllerStrings.ACTUATOR_TO_ENABLE);

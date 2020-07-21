@@ -2,6 +2,7 @@ package it.unibs.ing.domohouse.model.db;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import it.unibs.ing.domohouse.model.components.elements.HousingUnit;
 import it.unibs.ing.domohouse.model.components.elements.User;
@@ -40,6 +41,10 @@ public class DatabaseFacade {
 		return databaseLoader.loadHousingUnits(user);
 	}
 	
+	public Map<String, String> getAllProperties() {
+		return databaseLoader.getAllProperties();
+	}
+	
 	public void addSaveable(Saveable toAdd) {
 		saveables.add(toAdd);
 	}
@@ -48,5 +53,13 @@ public class DatabaseFacade {
 		for(Saveable saveable : saveables)
 			update(saveable.getUpdateQuery());
 		saveables.removeAll(saveables);
+	}
+
+	public void addProperty(String propertyName, String defaultValue) {
+		Query query = new Query(QueryStrings.INSERT_PROPERTY);
+		query.setStringParameter(1, propertyName);
+		query.setIntegerParameter(2, 0); //temporaneo, ma in futuro potrebbe essere rimosso
+		query.setStringParameter(3, defaultValue);
+		connector.executeQueryWithoutResult(query);
 	}
 }

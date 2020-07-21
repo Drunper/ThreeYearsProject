@@ -1,10 +1,11 @@
 package it.unibs.ing.domohouse.controller.inputhandler;
 
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import it.unibs.ing.domohouse.model.util.DataFacade;
+import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 
@@ -26,7 +27,7 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readRoomFromUser(String user, String selectedHouse) {
+	public void readRoomFromUser(String user, String selectedHouse, MenuManager view) {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
@@ -38,25 +39,31 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 		}
 		while (dataFacade.hasRoomOrArtifact(user, selectedHouse, name));
 		String descr = input.readNotVoidString(ControllerStrings.ROOM_INPUT_DESCRIPTION);
-		Map<String, String> propertiesMap = new TreeMap<>();
+		view.printCollectionOfString(dataFacade.getPropertiesSet());
 
-		double temp = input.readDouble(ControllerStrings.ROOM_INPUT_TEMPERATURE);
-		double umidita = input.readDouble(ControllerStrings.ROOM_INPUT_HUMIDITY);
-		double pressione = input.readDouble(ControllerStrings.ROOM_INPUT_PRESSURE);
-		double vento = input.readDouble(ControllerStrings.ROOM_INPUT_WIND);
-		propertiesMap.put("temperatura", String.valueOf(temp));
-		propertiesMap.put("umidità", String.valueOf(umidita));
-		propertiesMap.put("pressione", String.valueOf(pressione));
-		propertiesMap.put("vento", String.valueOf(vento));
+		Map<String, String> propertiesMap = new HashMap<>();
 
-		boolean presenza = input.yesOrNo(ControllerStrings.ROOM_PRESENCE);
-		String presenza_persone;
-		if (presenza)
-			presenza_persone = "presenza di persone";
-		else
-			presenza_persone = "assenza di persone";
-
-		propertiesMap.put("presenza_persone", String.valueOf(presenza_persone));
+		boolean remain = true;
+		String propertyName;
+		do {
+			propertyName = input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_NAME, 20);
+			if (!propertyName.equals(ControllerStrings.BACK_CHARACTER) && !propertiesMap.containsKey(propertyName)) {
+				String propertyValue;
+				if (dataFacade.hasProperty(propertyName)) {
+					propertyValue = (input.yesOrNo(ControllerStrings.PROPERTY_INPUT_VALUE_QUESTION))
+							? input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_VALUE, 20)
+							: dataFacade.getPropertyDefaultValue(propertyName);
+				}
+				else {
+					propertyValue = input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_VALUE, 20);
+					dataFacade.addProperty(propertyName, propertyValue);
+				}
+				propertiesMap.put(propertyName, propertyValue);
+			}
+			else if(propertyName.equals(ControllerStrings.BACK_CHARACTER))
+				remain = false;
+		}
+		while (remain);
 
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
 			dataFacade.addRoom(user, selectedHouse, name, descr, propertiesMap);

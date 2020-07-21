@@ -19,6 +19,7 @@ public class DataFacade implements Serializable {
 	private Manager sensorCategoryManager;
 	private Manager actuatorCategoryManager;
 	private Manager userManager;
+	private Map<String, String> propertyMap;
 	private DatabaseFacade databaseFacade;
 	private ObjectFactory objectFactory;
 
@@ -32,6 +33,7 @@ public class DataFacade implements Serializable {
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
 		userManager = new Manager();
+		propertyMap = databaseFacade.getAllProperties();
 	}
 
 	public void loadCategories() {
@@ -552,5 +554,22 @@ public class DataFacade implements Serializable {
 
 	public void addSaveable(Saveable saveable) {
 		databaseFacade.addSaveable(saveable);
+	}
+	
+	public Set<String> getPropertiesSet() {
+		return propertyMap.keySet();
+	}
+	
+	public boolean hasProperty(String property) {
+		return propertyMap.containsKey(property);
+	}
+	
+	public void addProperty(String propertyName, String defaultValue) {
+		propertyMap.put(propertyName, defaultValue);
+		databaseFacade.addProperty(propertyName, defaultValue);
+	}
+
+	public String getPropertyDefaultValue(String propertyName) {
+		return propertyMap.get(propertyName);
 	}
 }
