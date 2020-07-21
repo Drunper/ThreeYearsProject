@@ -29,25 +29,25 @@ public class QueryStrings {
 	public static final String GET_ROOM_PROPERTIES = "SELECT proprietà.nome_proprietà, tipo, valore_di_default"
 			+ " FROM proprietà JOIN proprietà_stanze ON proprietà.nome_proprietà = proprietà_stanze.nome_proprietà"
 			+ " WHERE nome_utente =? AND nome_unità =? AND nome_stanza =?";
-	public static final String GET_ARTIFACTS = "SELECT nome_artefatto, descrizione, posizione FROM artefatto"
-			+ " WHERE nome_utente =? AND nome_unità =?";
+	public static final String GET_ARTIFACTS = "SELECT nome_artefatto, descrizione FROM artefatto"
+			+ " WHERE nome_utente =? AND nome_unità =? AND posizione =?";
 	public static final String GET_ARTIFACT_PROPERTIES = "SELECT proprietà.nome_proprietà, tipo, valore_di_default"
 			+ " FROM proprietà JOIN proprietà_artefatti ON proprietà.nome_proprietà = proprietà_artefatti.nome_proprietà"
 			+ " WHERE nome_utente =? AND nome_unità =? AND nome_artefatto =?";
-	public static final String GET_SENSORS = "SELECT nome_sensore, stato, stanze_o_artefatti, nome_categoria_sensori, posizione"
-			+ " FROM sensore WHERE nome_utente =? AND nome_unità =?";
-	public static final String GET_MEASURED_OBJECTS = "SELECT nome_artefatto AS nome_oggetto"
+	public static final String GET_SENSORS = "SELECT nome_sensore, stato, stanze_o_artefatti, nome_categoria_sensori"
+			+ " FROM sensore WHERE nome_utente =? AND nome_unità =? AND posizione =?";
+	public static final String GET_MEASURED_ARTIFACTS = "SELECT nome_artefatto"
 			+ " FROM misura_artefatti JOIN sensore ON (misura_artefatti.nome_utente = sensore.nome_utente AND misura_artefatti.nome_unità = sensore.nome_unità AND misura_artefatti.nome_sensore = sensore.nome_sensore)"
-			+ " WHERE misura_artefatti.nome_utente =? AND misura_artefatti.nome_unità =? AND misura_artefatti.nome_sensore =? AND sensore.stanze_o_artefatti = 0"
-			+ " UNION" + " SELECT nome_stanza AS nome_oggetto"
+			+ " WHERE misura_artefatti.nome_utente =? AND misura_artefatti.nome_unità =? AND misura_artefatti.nome_sensore =? AND sensore.stanze_o_artefatti = 0";
+	public static final String GET_MEASURED_ROOMS = "SELECT nome_stanza"
 			+ " FROM misura_stanze JOIN sensore ON (misura_stanze.nome_utente = sensore.nome_utente AND misura_stanze.nome_unità = sensore.nome_unità AND misura_stanze.nome_sensore = sensore.nome_sensore)"
 			+ " WHERE misura_stanze.nome_utente =? AND misura_stanze.nome_unità =? AND misura_stanze.nome_sensore =? AND sensore.stanze_o_artefatti = 1";
-	public static final String GET_ACTUATORS = "SELECT nome_attuatore, stato, stanze_o_artefatti, nome_categoria_attuatori, posizione"
-			+ " FROM attuatore WHERE nome_utente =? AND nome_unità =?";
-	public static final String GET_CONTROLLED_OBJECTS = "SELECT nome_artefatto AS nome_oggetto"
+	public static final String GET_ACTUATORS = "SELECT nome_attuatore, stato, stanze_o_artefatti, nome_categoria_attuatori"
+			+ " FROM attuatore WHERE nome_utente =? AND nome_unità =? AND posizione =?";
+	public static final String GET_CONTROLLED_ARTIFACTS = "SELECT nome_artefatto AS nome_oggetto"
 			+ " FROM controlla_artefatti JOIN attuatore ON (controlla_artefatti.nome_utente = attuatore.nome_utente AND controlla_artefatti.nome_unità = attuatore.nome_unità AND controlla_artefatti.nome_attuatore = attuatore.nome_attuatore)"
-			+ " WHERE controlla_artefatti.nome_utente =? AND controlla_artefatti.nome_unità =? AND controlla_artefatti.nome_attuatore =? AND attuatore.stanze_o_artefatti = 0"
-			+ " UNION" + " SELECT nome_stanza AS nome_oggetto"
+			+ " WHERE controlla_artefatti.nome_utente =? AND controlla_artefatti.nome_unità =? AND controlla_artefatti.nome_attuatore =? AND attuatore.stanze_o_artefatti = 0";
+	public static final String GET_CONTROLLED_ROOMS = "SELECT nome_stanza AS nome_oggetto"
 			+ " FROM controlla_stanze JOIN attuatore ON (controlla_stanze.nome_utente = attuatore.nome_utente AND controlla_stanze.nome_unità = attuatore.nome_unità AND controlla_stanze.nome_attuatore = attuatore.nome_attuatore)"
 			+ " WHERE controlla_stanze.nome_utente =? AND controlla_stanze.nome_unità =? AND controlla_stanze.nome_attuatore =? AND attuatore.stanze_o_artefatti = 1";
 	public static final String GET_RULES = "SELECT nome_regola, stato, testo_antecedente, testo_conseguente"

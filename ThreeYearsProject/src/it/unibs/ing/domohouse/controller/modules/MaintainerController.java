@@ -13,7 +13,6 @@ import it.unibs.ing.domohouse.view.ManageableRenderer;
 import java.io.PrintWriter;
 
 import it.unibs.ing.domohouse.controller.ControllerStrings;
-import it.unibs.ing.domohouse.model.util.Loader;
 
 public class MaintainerController {
 
@@ -31,11 +30,10 @@ public class MaintainerController {
 	private LogWriter log;
 	private ManageableRenderer renderer;
 	private Saver saver;
-	private Loader loader;
 	private LibImporter libImporter;
 	private ClockStrategy clock;
 
-	public MaintainerController(DataFacade dataFacade, LogWriter log, ManageableRenderer renderer, Loader loader,
+	public MaintainerController(DataFacade dataFacade, LogWriter log, ManageableRenderer renderer,
 			MaintainerInputHandler maintainerInputHandler, Saver saver, LibImporter libImporter, ClockStrategy clock,
 			PrintWriter output, RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.MAINTAINER_MAIN_MENU_TITLE,
@@ -43,7 +41,6 @@ public class MaintainerController {
 		this.dataFacade = dataFacade;
 		this.log = log;
 		this.input = input;
-		this.loader = loader;
 		this.renderer = renderer;
 		this.maintainerInputHandler = maintainerInputHandler;
 		this.saver = saver;
@@ -65,24 +62,14 @@ public class MaintainerController {
 				case 1:
 					menuManager.clearOutput();
 					String user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
-					if(!dataFacade.hasUser(user))
-						loader.loadUser(user);
 					if(dataFacade.hasUser(user)) {
 						if (dataFacade.doesHousingUnitExist(user)) {
 							menuManager.printListOfString(dataFacade.getHousingUnitsList(user));
 							String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
 							maintainerUnitController.show(user, selectedHouse);
 						}
-						else {
-							loader.loadHousingUnits(user);
-							if(dataFacade.doesHousingUnitExist(user)) {
-								menuManager.printListOfString(dataFacade.getHousingUnitsList(user));
-								String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
-								maintainerUnitController.show(user, selectedHouse);
-							}
-							else
-								output.println(ControllerStrings.NO_HOUSE);
-						}
+						else
+							output.println(ControllerStrings.NO_HOUSE);
 					}
 					else
 						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
@@ -139,7 +126,6 @@ public class MaintainerController {
 					break;
 				case 7:
 					// salva file
-					dataFacade.setFirstStart(false);
 					log.write(ControllerStrings.LOG_SAVING_DATA);
 					saver.saveDataFacade(dataFacade);
 					output.println(ControllerStrings.DATA_SAVED);

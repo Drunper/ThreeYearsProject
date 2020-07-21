@@ -38,11 +38,11 @@ public class Manager implements Serializable {
 	}
 
 	public void addElement(Manageable element) {
-		assert element != null;
 		assert managerInvariant() : ModelStrings.WRONG_INVARIANT;
 		int pre_size = elementMap.size();
 
-		elementMap.put(element.getName(), element);
+		if(element != null)
+			elementMap.put(element.getName(), element);
 
 		assert elementMap.size() >= pre_size;
 		assert managerInvariant() : ModelStrings.WRONG_INVARIANT;

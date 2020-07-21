@@ -88,8 +88,7 @@ public class MasterController {
 		authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
 		loader = new DatabaseLoader(connector, objectFabricator);
 		saver = new FileSaver();
-		loadFromDB();
-
+		dataFacade.loadCategories();
 		
 		RawInputHandler input = new RawInputHandler(in, output);
 		buildInputHandlers(output, input);
@@ -130,15 +129,6 @@ public class MasterController {
 		userUnitController.setUserRoomController(userRoomController);
 		maintainerController.setMaintainerUnitController(maintainerUnitController);
 		maintainerUnitController.setMaintainerRoomController(maintainerRoomController);
-	}
-	
-	private void loadFromDB() {
-		assert loader != null;
-
-		loader.loadSensorCategories();
-		loader.loadActuatorCategories();
-
-		assert controllerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 	
 	private void checkConfigFileExistence(PrintWriter output) {

@@ -3,20 +3,14 @@ package it.unibs.ing.domohouse.model.util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import it.unibs.ing.domohouse.model.components.elements.Actuator;
-import it.unibs.ing.domohouse.model.components.elements.Artifact;
-import it.unibs.ing.domohouse.model.components.elements.HousingUnit;
-import it.unibs.ing.domohouse.model.components.elements.Room;
-import it.unibs.ing.domohouse.model.components.elements.Sensor;
-import it.unibs.ing.domohouse.model.components.elements.User;
-import it.unibs.ing.domohouse.model.components.properties.ActuatorCategory;
-import it.unibs.ing.domohouse.model.components.properties.OperatingModesManager;
-import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
-import it.unibs.ing.domohouse.model.components.rule.Rule;
-import it.unibs.ing.domohouse.model.db.Connector;
-import it.unibs.ing.domohouse.model.db.DatabaseLoader;
+import it.unibs.ing.domohouse.model.components.elements.*;
+import it.unibs.ing.domohouse.model.components.properties.*;
+import it.unibs.ing.domohouse.model.components.rule.*;
+import it.unibs.ing.domohouse.model.db.*;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class DataFacade implements Serializable {
@@ -25,47 +19,52 @@ public class DataFacade implements Serializable {
 	private Manager sensorCategoryManager;
 	private Manager actuatorCategoryManager;
 	private Manager userManager;
-	private boolean firstStart;
-	private DatabaseLoader databaseLoader;
-	private Connector connector;
+	private DatabaseFacade databaseFacade;
+	private ObjectFactory objectFactory;
 
 	/*
 	 * invariante sensorCategoryManager != null, actuatorCategoryManager != null,
 	 * housingUnitManager != null
 	 */
 	public DataFacade(Connector connector) {
-		this.connector = connector;
-		databaseLoader = new DatabaseLoader(connector);
+		objectFactory = new ObjectFactory(new RuleParser());
+		databaseFacade = new DatabaseFacade(connector, new DatabaseLoader(connector, objectFactory, this));
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
 		userManager = new Manager();
-		this.firstStart = true;
 	}
 
-	public void setFirstStart(boolean flag) {
-		this.firstStart = flag;
+	public void loadCategories() {
+		for (SensorCategory cat : databaseFacade.loadSensorCategories())
+			sensorCategoryManager.addElement(cat);
+		for (ActuatorCategory cat : databaseFacade.loadActuatorCategories())
+			actuatorCategoryManager.addElement(cat);
 	}
 
-	public boolean getFirstStart() {
-		return this.firstStart;
+	public void addUser(String user) {
+		userManager.addElement(new User(user));
 	}
-	
-	public void addUser(User user) {
-		userManager.addElement(user);
-	}
-	
+
 	public boolean hasUser(String selectedUser) {
+		if (!userManager.hasElement(selectedUser))
+			userManager.addElement(databaseFacade.loadUser(selectedUser));
+
 		return userManager.hasElement(selectedUser);
 	}
-	
+
 	public User getUser(String selectedUser) {
 		return (User) userManager.getElementByName(selectedUser);
 	}
-	
+
 	public Set<String> getUserSet() {
 		return userManager.getListOfElements();
 	}
-	
+
+	private void loadHousingUnits(String selectedUser) {
+		for (HousingUnit house : databaseFacade.loadHousingUnits(selectedUser))
+			getUser(selectedUser).addHousingUnit(house);
+	}
+
 	public boolean hasHousingUnit(String selectedUser, String selectedHouse) {
 		assert selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -80,6 +79,10 @@ public class DataFacade implements Serializable {
 
 	public boolean doesHousingUnitExist(String selectedUser) {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
+		
+		if(!getUser(selectedUser).doesHousingUnitExist())
+			loadHousingUnits(selectedUser);
+		
 		return getUser(selectedUser).doesHousingUnitExist();
 	}
 
@@ -89,9 +92,8 @@ public class DataFacade implements Serializable {
 		return getUser(selectedUser).getHousingUnit(selectedHouse);
 	}
 
-	public void addHousingUnit(String selectedUser, HousingUnit toAdd) {
-		assert toAdd != null;
-		getUser(selectedUser).addHousingUnit(toAdd);
+	public void addHousingUnit(String selectedUser, String selectedHouse, String descr, String type) {
+		getUser(selectedUser).addHousingUnit(new HousingUnit(selectedHouse, descr, type, selectedUser));
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
@@ -151,23 +153,25 @@ public class DataFacade implements Serializable {
 		return actuatorCategoryManager.hasElement(category);
 	}
 
-	public void addSensorCategory(SensorCategory cat) {
-		assert cat != null;
+	public void addSensorCategory(String name, String abbreviation, String manufacturer,
+			Map<String, InfoStrategy> infoDomainMap, Map<String, String> measurementUnitMap) {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 		int pre_size = sensorCategoryManager.size();
 
-		sensorCategoryManager.addElement(cat);
+		sensorCategoryManager.addElement(objectFactory.createSensorCategory(name, abbreviation, manufacturer,
+				infoDomainMap, measurementUnitMap));
 
 		assert sensorCategoryManager.size() >= pre_size;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void addActuatorCategory(ActuatorCategory cat) {
-		assert cat != null;
+	public void addActuatorCategory(String name, String abbreviation, String manufacturer, List<String> listOfModes,
+			String defaultMode) {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 		int pre_size = actuatorCategoryManager.size();
 
-		actuatorCategoryManager.addElement(cat);
+		actuatorCategoryManager.addElement(
+				objectFactory.createActuatorCategory(name, abbreviation, manufacturer, listOfModes, defaultMode));
 
 		assert actuatorCategoryManager.size() >= pre_size;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -197,14 +201,13 @@ public class DataFacade implements Serializable {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 		return act;
 	}
-	
+
 	public String getCategoryOfASensor(String selectedUser, String selectedHouse, String selectedSensor) {
 		assert selectedHouse != null && selectedSensor != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		return getUser(selectedUser).getCategoryOfASensor(selectedHouse, selectedSensor);
 	}
-
 
 	public Sensor getSensor(String selectedUser, String selectedHouse, String selectedSensor) {
 		return getUser(selectedUser).getSensor(selectedHouse, selectedSensor);
@@ -242,7 +245,7 @@ public class DataFacade implements Serializable {
 
 		return getUser(selectedUser).doesActuatorExist(selectedHouse, selectedRoom);
 	}
-	
+
 	public Set<String> getActuatorOperatingModes(String selectedUser, String selectedHouse, String selectedActuator) {
 		return getUser(selectedUser).getActuatorOperatingModes(selectedHouse, selectedActuator);
 	}
@@ -277,11 +280,11 @@ public class DataFacade implements Serializable {
 		return getUser(selectedUser).hasRoom(selectedHouse, selectedRoom);
 	}
 
-	public void addRoom(String selectedUser, String selectedHouse, Room toAdd) {
-		assert toAdd != null && selectedHouse != null;
+	public void addRoom(String selectedUser, String selectedHouse, String selectedRoom, String descr,
+			Map<String, String> propertiesMap) {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		getUser(selectedUser).addRoom(selectedHouse, toAdd);
+		getUser(selectedUser).addRoom(selectedHouse, new Room(selectedRoom, descr, propertiesMap));
 
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
@@ -290,18 +293,27 @@ public class DataFacade implements Serializable {
 		assert selectedHouse != null;
 		assert selectedRoom != null && descr != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		
+
 		getUser(selectedUser).changeRoomDescription(selectedHouse, selectedRoom, descr);
 
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void addSensor(String selectedUser, String selectedHouse, String location, Sensor sensor) {
+	public void addSensor(String selectedUser, String selectedHouse, String location, String name, String category,
+			boolean roomOrArtifact, List<String> objectList) {
 		assert selectedHouse != null;
-		assert location != null && sensor != null && sensor.getName() != null;
+		assert location != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		getUser(selectedUser).addSensor(selectedHouse, location, sensor);
+		List<Gettable> gettableList = objectList.stream().map(s -> {
+			if (roomOrArtifact)
+				return getRoom(selectedUser, selectedHouse, s);
+			else
+				return getArtifact(selectedUser, selectedHouse, s);
+		}).collect(Collectors.toList());
+
+		getUser(selectedUser).addSensor(selectedHouse, location,
+				objectFactory.createSensor(name, getSensorCategory(category), roomOrArtifact, gettableList));
 
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
@@ -358,7 +370,6 @@ public class DataFacade implements Serializable {
 	public void addAssociation(String selectedUser, String selectedHouse, String object, String category) {
 		assert object != null && category != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		
 
 		getUser(selectedUser).addAssociation(selectedHouse, object, category);
 
@@ -379,20 +390,31 @@ public class DataFacade implements Serializable {
 		return getUser(selectedUser).getArtifact(selectedHouse, selectedArtifact);
 	}
 
-	public void addArtifact(String selectedUser, String selectedHouse, String location, Artifact toAdd) {
-		assert location != null && toAdd != null && toAdd.getName() != null && selectedHouse != null;
+	public void addArtifact(String selectedUser, String selectedHouse, String location, String selectedArtifact,
+			String descr, Map<String, String> propertiesMap) {
+		assert location != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		getUser(selectedUser).addArtifact(selectedHouse, location, toAdd);
+		getUser(selectedUser).addArtifact(selectedHouse, location,
+				new Artifact(selectedArtifact, descr, propertiesMap));
 
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void addActuator(String selectedUser, String selectedHouse, String location, Actuator toAdd) {
-		assert location != null && toAdd != null && selectedHouse != null;
+	public void addActuator(String selectedUser, String selectedHouse, String location, String selectedActuator,
+			String category, boolean roomOrArtifact, List<String> objectList) {
+		assert location != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		
-		getUser(selectedUser).addActuator(selectedHouse, location, toAdd);
+
+		List<Gettable> gettableList = objectList.stream().map(s -> {
+			if (roomOrArtifact)
+				return getRoom(selectedUser, selectedHouse, s);
+			else
+				return getArtifact(selectedUser, selectedHouse, s);
+		}).collect(Collectors.toList());
+
+		getUser(selectedUser).addActuator(selectedHouse, location, objectFactory.createActuator(selectedActuator,
+				getActuatorCategory(category), roomOrArtifact, gettableList));
 
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
@@ -445,8 +467,24 @@ public class DataFacade implements Serializable {
 		return getUser(selectedUser).getRulesStrings(selectedHouse);
 	}
 
-	public void addRule(String selectedUser, String selectedHouse, Rule toAdd) {
-		getUser(selectedUser).addRule(selectedHouse, toAdd);
+	public void addRule(String selectedUser, String selectedHouse, String name, String antString, String consString,
+			List<String> involvedSensors, List<String> involvedActuators, State state) {
+		List<Sensor> sensors = involvedSensors.stream().map(s -> getSensor(selectedUser, selectedHouse, s))
+				.collect(Collectors.toList());
+		List<Actuator> actuators = involvedActuators.stream().map(s -> getActuator(selectedUser, selectedHouse, s))
+				.collect(Collectors.toList());
+		getUser(selectedUser).addRule(selectedHouse,
+				objectFactory.createRule(name, antString, consString, sensors, actuators, state));
+	}
+	
+	public void addRule(String selectedUser, String selectedHouse, String name, String antString, String consString,
+			List<String> involvedSensors, List<String> involvedActuators) {
+		List<Sensor> sensors = involvedSensors.stream().map(s -> getSensor(selectedUser, selectedHouse, s))
+				.collect(Collectors.toList());
+		List<Actuator> actuators = involvedActuators.stream().map(s -> getActuator(selectedUser, selectedHouse, s))
+				.collect(Collectors.toList());
+		getUser(selectedUser).addRule(selectedHouse,
+				objectFactory.createRule(name, antString, consString, sensors, actuators));
 	}
 
 	public Set<String> getRulesNames(String selectedUser, String selectedHouse) {

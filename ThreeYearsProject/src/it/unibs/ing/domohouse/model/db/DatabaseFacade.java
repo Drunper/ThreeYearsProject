@@ -1,5 +1,12 @@
 package it.unibs.ing.domohouse.model.db;
 
+import java.util.List;
+
+import it.unibs.ing.domohouse.model.components.elements.HousingUnit;
+import it.unibs.ing.domohouse.model.components.elements.User;
+import it.unibs.ing.domohouse.model.components.properties.ActuatorCategory;
+import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
+
 public class DatabaseFacade {
 
 	private Connector connector;
@@ -14,19 +21,19 @@ public class DatabaseFacade {
 		connector.executeQueryWithoutResult(query);
 	}
 	
-	public void loadSensorCategories() {
-		databaseLoader.loadSensorCategories();
+	public List<SensorCategory> loadSensorCategories() {
+		return databaseLoader.loadSensorCategories();
 	}
 
-	public void loadActuatorCategories() {
-		databaseLoader.loadActuatorCategories();
+	public List<ActuatorCategory> loadActuatorCategories() {
+		return databaseLoader.loadActuatorCategories();
 	}
 	
-	public void loadUser(String user) {		
-		databaseLoader.loadUser(user);
+	public User loadUser(String user) {		
+		return databaseLoader.loadUser(user);
 	}
 
-	public void loadHousingUnits(String user) {
-		databaseLoader.loadHousingUnits(user);
+	public List<HousingUnit> loadHousingUnits(String user) {
+		return databaseLoader.loadHousingUnits(user);
 	}
 }

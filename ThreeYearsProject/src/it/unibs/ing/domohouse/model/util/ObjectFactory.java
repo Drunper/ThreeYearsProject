@@ -79,7 +79,7 @@ public class ObjectFactory {
 		return cat;
 	}
 
-	public void createRule(String name, String antString, String consString, List<Sensor> involvedSensors,
+	public Rule createRule(String name, String antString, String consString, List<Sensor> involvedSensors,
 			List<Actuator> involvedActuators) {
 		assert name != null && name.length() > 0;
 		State state = new ActiveState();
@@ -89,7 +89,7 @@ public class ObjectFactory {
 		for (Actuator actuator : involvedActuators)
 			if (!actuator.getState().isActive())
 				state = new InactiveState();
-		createRule(name, antString, consString, involvedSensors, involvedActuators, state);
+		return createRule(name, antString, consString, involvedSensors, involvedActuators, state);
 	}
 
 	public Rule createRule(String name, String antString, String consString, List<Sensor> involvedSensors,
