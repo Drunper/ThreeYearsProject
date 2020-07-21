@@ -29,10 +29,14 @@ public class DatabaseLoader {
 		List<SensorCategory> sensorCategories = new ArrayList<>();
 		try (ResultSet set = connector.executeQuery(QueryStrings.GET_SENSOR_CATEGORIES)) {
 			while (set.next()) {
-				sensorCategories.add(objectFactory.createSensorCategory(set.getString("nome_categoria_sensori"),
+				SensorCategory cat = objectFactory.createSensorCategory(set.getString("nome_categoria_sensori"),
 						set.getString("sigla"), set.getString("costruttore"),
 						getSensorCategoryInfos(set.getString("nome_categoria_sensori")),
-						getMeasurementUnits(set.getString("nome_categoria_sensori"))));
+						getMeasurementUnits(set.getString("nome_categoria_sensori")));
+				Saveable saveable = new SaveableSensorCategory(cat, new OldObjectState());
+				cat.setSaveable(saveable);
+				dataFacade.addSaveable(saveable);
+				sensorCategories.add(cat);
 			}
 		}
 		catch (SQLException e) {
@@ -109,10 +113,14 @@ public class DatabaseLoader {
 		List<ActuatorCategory> actuatorCategories = new ArrayList<>();
 		try (ResultSet set = connector.executeQuery(QueryStrings.GET_ACTUATOR_CATEGORIES)) {
 			while (set.next()) {
-				actuatorCategories.add(objectFactory.createActuatorCategory(set.getString("nome_categoria_attuatori"),
+				ActuatorCategory cat = objectFactory.createActuatorCategory(set.getString("nome_categoria_attuatori"),
 						set.getString("sigla"), set.getString("costruttore"),
 						getListOfModes(set.getString("nome_categoria_attuatori")),
-						set.getString("modalità_di_default")));
+						set.getString("modalità_di_default"));
+				Saveable saveable = new SaveableActuatorCategory(cat, new OldObjectState());
+				dataFacade.addSaveable(saveable);
+				cat.setSaveable(saveable);
+				actuatorCategories.add(cat);
 			}
 		}
 		catch (SQLException e) {
@@ -144,7 +152,10 @@ public class DatabaseLoader {
 		try (ResultSet set = connector.executeQuery(query)) {
 			if (set.next()) {
 				User userObject = new User(set.getString("nome_utente"));
-				userObject.setSaveable(new SaveableUser(userObject, new OldObjectState()));
+				Saveable saveable = new SaveableUser(userObject, new OldObjectState());
+				dataFacade.addSaveable(saveable);
+				userObject.setSaveable(saveable);
+				return userObject;
 			}
 		}
 		catch (SQLException e) {
@@ -162,7 +173,9 @@ public class DatabaseLoader {
 				String selectedHouse = set.getString("nome_unità");
 				HousingUnit housingUnit = new HousingUnit(selectedHouse, set.getString("descrizione"),
 						set.getString("tipo"), user);
-				housingUnit.setSaveable(new SaveableHousingUnit(housingUnit, new OldObjectState()));
+				Saveable saveable = new SaveableHousingUnit(housingUnit, new OldObjectState()); 
+				housingUnit.setSaveable(saveable);
+				dataFacade.addSaveable(saveable);
 				housingUnits.add(housingUnit);
 				List<Room> rooms = loadRooms(user, selectedHouse);
 				for (Room room : rooms)
@@ -199,7 +212,9 @@ public class DatabaseLoader {
 			while (set.next()) {
 				Room room = new Room(set.getString("nome_stanza"), set.getString("descrizione"),
 						getProperties(user, selectedHouse, set.getString("nome_stanza"), true));
-				room.setSaveable(new SaveableRoom(user, selectedHouse, room, new OldObjectState()));
+				Saveable saveable = new SaveableRoom(user, selectedHouse, room, new OldObjectState());
+				room.setSaveable(saveable);
+				dataFacade.addSaveable(saveable);
 				rooms.add(room);
 			}
 		}
@@ -244,8 +259,10 @@ public class DatabaseLoader {
 			while (set.next()) {
 				Artifact artifact = new Artifact(set.getString("nome_artefatto"), set.getString("descrizione"),
 						getProperties(user, selectedHouse, set.getString("nome_artefatto"), false));
+				Saveable saveable = new SaveableArtifact(user, selectedHouse, location, artifact, new OldObjectState());
+				dataFacade.addSaveable(saveable);
 				artifact.setSaveable(
-						new SaveableArtifact(user, selectedHouse, location, artifact, new OldObjectState()));
+						saveable);
 				artifacts.add(new Artifact(set.getString("nome_artefatto"), set.getString("descrizione"),
 						getProperties(user, selectedHouse, set.getString("nome_artefatto"), false)));
 			}
@@ -268,7 +285,9 @@ public class DatabaseLoader {
 						dataFacade.getSensorCategory(set.getString("nome_categoria_sensori")),
 						set.getBoolean("stanze_o_artefatti"), getDeviceObjects(user, selectedHouse,
 								set.getString("nome_sensore"), true, set.getBoolean("stanze_o_artefatti")));
-				sensor.setSaveable(new SaveableSensor(user, selectedHouse, location, sensor, new OldObjectState()));
+				Saveable saveable = new SaveableSensor(user, selectedHouse, location, sensor, new OldObjectState());
+				dataFacade.addSaveable(saveable);
+				sensor.setSaveable(saveable);
 				sensors.add(sensor);
 			}
 		}
@@ -290,8 +309,10 @@ public class DatabaseLoader {
 						dataFacade.getActuatorCategory(set.getString("nome_categoria_attuatori")),
 						set.getBoolean("stanze_o_artefatti"), getDeviceObjects(user, selectedHouse,
 								set.getString("nome_attuatore"), false, set.getBoolean("stanze_o_artefatti")));
+				Saveable saveable = new SaveableActuator(user, selectedHouse, location, actuator, new OldObjectState());
+				dataFacade.addSaveable(saveable);
 				actuator.setSaveable(
-						new SaveableActuator(user, selectedHouse, location, actuator, new OldObjectState()));
+						saveable);
 				actuators.add(actuator);
 			}
 		}
@@ -339,7 +360,9 @@ public class DatabaseLoader {
 						set.getString("testo_conseguente"),
 						getSensorFromAntString(user, selectedHouse, set.getString("testo_antecedente")),
 						getActuatorsFromConsString(user, selectedHouse, set.getString("testo_conseguente")), state);
-				rule.setSaveable(new SaveableRule(user, selectedHouse, rule, new OldObjectState()));
+				Saveable saveable = new SaveableRule(user, selectedHouse, rule, new OldObjectState());
+				dataFacade.addSaveable(saveable);
+				rule.setSaveable(saveable);
 				rules.add(rule);
 			}
 		}

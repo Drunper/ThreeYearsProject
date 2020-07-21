@@ -76,9 +76,9 @@ public class QueryStrings {
 
 	public static final String INSERT_CATEGORY_OPERATING_MODE = "INSERT INTO possiede_modalità (nome_categoria_attuatori, nome_modalità)";
 
-	public static final String INSERT_HOUSING_UNIT = "INSERT INTO unità_immobiliare (nome_unità, nome_utente, tipo, descr) VALUES (?, ?, ?, ?)";
+	public static final String INSERT_HOUSING_UNIT = "INSERT INTO unità_immobiliare (nome_unità, nome_utente, tipo, descrizione) VALUES (?, ?, ?, ?)";
 
-	public static final String INSERT_ROOM = "INSERT INTO stanza (nome_stanza, nome_unità, nome_utente, descr) VALUES (?, ?, ?, ?);";
+	public static final String INSERT_ROOM = "INSERT INTO stanza (nome_stanza, nome_unità, nome_utente, descrizione) VALUES (?, ?, ?, ?);";
 
 	public static final String INSERT_ROOM_PROPERTY = "INSERT INTO proprietà_stanze (nome_stanza, nome_unità, nome_utente, nome_proprietà)";
 

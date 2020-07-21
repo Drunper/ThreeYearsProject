@@ -7687,3 +7687,32 @@
 [18/07/2020 23:51:55] Visualizzazione del sensore t1_termometri
 [18/07/2020 23:52:19] Azionamento dell'attuatore trm1_termoregolatori
 [18/07/2020 23:52:25] Visualizzazione del sensore t1_termometri
+[21/07/2020 23:47:12] Il manutentore prova ha effettuato l'accesso al sistema
+[21/07/2020 23:47:20] Visualizzazione della categoria di sensore termometri
+[21/07/2020 23:47:27] Inserimento di una nuova unità immobiliare...
+[22/07/2020 00:04:58] Il manutentore prova ha effettuato l'accesso al sistema
+[22/07/2020 00:05:51] Il manutentore prova ha effettuato l'accesso al sistema
+[22/07/2020 00:06:52] Il manutentore prova ha effettuato l'accesso al sistema
+[22/07/2020 00:07:04] Inserimento di una nuova unità immobiliare...
+[22/07/2020 00:07:29] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[22/07/2020 00:07:44] Visualizzazione della descrizione dell'unità immobiliare
+[22/07/2020 00:07:47] Uscita dal menù corrente
+[22/07/2020 00:08:17] Uscita dal menù corrente
+[22/07/2020 00:09:39] Il manutentore prova ha effettuato l'accesso al sistema
+[22/07/2020 00:10:57] Il manutentore prova ha effettuato l'accesso al sistema
+[22/07/2020 00:13:58] Il manutentore prova ha effettuato l'accesso al sistema
+[22/07/2020 00:14:15] Inserimento di una nuova unità immobiliare...
+[22/07/2020 00:14:34] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[22/07/2020 00:14:39] Uscita dal menù corrente
+[22/07/2020 00:16:22] Il manutentore prova ha effettuato l'accesso al sistema
+[22/07/2020 00:16:56] Inserimento di una nuova unità immobiliare...
+[22/07/2020 00:18:07] Il manutentore prova ha effettuato l'accesso al sistema
+[22/07/2020 00:18:12] Inserimento di una nuova unità immobiliare...
+[22/07/2020 00:27:20] Il manutentore prova ha effettuato l'accesso al sistema
+[22/07/2020 00:27:22] Inserimento di una nuova unità immobiliare...
+[22/07/2020 00:27:35] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[22/07/2020 00:27:36] Uscita dal menù corrente
+[22/07/2020 00:28:43] Il manutentore prova ha effettuato l'accesso al sistema
+[22/07/2020 00:28:49] Inserimento di una nuova unità immobiliare...
+[22/07/2020 00:29:09] Inserimento di una nuova unità immobiliare avvenuto correttamente
+[22/07/2020 00:29:13] Uscita dal menù corrente

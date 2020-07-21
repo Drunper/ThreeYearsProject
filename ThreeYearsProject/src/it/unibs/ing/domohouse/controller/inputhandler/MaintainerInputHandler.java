@@ -10,27 +10,53 @@ import it.unibs.ing.domohouse.model.components.properties.InfoStrategy;
 import it.unibs.ing.domohouse.model.components.properties.DoubleInfoStrategy;
 import it.unibs.ing.domohouse.model.components.properties.StringInfoStrategy;
 import it.unibs.ing.domohouse.model.util.DataFacade;
-import it.unibs.ing.domohouse.model.util.ObjectFabricator;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 
 public class MaintainerInputHandler extends UserInputHandler {
 
-	private ObjectFabricator objectFabricator;
-
-	public MaintainerInputHandler(DataFacade dataFacade, ObjectFabricator objectFabricator, PrintWriter output,
+	public MaintainerInputHandler(DataFacade dataFacade, PrintWriter output,
 			RawInputHandler input) {
 		super(dataFacade, output, input);
-		this.objectFabricator = objectFabricator;
 	}
 
+	public void readUser() {
+		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
+		
+		String user; 
+		boolean remain = true;
+		do {
+			user = input.readNotVoidString(ControllerStrings.USER_INPUT_NAME);
+			if(dataFacade.hasUser(user))
+				output.println(ControllerStrings.ERROR_USER_ALREADY_EXISTENT);
+			else
+				remain = false;
+		}
+		while(remain);
+		
+		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
+			dataFacade.addUser(user);
+	}
+	
 	public void readHouseFromUser() {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
-		String user = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_USER);
+		String user;
+		boolean remain = true;
+		do {
+			user = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_USER);
+			if(!dataFacade.hasUser(user))
+				output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
+			else
+				remain = false;
+		}
+		while(remain);
+		
+		dataFacade.loadHousingUnits(user);
+		
 		String name;
 		do {
-			name = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_NAME);
+			name = input.readStringWithMaximumLength(ControllerStrings.HOUSE_INPUT_NAME, 30);
 			if (dataFacade.hasHousingUnit(user, name))
 				output.println(ControllerStrings.NAME_ALREADY_EXISTENT);
 		}
@@ -39,7 +65,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 		String descr = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_DESCRIPTION);
 		String type = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_TYPE);
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			objectFabricator.createHouse(name, descr, type, user);
+			dataFacade.addHousingUnit(user, name, descr, type);
 
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
@@ -75,7 +101,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 					double max = input.readDouble(ControllerStrings.INSERT_SENSOR_CATEGORY_MAX_VALUE);
 					String measurementUnit = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_DETECTABLE_INFO);
 
-					InfoStrategy domainInfo = new DoubleInfoStrategy(min, max);
+					InfoStrategy domainInfo = new DoubleInfoStrategy(min, max, 0);
 					infoDomainMap.put(detectableInfo, domainInfo);
 					measurementUnitMap.put(detectableInfo, measurementUnit);
 					if (!input.yesOrNo(ControllerStrings.INSERT_ANOTHER_INFO))
@@ -106,7 +132,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 							domain.add(s);
 					}
 					while (remainTwo);
-					InfoStrategy domainInfo = new StringInfoStrategy(domain);
+					InfoStrategy domainInfo = new StringInfoStrategy(domain, 0);
 					infoDomainMap.put(detectableInfo, domainInfo);
 					if (!input.yesOrNo(ControllerStrings.INSERT_ANOTHER_INFO))
 						remain = false;
@@ -118,7 +144,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 		}
 
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			objectFabricator.createSensorCategory(name, abbreviation, manufacturer, infoDomainMap, measurementUnitMap);
+			dataFacade.addSensorCategory(name, abbreviation, manufacturer, infoDomainMap, measurementUnitMap);
 
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
@@ -153,7 +179,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 		String defaultMode = input.readNotVoidString(ControllerStrings.ACTUATOR_CATEGORY_INPUT_DEFAULT_MODE);
 
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			objectFabricator.createActuatorCategory(name, abbreviation, constructor, listOfModes, defaultMode);
+			dataFacade.addActuatorCategory(name, abbreviation, constructor, listOfModes, defaultMode);
 
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
@@ -177,6 +203,6 @@ public class MaintainerInputHandler extends UserInputHandler {
 	}
 
 	private boolean maintainerInputHandlerInvariant() {
-		return userInputHandlerInvariant() && objectFabricator != null;
+		return userInputHandlerInvariant();
 	}
 }

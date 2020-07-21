@@ -1,5 +1,6 @@
 package it.unibs.ing.domohouse.model.db;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.unibs.ing.domohouse.model.components.elements.HousingUnit;
@@ -11,10 +12,12 @@ public class DatabaseFacade {
 
 	private Connector connector;
 	private DatabaseLoader databaseLoader;
+	private List<Saveable> saveables;
 	
 	public DatabaseFacade(Connector connector, DatabaseLoader databaseLoader) {
 		this.connector = connector;
 		this.databaseLoader = databaseLoader;
+		saveables = new ArrayList<>();
 	}
 	
 	public void update(Query query) {
@@ -35,5 +38,15 @@ public class DatabaseFacade {
 
 	public List<HousingUnit> loadHousingUnits(String user) {
 		return databaseLoader.loadHousingUnits(user);
+	}
+	
+	public void addSaveable(Saveable toAdd) {
+		saveables.add(toAdd);
+	}
+
+	public void saveData() {
+		for(Saveable saveable : saveables)
+			update(saveable.getUpdateQuery());
+		saveables.removeAll(saveables);
 	}
 }

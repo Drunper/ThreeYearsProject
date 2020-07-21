@@ -95,14 +95,15 @@ public class Connector {
 	}
 	
 	public void executeQueryWithoutResult(Query query) {
-		try {
-			setQuery(query);
-			preparedStatement.execute();
-			preparedStatement.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		if(query != null)
+			try {
+				setQuery(query);
+				preparedStatement.execute();
+				preparedStatement.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 	}
 	
 	public ResultSet executeQuery(Query query) {

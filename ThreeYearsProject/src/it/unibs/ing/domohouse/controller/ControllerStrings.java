@@ -26,10 +26,10 @@ public class ControllerStrings {
 			"Visualizza attuatore", "Aziona attuatore", "Visualizza artefatto", "Modifica descrizione stanza",
 			"Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto", "Attiva/disattiva dispositivo",
 			"Aggiorna ora" };
-	public static final String[] MAINTAINER_MAIN_MENU_VOICES = { "Visualizza unità immobiliare",
+	public static final String[] MAINTAINER_MAIN_MENU_VOICES = { "Aggiungi fruitore", "Visualizza unità immobiliare",
 			"Aggiungi unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori",
-			"Inserisci categoria di sensori", "Inserisci categoria di attuatori", "Salva dati",
-			"Importa file di libreria", "Apri Help", "Visualizza Log", "Aggiorna ora" };
+			"Inserisci categoria di sensori", "Inserisci categoria di attuatori", "Importa file di libreria",
+			"Apri Help", "Visualizza Log", "Aggiorna ora" };
 	public static final String[] USER_MAIN_MENU_VOICES = { "Visualizza unità immobiliare",
 			"Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Apri Help", "Aggiorna ora" };
 
@@ -53,7 +53,7 @@ public class ControllerStrings {
 	public static final String CONFIG_FILE_LOADING_FAILED = "Errore durante il caricamento del file di configurazione, creazione del file in corso...";
 	public static final String CONFIG_FILE_CREATED = "File di configurazione creato con successo";
 	public static final String LOADED_CLOCK_STRATEGY = "Caricamento orologio completato";
-	
+
 	// LOGIN
 	public static final String INSERT_PASSWORD = "Inserisci la password";
 	public static final String USER_OR_PASSWORD_ERROR = "Nome utente o password errati";
@@ -262,4 +262,6 @@ public class ControllerStrings {
 
 	// INVARIANT, PRECONDITIONS, POSTCONDITIONS
 	public static final String WRONG_INVARIANT = "Invariante della classe non soddisfatto";
+	public static final String USER_INPUT_NAME = "Inserisci il nome dell'utente";
+	public static final String ERROR_USER_ALREADY_EXISTENT = "Un nome utente con lo stesso nome esiste già";
 }

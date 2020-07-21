@@ -6,18 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import it.unibs.ing.domohouse.model.util.DataFacade;
-import it.unibs.ing.domohouse.model.util.ObjectFabricator;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 
 public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 
-	private ObjectFabricator objectFabricator;
-
-	public MaintainerRoomInputHandler(DataFacade dataFacade, ObjectFabricator objectFabricator, PrintWriter output,
+	public MaintainerRoomInputHandler(DataFacade dataFacade, PrintWriter output,
 			RawInputHandler input) {
 		super(dataFacade, output, input);
-		this.objectFabricator = objectFabricator;
 	}
 
 	public void changeRoomDescription(String user, String selectedHouse, String selectedRoom) {
@@ -141,7 +137,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 				}
 				while (input.yesOrNo(ControllerStrings.SENSOR_ANOTHER_ASSOCIATION));
 				if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-					objectFabricator.createSensor(user, selectedHouse, name, category, roomOrArtifact, objectList, location);
+					dataFacade.addSensor(user, selectedHouse, location, name, category, roomOrArtifact, objectList);
 			}
 			else
 				output.println(ControllerStrings.NO_SENSOR_ROOM_OR_ARTIFACT_ERROR);
@@ -166,7 +162,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 
 		String descr = input.readNotVoidString(ControllerStrings.ARTIFACT_INPUT_DESCRIPTION);
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			objectFabricator.createArtifact(user, selectedHouse, name, descr, location, new HashMap<String, String>());
+			dataFacade.addArtifact(user, selectedHouse, name, descr, location, new HashMap<String, String>());
 
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
@@ -273,8 +269,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 				}
 				while (input.yesOrNo(ControllerStrings.ACTUATOR_ANOTHER_ASSOCIATION));
 				if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-					objectFabricator.createActuator(user, selectedHouse, name, category, roomOrArtifact, objectList,
-							location);
+					dataFacade.addActuator(user, selectedHouse, location, name, category, roomOrArtifact, objectList);
 			}
 			else
 				output.println(ControllerStrings.NO_ACTUATOR_ROOM_OR_ARTIFACT_ERROR);

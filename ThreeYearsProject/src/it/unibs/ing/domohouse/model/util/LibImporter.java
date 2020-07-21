@@ -17,12 +17,10 @@ public class LibImporter {
 	private static final String DOUBLE_REGEX = "^[-+]?\\d+(\\.{0,1}(\\d+?))?$";
 
 	private DataFacade dataFacade;
-	private ObjectFabricator objectFabricator;
 	private String errorString;
 
-	public LibImporter(DataFacade dataFacade, ObjectFabricator objectFabricator) {
+	public LibImporter(DataFacade dataFacade) {
 		this.dataFacade = dataFacade;
-		this.objectFabricator = objectFabricator;
 	}
 
 	public boolean importFile(String user) {

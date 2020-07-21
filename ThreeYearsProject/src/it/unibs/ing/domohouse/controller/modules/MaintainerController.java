@@ -57,9 +57,13 @@ public class MaintainerController {
 			selection = menuManager.doChoice();
 			switch (selection) {
 				case 0:
+					dataFacade.saveData();
 					log.write(ControllerStrings.LOG_EXIT_MENU);
 					break;
 				case 1:
+					maintainerInputHandler.readUser();
+					break;
+				case 2:
 					menuManager.clearOutput();
 					String user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
 					if(dataFacade.hasUser(user)) {
@@ -74,15 +78,13 @@ public class MaintainerController {
 					else
 						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					break;
-				case 2:
+				case 3:
 					menuManager.clearOutput();
-					/*
 					log.write(ControllerStrings.LOG_INSERT_HOUSE);
 					maintainerInputHandler.readHouseFromUser();
 					log.write(ControllerStrings.LOG_INSERT_HOUSE_SUCCESS);
-					*/
 					break;
-				case 3:
+				case 4:
 					// visualizza categorie di sensori
 					menuManager.clearOutput();
 					if (dataFacade.doesSensorCategoryExist()) {
@@ -97,7 +99,7 @@ public class MaintainerController {
 					else
 						output.println(ControllerStrings.NO_SENSOR_CATEGORY);
 					break;
-				case 4:
+				case 5:
 					// visualizza categoria di attuatore
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorCategoryExist()) {
@@ -112,24 +114,17 @@ public class MaintainerController {
 					else
 						output.println(ControllerStrings.NO_ACTUATOR_CATEGORY);
 					break;
-				case 5:
+				case 6:
 					// crea sensor category
 					log.write(ControllerStrings.LOG_INSERT_SENSOR_CATEGORY);
 					maintainerInputHandler.readSensorCategoryFromUser();
 					log.write(ControllerStrings.LOG_INSERT_SENSOR_CATEGORY_SUCCESS);
 					break;
-				case 6:
+				case 7:
 					// crea actuator category
 					log.write(ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY);
 					maintainerInputHandler.readActuatorCategoryFromUser();
 					log.write(ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY_SUCCESS);
-					break;
-				case 7:
-					// salva file
-					log.write(ControllerStrings.LOG_SAVING_DATA);
-					saver.saveDataFacade(dataFacade);
-					output.println(ControllerStrings.DATA_SAVED);
-					log.write(ControllerStrings.DATA_SAVED);
 					break;
 				case 8:
 					// importa file

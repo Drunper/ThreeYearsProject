@@ -5,15 +5,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import it.unibs.ing.domohouse.model.util.DataFacade;
-import it.unibs.ing.domohouse.model.util.ObjectFabricator;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 
 public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 
-	public MaintainerUnitInputHandler(DataFacade dataFacade, ObjectFabricator objectFabricator, PrintWriter output,
+	public MaintainerUnitInputHandler(DataFacade dataFacade, PrintWriter output,
 			RawInputHandler input) {
-		super(dataFacade, objectFabricator, output, input);
+		super(dataFacade, output, input);
 	}
 
 	public void changeHouseDescription(String user, String selectedHouse) {
@@ -60,7 +59,7 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 		propertiesMap.put("presenza_persone", String.valueOf(presenza_persone));
 
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			objectFabricator.createRoom(user, selectedHouse, name, descr, propertiesMap);
+			dataFacade.addRoom(user, selectedHouse, name, descr, propertiesMap);
 
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}

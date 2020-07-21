@@ -8,7 +8,6 @@ import java.util.Set;
 import it.unibs.ing.domohouse.model.components.properties.OperatingModesManager;
 import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
 import it.unibs.ing.domohouse.model.util.DataFacade;
-import it.unibs.ing.domohouse.model.util.ObjectFabricator;
 import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.controller.ControllerStrings;
@@ -18,14 +17,12 @@ public class UserUnitInputHandler {
 	protected DataFacade dataFacade;
 	protected PrintWriter output;
 	protected RawInputHandler input;
-	protected ObjectFabricator objectFabricator;
 
-	public UserUnitInputHandler(DataFacade dataFacade, ObjectFabricator objectFabricator, PrintWriter output,
+	public UserUnitInputHandler(DataFacade dataFacade, PrintWriter output,
 			RawInputHandler input) {
 		this.dataFacade = dataFacade;
 		this.output = output;
 		this.input = input;
-		this.objectFabricator = objectFabricator;
 	}
 
 	public String safeInsertRoom(String user, String selectedHouse) {
@@ -175,7 +172,7 @@ public class UserUnitInputHandler {
 			consString = "start :=" + time + "," + consString;
 		}
 
-		objectFabricator.createRule(user, selectedHouse, name, antString, consString, sensors, actuators);
+		dataFacade.addRule(user, selectedHouse, name, antString, consString, sensors, actuators);
 
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
