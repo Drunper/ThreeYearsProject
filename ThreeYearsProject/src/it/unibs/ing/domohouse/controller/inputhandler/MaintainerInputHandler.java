@@ -10,34 +10,34 @@ import it.unibs.ing.domohouse.model.components.properties.InfoStrategy;
 import it.unibs.ing.domohouse.model.components.properties.DoubleInfoStrategy;
 import it.unibs.ing.domohouse.model.components.properties.StringInfoStrategy;
 import it.unibs.ing.domohouse.model.util.DataFacade;
+import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 
 public class MaintainerInputHandler extends UserInputHandler {
 
-	public MaintainerInputHandler(DataFacade dataFacade, PrintWriter output,
-			RawInputHandler input) {
+	public MaintainerInputHandler(DataFacade dataFacade, PrintWriter output, RawInputHandler input) {
 		super(dataFacade, output, input);
 	}
 
 	public void readUser() {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
-		
-		String user; 
+
+		String user;
 		boolean remain = true;
 		do {
 			user = input.readNotVoidString(ControllerStrings.USER_INPUT_NAME);
-			if(dataFacade.hasUser(user))
+			if (dataFacade.hasUser(user))
 				output.println(ControllerStrings.ERROR_USER_ALREADY_EXISTENT);
 			else
 				remain = false;
 		}
-		while(remain);
-		
+		while (remain);
+
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
 			dataFacade.addUser(user);
 	}
-	
+
 	public void readHouseFromUser() {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
@@ -45,15 +45,15 @@ public class MaintainerInputHandler extends UserInputHandler {
 		boolean remain = true;
 		do {
 			user = input.readNotVoidString(ControllerStrings.HOUSE_INPUT_USER);
-			if(!dataFacade.hasUser(user))
+			if (!dataFacade.hasUser(user))
 				output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 			else
 				remain = false;
 		}
-		while(remain);
-		
+		while (remain);
+
 		dataFacade.loadHousingUnits(user);
-		
+
 		String name;
 		do {
 			name = input.readStringWithMaximumLength(ControllerStrings.HOUSE_INPUT_NAME, 30);
@@ -70,7 +70,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readSensorCategoryFromUser() {
+	public void readSensorCategoryFromUser(MenuManager view) {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String name;
@@ -85,68 +85,105 @@ public class MaintainerInputHandler extends UserInputHandler {
 		while (remain);
 		name = name.replace(ControllerStrings.UNDERSCORE, ControllerStrings.NULL_CHARACTER); // il nome non può
 																								// contenere underscore
-
 		String abbreviation = input.readNotVoidString(ControllerStrings.INPUT_CATEGORY_ABBREVIATION);
 		String manufacturer = input.readNotVoidString(ControllerStrings.INPUT_CATEGORY_MANUFACTURER);
 
 		Map<String, InfoStrategy> infoDomainMap = new HashMap<>();
 		Map<String, String> measurementUnitMap = new HashMap<>();
 
-		remain = true;
-		if (input.yesOrNo(ControllerStrings.INSERT_NUMERIC_INFO)) {
-			do {
-				String detectableInfo = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_INPUT_INFO);
-				if (!infoDomainMap.containsKey(detectableInfo)) {
-					double min = input.readDouble(ControllerStrings.INSERT_SENSOR_CATEGORY_MIN_VALUE);
-					double max = input.readDouble(ControllerStrings.INSERT_SENSOR_CATEGORY_MAX_VALUE);
-					String measurementUnit = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_DETECTABLE_INFO);
-
-					InfoStrategy domainInfo = new DoubleInfoStrategy(min, max, 0);
-					infoDomainMap.put(detectableInfo, domainInfo);
-					measurementUnitMap.put(detectableInfo, measurementUnit);
-					if (!input.yesOrNo(ControllerStrings.INSERT_ANOTHER_INFO))
-						remain = false;
-				}
-				else
-					output.println(ControllerStrings.ERROR_INFO_ALREADY_INSERTED);
-			}
-			while (remain);
-		}
-		else {
-			do {
-				String detectableInfo = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_INPUT_INFO);
-				if (!infoDomainMap.containsKey(detectableInfo)) {
-					List<String> domain = new ArrayList<>();
-					String s;
-					boolean remainTwo = true;
-					do {
-						s = input.readNotVoidString(ControllerStrings.INPUT_NON_NUMERIC_DOMAIN);
-						if (s.equals(ControllerStrings.BACK_CHARACTER))
-							if (!domain.isEmpty())
-								remainTwo = false;
-							else
-								output.println(ControllerStrings.DOMAIN_VALUE_REQUIRED);
-						else if (domain.contains(s))
-							output.println(ControllerStrings.ERROR_DOMAIN_VALUE_ALREADY_INSERTED);
-						else
-							domain.add(s);
-					}
-					while (remainTwo);
-					InfoStrategy domainInfo = new StringInfoStrategy(domain, 0);
-					infoDomainMap.put(detectableInfo, domainInfo);
-					if (!input.yesOrNo(ControllerStrings.INSERT_ANOTHER_INFO))
-						remain = false;
-				}
-				else
-					output.println(ControllerStrings.ERROR_INFO_ALREADY_INSERTED);
-			}
-			while (remain);
-		}
+		readInfoStrategies(infoDomainMap, measurementUnitMap, view);
 
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
 			dataFacade.addSensorCategory(name, abbreviation, manufacturer, infoDomainMap, measurementUnitMap);
 
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
+	}
+
+	private void readInfoStrategies(Map<String, InfoStrategy> infoDomainMap, Map<String, String> measurementUnitMap, MenuManager view) {
+		boolean remain = true;		
+		
+		int dbID = dataFacade.getCurrentMaxID();
+		
+		do {
+			if (input.yesOrNo(ControllerStrings.INSERT_NUMERIC_INFO)) {
+				view.printCollectionOfString(dataFacade.getNumericInfoStrategySet());
+				if(input.yesOrNo(ControllerStrings.INSERT_INFO_IN_LIST)) {
+					int ID = input.readInt(ControllerStrings.INPUT_INFO_ID);
+					if(dataFacade.hasNumericInfoStrategy(ID)) {
+						DoubleInfoStrategy infoStrategy = dataFacade.getNumericInfoStrategy(ID);
+						if(!infoDomainMap.containsKey(infoStrategy.getMeasuredProperty())) {
+							infoDomainMap.put(infoStrategy.getMeasuredProperty(), infoStrategy);
+							measurementUnitMap.put(infoStrategy.getMeasuredProperty(), input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_DETECTABLE_INFO));
+						}
+						else
+							output.println(ControllerStrings.ERROR_INFO_ALREADY_INSERTED);
+					}
+					else
+						output.println(ControllerStrings.ERROR_INFO_NOT_IN_DB);	
+				}
+				else {
+					String detectableInfo = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_INPUT_INFO);
+					if (!infoDomainMap.containsKey(detectableInfo)) {
+						double min = input.readDouble(ControllerStrings.INSERT_SENSOR_CATEGORY_MIN_VALUE);
+						double max = input.readDouble(ControllerStrings.INSERT_SENSOR_CATEGORY_MAX_VALUE);
+						String measurementUnit = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_DETECTABLE_INFO);
+	
+						DoubleInfoStrategy domainInfo = new DoubleInfoStrategy(min, max, ++dbID, detectableInfo);
+						dataFacade.addNumericInfoStrategy(dbID, domainInfo);
+						infoDomainMap.put(detectableInfo, domainInfo);
+						measurementUnitMap.put(detectableInfo, measurementUnit);
+						if (!input.yesOrNo(ControllerStrings.INSERT_ANOTHER_INFO))
+							remain = false;
+					}
+					else
+						output.println(ControllerStrings.ERROR_INFO_ALREADY_INSERTED);
+				}
+			}
+			else {
+				view.printCollectionOfString(dataFacade.getNonNumericInfoStrategySet());
+				if(input.yesOrNo(ControllerStrings.INSERT_INFO_IN_LIST)) {
+					int ID = input.readInt(ControllerStrings.INPUT_INFO_ID);
+					if(dataFacade.hasNonNumericInfoStrategy(ID)) {
+						StringInfoStrategy infoStrategy = dataFacade.getNonNumericInfoStrategy(ID);
+						if(!infoDomainMap.containsKey(infoStrategy.getMeasuredProperty())) {
+							infoDomainMap.put(infoStrategy.getMeasuredProperty(), infoStrategy);
+						}
+						else
+							output.println(ControllerStrings.ERROR_INFO_ALREADY_INSERTED);
+					}
+					else
+						output.println(ControllerStrings.ERROR_INFO_NOT_IN_DB);	
+				}
+				else {
+					String detectableInfo = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_INPUT_INFO);
+					if (!infoDomainMap.containsKey(detectableInfo)) {
+						List<String> domain = new ArrayList<>();
+						String s;
+						boolean remainTwo = true;
+						do {
+							s = input.readNotVoidString(ControllerStrings.INPUT_NON_NUMERIC_DOMAIN);
+							if (s.equals(ControllerStrings.BACK_CHARACTER))
+								if (!domain.isEmpty())
+									remainTwo = false;
+								else
+									output.println(ControllerStrings.DOMAIN_VALUE_REQUIRED);
+							else if (domain.contains(s))
+								output.println(ControllerStrings.ERROR_DOMAIN_VALUE_ALREADY_INSERTED);
+							else
+								domain.add(s);
+						}
+						while (remainTwo);
+						StringInfoStrategy domainInfo = new StringInfoStrategy(domain, ++dbID, detectableInfo);
+						infoDomainMap.put(detectableInfo, domainInfo);
+						if (!input.yesOrNo(ControllerStrings.INSERT_ANOTHER_INFO))
+							remain = false;
+					}
+					else
+						output.println(ControllerStrings.ERROR_INFO_ALREADY_INSERTED);
+				}
+			}
+		}
+		while (remain);
 	}
 
 	public void readActuatorCategoryFromUser() {

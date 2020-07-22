@@ -8,15 +8,14 @@ public class QueryStrings {
 			+ " WHERE nome_utente =?";
 	public static final String GET_USER = "SELECT * FROM utente WHERE nome_utente =?";
 	public static final String GET_SENSOR_CATEGORIES = "SELECT * FROM categoria_sensori";
-	public static final String GET_NUMERIC_INFO_OF_A_CATEGORY = "SELECT informazione_rilevabile.id_informazione, informazione_rilevabile.nome_proprietà, minimo, massimo"
-			+ " FROM informazione_rilevabile JOIN misura_informazioni ON informazione_rilevabile.id_informazione = misura_informazioni.id_informazione"
-			+ " WHERE selettore_informazione = 0 AND nome_categoria_sensori =?";
-	public static final String GET_MEASUREMENT_UNIT = "SELECT informazione_rilevabile.id_informazione, informazione_rilevabile.nome_proprietà, unità_di_misura"
+	public static final String GET_NUMERIC_INFO_OF_A_CATEGORY = "SELECT informazione_rilevabile.id_informazione, informazione_rilevabile.nome_proprietà, minimo, massimo, unità_di_misura"
 			+ " FROM informazione_rilevabile JOIN misura_informazioni ON informazione_rilevabile.id_informazione = misura_informazioni.id_informazione"
 			+ " WHERE selettore_informazione = 0 AND nome_categoria_sensori =?";
 	public static final String GET_NON_NUMERIC_INFO_OF_A_CATEGORY = "SELECT informazione_rilevabile.id_informazione, informazione_rilevabile.nome_proprietà"
 			+ " FROM informazione_rilevabile JOIN misura_informazioni ON informazione_rilevabile.id_informazione = misura_informazioni.id_informazione"
 			+ " WHERE selettore_informazione = 1 AND nome_categoria_sensori =?";
+	public static final String GET_NUMERIC_INFOS = "SELECT * FROM informazione_rilevabile WHERE selettore_informazione = 0";
+	public static final String GET_NON_NUMERIC_INFOS = "SELECT * FROM informazione_rilevabile WHERE selettore_informazione = 1";
 	public static final String GET_NON_NUMERIC_DOMAIN_VALUE = "SELECT nome_valore FROM valore_dominio"
 			+ " WHERE id_informazione =? AND nome_proprietà =?";
 	public static final String GET_ACTUATOR_CATEGORIES = "SELECT * FROM categoria_attuatori";
@@ -75,13 +74,15 @@ public class QueryStrings {
 	
 	public static final String INSERT_PROPERTY = "INSERT INTO proprietà (nome_proprietà, tipo, valore_di_default) VALUES (?, ?, ?)";
 
-	public static final String INSERT_NUMERIC_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (nome_proprietà, selettore_informazione, minimo, massimo, unità_di_misura) VALUES  (?, 0, ?, ?, ?)";
+	public static final String INSERT_NUMERIC_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (nome_proprietà, selettore_informazione, minimo, massimo) VALUES  (?, 0, ?, ?)";
 
 	public static final String INSERT_NON_NUMERIC_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (nome_proprietà, selettore_informazione) VALUES (?, 1)";
 	
+	public static final String INSERT_NON_NUMERIC_DOMAIN_VALUE = "INSERT INTO valore_dominio (id_informazione, nome_proprietà, nome_valore) VALUES";
+	
 	public static final String INSERT_SENSOR_CATEGORY = "INSERT INTO categoria_sensori (nome_categoria_sensori, descrizione, sigla, costruttore) VALUES (?, ?, ?, ?);";
 
-	public static final String INSERT_MEASURED_INFO = "INSERT INTO misura_informazioni (nome_categoria_sensori, id_informazione, nome_proprietà) VALUES";
+	public static final String INSERT_MEASURED_INFO = "INSERT INTO misura_informazioni (nome_categoria_sensori, id_informazione, nome_proprietà, unità_di_misura) VALUES";
 
 	public static final String INSERT_ACTUATOR_CATEGORY = "INSERT INTO categoria_attuatori (nome_categoria_attuatori, descrizione, sigla, costruttore, modalità_di_default) VALUES (?, ?, ?, ?, ?);";
 

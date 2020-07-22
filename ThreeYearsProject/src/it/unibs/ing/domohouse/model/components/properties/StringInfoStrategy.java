@@ -10,10 +10,12 @@ public class StringInfoStrategy implements InfoStrategy, Serializable {
 	private static final long serialVersionUID = 8997364281663305737L;
 	private int ID;
 	private List<String> domain;
+	private String measuredProperty;
 
-	public StringInfoStrategy(List<String> domain, int ID) {
+	public StringInfoStrategy(List<String> domain, int ID, String measuredProperty) {
 		this.domain = domain;
 		this.ID = ID;
+		this.measuredProperty = measuredProperty;
 	}
 
 	@Override
@@ -30,7 +32,16 @@ public class StringInfoStrategy implements InfoStrategy, Serializable {
 		return ID;
 	}
 	
+	@Override
+	public String getMeasuredProperty() {
+		return measuredProperty;
+	}
+	
 	public String toString() {
 		return String.join(ModelStrings.COMMA_WITH_SPACE, domain);
+	}
+	
+	public List<String> getDomainValues() {
+		return domain;
 	}
 }

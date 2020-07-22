@@ -6,4 +6,5 @@ public interface InfoStrategy {
 	
 	String getSingleValue(List<String> values);
 	int getID();
+	String getMeasuredProperty();
 }

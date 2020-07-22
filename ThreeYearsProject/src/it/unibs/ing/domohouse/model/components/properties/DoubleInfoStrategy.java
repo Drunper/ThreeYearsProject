@@ -9,11 +9,13 @@ public class DoubleInfoStrategy implements InfoStrategy, Serializable {
 	private double lowerBound;
 	private double upperBound;
 	private int ID;
+	private String measuredProperty;
 
-	public DoubleInfoStrategy(double lowerBound, double upperBound, int ID) {
+	public DoubleInfoStrategy(double lowerBound, double upperBound, int ID, String measuredProperty) {
 		this.lowerBound = lowerBound;
 		this.upperBound = upperBound;
 		this.ID = ID;
+		this.measuredProperty = measuredProperty;
 	}
 
 	@Override
@@ -35,8 +37,21 @@ public class DoubleInfoStrategy implements InfoStrategy, Serializable {
 	public int getID() {
 		return ID;
 	}
+	
+	@Override
+	public String getMeasuredProperty() {
+		return measuredProperty;
+	}
 
 	public String toString() {
 		return lowerBound + " -to- " + upperBound;
+	}
+	
+	public double getLowerBound() {
+		return lowerBound;
+	}
+	
+	public double getUpperBound() {
+		return upperBound;
 	}
 }

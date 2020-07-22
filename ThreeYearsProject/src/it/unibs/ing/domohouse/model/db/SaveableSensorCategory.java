@@ -33,11 +33,12 @@ public class SaveableSensorCategory implements Saveable {
 			query.setStringParameter(pos++, sensorCategory.getName());
 			query.setIntegerParameter(pos++, sensorCategory.getInfoID(property));
 			query.setStringParameter(pos++, property);
+			query.setStringParameter(pos++, sensorCategory.getMeasurementUnit(property));
 		}
 
 		queryString += QueryStrings.INSERT_MEASURED_INFO
 				+ String.join(", ",
-						Collections.nCopies(sensorCategory.getInfoStrategySet().size(), QueryStrings.THREE_VALUES))
+						Collections.nCopies(sensorCategory.getInfoStrategySet().size(), QueryStrings.FOUR_VALUES))
 				+ ";";
 		query.setQuery(queryString);
 		return query;

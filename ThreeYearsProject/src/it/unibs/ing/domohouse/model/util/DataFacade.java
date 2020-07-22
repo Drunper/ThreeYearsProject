@@ -1,9 +1,10 @@
 package it.unibs.ing.domohouse.model.util;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,27 +14,26 @@ import it.unibs.ing.domohouse.model.components.rule.*;
 import it.unibs.ing.domohouse.model.db.*;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
-public class DataFacade implements Serializable {
+public class DataFacade {
 
-	private static final long serialVersionUID = 830399600665259268L;
 	private Manager sensorCategoryManager;
 	private Manager actuatorCategoryManager;
 	private Manager userManager;
-	private Map<String, String> propertyMap;
+	private Map<String, String> propertiesMap;
+	private Map<Integer, DoubleInfoStrategy> numericInfoStrategiesMap;
+	private Map<Integer, StringInfoStrategy> nonNumericInfoStrategiesMap;
 	private DatabaseFacade databaseFacade;
 	private ObjectFactory objectFactory;
 
-	/*
-	 * invariante sensorCategoryManager != null, actuatorCategoryManager != null,
-	 * housingUnitManager != null
-	 */
 	public DataFacade(Connector connector) {
 		objectFactory = new ObjectFactory(new RuleParser());
 		databaseFacade = new DatabaseFacade(connector, new DatabaseLoader(connector, objectFactory, this));
 		sensorCategoryManager = new Manager();
 		actuatorCategoryManager = new Manager();
 		userManager = new Manager();
-		propertyMap = databaseFacade.getAllProperties();
+		propertiesMap = databaseFacade.getAllProperties();
+		numericInfoStrategiesMap = databaseFacade.getNumericInfoStrategies();
+		nonNumericInfoStrategiesMap = databaseFacade.getNonNumericInfoStrategies();
 	}
 
 	public void loadCategories() {
@@ -557,19 +557,65 @@ public class DataFacade implements Serializable {
 	}
 	
 	public Set<String> getPropertiesSet() {
-		return propertyMap.keySet();
+		return propertiesMap.keySet();
 	}
 	
 	public boolean hasProperty(String property) {
-		return propertyMap.containsKey(property);
+		return propertiesMap.containsKey(property);
 	}
 	
 	public void addProperty(String propertyName, String defaultValue) {
-		propertyMap.put(propertyName, defaultValue);
+		propertiesMap.put(propertyName, defaultValue);
 		databaseFacade.addProperty(propertyName, defaultValue);
 	}
 
 	public String getPropertyDefaultValue(String propertyName) {
-		return propertyMap.get(propertyName);
+		return propertiesMap.get(propertyName);
+	}
+	
+	public Set<String> getNumericInfoStrategySet() {
+		Set<String> set = new HashSet<>();
+		for(Entry<Integer, DoubleInfoStrategy> entry : numericInfoStrategiesMap.entrySet()) {
+			set.add(entry.getKey() + " " + entry.getValue().getMeasuredProperty() + " " + entry.getValue().toString());
+		}
+		return set;
+	}
+	
+	public Set<String> getNonNumericInfoStrategySet() {
+		Set<String> set = new HashSet<>();
+		for(Entry<Integer, StringInfoStrategy> entry : nonNumericInfoStrategiesMap.entrySet()) {
+			set.add(entry.getKey() + " " + entry.getValue().getMeasuredProperty() + " " + entry.getValue().toString());
+		}
+		return set;
+	}
+	
+	public int getCurrentMaxID() {
+		return nonNumericInfoStrategiesMap.size() + numericInfoStrategiesMap.size();
+	}
+	
+	public boolean hasNumericInfoStrategy(int ID) {
+		return numericInfoStrategiesMap.containsKey(ID);
+	}
+	
+	public boolean hasNonNumericInfoStrategy(int ID) {
+		return nonNumericInfoStrategiesMap.containsKey(ID);
+	}
+	
+	public void addNumericInfoStrategy(int ID, DoubleInfoStrategy infoStrategy) {
+		numericInfoStrategiesMap.put(ID, infoStrategy);
+		databaseFacade.addNumericInfoStrategy(infoStrategy);
+	}
+	
+	public void addNonNumericInfoStrategy(int ID, StringInfoStrategy infoStrategy) {
+		nonNumericInfoStrategiesMap.put(ID, infoStrategy);
+		databaseFacade.addNonNumericInfoStrategy(infoStrategy);
+	}
+
+	public DoubleInfoStrategy getNumericInfoStrategy(int ID) {
+		return numericInfoStrategiesMap.get(ID);
+	}
+	
+	public StringInfoStrategy getNonNumericInfoStrategy(int ID) {
+		return nonNumericInfoStrategiesMap.get(ID);
 	}
 }

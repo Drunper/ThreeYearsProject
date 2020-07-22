@@ -115,7 +115,7 @@ public class MaintainerController {
 				case 6:
 					// crea sensor category
 					log.write(ControllerStrings.LOG_INSERT_SENSOR_CATEGORY);
-					maintainerInputHandler.readSensorCategoryFromUser();
+					maintainerInputHandler.readSensorCategoryFromUser(menuManager);
 					log.write(ControllerStrings.LOG_INSERT_SENSOR_CATEGORY_SUCCESS);
 					break;
 				case 7:

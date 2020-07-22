@@ -8,11 +8,13 @@ public class Query {
 	private String query;
 	private Map<Integer, Integer> integerParameters;
 	private Map<Integer, String> stringParameters;
+	private Map<Integer, Double> doubleParameters;
 	
 	public Query(String query) {
 		this.query = query;
 		integerParameters = new HashMap<>();
 		stringParameters = new HashMap<>();
+		doubleParameters = new HashMap<>();
 	}
 	
 	public Query(String query, Map<Integer, Integer> integerParameters, Map<Integer, String> stringParameters) {
@@ -29,6 +31,10 @@ public class Query {
 		integerParameters.put(position, value);
 	}
 	
+	public void setDoubleParameter(int position, double value) {
+		doubleParameters.put(position, value);
+	}
+	
 	public void setStringParameter(String value, int...positions) {
 		for(int position : positions)
 			stringParameters.put(position, value);
@@ -40,6 +46,10 @@ public class Query {
 	
 	public Map<Integer, String> getStringParameters() {
 		return stringParameters;
+	}
+	
+	public Map<Integer, Double> getDoubleParameters() {
+		return doubleParameters;
 	}
 	
 	public String getQuery() {

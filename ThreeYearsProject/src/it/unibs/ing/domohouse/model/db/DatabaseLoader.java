@@ -29,10 +29,11 @@ public class DatabaseLoader {
 		List<SensorCategory> sensorCategories = new ArrayList<>();
 		try (ResultSet set = connector.executeQuery(QueryStrings.GET_SENSOR_CATEGORIES)) {
 			while (set.next()) {
+				Map<String, String> measurementUnitMap = new HashMap<>();
 				SensorCategory cat = objectFactory.createSensorCategory(set.getString("nome_categoria_sensori"),
 						set.getString("sigla"), set.getString("costruttore"),
-						getSensorCategoryInfos(set.getString("nome_categoria_sensori")),
-						getMeasurementUnits(set.getString("nome_categoria_sensori")));
+						getSensorCategoryInfos(set.getString("nome_categoria_sensori"), measurementUnitMap),
+						measurementUnitMap);
 				Saveable saveable = new SaveableSensorCategory(cat, new OldObjectState());
 				cat.setSaveable(saveable);
 				dataFacade.addSaveable(saveable);
@@ -45,7 +46,8 @@ public class DatabaseLoader {
 		return sensorCategories;
 	}
 
-	private Map<String, InfoStrategy> getSensorCategoryInfos(String categoryName) {
+	private Map<String, InfoStrategy> getSensorCategoryInfos(String categoryName,
+			Map<String, String> measurementUnitMap) {
 		Map<String, InfoStrategy> infoDomainMap = new HashMap<>();
 
 		Query query = new Query(QueryStrings.GET_NUMERIC_INFO_OF_A_CATEGORY);
@@ -53,7 +55,8 @@ public class DatabaseLoader {
 		try (ResultSet set1 = connector.executeQuery(query)) {
 			while (set1.next()) {
 				infoDomainMap.put(set1.getString("nome_proprietà"), new DoubleInfoStrategy(set1.getDouble("minimo"),
-						set1.getDouble("massimo"), set1.getInt("id_informazione")));
+						set1.getDouble("massimo"), set1.getInt("id_informazione"), set1.getString("nome_proprietà")));
+				measurementUnitMap.put(set1.getString("nome_proprietà"), set1.getString("unità_di_misura"));
 			}
 		}
 		catch (SQLException e) {
@@ -63,9 +66,11 @@ public class DatabaseLoader {
 		query.setQuery(QueryStrings.GET_NON_NUMERIC_INFO_OF_A_CATEGORY);
 		try (ResultSet set2 = connector.executeQuery(query)) {
 			while (set2.next()) {
-				infoDomainMap.put(set2.getString("nome_proprietà"), new StringInfoStrategy(
-						getStringInfoDomainValues(set2.getInt("id_informazione"), set2.getString("nome_proprietà")),
-						set2.getInt("id_informazione")));
+				infoDomainMap.put(set2.getString("nome_proprietà"),
+						new StringInfoStrategy(
+								getStringInfoDomainValues(set2.getInt("id_informazione"),
+										set2.getString("nome_proprietà")),
+								set2.getInt("id_informazione"), set2.getString("nome_proprietà")));
 			}
 		}
 		catch (SQLException e) {
@@ -74,27 +79,10 @@ public class DatabaseLoader {
 		return infoDomainMap;
 	}
 
-	private Map<String, String> getMeasurementUnits(String categoryName) {
-		Map<String, String> measurementUnitMap = new HashMap<>();
-
-		Query query = new Query(QueryStrings.GET_MEASUREMENT_UNIT);
-		query.setStringParameter(1, categoryName);
-		try (ResultSet set = connector.executeQuery(query)) {
-			while (set.next()) {
-				measurementUnitMap.put(set.getString("nome_proprietà"), set.getString("unità_di_misura"));
-			}
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return measurementUnitMap;
-	}
-
 	private List<String> getStringInfoDomainValues(int infoID, String propertyName) {
 		List<String> domain = new ArrayList<>();
 
-		Query query = new Query(QueryStrings.GET_MEASUREMENT_UNIT);
+		Query query = new Query(QueryStrings.GET_NON_NUMERIC_DOMAIN_VALUE);
 		query.setIntegerParameter(1, infoID);
 		query.setStringParameter(2, propertyName);
 		try (ResultSet set = connector.executeQuery(query)) {
@@ -173,7 +161,7 @@ public class DatabaseLoader {
 				String selectedHouse = set.getString("nome_unità");
 				HousingUnit housingUnit = new HousingUnit(selectedHouse, set.getString("descrizione"),
 						set.getString("tipo"), user);
-				Saveable saveable = new SaveableHousingUnit(housingUnit, new OldObjectState()); 
+				Saveable saveable = new SaveableHousingUnit(housingUnit, new OldObjectState());
 				housingUnit.setSaveable(saveable);
 				dataFacade.addSaveable(saveable);
 				housingUnits.add(housingUnit);
@@ -185,14 +173,14 @@ public class DatabaseLoader {
 					for (Artifact artifact : loadArtifacts(user, selectedHouse, room.getName()))
 						room.addArtifact(artifact);
 				}
-				
+
 				for (Room room : rooms) {
 					for (Sensor sensor : loadSensors(user, selectedHouse, room.getName()))
 						room.addSensor(sensor);
 					for (Actuator actuator : loadActuators(user, selectedHouse, room.getName()))
 						room.addActuator(actuator);
 				}
-				
+
 				for (Rule rule : loadRules(user, selectedHouse))
 					housingUnit.addRule(rule);
 			}
@@ -224,9 +212,10 @@ public class DatabaseLoader {
 		}
 		return rooms;
 	}
-	
+
 	private void addAssociations(String user, String selectedHouse, String object, boolean roomOrArtifact) {
-		String queryString = roomOrArtifact ? QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ROOM : QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ARTIFACT;
+		String queryString = roomOrArtifact ? QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ROOM
+				: QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ARTIFACT;
 		Query query = new Query(queryString);
 		query.setStringParameter(1, selectedHouse);
 		query.setStringParameter(2, user);
@@ -238,7 +227,8 @@ public class DatabaseLoader {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		query.setQuery(roomOrArtifact ? QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ROOM : QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ARTIFACT);
+		query.setQuery(roomOrArtifact ? QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ROOM
+				: QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ARTIFACT);
 		try (ResultSet set = connector.executeQuery(query)) {
 			while (set.next())
 				dataFacade.addAssociation(user, selectedHouse, object, set.getString("nome_categoria_attuatori"));
@@ -255,7 +245,7 @@ public class DatabaseLoader {
 				propertyMap.put(set.getString("nome_proprietà"), set.getString("valore_di_default"));
 			}
 		}
-		catch(SQLException e) {
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return propertyMap;
@@ -298,8 +288,7 @@ public class DatabaseLoader {
 						getProperties(user, selectedHouse, set.getString("nome_artefatto"), false));
 				Saveable saveable = new SaveableArtifact(user, selectedHouse, location, artifact, new OldObjectState());
 				dataFacade.addSaveable(saveable);
-				artifact.setSaveable(
-						saveable);
+				artifact.setSaveable(saveable);
 				artifacts.add(new Artifact(set.getString("nome_artefatto"), set.getString("descrizione"),
 						getProperties(user, selectedHouse, set.getString("nome_artefatto"), false)));
 				addAssociations(user, selectedHouse, artifact.getName(), false);
@@ -324,7 +313,7 @@ public class DatabaseLoader {
 						dataFacade.getSensorCategory(set.getString("nome_categoria_sensori")),
 						set.getBoolean("stanze_o_artefatti"), getDeviceObjects(user, selectedHouse,
 								set.getString("nome_sensore"), true, set.getBoolean("stanze_o_artefatti")));
-				
+
 				Saveable saveable = new SaveableSensor(user, selectedHouse, location, sensor, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				sensor.setSaveable(saveable);
@@ -351,8 +340,7 @@ public class DatabaseLoader {
 								set.getString("nome_attuatore"), false, set.getBoolean("stanze_o_artefatti")));
 				Saveable saveable = new SaveableActuator(user, selectedHouse, location, actuator, new OldObjectState());
 				dataFacade.addSaveable(saveable);
-				actuator.setSaveable(
-						saveable);
+				actuator.setSaveable(saveable);
 				actuators.add(actuator);
 			}
 		}
@@ -439,5 +427,58 @@ public class DatabaseLoader {
 		}
 
 		return actuators;
+	}
+
+	public Map<Integer, DoubleInfoStrategy> getNumericInfoStrategies() {
+		Map<Integer, DoubleInfoStrategy> map = new HashMap<>();
+
+		try (ResultSet set = connector.executeQuery(QueryStrings.GET_NUMERIC_INFOS)) {
+			while (set.next()) {
+				map.put(set.getInt("id_informazione"), new DoubleInfoStrategy(set.getDouble("minimo"),
+						set.getDouble("massimo"), set.getInt("id_informazione"), set.getString("nome_proprietà")));
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return map;
+	}
+
+	public Map<Integer, StringInfoStrategy> getNonNumericInfoStrategies() {
+		Map<Integer, StringInfoStrategy> map = new HashMap<>();
+
+		try (ResultSet set = connector.executeQuery(QueryStrings.GET_NON_NUMERIC_INFOS)) {
+			while (set.next()) {
+				map.put(set.getInt("id_informazione"),
+						new StringInfoStrategy(
+								getDomainValues(set.getInt("id_informazione"), set.getString("nome_proprietà")),
+								set.getInt("id_informazione"), set.getString("nome_proprietà")));
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return map;
+	}
+
+	private List<String> getDomainValues(int ID, String propertyName) {
+		List<String> domain = new ArrayList<>();
+
+		Query query = new Query(QueryStrings.GET_NON_NUMERIC_DOMAIN_VALUE);
+		query.setIntegerParameter(1, ID);
+		query.setStringParameter(2, propertyName);
+
+		try (ResultSet set = connector.executeQuery(query)) {
+			while (set.next()) {
+				domain.add(set.getString("nome_valore"));
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return domain;
 	}
 }

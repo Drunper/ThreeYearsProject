@@ -163,6 +163,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 
 		String descr = input.readNotVoidString(ControllerStrings.ARTIFACT_INPUT_DESCRIPTION);
 
+		output.println(ControllerStrings.LIST_OF_PROPERTIES);
 		view.printCollectionOfString(dataFacade.getPropertiesSet());
 
 		Map<String, String> propertyMap = new HashMap<>();

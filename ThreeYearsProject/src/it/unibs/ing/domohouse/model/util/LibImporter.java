@@ -100,8 +100,7 @@ public class LibImporter {
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		String parameters = importedText.split(ModelStrings.SEPARATOR)[1]; // parameters = selectedHouse, name,
-																			// category,
-																			// true/false, element1;element2, room
+																			// category,											// true/false, element1;element2, room
 		String selectedHouse;
 		String name;
 		String category;
@@ -132,7 +131,7 @@ public class LibImporter {
 							return false;
 					}
 
-					objectFabricator.createActuator(user, selectedHouse, name, category, true, elements, location);
+					dataFacade.addActuator(user, selectedHouse, location, name, category, true, elements);
 					return true;
 
 				}
@@ -149,7 +148,7 @@ public class LibImporter {
 						dataFacade.addAssociation(user, selectedHouse, art, category);
 					}
 
-					objectFabricator.createActuator(user, selectedHouse, name, category, false, elements, location);
+					dataFacade.addActuator(user, selectedHouse, location, name, category, false, elements);
 
 					assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 					return true;
@@ -191,7 +190,7 @@ public class LibImporter {
 				if (!listOfModes.contains(defaultMode))
 					return false;
 
-				objectFabricator.createActuatorCategory(name, abbreviation, constructor, listOfModes, defaultMode);
+				dataFacade.addActuatorCategory(name, abbreviation, constructor, listOfModes, defaultMode);
 
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
@@ -220,7 +219,7 @@ public class LibImporter {
 			descr = tokens[2];
 			location = tokens[3];
 			if (dataFacade.hasHousingUnit(user, selectedHouse) && !dataFacade.hasArtifact(user, selectedHouse, name)) {
-				objectFabricator.createArtifact(user, selectedHouse, name, descr, location, new HashMap<String, String>());
+				dataFacade.addArtifact(user, selectedHouse, name, descr, location, new HashMap<String, String>());
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
 			}
@@ -234,15 +233,17 @@ public class LibImporter {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		String parameters = importedText.split(ModelStrings.SEPARATOR)[1]; // parameters = name,descr
+		String parameters = importedText.split(ModelStrings.SEPARATOR)[1]; // parameters = name,descr,type
 		String selectedHouse;
 		String descr;
-		if (checkTokens(2, parameters)) {
+		String type;
+		if (checkTokens(3, parameters)) {
 			String[] tokens = tokenTrimmer(parameters.split(","));
 			selectedHouse = tokens[0];
 			descr = tokens[1];
+			type = tokens[2];
 			if (!dataFacade.hasHousingUnit(user, selectedHouse)) {
-				objectFabricator.createHouse(selectedHouse, descr, "sono un placeholder", "sono un placeholder");
+				dataFacade.addHousingUnit(user, selectedHouse, descr, type);
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
 			}
@@ -324,7 +325,7 @@ public class LibImporter {
 			}
 
 			if (!dataFacade.hasSensorCategory(name)) {
-				objectFabricator.createSensorCategory(name, abbreviation, manufacturer, infoDomainMap,
+				dataFacade.addSensorCategory(name, abbreviation, manufacturer, infoDomainMap,
 						measurementUnitMap);
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
@@ -371,7 +372,7 @@ public class LibImporter {
 						if (dataFacade.isAssociated(user, selectedHouse, room, category))
 							return false;
 					}
-					objectFabricator.createSensor(user, selectedHouse, name, category, true, elements, location);
+					dataFacade.addSensor(user, selectedHouse, location, name, category, true, elements);
 					return true;
 
 				}
@@ -382,7 +383,7 @@ public class LibImporter {
 						if (dataFacade.isAssociated(user, selectedHouse, artifact, category))
 							return false;
 					}
-					objectFabricator.createSensor(user, selectedHouse, name, category, false, elements, location);
+					dataFacade.addSensor(user, selectedHouse, location, name, category, false, elements);
 					assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 					return true;
 				}
@@ -440,7 +441,7 @@ public class LibImporter {
 				propertiesMap.put("vento", String.valueOf(d_vento));
 				propertiesMap.put("presenza_persone", presenza_persone);
 
-				objectFabricator.createRoom(user, selectedHouse, name, descr, propertiesMap);
+				dataFacade.addRoom(user, selectedHouse, name, descr, propertiesMap);
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
 			}
@@ -514,7 +515,7 @@ public class LibImporter {
 				else
 					return false;
 				consString = consString.replace("; ", ", ");
-				objectFabricator.createRule(user, selectedHouse, rule_name, antString, consString, sensors, actuators,
+				dataFacade.addRule(user, selectedHouse, rule_name, antString, consString, sensors, actuators,
 						rule_state);
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
@@ -776,9 +777,6 @@ public class LibImporter {
 	}
 
 	private boolean libImporterInvariant() {
-		boolean checkDataHandler = dataFacade != null;
-		boolean checkInputHandler = objectFabricator != null;
-
-		return checkDataHandler && checkInputHandler;
+		return dataFacade != null;
 	}
 }

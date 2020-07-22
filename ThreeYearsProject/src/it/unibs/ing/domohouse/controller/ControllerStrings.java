@@ -267,4 +267,8 @@ public class ControllerStrings {
 	public static final String PROPERTY_INPUT_NAME = "Inserisci il nome di una proprietà";
 	public static final String PROPERTY_INPUT_VALUE_QUESTION = "Vuoi inserire un valore per la proprietà? (NO inserirà il valore di default)";
 	public static final String PROPERTY_INPUT_VALUE = "Inserisci il valore della proprietà";
+	public static final String LIST_OF_PROPERTIES = "Lista delle proprietà già presenti nel sistema:";
+	public static final String INSERT_INFO_IN_LIST = "Vuoi inserire una informazione rilevabile presente nella lista?";
+	public static final String INPUT_INFO_ID = "Inserisci l'ID dell'informazione rilevabile desiderata";
+	public static final String ERROR_INFO_NOT_IN_DB = "L'ID inserito non è presente nella lista";
 }

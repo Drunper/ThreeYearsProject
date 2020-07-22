@@ -39,6 +39,7 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 		}
 		while (dataFacade.hasRoomOrArtifact(user, selectedHouse, name));
 		String descr = input.readNotVoidString(ControllerStrings.ROOM_INPUT_DESCRIPTION);
+		output.println(ControllerStrings.LIST_OF_PROPERTIES);
 		view.printCollectionOfString(dataFacade.getPropertiesSet());
 
 		Map<String, String> propertiesMap = new HashMap<>();
