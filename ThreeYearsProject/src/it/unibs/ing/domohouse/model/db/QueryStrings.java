@@ -54,6 +54,18 @@ public class QueryStrings {
 	public static final String GET_RULES = "SELECT nome_regola, stato, testo_antecedente, testo_conseguente"
 			+ " FROM regola" 
 			+ " WHERE nome_utente =? AND nome_unità =?";
+	public static final String GET_ASSOCIATED_SENSOR_CATEGORY_ROOM = "SELECT nome_categoria_sensori"
+			+ " FROM misura_stanze JOIN sensore ON misura_stanze.nome_sensore = sensore.nome_sensore"
+			+ " WHERE nome_unità =? AND nome_utente =? AND nome_stanza =?";
+	public static final String GET_ASSOCIATED_SENSOR_CATEGORY_ARTIFACT = "SELECT nome_categoria_sensori"
+			+ " FROM misura_artefatti JOIN sensore ON misura_artefatti.nome_sensore = sensore.nome_sensore"
+			+ " WHERE nome_unità =? AND nome_utente =? AND nome_artefatto =?";
+	public static final String GET_ASSOCIATED_ACTUATOR_CATEGORY_ROOM = "SELECT nome_categoria_attuatori"
+			+ " FROM controlla_stanze JOIN attuatore ON misura_stanze.nome_attuatore = attuatore.nome_attuatore"
+			+ " WHERE nome_unità =? AND nome_utente =? AND nome_stanza =?";
+	public static final String GET_ASSOCIATED_ACTUATOR_CATEGORY_ARTIFACT = "SELECT nome_categoria_attuatori"
+			+ " FROM controlla_artefatti JOIN sensore ON controlla_artefatti.nome_attuatore = attuatore.nome_attuatore"
+			+ " WHERE nome_unità =? AND nome_utente =? AND nome_artefatto =?";
 	
 	//Query di inserimento
 	
@@ -61,7 +73,7 @@ public class QueryStrings {
 	
 	public static final String INSERT_USER = "INSERT INTO utente (nome_utente) VALUES (?)";
 	
-	public static final String INSERT_PROPERTY = "INSERT INTO proprietà (nome_proprietà, tipo, valore_default) VALUES (?, ?, ?)";
+	public static final String INSERT_PROPERTY = "INSERT INTO proprietà (nome_proprietà, tipo, valore_di_default) VALUES (?, ?, ?)";
 
 	public static final String INSERT_NUMERIC_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (nome_proprietà, selettore_informazione, minimo, massimo, unità_di_misura) VALUES  (?, 0, ?, ?, ?)";
 
@@ -69,35 +81,35 @@ public class QueryStrings {
 	
 	public static final String INSERT_SENSOR_CATEGORY = "INSERT INTO categoria_sensori (nome_categoria_sensori, descrizione, sigla, costruttore) VALUES (?, ?, ?, ?);";
 
-	public static final String INSERT_MEASURED_INFO = "INSERT INTO misura_informazioni (nome_categoria_sensori, id_informazione, nome_proprietà)";
+	public static final String INSERT_MEASURED_INFO = "INSERT INTO misura_informazioni (nome_categoria_sensori, id_informazione, nome_proprietà) VALUES";
 
 	public static final String INSERT_ACTUATOR_CATEGORY = "INSERT INTO categoria_attuatori (nome_categoria_attuatori, descrizione, sigla, costruttore, modalità_di_default) VALUES (?, ?, ?, ?, ?);";
 
 	public static final String INSERT_OPERATING_MODE = "INSERT INTO modalità_operativa (nome_modalità, parametrica) VALUES (?, ?)";
 
-	public static final String INSERT_CATEGORY_OPERATING_MODE = "INSERT INTO possiede_modalità (nome_categoria_attuatori, nome_modalità)";
+	public static final String INSERT_CATEGORY_OPERATING_MODE = "INSERT INTO possiede_modalità (nome_categoria_attuatori, nome_modalità) VALUES";
 
 	public static final String INSERT_HOUSING_UNIT = "INSERT INTO unità_immobiliare (nome_unità, nome_utente, tipo, descrizione) VALUES (?, ?, ?, ?)";
 
 	public static final String INSERT_ROOM = "INSERT INTO stanza (nome_stanza, nome_unità, nome_utente, descrizione) VALUES (?, ?, ?, ?);";
 
-	public static final String INSERT_ROOM_PROPERTY = "INSERT INTO proprietà_stanze (nome_stanza, nome_unità, nome_utente, nome_proprietà)";
+	public static final String INSERT_ROOM_PROPERTY = "INSERT INTO proprietà_stanze (nome_stanza, nome_unità, nome_utente, nome_proprietà) VALUES";
 
-	public static final String INSERT_ARTIFACT_PROPERTY = "INSERT INTO proprietà_artefatti (nome_artefatto, nome_unità, nome_utente, nome_proprietà)";
+	public static final String INSERT_ARTIFACT_PROPERTY = "INSERT INTO proprietà_artefatti (nome_artefatto, nome_unità, nome_utente, nome_proprietà) VALUES";
 	
 	public static final String INSERT_ARTIFACT = "INSERT INTO artefatto (nome_artefatto, nome_unità, nome_utente, descrizione, posizione) VALUES (?, ?, ?, ?, ?);";
 
 	public static final String INSERT_ACTUATOR = "INSERT INTO attuatore (nome_attuatore, nome_unità, nome_utente, stato, stanze_o_artefatti, posizione, nome_categoria_attuatori) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-	public static final String INSERT_ACTUATOR_CONTROL_ROOM = "INSERT INTO controlla_stanze (nome_attuatore, nome_unità, nome_utente, nome_stanza)";
+	public static final String INSERT_ACTUATOR_CONTROL_ROOM = "INSERT INTO controlla_stanze (nome_attuatore, nome_unità, nome_utente, nome_stanza) VALUES";
 
-	public static final String INSERT_ACTUATOR_CONTROL_ARTIFACT = "INSERT INTO controlla_artefatti (nome_attuatore, nome_unità, nome_utente, nome_artefatto)";
+	public static final String INSERT_ACTUATOR_CONTROL_ARTIFACT = "INSERT INTO controlla_artefatti (nome_attuatore, nome_unità, nome_utente, nome_artefatto) VALUES";
 
 	public static final String INSERT_SENSOR = "INSERT INTO sensore (nome_sensore, nome_unità, nome_utente, stato, stanze_o_artefatti, posizione, nome_categoria_sensori) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-	public static final String INSERT_SENSOR_MEASURE_ROOM = "INSERT INTO misura_stanze (nome_sensore, nome_unità, nome_utente, nome_stanza)";
+	public static final String INSERT_SENSOR_MEASURE_ROOM = "INSERT INTO misura_stanze (nome_sensore, nome_unità, nome_utente, nome_stanza) VALUES";
 
-	public static final String INSERT_SENSOR_MEASURE_ARTIFACT = "INSERT INTO misura_artefatti (nome_sensore, nome_unità, nome_utente, nome_artefatto)";
+	public static final String INSERT_SENSOR_MEASURE_ARTIFACT = "INSERT INTO misura_artefatti (nome_sensore, nome_unità, nome_utente, nome_artefatto) VALUES";
 
 	public static final String INSERT_RULE = "INSERT INTO regola (nome_regola, nome_unità, nome_utente, stato, testo_antecedente, testo_conseguente) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -131,9 +143,9 @@ public class QueryStrings {
 	
 	//Stringhe di utilità
 	
-	public static final String FOUR_VALUES = " VALUES (?, ?, ?, ?)";
+	public static final String FOUR_VALUES = " (?, ?, ?, ?)";
 	
-	public static final String THREE_VALUES = " VALUES (?, ?, ?)";
+	public static final String THREE_VALUES = " (?, ?, ?)";
 	
-	public static final String TWO_VALUES = " VALUES (?, ?)";
+	public static final String TWO_VALUES = " (?, ?)";
 }

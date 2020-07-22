@@ -58,7 +58,7 @@ public class DatabaseFacade {
 	public void addProperty(String propertyName, String defaultValue) {
 		Query query = new Query(QueryStrings.INSERT_PROPERTY);
 		query.setStringParameter(1, propertyName);
-		query.setIntegerParameter(2, 0); //temporaneo, ma in futuro potrebbe essere rimosso
+		query.setStringParameter(2, null); //temporaneo, ma in futuro potrebbe essere rimosso
 		query.setStringParameter(3, defaultValue);
 		connector.executeQueryWithoutResult(query);
 	}

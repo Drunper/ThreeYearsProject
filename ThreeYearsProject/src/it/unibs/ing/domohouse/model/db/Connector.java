@@ -79,7 +79,7 @@ public class Connector {
 			preparedStatement = connection.prepareStatement(query);
 			res = preparedStatement.executeQuery();
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return res;

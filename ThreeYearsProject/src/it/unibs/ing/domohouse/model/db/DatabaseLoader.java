@@ -216,6 +216,7 @@ public class DatabaseLoader {
 				room.setSaveable(saveable);
 				dataFacade.addSaveable(saveable);
 				rooms.add(room);
+				addAssociations(user, selectedHouse, room.getName(), true);
 			}
 		}
 		catch (SQLException e) {
@@ -224,6 +225,29 @@ public class DatabaseLoader {
 		return rooms;
 	}
 	
+	private void addAssociations(String user, String selectedHouse, String object, boolean roomOrArtifact) {
+		String queryString = roomOrArtifact ? QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ROOM : QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ARTIFACT;
+		Query query = new Query(queryString);
+		query.setStringParameter(1, selectedHouse);
+		query.setStringParameter(2, user);
+		query.setStringParameter(3, object);
+		try (ResultSet set = connector.executeQuery(query)) {
+			while (set.next())
+				dataFacade.addAssociation(user, selectedHouse, object, set.getString("nome_categoria_sensori"));
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		query.setQuery(roomOrArtifact ? QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ROOM : QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ARTIFACT);
+		try (ResultSet set = connector.executeQuery(query)) {
+			while (set.next())
+				dataFacade.addAssociation(user, selectedHouse, object, set.getString("nome_categoria_attuatori"));
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public Map<String, String> getAllProperties() {
 		Map<String, String> propertyMap = new HashMap<>();
 		try (ResultSet set = connector.executeQuery(QueryStrings.GET_ALL_PROPERTIES)) {
@@ -232,7 +256,7 @@ public class DatabaseLoader {
 			}
 		}
 		catch(SQLException e) {
-			
+			e.printStackTrace();
 		}
 		return propertyMap;
 	}
@@ -278,6 +302,8 @@ public class DatabaseLoader {
 						saveable);
 				artifacts.add(new Artifact(set.getString("nome_artefatto"), set.getString("descrizione"),
 						getProperties(user, selectedHouse, set.getString("nome_artefatto"), false)));
+				addAssociations(user, selectedHouse, artifact.getName(), false);
+
 			}
 		}
 		catch (SQLException e) {
@@ -298,6 +324,7 @@ public class DatabaseLoader {
 						dataFacade.getSensorCategory(set.getString("nome_categoria_sensori")),
 						set.getBoolean("stanze_o_artefatti"), getDeviceObjects(user, selectedHouse,
 								set.getString("nome_sensore"), true, set.getBoolean("stanze_o_artefatti")));
+				
 				Saveable saveable = new SaveableSensor(user, selectedHouse, location, sensor, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				sensor.setSaveable(saveable);

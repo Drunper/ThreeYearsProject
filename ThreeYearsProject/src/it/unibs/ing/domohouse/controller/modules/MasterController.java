@@ -54,7 +54,8 @@ public class MasterController {
 		log = new LogWriter();
 		renderer = buildChain();
 
-		connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
+		connector = new Connector("jdbc:mysql://localhost:3306/domohouse?allowMultiQueries=true", "domohouse", "^v1Iz1rFOnqx");
+		connector.openConnection();
 		dataFacade = new DataFacade(connector);
 		authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
 		rulesWorker = new RulesWorker(dataFacade, clock);
@@ -70,6 +71,7 @@ public class MasterController {
 	public void start() {
 		loginController.show();
 		rulesWorker.stopCheckRules();
+		connector.closeConnection();
 	}
 
 	private void buildInputHandlers(PrintWriter output, RawInputHandler input) {

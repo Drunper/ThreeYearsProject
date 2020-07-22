@@ -45,7 +45,7 @@ public class SaveableRoom implements Saveable {
 				query.setStringParameter(pos++, user);
 				query.setStringParameter(pos++, property);
 			}
-			queryString += QueryStrings.INSERT_ROOM_PROPERTY + String.join(", ",
+			queryString += " " + QueryStrings.INSERT_ROOM_PROPERTY + String.join(", ",
 					Collections.nCopies(room.getPropertiesNameSet().size(), QueryStrings.FOUR_VALUES)) + ";";
 		}
 		query.setQuery(queryString);
