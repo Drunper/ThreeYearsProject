@@ -5,7 +5,6 @@ import it.unibs.ing.domohouse.model.components.clock.ClockStrategy;
 import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.LibImporter;
 import it.unibs.ing.domohouse.model.util.LogWriter;
-import it.unibs.ing.domohouse.model.util.Saver;
 import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.view.ManageableRenderer;
@@ -53,6 +52,7 @@ public class MaintainerController {
 			output.println(clock.getCurrentTime());
 			output.println();
 			selection = menuManager.doChoice();
+			String user;
 			switch (selection) {
 				case 0:
 					dataFacade.saveData();
@@ -63,7 +63,7 @@ public class MaintainerController {
 					break;
 				case 2:
 					menuManager.clearOutput();
-					String user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
+					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
 					if(dataFacade.hasUser(user)) {
 						if (dataFacade.doesHousingUnitExist(user)) {
 							menuManager.printCollectionOfString(dataFacade.getHousingUnitsList(user));
@@ -126,19 +126,24 @@ public class MaintainerController {
 					break;
 				case 8:
 					// importa file
-					/*
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_IMPORTING_FILE);
-					if (libImporter.importFile(user)) {
-						log.write(ControllerStrings.SUCCESS_IMPORT_FILE);
-						output.println(ControllerStrings.SUCCESS_IMPORT_FILE);
+					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
+					if(dataFacade.hasUser(user)) {
+						dataFacade.loadHousingUnits(user);
+						if (libImporter.importFile(user)) {
+							log.write(ControllerStrings.SUCCESS_IMPORT_FILE);
+							output.println(ControllerStrings.SUCCESS_IMPORT_FILE);
+						}
+						else {
+							String error = libImporter.getErrorsString();
+							output.println(error);
+							log.write(ControllerStrings.LOG_ERROR_IMPORT + error);
+						}
 					}
-					else {
-						String error = libImporter.getErrorsString();
-						output.println(error);
-						log.write(ControllerStrings.LOG_ERROR_IMPORT + error);
-					}
-					*/
+					else
+						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
+						
 					break;
 				case 9:
 					/*

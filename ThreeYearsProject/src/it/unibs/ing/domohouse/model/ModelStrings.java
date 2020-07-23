@@ -27,9 +27,11 @@ public class ModelStrings {
 	public static final String LOG_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss";
 
 	// INT CONSTANT
-	public static int FIRST_TOKEN = 0;
-	public static int SECOND_TOKEN = 1;
-	public static int THIRD_TOKEN = 2;
+	public static final int FIRST_TOKEN = 0;
+	public static final int SECOND_TOKEN = 1;
+	public static final int THIRD_TOKEN = 2;
+	public static final int FOURTH_TOKEN = 3;
+
 
 	// UTILS AND OTHERS
 	public static final String UNDERSCORE = "_";

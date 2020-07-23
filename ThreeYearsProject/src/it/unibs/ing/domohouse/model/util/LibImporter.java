@@ -100,7 +100,8 @@ public class LibImporter {
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		String parameters = importedText.split(ModelStrings.SEPARATOR)[1]; // parameters = selectedHouse, name,
-																			// category,											// true/false, element1;element2, room
+																			// category, // true/false,
+																			// element1;element2, room
 		String selectedHouse;
 		String name;
 		String category;
@@ -131,7 +132,7 @@ public class LibImporter {
 							return false;
 					}
 
-					dataFacade.addActuator(user, selectedHouse, location, name, category, true, elements);
+					dataFacade.addActuator(user, selectedHouse, location, name + ModelStrings.UNDERSCORE + category, category, true, elements);
 					return true;
 
 				}
@@ -148,7 +149,7 @@ public class LibImporter {
 						dataFacade.addAssociation(user, selectedHouse, art, category);
 					}
 
-					dataFacade.addActuator(user, selectedHouse, location, name, category, false, elements);
+					dataFacade.addActuator(user, selectedHouse, location, name + ModelStrings.UNDERSCORE + category, category, false, elements);
 
 					assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 					return true;
@@ -212,14 +213,27 @@ public class LibImporter {
 		String name;
 		String descr;
 		String location;
-		if (checkTokens(4, parameters)) {
+		if (checkTokens(5, parameters)) {
 			String[] tokens = tokenTrimmer(parameters.split(","));
 			selectedHouse = tokens[0];
 			name = tokens[1];
 			descr = tokens[2];
 			location = tokens[3];
+
+			String[] propertyTokens = tokens[4].split(";");
+
+			Map<String, String> propertiesMap = new HashMap<>();
+
+			for (String propertyToken : propertyTokens) {
+				String propertyName = propertyToken.split("#")[ModelStrings.FIRST_TOKEN];
+				String propertyValue = propertyToken.split("#")[ModelStrings.SECOND_TOKEN];
+				if (!dataFacade.hasProperty(propertyName))
+					dataFacade.addProperty(propertyName, propertyValue);
+				propertiesMap.put(propertyName, propertyValue);
+			}
+
 			if (dataFacade.hasHousingUnit(user, selectedHouse) && !dataFacade.hasArtifact(user, selectedHouse, name)) {
-				dataFacade.addArtifact(user, selectedHouse, name, descr, location, new HashMap<String, String>());
+				dataFacade.addArtifact(user, selectedHouse, location, name, descr, propertiesMap);
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
 			}
@@ -279,54 +293,73 @@ public class LibImporter {
 			manufacturer = tokens[2];
 			infos = tokens[3].split("\\-");
 			for (String infoString : infos) {
-				String infoName = infoString.split(";")[ModelStrings.FIRST_TOKEN];
-				if (infoString.split(";")[ModelStrings.SECOND_TOKEN].equalsIgnoreCase("double")) {
-					String domain = infoString.split(";")[ModelStrings.THIRD_TOKEN];
-					int num = 0;
-					for (int i = 0; i < domain.length(); i++) {
-						if (domain.charAt(i) == '#')
-							num++;
+				int ID = Integer.parseInt(infoString.split(";")[ModelStrings.FIRST_TOKEN]);
+				String infoName = infoString.split(";")[ModelStrings.SECOND_TOKEN];
+				if (infoString.split(";")[ModelStrings.THIRD_TOKEN].equalsIgnoreCase("double")) {
+					if (dataFacade.hasNumericInfoStrategy(ID)) {
+						infoDomainMap.put(infoName, dataFacade.getNumericInfoStrategy(ID));
+						measurementUnitMap.put(infoName,
+								infoString.split(";")[ModelStrings.FOURTH_TOKEN].split("#")[ModelStrings.THIRD_TOKEN]);
 					}
+					else {
+						String domain = infoString.split(";")[ModelStrings.FOURTH_TOKEN];
+						int num = 0;
+						for (int i = 0; i < domain.length(); i++) {
+							if (domain.charAt(i) == '#')
+								num++;
+						}
 
-					double min;
-					double max;
-					String measurementUnit;
-					if (num == 2) {
-						String s_min = domain.split("#")[0];
-						String s_max = domain.split("#")[1];
-						measurementUnit = domain.split("#")[2];
-						if (s_min.matches(DOUBLE_REGEX) && s_max.matches(DOUBLE_REGEX)
-								&& measurementUnit.length() > 0) {
-							min = Double.parseDouble(s_min);
-							max = Double.parseDouble(s_max);
+						double min;
+						double max;
+						String measurementUnit;
+						if (num == 2) {
+							String s_min = domain.split("#")[0];
+							String s_max = domain.split("#")[1];
+							measurementUnit = domain.split("#")[2];
+							if (s_min.matches(DOUBLE_REGEX) && s_max.matches(DOUBLE_REGEX)
+									&& measurementUnit.length() > 0) {
+								min = Double.parseDouble(s_min);
+								max = Double.parseDouble(s_max);
+							}
+							else
+								return false;
+
+							if (min > max)
+								return false;
+							if(!dataFacade.hasProperty(infoName))
+								dataFacade.addProperty(infoName, s_min);
+							DoubleInfoStrategy info = new DoubleInfoStrategy(min, max, ID, infoName);
+							dataFacade.addNumericInfoStrategy(ID, info);
+							infoDomainMap.put(infoName, info);
+							measurementUnitMap.put(infoName, measurementUnit);
 						}
 						else
 							return false;
-
-						if (min > max)
-							return false;
-						infoDomainMap.put(infoName, new DoubleInfoStrategy(min, max));
-						measurementUnitMap.put(infoName, measurementUnit);
 					}
-					else
-						return false;
 				}
 				else {
-					List<String> domainValues = new ArrayList<>();
-					for (int i = ModelStrings.THIRD_TOKEN; i < infoString.split(";").length; i++) {
-						String temp = infoString.split(";")[i];
-						if (domainValues.contains(temp))
-							return false;
-						else
-							domainValues.add(temp);
+					if (dataFacade.hasNonNumericInfoStrategy(ID))
+						infoDomainMap.put(infoName, dataFacade.getNonNumericInfoStrategy(ID));
+					else {
+						List<String> domainValues = new ArrayList<>();
+						for (int i = ModelStrings.FOURTH_TOKEN; i < infoString.split(";").length; i++) {
+							String temp = infoString.split(";")[i];
+							if (domainValues.contains(temp))
+								return false;
+							else
+								domainValues.add(temp);
+						}
+						if(!dataFacade.hasProperty(infoName))
+							dataFacade.addProperty(infoName, domainValues.get(ModelStrings.FIRST_TOKEN));
+						StringInfoStrategy info = new StringInfoStrategy(domainValues, ID, infoName);
+						dataFacade.addNonNumericInfoStrategy(ID, info);
+						infoDomainMap.put(infoName, info);
 					}
-					infoDomainMap.put(infoName, new StringInfoStrategy(domainValues));
 				}
 			}
 
 			if (!dataFacade.hasSensorCategory(name)) {
-				dataFacade.addSensorCategory(name, abbreviation, manufacturer, infoDomainMap,
-						measurementUnitMap);
+				dataFacade.addSensorCategory(name, abbreviation, manufacturer, infoDomainMap, measurementUnitMap);
 				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 				return true;
 			}
@@ -372,7 +405,7 @@ public class LibImporter {
 						if (dataFacade.isAssociated(user, selectedHouse, room, category))
 							return false;
 					}
-					dataFacade.addSensor(user, selectedHouse, location, name, category, true, elements);
+					dataFacade.addSensor(user, selectedHouse, location, name + ModelStrings.UNDERSCORE + category, category, true, elements);
 					return true;
 
 				}
@@ -383,7 +416,7 @@ public class LibImporter {
 						if (dataFacade.isAssociated(user, selectedHouse, artifact, category))
 							return false;
 					}
-					dataFacade.addSensor(user, selectedHouse, location, name, category, false, elements);
+					dataFacade.addSensor(user, selectedHouse, location, name + ModelStrings.UNDERSCORE + category, category, false, elements);
 					assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 					return true;
 				}
@@ -402,59 +435,38 @@ public class LibImporter {
 		String selectedHouse;
 		String name;
 		String descr;
-		String temp;
-		String umidita;
-		String pressione;
-		String vento;
-		String bool_pres_pers;
 
-		if (checkTokens(8, parameters)) {
+		if (checkTokens(4, parameters)) {
 			String[] tokens = tokenTrimmer(parameters.split(","));
 			selectedHouse = tokens[0];
 			name = tokens[1];
 			descr = tokens[2];
-			temp = tokens[3];
-			umidita = tokens[4];
-			pressione = tokens[5];
-			vento = tokens[6];
-			bool_pres_pers = tokens[7];
 
-			if (dataFacade.hasHousingUnit(user, selectedHouse) && !dataFacade.hasRoom(user, selectedHouse, name)
-					&& temp.matches(DOUBLE_REGEX) && umidita.matches(DOUBLE_REGEX) && pressione.matches(DOUBLE_REGEX)
-					&& vento.matches(DOUBLE_REGEX) && isBoolean(bool_pres_pers)) {
-				Map<String, String> propertiesMap = new TreeMap<>();
+			String[] propertyTokens = tokens[3].split(";");
 
-				double d_temp = Double.parseDouble(temp);
-				double d_umidita = Double.parseDouble(umidita);
-				double d_pressione = Double.parseDouble(pressione);
-				double d_vento = Double.parseDouble(vento);
-				boolean presenza = Boolean.parseBoolean(bool_pres_pers);
-				String presenza_persone;
-				if (presenza)
-					presenza_persone = "presenza di persone";
-				else
-					presenza_persone = "assenza di persone";
+			Map<String, String> propertiesMap = new HashMap<>();
 
-				propertiesMap.put("temperatura", String.valueOf(d_temp));
-				propertiesMap.put("umidità", String.valueOf(d_umidita));
-				propertiesMap.put("pressione", String.valueOf(d_pressione));
-				propertiesMap.put("vento", String.valueOf(d_vento));
-				propertiesMap.put("presenza_persone", presenza_persone);
-
-				dataFacade.addRoom(user, selectedHouse, name, descr, propertiesMap);
-				assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
-				return true;
+			for (String propertyToken : propertyTokens) {
+				String propertyName = propertyToken.split("#")[ModelStrings.FIRST_TOKEN];
+				String propertyValue = propertyToken.split("#")[ModelStrings.SECOND_TOKEN];
+				if (!dataFacade.hasProperty(propertyName))
+					dataFacade.addProperty(propertyName, propertyValue);
+				propertiesMap.put(propertyName, propertyValue);
 			}
+
+			dataFacade.addRoom(user, selectedHouse, name, descr, propertiesMap);
+			assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
+			return true;
+
 		}
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 		return false;
-
 	}
 
 	/*
 	 * Controlla nomi Controlla consistenza tra array sensor, attuatore e antString
-	 * consString Rule r = new Rule(dataFacade.getHousingUnit(user, selectedHouse), name,
-	 * antString, consString, sensors, act, state); Chiamare metodo
+	 * consString Rule r = new Rule(dataFacade.getHousingUnit(user, selectedHouse),
+	 * name, antString, consString, sensors, act, state); Chiamare metodo
 	 * dataFacade.getHousingUnit(user, selectedHouse).addRule(r)
 	 */
 	private boolean importRule(String user, String importedText) {
