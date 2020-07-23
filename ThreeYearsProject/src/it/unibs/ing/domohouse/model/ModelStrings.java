@@ -55,4 +55,5 @@ public class ModelStrings {
 	public static final String OPERATING_MODE_PRECONDITION = "operatingModesMap non contiene il nome richiesto";
 	public static final String PARAMETRIC_OPERATING_MODE_PRECONDITION = "parametricOperatingModesMap non contiene il nome richiesto";
 	public static final String ARTIFACT_PRECONDITION = "L'artefatto ottenuto è null";
+	public static final String SHA1PRNG = "SHA1PRNG";
 }

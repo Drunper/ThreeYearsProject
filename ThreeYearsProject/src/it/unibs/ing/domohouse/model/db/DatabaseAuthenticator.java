@@ -20,11 +20,12 @@ public class DatabaseAuthenticator implements Authenticator {
 	@Override
 	public boolean checkMaintainerPassword(String user, String password) {
 		boolean result = false;
-		Query query = new Query(QueryStrings.CHECK_MAINTAINER);
+		Query query = new Query(QueryStrings.GET_MAINTAINER_PASSWORD_AND_SALT);
 		query.setStringParameter(1, user);
-		query.setStringParameter(2, hashCalculator.hash(password));
 		try (ResultSet set = connector.executeQuery(query)) {
-			result = set.next();
+			if(set.next()) {
+				result = set.getString("password").equalsIgnoreCase(hashCalculator.hash(password, hashCalculator.hexToBytes(set.getString("sale"))));
+			}
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -35,9 +36,9 @@ public class DatabaseAuthenticator implements Authenticator {
 	@Override
 	public void addMaintainer(String user, String password) {
 		Query query = new Query(QueryStrings.INSERT_MAINTAINER);
+		byte[] salt = hashCalculator.getSalt();
 		query.setStringParameter(1, user);
-		query.setStringParameter(2, hashCalculator.hash(password));
-		//aggiungere il sale
+		query.setStringParameter(2, hashCalculator.hash(password, salt));
 		connector.executeQueryWithoutResult(query);
 		//gestire bene le eccezioni
 	}

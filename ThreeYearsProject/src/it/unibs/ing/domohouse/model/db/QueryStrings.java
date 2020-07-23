@@ -2,8 +2,8 @@ package it.unibs.ing.domohouse.model.db;
 
 public class QueryStrings {
 
-	public static final String CHECK_MAINTAINER = "SELECT * FROM manutentore"
-			+ " WHERE nome_manutentore =? AND password =?";
+	public static final String GET_MAINTAINER_PASSWORD_AND_SALT = "SELECT * FROM manutentore"
+			+ " WHERE nome_manutentore =?";
 	public static final String CHECK_USER = "SELECT * FROM utente" + " WHERE nome_utente =?";
 	public static final String GET_USER = "SELECT * FROM utente WHERE nome_utente =?";
 	public static final String GET_SENSOR_CATEGORIES = "SELECT * FROM categoria_sensori";

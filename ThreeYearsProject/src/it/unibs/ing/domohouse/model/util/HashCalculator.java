@@ -3,29 +3,38 @@ package it.unibs.ing.domohouse.model.util;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class HashCalculator {
 
 	private MessageDigest md;
+	SecureRandom sr;
 	
 	public HashCalculator() {
 		try {
 			md = MessageDigest.getInstance(ModelStrings.SHA_256);
+			sr = SecureRandom.getInstance(ModelStrings.SHA1PRNG);
 		}
 		catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
-			System.err.println(ModelStrings.ALGORITHM_ERROR);
 		}
 	}
 
-	public String hash(String toHash) {
+	public String hash(String toHash, byte[] salt) {
 		assert toHash != null;
+		md.update(salt);
 		return bytesToHex(md.digest(toHash.getBytes(StandardCharsets.UTF_8)));
 	}
 	
-	private static String bytesToHex(byte[] hash) {
+	public byte[] getSalt() {
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+        return salt;
+	}
+	
+	private String bytesToHex(byte[] hash) {
 		assert hash != null;
 
 		StringBuffer hexString = new StringBuffer();
@@ -40,5 +49,15 @@ public class HashCalculator {
 
 		assert result != null;
 		return result;
+	}
+	
+	public byte[] hexToBytes(String s) {
+	    int length = s.length();
+	    byte[] result = new byte[length / 2];
+	    for (int i = 0; i < length; i += 2) {
+	        result[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+	                             + Character.digit(s.charAt(i+1), 16));
+	    }
+	    return result;
 	}
 }
