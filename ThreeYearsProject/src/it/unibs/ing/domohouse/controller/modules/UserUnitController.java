@@ -57,7 +57,7 @@ public class UserUnitController {
 					// visualizza stanza
 					menuManager.clearOutput();
 					if (dataFacade.doesRoomExist(user, selectedHouse)) {
-						menuManager.printCollectionOfString(dataFacade.getRoomsList(user, selectedHouse));
+						menuManager.printCollectionOfString(dataFacade.getRoomsSet(user, selectedHouse));
 						output.println();
 						output.println();
 						String selectedRoom = userUnitInputHandler.safeInsertRoom(user, selectedHouse);

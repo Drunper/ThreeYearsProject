@@ -63,12 +63,14 @@ public class DataFacade {
 	}
 
 	public Set<String> getUserSet() {
-		return userManager.getListOfElements();
+		return userManager.getSetOfElements();
 	}
 
 	public void loadHousingUnits(String selectedUser) {
-		for (HousingUnit house : databaseFacade.loadHousingUnits(selectedUser))
+		for (HousingUnit house : databaseFacade.loadHousingUnits(selectedUser)) {
 			getUser(selectedUser).addHousingUnit(house);
+			databaseFacade.addAssociations(selectedUser, house.getName());
+		}
 	}
 
 	public boolean hasHousingUnit(String selectedUser, String selectedHouse) {
@@ -107,7 +109,7 @@ public class DataFacade {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public Set<String> getRoomsList(String selectedUser, String selectedHouse) {
+	public Set<String> getRoomsSet(String selectedUser, String selectedHouse) {
 		assert selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -116,7 +118,7 @@ public class DataFacade {
 
 	public Set<String> getSensorCategoryList() {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return sensorCategoryManager.getListOfElements();
+		return sensorCategoryManager.getSetOfElements();
 	}
 
 	public boolean doesSensorCategoryExist() {
@@ -127,7 +129,7 @@ public class DataFacade {
 		assert info != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		for (String cat : sensorCategoryManager.getListOfElements()) {
+		for (String cat : sensorCategoryManager.getSetOfElements()) {
 			SensorCategory sensCat = getSensorCategory(cat);
 
 			Set<String> detectableInfoList = sensCat.getInfoStrategySet();
@@ -143,7 +145,7 @@ public class DataFacade {
 
 	public Set<String> getActuatorCategoryList() {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-		return actuatorCategoryManager.getListOfElements();
+		return actuatorCategoryManager.getSetOfElements();
 	}
 
 	public boolean doesActuatorCategoryExist() {
@@ -590,6 +592,7 @@ public class DataFacade {
 	}
 	
 	public int getCurrentMaxID() {
+		System.out.println("IO SONO L'ID MAX " + (nonNumericInfoStrategiesMap.size() + numericInfoStrategiesMap.size()));
 		return nonNumericInfoStrategiesMap.size() + numericInfoStrategiesMap.size();
 	}
 	
@@ -617,5 +620,9 @@ public class DataFacade {
 	
 	public StringInfoStrategy getNonNumericInfoStrategy(int ID) {
 		return nonNumericInfoStrategiesMap.get(ID);
+	}
+
+	public Set<String> getArtifactSet(String user, String selectedHouse) {
+		return getUser(user).getArtifactSet(selectedHouse);
 	}
 }

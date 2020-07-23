@@ -87,7 +87,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 	}
 
 	public Set<String> getControlledObjectsSet() {
-		return controlledObjects.getListOfElements();
+		return controlledObjects.getSetOfElements();
 	}
 
 	// Fatto per chiarezza, solo un artefatto o una stanza può essere controllato

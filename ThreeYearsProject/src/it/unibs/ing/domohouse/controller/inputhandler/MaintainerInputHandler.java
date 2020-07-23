@@ -123,6 +123,10 @@ public class MaintainerInputHandler extends UserInputHandler {
 				}
 				else {
 					String detectableInfo = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_INPUT_INFO);
+					if(!dataFacade.hasProperty(detectableInfo)) {
+						String defaultValue = input.readStringWithMaximumLength(ControllerStrings.NOT_IN_DB_PROPERTY_INPUT_VALUE, 20);
+						dataFacade.addProperty(detectableInfo, defaultValue);
+					}
 					if (!infoDomainMap.containsKey(detectableInfo)) {
 						double min = input.readDouble(ControllerStrings.INSERT_SENSOR_CATEGORY_MIN_VALUE);
 						double max = input.readDouble(ControllerStrings.INSERT_SENSOR_CATEGORY_MAX_VALUE);
@@ -156,6 +160,10 @@ public class MaintainerInputHandler extends UserInputHandler {
 				}
 				else {
 					String detectableInfo = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_INPUT_INFO);
+					if(!dataFacade.hasProperty(detectableInfo)) {
+						String defaultValue = input.readStringWithMaximumLength(ControllerStrings.NOT_IN_DB_PROPERTY_INPUT_VALUE, 20);
+						dataFacade.addProperty(detectableInfo, defaultValue);
+					}
 					if (!infoDomainMap.containsKey(detectableInfo)) {
 						List<String> domain = new ArrayList<>();
 						String s;
@@ -174,6 +182,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 						}
 						while (remainTwo);
 						StringInfoStrategy domainInfo = new StringInfoStrategy(domain, ++dbID, detectableInfo);
+						dataFacade.addNonNumericInfoStrategy(dbID, domainInfo);
 						infoDomainMap.put(detectableInfo, domainInfo);
 						if (!input.yesOrNo(ControllerStrings.INSERT_ANOTHER_INFO))
 							remain = false;

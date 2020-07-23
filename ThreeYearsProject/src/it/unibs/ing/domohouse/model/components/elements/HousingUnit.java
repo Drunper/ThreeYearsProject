@@ -113,7 +113,7 @@ public class HousingUnit implements Serializable, Manageable {
 
 	public Set<String> getRoomList() {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
-		return roomManager.getListOfElements();
+		return roomManager.getSetOfElements();
 	}
 
 	public Room getRoom(String name) {
@@ -291,12 +291,12 @@ public class HousingUnit implements Serializable, Manageable {
 
 	public Set<String> getSensorNames() {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
-		return sensorManager.getListOfElements();
+		return sensorManager.getSetOfElements();
 	}
 
 	public Set<String> getActuatorNames() {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
-		return actuatorManager.getListOfElements();
+		return actuatorManager.getSetOfElements();
 	}
 
 	public boolean doesActuatorExist(String selectedRoom) {
@@ -320,7 +320,7 @@ public class HousingUnit implements Serializable, Manageable {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		State rule_state = new ActiveState();
-		for (String ruleName : rulesManager.getListOfElements()) {
+		for (String ruleName : rulesManager.getSetOfElements()) {
 			Rule rule = (Rule) rulesManager.getElementByName(ruleName);
 			for (String involved_sensor : rule.getInvolvedSensors()) {
 				Sensor sens = getSensor(involved_sensor);
@@ -352,7 +352,7 @@ public class HousingUnit implements Serializable, Manageable {
 
 	public List<Rule> getEnabledRulesList() {
 		List<Rule> enabledRulesList = new ArrayList<>();
-		for (String ruleName : rulesManager.getListOfElements()) {
+		for (String ruleName : rulesManager.getSetOfElements()) {
 			Rule rule = (Rule) rulesManager.getElementByName(ruleName);
 			if (rule.getState().isActive())
 				enabledRulesList.add(rule);
@@ -361,12 +361,12 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 
 	public Set<String> getRulesNames() {
-		return rulesManager.getListOfElements();
+		return rulesManager.getSetOfElements();
 	}
 
 	public List<String> getEnabledRulesNamesList() {
 		List<String> enabledRulesNamesList = new ArrayList<>();
-		for (String ruleName : rulesManager.getListOfElements()) {
+		for (String ruleName : rulesManager.getSetOfElements()) {
 			if (((Rule) rulesManager.getElementByName(ruleName)).getState().isActive())
 				enabledRulesNamesList.add(ruleName);
 		}
@@ -375,7 +375,7 @@ public class HousingUnit implements Serializable, Manageable {
 
 	public List<String> getEnabledRulesStrings() {
 		List<String> enabledRulesString = new ArrayList<>();
-		for (String ruleName : rulesManager.getListOfElements()) {
+		for (String ruleName : rulesManager.getSetOfElements()) {
 			if (((Rule) rulesManager.getElementByName(ruleName)).getState().isActive())
 				enabledRulesString.add(((Rule) rulesManager.getElementByName(ruleName)).toString());
 		}
@@ -384,7 +384,7 @@ public class HousingUnit implements Serializable, Manageable {
 
 	public List<String> getRulesStrings() {
 		List<String> enabledRulesString = new ArrayList<>();
-		for (String ruleName : rulesManager.getListOfElements())
+		for (String ruleName : rulesManager.getSetOfElements())
 			enabledRulesString.add(((Rule) rulesManager.getElementByName(ruleName)).toString());
 		return enabledRulesString;
 	}
@@ -400,5 +400,9 @@ public class HousingUnit implements Serializable, Manageable {
 		boolean checkManagers = roomManager != null && sensorManager != null && actuatorManager != null
 				&& artifactManager != null && associationManager != null;
 		return checkName && checkDescr && checkManagers;
+	}
+
+	public Set<String> getArtifactSet() {
+		return artifactManager.getSetOfElements();
 	}
 }

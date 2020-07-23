@@ -79,7 +79,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 
 				if (roomOrArtifact) {
 					boolean canAssociate = false;
-					for (String room : dataFacade.getRoomsList(user, selectedHouse)) {
+					for (String room : dataFacade.getRoomsSet(user, selectedHouse)) {
 						if (!dataFacade.isAssociated(user, selectedHouse, room, category))
 							canAssociate = true;
 					}
@@ -91,7 +91,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 				}
 				else {
 					boolean canAssociate = false;
-					for (String room : dataFacade.getRoomsList(user, selectedHouse)) {
+					for (String room : dataFacade.getRoomsSet(user, selectedHouse)) {
 						for (String artifact : dataFacade.getArtifactNames(user, selectedHouse, room)) {
 							if (!dataFacade.isAssociated(user, selectedHouse, artifact, category))
 								canAssociate = true;
@@ -238,7 +238,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 
 				if (roomOrArtifact) {
 					boolean canAssociate = false;
-					for (String room : dataFacade.getRoomsList(user, selectedHouse)) {
+					for (String room : dataFacade.getRoomsSet(user, selectedHouse)) {
 						if (!dataFacade.isAssociated(user, selectedHouse, room, category))
 							canAssociate = true;
 					}
@@ -250,7 +250,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 				}
 				else {
 					boolean canAssociate = false;
-					for (String room : dataFacade.getRoomsList(user, selectedHouse)) {
+					for (String room : dataFacade.getRoomsSet(user, selectedHouse)) {
 						for (String artifact : dataFacade.getArtifactNames(user, selectedHouse, room)) {
 							if (!dataFacade.isAssociated(user, selectedHouse, artifact, category))
 								canAssociate = true;

@@ -55,7 +55,7 @@ public class Manager implements Serializable {
 		return elementMap.containsKey(name);
 	}
 
-	public Set<String> getListOfElements() {
+	public Set<String> getSetOfElements() {
 		assert managerInvariant() : ModelStrings.WRONG_INVARIANT;
 		Set<String> namesSet = elementMap.keySet();
 

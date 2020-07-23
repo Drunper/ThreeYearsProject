@@ -52,7 +52,7 @@ public class User implements Manageable {
 
 	public Set<String> getHousingUnitsList() {
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
-		return housingUnitManager.getListOfElements();
+		return housingUnitManager.getSetOfElements();
 	}
 
 	public boolean doesHousingUnitExist() {
@@ -415,5 +415,9 @@ public class User implements Manageable {
 	
 	private boolean userInvariant() {
 		return housingUnitManager != null;
+	}
+
+	public Set<String> getArtifactSet(String selectedHouse) {
+		return getHousingUnit(selectedHouse).getArtifactSet();
 	}
 }

@@ -44,6 +44,7 @@ public class UserController {
 			selection = menuManager.doChoice();
 			switch (selection) {
 				case 0:
+					dataFacade.saveData();
 					log.write(ControllerStrings.LOG_EXIT_MENU);
 					break;
 				case 1:

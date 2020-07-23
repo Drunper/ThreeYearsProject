@@ -107,7 +107,7 @@ public class Room implements Gettable, Serializable {
 
 	public Set<String> getActuatorsNames() {
 		assert roomInvariant() : ModelStrings.WRONG_INVARIANT;
-		return actuatorManager.getListOfElements();
+		return actuatorManager.getSetOfElements();
 	}
 
 	public void addSensor(Sensor toAdd) {
@@ -144,7 +144,7 @@ public class Room implements Gettable, Serializable {
 
 	public Set<String> getSensorsNames() {
 		assert roomInvariant() : ModelStrings.WRONG_INVARIANT;
-		return sensorManager.getListOfElements();
+		return sensorManager.getSetOfElements();
 	}
 
 	public void addArtifact(Artifact toAdd) {
@@ -170,7 +170,7 @@ public class Room implements Gettable, Serializable {
 
 	public Set<String> getArtifactsNames() {
 		assert roomInvariant() : ModelStrings.WRONG_INVARIANT;
-		return artifactManager.getListOfElements();
+		return artifactManager.getSetOfElements();
 	}
 
 	@Override

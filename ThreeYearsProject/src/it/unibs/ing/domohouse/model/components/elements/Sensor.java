@@ -66,7 +66,7 @@ public class Sensor implements Manageable, Serializable, Stateable {
 
 	public Set<String> getMeasuredObjectsSet() {
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
-		return measuredObjects.getListOfElements();
+		return measuredObjects.getSetOfElements();
 	}
 
 	public Gettable getElementByName(String name) {

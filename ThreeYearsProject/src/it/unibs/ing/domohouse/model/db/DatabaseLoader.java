@@ -171,17 +171,17 @@ public class DatabaseLoader {
 
 				for (Room room : rooms) {
 					for (Artifact artifact : loadArtifacts(user, selectedHouse, room.getName()))
-						room.addArtifact(artifact);
+						housingUnit.addArtifact(artifact, room.getName());
 				}
 
 				for (Room room : rooms) {
-					for (Sensor sensor : loadSensors(user, selectedHouse, room.getName()))
-						room.addSensor(sensor);
-					for (Actuator actuator : loadActuators(user, selectedHouse, room.getName()))
-						room.addActuator(actuator);
+					for (Sensor sensor : loadSensors(user, housingUnit, room.getName()))
+						housingUnit.addSensor(room.getName(), sensor);
+					for (Actuator actuator : loadActuators(user, housingUnit, room.getName()))
+						housingUnit.addActuator(actuator, room.getName());
 				}
 
-				for (Rule rule : loadRules(user, selectedHouse))
+				for (Rule rule : loadRules(user, housingUnit))
 					housingUnit.addRule(rule);
 			}
 		}
@@ -204,7 +204,6 @@ public class DatabaseLoader {
 				room.setSaveable(saveable);
 				dataFacade.addSaveable(saveable);
 				rooms.add(room);
-				addAssociations(user, selectedHouse, room.getName(), true);
 			}
 		}
 		catch (SQLException e) {
@@ -213,28 +212,48 @@ public class DatabaseLoader {
 		return rooms;
 	}
 
-	private void addAssociations(String user, String selectedHouse, String object, boolean roomOrArtifact) {
-		String queryString = roomOrArtifact ? QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ROOM
-				: QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ARTIFACT;
-		Query query = new Query(queryString);
+	public void addAssociations(String user, String selectedHouse) {
+		Query query = new Query("");
 		query.setStringParameter(1, selectedHouse);
 		query.setStringParameter(2, user);
-		query.setStringParameter(3, object);
-		try (ResultSet set = connector.executeQuery(query)) {
-			while (set.next())
-				dataFacade.addAssociation(user, selectedHouse, object, set.getString("nome_categoria_sensori"));
+		for(String room : dataFacade.getRoomsSet(user, selectedHouse)) {
+			query.setStringParameter(3, room);
+			query.setQuery(QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ROOM);
+			try (ResultSet set = connector.executeQuery(query)) {
+				while (set.next())
+					dataFacade.addAssociation(user, selectedHouse, room, set.getString("nome_categoria_sensori"));
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+			query.setQuery(QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ROOM);
+			try (ResultSet set = connector.executeQuery(query)) {
+				while (set.next())
+					dataFacade.addAssociation(user, selectedHouse, room, set.getString("nome_categoria_attuatori"));
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		query.setQuery(roomOrArtifact ? QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ROOM
-				: QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ARTIFACT);
-		try (ResultSet set = connector.executeQuery(query)) {
-			while (set.next())
-				dataFacade.addAssociation(user, selectedHouse, object, set.getString("nome_categoria_attuatori"));
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
+		
+		for(String artifact : dataFacade.getArtifactSet(user, selectedHouse)) {
+			query.setStringParameter(3, artifact);
+			query.setQuery(QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ARTIFACT);
+			try (ResultSet set = connector.executeQuery(query)) {
+				while (set.next())
+					dataFacade.addAssociation(user, selectedHouse, artifact, set.getString("nome_categoria_sensori"));
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+			query.setQuery(QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ARTIFACT);
+			try (ResultSet set = connector.executeQuery(query)) {
+				while (set.next())
+					dataFacade.addAssociation(user, selectedHouse, artifact, set.getString("nome_categoria_attuatori"));
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -291,8 +310,6 @@ public class DatabaseLoader {
 				artifact.setSaveable(saveable);
 				artifacts.add(new Artifact(set.getString("nome_artefatto"), set.getString("descrizione"),
 						getProperties(user, selectedHouse, set.getString("nome_artefatto"), false)));
-				addAssociations(user, selectedHouse, artifact.getName(), false);
-
 			}
 		}
 		catch (SQLException e) {
@@ -301,11 +318,11 @@ public class DatabaseLoader {
 		return artifacts;
 	}
 
-	private List<Sensor> loadSensors(String user, String selectedHouse, String location) {
+	private List<Sensor> loadSensors(String user, HousingUnit selectedHouse, String location) {
 		List<Sensor> sensors = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_SENSORS);
 		query.setStringParameter(1, user);
-		query.setStringParameter(2, selectedHouse);
+		query.setStringParameter(2, selectedHouse.getName());
 		query.setStringParameter(3, location);
 		try (ResultSet set = connector.executeQuery(query)) {
 			while (set.next()) {
@@ -314,7 +331,7 @@ public class DatabaseLoader {
 						set.getBoolean("stanze_o_artefatti"), getDeviceObjects(user, selectedHouse,
 								set.getString("nome_sensore"), true, set.getBoolean("stanze_o_artefatti")));
 
-				Saveable saveable = new SaveableSensor(user, selectedHouse, location, sensor, new OldObjectState());
+				Saveable saveable = new SaveableSensor(user, selectedHouse.getName(), location, sensor, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				sensor.setSaveable(saveable);
 				sensors.add(sensor);
@@ -326,11 +343,11 @@ public class DatabaseLoader {
 		return sensors;
 	}
 
-	private List<Actuator> loadActuators(String user, String selectedHouse, String location) {
+	private List<Actuator> loadActuators(String user, HousingUnit selectedHouse, String location) {
 		List<Actuator> actuators = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_ACTUATORS);
 		query.setStringParameter(1, user);
-		query.setStringParameter(2, selectedHouse);
+		query.setStringParameter(2, selectedHouse.getName());
 		query.setStringParameter(3, location);
 		try (ResultSet set = connector.executeQuery(query)) {
 			while (set.next()) {
@@ -338,7 +355,7 @@ public class DatabaseLoader {
 						dataFacade.getActuatorCategory(set.getString("nome_categoria_attuatori")),
 						set.getBoolean("stanze_o_artefatti"), getDeviceObjects(user, selectedHouse,
 								set.getString("nome_attuatore"), false, set.getBoolean("stanze_o_artefatti")));
-				Saveable saveable = new SaveableActuator(user, selectedHouse, location, actuator, new OldObjectState());
+				Saveable saveable = new SaveableActuator(user, selectedHouse.getName(), location, actuator, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				actuator.setSaveable(saveable);
 				actuators.add(actuator);
@@ -350,7 +367,7 @@ public class DatabaseLoader {
 		return actuators;
 	}
 
-	private List<Gettable> getDeviceObjects(String user, String selectedHouse, String device, boolean sensOrAct,
+	private List<Gettable> getDeviceObjects(String user, HousingUnit selectedHouse, String device, boolean sensOrAct,
 			boolean roomOrArtifact) {
 		List<Gettable> deviceObjects = new ArrayList<>();
 
@@ -359,14 +376,14 @@ public class DatabaseLoader {
 				: (roomOrArtifact ? QueryStrings.GET_CONTROLLED_ROOMS : QueryStrings.GET_CONTROLLED_ARTIFACTS);
 		Query query = new Query(queryString);
 		query.setStringParameter(user, 1);
-		query.setStringParameter(selectedHouse, 2);
+		query.setStringParameter(selectedHouse.getName(), 2);
 		query.setStringParameter(device, 3);
 		try (ResultSet set = connector.executeQuery(query)) {
 			while (set.next()) {
 				if (roomOrArtifact)
-					deviceObjects.add(dataFacade.getRoom(user, selectedHouse, set.getString("nome_stanza")));
+					deviceObjects.add(selectedHouse.getRoom(set.getString("nome_stanza")));
 				else
-					deviceObjects.add(dataFacade.getArtifact(user, selectedHouse, set.getString("nome_artefatto")));
+					deviceObjects.add(selectedHouse.getArtifact(set.getString("nome_artefatto")));
 			}
 		}
 		catch (SQLException e) {
@@ -376,11 +393,11 @@ public class DatabaseLoader {
 		return deviceObjects;
 	}
 
-	private List<Rule> loadRules(String user, String selectedHouse) {
+	private List<Rule> loadRules(String user, HousingUnit selectedHouse) {
 		List<Rule> rules = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_RULES);
 		query.setStringParameter(1, user);
-		query.setStringParameter(2, selectedHouse);
+		query.setStringParameter(2, selectedHouse.getName());
 		try (ResultSet set = connector.executeQuery(query)) {
 			while (set.next()) {
 				State state = set.getBoolean("stato") ? new ActiveState() : new InactiveState();
@@ -388,7 +405,7 @@ public class DatabaseLoader {
 						set.getString("testo_conseguente"),
 						getSensorFromAntString(user, selectedHouse, set.getString("testo_antecedente")),
 						getActuatorsFromConsString(user, selectedHouse, set.getString("testo_conseguente")), state);
-				Saveable saveable = new SaveableRule(user, selectedHouse, rule, new OldObjectState());
+				Saveable saveable = new SaveableRule(user, selectedHouse.getName(), rule, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				rule.setSaveable(saveable);
 				rules.add(rule);
@@ -400,30 +417,30 @@ public class DatabaseLoader {
 		return rules;
 	}
 
-	private List<Sensor> getSensorFromAntString(String user, String selectedHouse, String antString) {
+	private List<Sensor> getSensorFromAntString(String user, HousingUnit selectedHouse, String antString) {
 		List<Sensor> sensors = new ArrayList<>();
 		while (antString.contains("&&") || antString.contains("||")) {
 			String condition = antString.split("\\&\\&|\\|\\|")[0];
 			if (!condition.contains("time")) {
 				String sensor = condition.split("\\.")[0];
-				sensors.add(dataFacade.getSensor(user, selectedHouse, sensor.trim()));
+				sensors.add(selectedHouse.getSensor(sensor.trim()));
 			}
 			String temp = antString.split("\\&\\&|\\|\\|")[1];
 			antString = temp;
 		}
 		if (!antString.contains("time"))
-			sensors.add(dataFacade.getSensor(user, selectedHouse, antString.split("\\.")[0].trim()));
+			sensors.add(selectedHouse.getSensor(antString.split("\\.")[0].trim()));
 
 		return sensors;
 	}
 
-	private List<Actuator> getActuatorsFromConsString(String user, String selectedHouse, String consString) {
+	private List<Actuator> getActuatorsFromConsString(String user, HousingUnit selectedHouse, String consString) {
 		List<Actuator> actuators = new ArrayList<>();
 		String[] actions = consString.split(";");
 		for (String action : actions) {
 			String act = action.split(":=")[0].trim();
 			if (!act.equals("start"))
-				actuators.add(dataFacade.getActuator(user, selectedHouse, act));
+				actuators.add(selectedHouse.getActuator(act));
 		}
 
 		return actuators;

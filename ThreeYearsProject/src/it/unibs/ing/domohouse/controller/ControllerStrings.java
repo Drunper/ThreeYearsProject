@@ -271,4 +271,5 @@ public class ControllerStrings {
 	public static final String INSERT_INFO_IN_LIST = "Vuoi inserire una informazione rilevabile presente nella lista?";
 	public static final String INPUT_INFO_ID = "Inserisci l'ID dell'informazione rilevabile desiderata";
 	public static final String ERROR_INFO_NOT_IN_DB = "L'ID inserito non è presente nella lista";
+	public static final String NOT_IN_DB_PROPERTY_INPUT_VALUE = "La proprietà inserita non è presente, inserisci il valore di default della proprietà";
 }

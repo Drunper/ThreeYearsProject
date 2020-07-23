@@ -76,7 +76,8 @@ public class DatabaseFacade {
 
 	public void addNumericInfoStrategy(DoubleInfoStrategy infoStrategy) {
 		Query query = new Query(QueryStrings.INSERT_NUMERIC_INFO_STRATEGY);
-		query.setStringParameter(1, infoStrategy.getMeasuredProperty());
+		query.setIntegerParameter(1, infoStrategy.getID());
+		query.setStringParameter(2, infoStrategy.getMeasuredProperty());
 		query.setDoubleParameter(3, infoStrategy.getLowerBound());
 		query.setDoubleParameter(4, infoStrategy.getUpperBound());
 		connector.executeQueryWithoutResult(query);
@@ -86,7 +87,8 @@ public class DatabaseFacade {
 		String queryString = QueryStrings.INSERT_NON_NUMERIC_INFO_STRATEGY;
 
 		Query query = new Query("");
-		query.setStringParameter(1, infoStrategy.getMeasuredProperty());
+		query.setIntegerParameter(1, infoStrategy.getID());
+		query.setStringParameter(2, infoStrategy.getMeasuredProperty());
 
 		int pos = 3;
 		for (String domainValue : infoStrategy.getDomainValues()) {
@@ -95,10 +97,14 @@ public class DatabaseFacade {
 			query.setStringParameter(pos++, domainValue);
 		}
 
-		queryString += QueryStrings.INSERT_NON_NUMERIC_DOMAIN_VALUE + String.join(", ",
+		queryString += " " + QueryStrings.INSERT_NON_NUMERIC_DOMAIN_VALUE + String.join(", ",
 				Collections.nCopies(infoStrategy.getDomainValues().size(), QueryStrings.THREE_VALUES));
 
 		query.setQuery(queryString);
 		connector.executeQueryWithoutResult(query);
+	}
+
+	public void addAssociations(String user, String house) {
+		databaseLoader.addAssociations(user, house);
 	}
 }
