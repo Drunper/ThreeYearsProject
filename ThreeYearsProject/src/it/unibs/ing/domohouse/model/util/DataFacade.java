@@ -12,6 +12,17 @@ import it.unibs.ing.domohouse.model.components.elements.*;
 import it.unibs.ing.domohouse.model.components.properties.*;
 import it.unibs.ing.domohouse.model.components.rule.*;
 import it.unibs.ing.domohouse.model.db.*;
+import it.unibs.ing.domohouse.model.db.persistent.NewObjectState;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentActuator;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentActuatorCategory;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentArtifact;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentHousingUnit;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentRoom;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentRule;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentSensor;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentSensorCategory;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentUser;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class DataFacade {
@@ -45,7 +56,7 @@ public class DataFacade {
 
 	public void addUser(String user) {
 		User userObj = new User(user);
-		Saveable saveable = new SaveableUser(userObj, new NewObjectState());
+		PersistentObject saveable = new PersistentUser(userObj, new NewObjectState());
 		addSaveable(saveable);
 		userObj.setSaveable(saveable);
 		userManager.addElement(userObj);
@@ -102,7 +113,7 @@ public class DataFacade {
 
 	public void addHousingUnit(String selectedUser, String selectedHouse, String descr, String type) {
 		HousingUnit house = new HousingUnit(selectedHouse, descr, type, selectedUser);
-		Saveable saveable = new SaveableHousingUnit(house, new NewObjectState());
+		PersistentObject saveable = new PersistentHousingUnit(house, new NewObjectState());
 		addSaveable(saveable);
 		house.setSaveable(saveable);
 		getUser(selectedUser).addHousingUnit(house);
@@ -172,7 +183,7 @@ public class DataFacade {
 
 		SensorCategory cat = objectFactory.createSensorCategory(name, abbreviation, manufacturer, infoDomainMap,
 				measurementUnitMap);
-		Saveable saveable = new SaveableSensorCategory(cat, new NewObjectState());
+		PersistentObject saveable = new PersistentSensorCategory(cat, new NewObjectState());
 		addSaveable(saveable);
 		cat.setSaveable(saveable);
 		sensorCategoryManager.addElement(cat);
@@ -188,7 +199,7 @@ public class DataFacade {
 
 		ActuatorCategory cat = objectFactory.createActuatorCategory(name, abbreviation, manufacturer, listOfModes,
 				defaultMode);
-		Saveable saveable = new SaveableActuatorCategory(cat, new NewObjectState());
+		PersistentObject saveable = new PersistentActuatorCategory(cat, new NewObjectState());
 		addSaveable(saveable);
 		cat.setSaveable(saveable);
 		actuatorCategoryManager.addElement(cat);
@@ -304,7 +315,7 @@ public class DataFacade {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		Room room = new Room(selectedRoom, descr, propertiesMap);
-		Saveable saveable = new SaveableRoom(selectedUser, selectedHouse, room, new NewObjectState());
+		PersistentObject saveable = new PersistentRoom(selectedUser, selectedHouse, room, new NewObjectState());
 		addSaveable(saveable);
 		room.setSaveable(saveable);
 		getUser(selectedUser).addRoom(selectedHouse, room);
@@ -331,7 +342,7 @@ public class DataFacade {
 		Sensor sens = objectFactory.createSensor(name, getSensorCategory(category), roomOrArtifact,
 				getDevicesObjectList(selectedUser, selectedHouse, roomOrArtifact, objectList));
 
-		Saveable saveable = new SaveableSensor(selectedUser, selectedHouse, location, sens, new NewObjectState());
+		PersistentObject saveable = new PersistentSensor(selectedUser, selectedHouse, location, sens, new NewObjectState());
 		addSaveable(saveable);
 		sens.setSaveable(saveable);
 		getUser(selectedUser).addSensor(selectedHouse, location, sens);
@@ -428,7 +439,7 @@ public class DataFacade {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		Artifact artifact = new Artifact(selectedArtifact, descr, propertiesMap);
-		Saveable saveable = new SaveableArtifact(selectedUser, selectedHouse, location, artifact, new NewObjectState());
+		PersistentObject saveable = new PersistentArtifact(selectedUser, selectedHouse, location, artifact, new NewObjectState());
 		addSaveable(saveable);
 		artifact.setSaveable(saveable);
 		getUser(selectedUser).addArtifact(selectedHouse, location, artifact);
@@ -443,7 +454,7 @@ public class DataFacade {
 
 		Actuator act = objectFactory.createActuator(selectedActuator, getActuatorCategory(category), roomOrArtifact,
 				getDevicesObjectList(selectedUser, selectedHouse, roomOrArtifact, objectList));
-		Saveable saveable = new SaveableActuator(selectedUser, selectedHouse, location, act, new NewObjectState());
+		PersistentObject saveable = new PersistentActuator(selectedUser, selectedHouse, location, act, new NewObjectState());
 		addSaveable(saveable);
 		act.setSaveable(saveable);
 		getUser(selectedUser).addActuator(selectedHouse, location, act);
@@ -504,7 +515,7 @@ public class DataFacade {
 		Rule rule = objectFactory.createRule(name, antString, consString,
 				getRuleSensorsList(selectedUser, selectedHouse, involvedSensors),
 				getRuleActuatorsList(selectedUser, selectedHouse, involvedActuators), state);
-		Saveable saveable = new SaveableRule(selectedUser, selectedHouse, rule, new NewObjectState());
+		PersistentObject saveable = new PersistentRule(selectedUser, selectedHouse, rule, new NewObjectState());
 		addSaveable(saveable);
 		rule.setSaveable(saveable);
 		getUser(selectedUser).addRule(selectedHouse, rule);
@@ -515,7 +526,7 @@ public class DataFacade {
 		Rule rule = objectFactory.createRule(name, antString, consString,
 				getRuleSensorsList(selectedUser, selectedHouse, involvedSensors),
 				getRuleActuatorsList(selectedUser, selectedHouse, involvedActuators));
-		Saveable saveable = new SaveableRule(selectedUser, selectedHouse, rule, new NewObjectState());
+		PersistentObject saveable = new PersistentRule(selectedUser, selectedHouse, rule, new NewObjectState());
 		addSaveable(saveable);
 		rule.setSaveable(saveable);
 		getUser(selectedUser).addRule(selectedHouse, rule);
@@ -554,7 +565,7 @@ public class DataFacade {
 		databaseFacade.saveData();
 	}
 
-	public void addSaveable(Saveable saveable) {
+	public void addSaveable(PersistentObject saveable) {
 		databaseFacade.addSaveable(saveable);
 	}
 	

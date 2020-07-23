@@ -7,21 +7,21 @@ import java.util.Set;
 import it.unibs.ing.domohouse.model.ModelStrings;
 import it.unibs.ing.domohouse.model.components.properties.OperatingModesManager;
 import it.unibs.ing.domohouse.model.components.rule.Rule;
-import it.unibs.ing.domohouse.model.db.Saveable;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 import it.unibs.ing.domohouse.model.util.Manager;
 
 public class User implements Manageable {
 
 	private String name;
 	private Manager housingUnitManager;
-	private Saveable saveable;
+	private PersistentObject saveable;
 	
 	public User(String name) {
 		this.name = name;
 		housingUnitManager = new Manager();
 	}
 	
-	public void setSaveable(Saveable saveable) {
+	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
 	

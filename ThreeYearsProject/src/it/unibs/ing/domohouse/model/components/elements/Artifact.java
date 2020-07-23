@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
-import it.unibs.ing.domohouse.model.db.Saveable;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 
 public class Artifact implements Gettable, Serializable {
 
@@ -13,7 +13,7 @@ public class Artifact implements Gettable, Serializable {
 	private String name;
 	private String text;
 	private Map<String, String> propertiesMap;
-	private Saveable saveable;
+	private PersistentObject saveable;
 
 	public Artifact(String name, String text, Map<String, String> propertiesMap) {
 		this.name = name;
@@ -71,7 +71,7 @@ public class Artifact implements Gettable, Serializable {
 		return propertiesMap.keySet();
 	}
 	
-	public void setSaveable(Saveable saveable) {
+	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
 	

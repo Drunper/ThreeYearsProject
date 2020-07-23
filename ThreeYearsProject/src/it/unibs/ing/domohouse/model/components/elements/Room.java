@@ -5,7 +5,7 @@ import java.util.*;
 
 import it.unibs.ing.domohouse.model.util.Manager;
 import it.unibs.ing.domohouse.model.ModelStrings;
-import it.unibs.ing.domohouse.model.db.Saveable;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 
 public class Room implements Gettable, Serializable {
 
@@ -16,7 +16,7 @@ public class Room implements Gettable, Serializable {
 	private Manager actuatorManager;
 	private Manager artifactManager;
 	private Map<String, String> propertiesMap;
-	private Saveable saveable;
+	private PersistentObject saveable;
 
 	public Room(String name, String descr, Map<String, String> propertiesMap) {
 		this.name = name;
@@ -28,7 +28,7 @@ public class Room implements Gettable, Serializable {
 
 	}
 	
-	public void setSaveable(Saveable saveable) {
+	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
 	

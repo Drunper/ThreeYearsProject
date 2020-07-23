@@ -8,7 +8,7 @@ import it.unibs.ing.domohouse.model.components.properties.ActiveState;
 import it.unibs.ing.domohouse.model.components.properties.ActuatorCategory;
 import it.unibs.ing.domohouse.model.components.properties.OperatingMode;
 import it.unibs.ing.domohouse.model.components.properties.State;
-import it.unibs.ing.domohouse.model.db.Saveable;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 import it.unibs.ing.domohouse.model.util.Manager;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
@@ -21,7 +21,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 	private String operatingMode;
 	private String defaultMode;
 	private State state;
-	private Saveable saveable;
+	private PersistentObject saveable;
 	private boolean controllingRoom;
 	private boolean performing;
 
@@ -69,7 +69,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 		state.trigger(this);
 	}
 	
-	public void setSaveable(Saveable saveable) {
+	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
 	

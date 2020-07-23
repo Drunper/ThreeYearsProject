@@ -8,7 +8,7 @@ import java.util.Set;
 import it.unibs.ing.domohouse.model.components.properties.ActiveState;
 import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
 import it.unibs.ing.domohouse.model.components.properties.State;
-import it.unibs.ing.domohouse.model.db.Saveable;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 import it.unibs.ing.domohouse.model.util.Manager;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
@@ -21,7 +21,7 @@ public class Sensor implements Manageable, Serializable, Stateable {
 	private Manager measuredObjects;
 	private State state;
 	private boolean measuringRoom;
-	private Saveable saveable;
+	private PersistentObject saveable;
 
 	public Sensor(String name, SensorCategory category) {
 		this.name = name;
@@ -30,7 +30,7 @@ public class Sensor implements Manageable, Serializable, Stateable {
 		state = new ActiveState();
 	}
 	
-	public void setSaveable(Saveable saveable) {
+	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
 	

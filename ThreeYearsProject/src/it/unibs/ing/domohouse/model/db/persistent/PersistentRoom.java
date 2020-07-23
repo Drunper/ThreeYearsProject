@@ -1,17 +1,19 @@
-package it.unibs.ing.domohouse.model.db;
+package it.unibs.ing.domohouse.model.db.persistent;
 
 import java.util.Collections;
 
 import it.unibs.ing.domohouse.model.components.elements.Room;
+import it.unibs.ing.domohouse.model.db.Query;
+import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class SaveableRoom implements Saveable {
+public class PersistentRoom implements PersistentObject {
 
 	private String user;
 	private String housingUnit;
 	private Room room;
-	private ObjectState objectState;
+	private PersistentObjectState objectState;
 
-	public SaveableRoom(String user, String housingUnit, Room room, ObjectState objectState) {
+	public PersistentRoom(String user, String housingUnit, Room room, PersistentObjectState objectState) {
 		this.user = user;
 		this.housingUnit = housingUnit;
 		this.room = room;
@@ -67,7 +69,7 @@ public class SaveableRoom implements Saveable {
 	}
 
 	@Override
-	public void setObjectState(ObjectState objectState) {
+	public void setObjectState(PersistentObjectState objectState) {
 		this.objectState = objectState;
 	}
 

@@ -1,13 +1,15 @@
-package it.unibs.ing.domohouse.model.db;
+package it.unibs.ing.domohouse.model.db.persistent;
 
 import it.unibs.ing.domohouse.model.components.elements.HousingUnit;
+import it.unibs.ing.domohouse.model.db.Query;
+import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class SaveableHousingUnit implements Saveable {
+public class PersistentHousingUnit implements PersistentObject {
 
 	private HousingUnit housingUnit;
-	private ObjectState objectState;
+	private PersistentObjectState objectState;
 	
-	public SaveableHousingUnit(HousingUnit housingUnit, ObjectState objectState) {
+	public PersistentHousingUnit(HousingUnit housingUnit, PersistentObjectState objectState) {
 		this.housingUnit = housingUnit;
 		this.objectState = objectState;
 	}
@@ -45,7 +47,7 @@ public class SaveableHousingUnit implements Saveable {
 	}
 
 	@Override
-	public void setObjectState(ObjectState objectState) {
+	public void setObjectState(PersistentObjectState objectState) {
 		this.objectState = objectState;
 	}
 

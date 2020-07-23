@@ -1,15 +1,17 @@
-package it.unibs.ing.domohouse.model.db;
+package it.unibs.ing.domohouse.model.db.persistent;
 
 import java.util.Collections;
 
 import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
+import it.unibs.ing.domohouse.model.db.Query;
+import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class SaveableSensorCategory implements Saveable {
+public class PersistentSensorCategory implements PersistentObject {
 
 	private SensorCategory sensorCategory;
-	private ObjectState objectState;
+	private PersistentObjectState objectState;
 
-	public SaveableSensorCategory(SensorCategory sensorCategory, ObjectState objectState) {
+	public PersistentSensorCategory(SensorCategory sensorCategory, PersistentObjectState objectState) {
 		this.sensorCategory = sensorCategory;
 		this.objectState = objectState;
 	}
@@ -57,7 +59,7 @@ public class SaveableSensorCategory implements Saveable {
 	}
 
 	@Override
-	public void setObjectState(ObjectState objectState) {
+	public void setObjectState(PersistentObjectState objectState) {
 		this.objectState = objectState;
 	}
 

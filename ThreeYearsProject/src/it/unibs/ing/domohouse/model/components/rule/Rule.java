@@ -6,7 +6,7 @@ import java.util.List;
 import it.unibs.ing.domohouse.model.components.elements.Manageable;
 import it.unibs.ing.domohouse.model.components.elements.Stateable;
 import it.unibs.ing.domohouse.model.components.properties.State;
-import it.unibs.ing.domohouse.model.db.Saveable;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class Rule implements Serializable, Stateable, Manageable {
@@ -23,7 +23,7 @@ public class Rule implements Serializable, Stateable, Manageable {
 
 	private State state;
 	private boolean hasStartConsequent;
-	private Saveable saveable;
+	private PersistentObject saveable;
 
 	/*
 	 * invariante name != null, antString !=null, consequentRuleString != null,
@@ -40,7 +40,7 @@ public class Rule implements Serializable, Stateable, Manageable {
 		this.hasStartConsequent = false;
 	}
 	
-	public void setSaveable(Saveable saveable) {
+	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
 	

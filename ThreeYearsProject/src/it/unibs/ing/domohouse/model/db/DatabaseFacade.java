@@ -11,12 +11,13 @@ import it.unibs.ing.domohouse.model.components.properties.ActuatorCategory;
 import it.unibs.ing.domohouse.model.components.properties.DoubleInfoStrategy;
 import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
 import it.unibs.ing.domohouse.model.components.properties.StringInfoStrategy;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 
 public class DatabaseFacade {
 
 	private Connector connector;
 	private DatabaseLoader databaseLoader;
-	private List<Saveable> saveables;
+	private List<PersistentObject> saveables;
 
 	public DatabaseFacade(Connector connector, DatabaseLoader databaseLoader) {
 		this.connector = connector;
@@ -56,12 +57,12 @@ public class DatabaseFacade {
 		return databaseLoader.getNonNumericInfoStrategies();
 	}
 
-	public void addSaveable(Saveable toAdd) {
+	public void addSaveable(PersistentObject toAdd) {
 		saveables.add(toAdd);
 	}
 
 	public void saveData() {
-		for (Saveable saveable : saveables)
+		for (PersistentObject saveable : saveables)
 			update(saveable.getUpdateQuery());
 		saveables.removeAll(saveables);
 	}

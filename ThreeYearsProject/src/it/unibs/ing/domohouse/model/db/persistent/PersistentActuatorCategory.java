@@ -1,15 +1,17 @@
-package it.unibs.ing.domohouse.model.db;
+package it.unibs.ing.domohouse.model.db.persistent;
 
 import java.util.Collections;
 
 import it.unibs.ing.domohouse.model.components.properties.ActuatorCategory;
+import it.unibs.ing.domohouse.model.db.Query;
+import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class SaveableActuatorCategory implements Saveable {
+public class PersistentActuatorCategory implements PersistentObject {
 
 	private ActuatorCategory actuatorCategory;
-	private ObjectState objectState;
+	private PersistentObjectState objectState;
 
-	public SaveableActuatorCategory(ActuatorCategory actuatorCategory, ObjectState objectState) {
+	public PersistentActuatorCategory(ActuatorCategory actuatorCategory, PersistentObjectState objectState) {
 		this.actuatorCategory = actuatorCategory;
 		this.objectState = objectState;
 	}
@@ -55,7 +57,7 @@ public class SaveableActuatorCategory implements Saveable {
 	}
 
 	@Override
-	public void setObjectState(ObjectState objectState) {
+	public void setObjectState(PersistentObjectState objectState) {
 		this.objectState = objectState;
 	}
 

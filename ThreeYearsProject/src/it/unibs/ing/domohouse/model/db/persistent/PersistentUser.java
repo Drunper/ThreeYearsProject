@@ -1,13 +1,15 @@
-package it.unibs.ing.domohouse.model.db;
+package it.unibs.ing.domohouse.model.db.persistent;
 
 import it.unibs.ing.domohouse.model.components.elements.User;
+import it.unibs.ing.domohouse.model.db.Query;
+import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class SaveableUser implements Saveable {
+public class PersistentUser implements PersistentObject {
 
 	private User user;
-	private ObjectState objectState;
+	private PersistentObjectState objectState;
 
-	public SaveableUser(User user, ObjectState objectState) {
+	public PersistentUser(User user, PersistentObjectState objectState) {
 		this.user = user;
 		this.objectState = objectState;
 	}
@@ -37,7 +39,7 @@ public class SaveableUser implements Saveable {
 	}
 
 	@Override
-	public void setObjectState(ObjectState objectState) {
+	public void setObjectState(PersistentObjectState objectState) {
 		this.objectState = objectState;
 	}
 

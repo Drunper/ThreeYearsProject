@@ -1,19 +1,21 @@
-package it.unibs.ing.domohouse.model.db;
+package it.unibs.ing.domohouse.model.db.persistent;
 
 import java.util.Collections;
 
 import it.unibs.ing.domohouse.model.components.elements.Sensor;
+import it.unibs.ing.domohouse.model.db.Query;
+import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class SaveableSensor implements Saveable {
+public class PersistentSensor implements PersistentObject {
 
 	private String user;
 	private String housingUnit;
 	private String location;
 	private Sensor sensor;
-	private ObjectState objectState;
+	private PersistentObjectState objectState;
 	
-	public SaveableSensor(String user, String housingUnit, String location, Sensor sensor,
-			ObjectState objectState) {
+	public PersistentSensor(String user, String housingUnit, String location, Sensor sensor,
+			PersistentObjectState objectState) {
 		this.user = user;
 		this.housingUnit = housingUnit;
 		this.location = location;
@@ -70,7 +72,7 @@ public class SaveableSensor implements Saveable {
 	}
 
 	@Override
-	public void setObjectState(ObjectState objectState) {
+	public void setObjectState(PersistentObjectState objectState) {
 		this.objectState = objectState;
 	}
 

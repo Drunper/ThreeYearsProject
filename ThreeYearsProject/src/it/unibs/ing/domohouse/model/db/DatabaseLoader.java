@@ -9,6 +9,17 @@ import java.util.Map;
 
 import it.unibs.ing.domohouse.model.components.properties.*;
 import it.unibs.ing.domohouse.model.components.rule.Rule;
+import it.unibs.ing.domohouse.model.db.persistent.OldObjectState;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentActuator;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentActuatorCategory;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentArtifact;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentHousingUnit;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentRoom;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentRule;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentSensor;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentSensorCategory;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentUser;
 import it.unibs.ing.domohouse.model.components.elements.*;
 import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.ObjectFactory;
@@ -34,7 +45,7 @@ public class DatabaseLoader {
 						set.getString("sigla"), set.getString("costruttore"),
 						getSensorCategoryInfos(set.getString("nome_categoria_sensori"), measurementUnitMap),
 						measurementUnitMap);
-				Saveable saveable = new SaveableSensorCategory(cat, new OldObjectState());
+				PersistentObject saveable = new PersistentSensorCategory(cat, new OldObjectState());
 				cat.setSaveable(saveable);
 				dataFacade.addSaveable(saveable);
 				sensorCategories.add(cat);
@@ -105,7 +116,7 @@ public class DatabaseLoader {
 						set.getString("sigla"), set.getString("costruttore"),
 						getListOfModes(set.getString("nome_categoria_attuatori")),
 						set.getString("modalità_di_default"));
-				Saveable saveable = new SaveableActuatorCategory(cat, new OldObjectState());
+				PersistentObject saveable = new PersistentActuatorCategory(cat, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				cat.setSaveable(saveable);
 				actuatorCategories.add(cat);
@@ -140,7 +151,7 @@ public class DatabaseLoader {
 		try (ResultSet set = connector.executeQuery(query)) {
 			if (set.next()) {
 				User userObject = new User(set.getString("nome_utente"));
-				Saveable saveable = new SaveableUser(userObject, new OldObjectState());
+				PersistentObject saveable = new PersistentUser(userObject, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				userObject.setSaveable(saveable);
 				return userObject;
@@ -161,7 +172,7 @@ public class DatabaseLoader {
 				String selectedHouse = set.getString("nome_unità");
 				HousingUnit housingUnit = new HousingUnit(selectedHouse, set.getString("descrizione"),
 						set.getString("tipo"), user);
-				Saveable saveable = new SaveableHousingUnit(housingUnit, new OldObjectState());
+				PersistentObject saveable = new PersistentHousingUnit(housingUnit, new OldObjectState());
 				housingUnit.setSaveable(saveable);
 				dataFacade.addSaveable(saveable);
 				housingUnits.add(housingUnit);
@@ -200,7 +211,7 @@ public class DatabaseLoader {
 			while (set.next()) {
 				Room room = new Room(set.getString("nome_stanza"), set.getString("descrizione"),
 						getProperties(user, selectedHouse, set.getString("nome_stanza"), true));
-				Saveable saveable = new SaveableRoom(user, selectedHouse, room, new OldObjectState());
+				PersistentObject saveable = new PersistentRoom(user, selectedHouse, room, new OldObjectState());
 				room.setSaveable(saveable);
 				dataFacade.addSaveable(saveable);
 				rooms.add(room);
@@ -305,7 +316,7 @@ public class DatabaseLoader {
 			while (set.next()) {
 				Artifact artifact = new Artifact(set.getString("nome_artefatto"), set.getString("descrizione"),
 						getProperties(user, selectedHouse, set.getString("nome_artefatto"), false));
-				Saveable saveable = new SaveableArtifact(user, selectedHouse, location, artifact, new OldObjectState());
+				PersistentObject saveable = new PersistentArtifact(user, selectedHouse, location, artifact, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				artifact.setSaveable(saveable);
 				artifacts.add(new Artifact(set.getString("nome_artefatto"), set.getString("descrizione"),
@@ -331,7 +342,7 @@ public class DatabaseLoader {
 						set.getBoolean("stanze_o_artefatti"), getDeviceObjects(user, selectedHouse,
 								set.getString("nome_sensore"), true, set.getBoolean("stanze_o_artefatti")));
 
-				Saveable saveable = new SaveableSensor(user, selectedHouse.getName(), location, sensor, new OldObjectState());
+				PersistentObject saveable = new PersistentSensor(user, selectedHouse.getName(), location, sensor, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				sensor.setSaveable(saveable);
 				sensors.add(sensor);
@@ -355,7 +366,7 @@ public class DatabaseLoader {
 						dataFacade.getActuatorCategory(set.getString("nome_categoria_attuatori")),
 						set.getBoolean("stanze_o_artefatti"), getDeviceObjects(user, selectedHouse,
 								set.getString("nome_attuatore"), false, set.getBoolean("stanze_o_artefatti")));
-				Saveable saveable = new SaveableActuator(user, selectedHouse.getName(), location, actuator, new OldObjectState());
+				PersistentObject saveable = new PersistentActuator(user, selectedHouse.getName(), location, actuator, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				actuator.setSaveable(saveable);
 				actuators.add(actuator);
@@ -405,7 +416,7 @@ public class DatabaseLoader {
 						set.getString("testo_conseguente"),
 						getSensorFromAntString(user, selectedHouse, set.getString("testo_antecedente")),
 						getActuatorsFromConsString(user, selectedHouse, set.getString("testo_conseguente")), state);
-				Saveable saveable = new SaveableRule(user, selectedHouse.getName(), rule, new OldObjectState());
+				PersistentObject saveable = new PersistentRule(user, selectedHouse.getName(), rule, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				rule.setSaveable(saveable);
 				rules.add(rule);

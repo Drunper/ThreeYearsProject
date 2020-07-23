@@ -1,19 +1,21 @@
-package it.unibs.ing.domohouse.model.db;
+package it.unibs.ing.domohouse.model.db.persistent;
 
 import java.util.Collections;
 
 import it.unibs.ing.domohouse.model.components.elements.Actuator;
+import it.unibs.ing.domohouse.model.db.Query;
+import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class SaveableActuator implements Saveable {
+public class PersistentActuator implements PersistentObject {
 
 	private String user;
 	private String housingUnit;
 	private String location;
 	private Actuator actuator;
-	private ObjectState objectState;
+	private PersistentObjectState objectState;
 	
-	public SaveableActuator(String user, String housingUnit, String location, Actuator actuator,
-			ObjectState objectState) {
+	public PersistentActuator(String user, String housingUnit, String location, Actuator actuator,
+			PersistentObjectState objectState) {
 		this.user = user;
 		this.housingUnit = housingUnit;
 		this.location = location;
@@ -70,7 +72,7 @@ public class SaveableActuator implements Saveable {
 	}
 
 	@Override
-	public void setObjectState(ObjectState objectState) {
+	public void setObjectState(PersistentObjectState objectState) {
 		this.objectState = objectState;
 	}
 

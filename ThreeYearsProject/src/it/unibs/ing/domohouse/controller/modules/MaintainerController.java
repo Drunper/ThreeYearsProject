@@ -2,6 +2,7 @@ package it.unibs.ing.domohouse.controller.modules;
 
 import it.unibs.ing.domohouse.controller.inputhandler.MaintainerInputHandler;
 import it.unibs.ing.domohouse.model.components.clock.ClockStrategy;
+import it.unibs.ing.domohouse.model.util.ConfigFileManager;
 import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.LibImporter;
 import it.unibs.ing.domohouse.model.util.LogWriter;
@@ -30,13 +31,15 @@ public class MaintainerController {
 	private ManageableRenderer renderer;
 	private LibImporter libImporter;
 	private ClockStrategy clock;
+	private ConfigFileManager configFileManager;
 
-	public MaintainerController(DataFacade dataFacade, LogWriter log, ManageableRenderer renderer,
+	public MaintainerController(DataFacade dataFacade, LogWriter log, ConfigFileManager configFileManager, ManageableRenderer renderer,
 			MaintainerInputHandler maintainerInputHandler, LibImporter libImporter, ClockStrategy clock,
 			PrintWriter output, RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.MAINTAINER_MAIN_MENU_TITLE,
 				ControllerStrings.MAINTAINER_MAIN_MENU_VOICES, output, input);
 		this.dataFacade = dataFacade;
+		this.configFileManager = configFileManager;
 		this.log = log;
 		this.input = input;
 		this.renderer = renderer;
@@ -146,17 +149,13 @@ public class MaintainerController {
 						
 					break;
 				case 9:
-					/*
 					// mostra file di help
-					loader.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.MAINTAINER_HELP_FILE_NAME);
+					configFileManager.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.MAINTAINER_HELP_FILE_NAME);
 					break;
-					*/
 				case 10:
-					/*
 					// visualizza log
-					loader.runFileFromSource(ControllerStrings.LOG_PATH + ControllerStrings.LOG_NAME_FILE);
+					configFileManager.runFileFromSource(ControllerStrings.LOG_PATH + ControllerStrings.LOG_NAME_FILE);
 					break;
-					*/
 				case 11:
 					// aggiorna ora
 					log.write(ControllerStrings.LOG_REFRESH_HOUR);

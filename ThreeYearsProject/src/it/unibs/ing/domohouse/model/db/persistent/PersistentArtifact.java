@@ -1,19 +1,21 @@
-package it.unibs.ing.domohouse.model.db;
+package it.unibs.ing.domohouse.model.db.persistent;
 
 import java.util.Collections;
 
 import it.unibs.ing.domohouse.model.components.elements.Artifact;
+import it.unibs.ing.domohouse.model.db.Query;
+import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class SaveableArtifact implements Saveable {
+public class PersistentArtifact implements PersistentObject {
 
 	private String user;
 	private String housingUnit;
 	private String location;
 	private Artifact artifact;
-	private ObjectState objectState;
+	private PersistentObjectState objectState;
 	
-	public SaveableArtifact(String user, String housingUnit, String location, Artifact artifact,
-			ObjectState objectState) {
+	public PersistentArtifact(String user, String housingUnit, String location, Artifact artifact,
+			PersistentObjectState objectState) {
 		this.user = user;
 		this.housingUnit = housingUnit;
 		this.location = location;
@@ -72,7 +74,7 @@ public class SaveableArtifact implements Saveable {
 	}
 
 	@Override
-	public void setObjectState(ObjectState objectState) {
+	public void setObjectState(PersistentObjectState objectState) {
 		this.objectState = objectState;
 	}
 	

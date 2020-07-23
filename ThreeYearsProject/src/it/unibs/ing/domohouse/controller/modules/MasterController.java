@@ -5,8 +5,6 @@ import it.unibs.ing.domohouse.model.components.clock.ClockStrategy;
 import it.unibs.ing.domohouse.model.components.properties.OperatingModesManager;
 import it.unibs.ing.domohouse.model.components.rule.RulesWorker;
 import it.unibs.ing.domohouse.model.db.Connector;
-import it.unibs.ing.domohouse.model.file.FileLoader;
-import it.unibs.ing.domohouse.model.file.FileSaver;
 import it.unibs.ing.domohouse.model.util.*;
 import it.unibs.ing.domohouse.model.db.DatabaseAuthenticator;
 import it.unibs.ing.domohouse.view.*;
@@ -23,10 +21,10 @@ public class MasterController {
 	private Authenticator authenticator;
 	private ClockStrategy clock;
 	private LibImporter libImporter;
-	private Saver saver;
 	private LogWriter log;
 	private RulesWorker rulesWorker;
 	private Connector connector;
+	private ConfigFileManager configFileManager;
 
 	// Controllers
 	private LoginController loginController;
@@ -50,19 +48,20 @@ public class MasterController {
 
 	public MasterController(Scanner in, PrintWriter output) {
 		OperatingModesManager.fillOperatingModes();
+		configFileManager = new ConfigFileManager();
 		checkConfigFileExistence(output);
 		log = new LogWriter();
 		renderer = buildChain();
 
-		connector = new Connector("jdbc:mysql://localhost:3306/domohouse?allowMultiQueries=true", "domohouse", "^v1Iz1rFOnqx");
+		connector = new Connector("jdbc:mysql://localhost:3306/domohouse?allowMultiQueries=true", "domohouse",
+				"^v1Iz1rFOnqx");
 		connector.openConnection();
 		dataFacade = new DataFacade(connector);
 		authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
 		rulesWorker = new RulesWorker(dataFacade, clock);
 		libImporter = new LibImporter(dataFacade);
-		saver = new FileSaver();
 		dataFacade.loadCategories();
-		
+
 		RawInputHandler input = new RawInputHandler(in, output);
 		buildInputHandlers(output, input);
 		setControllers(output, input);
@@ -88,13 +87,13 @@ public class MasterController {
 				clock, output, input);
 		maintainerUnitController = new MaintainerUnitController(dataFacade, log, renderer, maintainerUnitInputHandler,
 				clock, output, input);
-		maintainerController = new MaintainerController(dataFacade, log, renderer, maintainerInputHandler,
-				libImporter, clock, output, input);
+		maintainerController = new MaintainerController(dataFacade, log, configFileManager, renderer, maintainerInputHandler, libImporter,
+				clock, output, input);
 		userRoomController = new UserRoomController(dataFacade, log, renderer, userRoomInputHandler, clock, output,
 				input);
 		userUnitController = new UserUnitController(dataFacade, log, renderer, userUnitInputHandler, clock, output,
 				input);
-		userController = new UserController(dataFacade, log, renderer, userInputHandler, clock, output, input);
+		userController = new UserController(dataFacade, log, configFileManager, renderer, userInputHandler, clock, output, input);
 		loginController = new LoginController(dataFacade, log, authenticator, clock, output, input);
 
 		loginController.setMaintainerController(maintainerController);
@@ -104,14 +103,13 @@ public class MasterController {
 		maintainerController.setMaintainerUnitController(maintainerUnitController);
 		maintainerUnitController.setMaintainerRoomController(maintainerRoomController);
 	}
-	
+
 	private void checkConfigFileExistence(PrintWriter output) {
-		FileLoader fileLoader = new FileLoader();
-		if (!fileLoader.loadConfigFile()) {
+		if (!configFileManager.loadConfigFile()) {
 			output.println(ControllerStrings.CONFIG_FILE_LOADING_FAILED);
-			saver.createConfigFile();
+			configFileManager.createConfigFile();
 			output.println(ControllerStrings.CONFIG_FILE_CREATED);
-			fileLoader.loadConfigFile();
+			configFileManager.loadConfigFile();
 		}
 		loadClockType();
 		output.println(ControllerStrings.LOADED_CLOCK_STRATEGY);

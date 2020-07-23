@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import it.unibs.ing.domohouse.model.components.elements.Manageable;
-import it.unibs.ing.domohouse.model.db.Saveable;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class SensorCategory implements Manageable, Serializable {
@@ -16,7 +16,7 @@ public class SensorCategory implements Manageable, Serializable {
 	private String descr;
 	private Map<String, InfoStrategy> infoDomainMap;
 	private Map<String, String> measurementUnitMap;
-	private Saveable saveable;
+	private PersistentObject saveable;
 
 	public SensorCategory(String name, String descr, Map<String, InfoStrategy> infoDomainMap,
 			Map<String, String> measurementUnitMap) {
@@ -26,7 +26,7 @@ public class SensorCategory implements Manageable, Serializable {
 		this.measurementUnitMap = measurementUnitMap;
 	}
 	
-	public void setSaveable(Saveable saveable) {
+	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
 	

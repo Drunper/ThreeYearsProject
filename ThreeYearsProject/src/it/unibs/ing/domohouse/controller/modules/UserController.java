@@ -2,6 +2,7 @@ package it.unibs.ing.domohouse.controller.modules;
 
 import it.unibs.ing.domohouse.controller.inputhandler.UserInputHandler;
 import it.unibs.ing.domohouse.model.components.clock.ClockStrategy;
+import it.unibs.ing.domohouse.model.util.ConfigFileManager;
 import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.LogWriter;
 import it.unibs.ing.domohouse.view.MenuManager;
@@ -23,13 +24,15 @@ public class UserController {
 	private UserInputHandler userInputHandler;
 	private ClockStrategy clock;
 	private PrintWriter output;
+	private ConfigFileManager configFileManager;
 
-	public UserController(DataFacade dataFacade, LogWriter log, ManageableRenderer renderer,
+	public UserController(DataFacade dataFacade, LogWriter log, ConfigFileManager configFileManager, ManageableRenderer renderer,
 			UserInputHandler userInputHandler, ClockStrategy clock, PrintWriter output, RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.USER_MAIN_MENU_TILE, ControllerStrings.USER_MAIN_MENU_VOICES,
 				output, input);
 		this.dataFacade = dataFacade;
 		this.log = log;
+		this.configFileManager = configFileManager;
 		this.renderer = renderer;
 		this.userInputHandler = userInputHandler;
 		this.clock = clock;
@@ -85,12 +88,10 @@ public class UserController {
 						output.println(ControllerStrings.NO_ACTUATOR_CATEGORY);
 					break;
 				case 4:
-					/*
 					// mostra file di help
 					menuManager.clearOutput();
-					loader.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.USER_HELP_FILE_NAME);
+					configFileManager.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.USER_HELP_FILE_NAME);
 					break;
-					*/
 				case 5:
 					// aggiorna ora
 					menuManager.clearOutput();

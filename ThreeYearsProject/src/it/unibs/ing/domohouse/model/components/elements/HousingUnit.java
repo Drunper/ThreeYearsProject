@@ -7,7 +7,7 @@ import it.unibs.ing.domohouse.model.components.properties.ActiveState;
 import it.unibs.ing.domohouse.model.components.properties.InactiveState;
 import it.unibs.ing.domohouse.model.components.properties.State;
 import it.unibs.ing.domohouse.model.components.rule.Rule;
-import it.unibs.ing.domohouse.model.db.Saveable;
+import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 import it.unibs.ing.domohouse.model.util.Association;
 import it.unibs.ing.domohouse.model.util.AssociationManager;
 import it.unibs.ing.domohouse.model.util.Manager;
@@ -26,7 +26,7 @@ public class HousingUnit implements Serializable, Manageable {
 	private Manager actuatorManager; // tutti gli attuatori della casa
 	private Manager artifactManager; // tutti gli artefatti della casa
 	private AssociationManager associationManager; // per il controllo delle associazioni
-	private Saveable saveable;
+	private PersistentObject saveable;
 
 	/*
 	 * invariante name > 0, descr > 0, diversi da null. Manager != null
@@ -44,7 +44,7 @@ public class HousingUnit implements Serializable, Manageable {
 		rulesManager = new Manager();
 	}
 	
-	public void setSaveable(Saveable saveable) {
+	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
 	
