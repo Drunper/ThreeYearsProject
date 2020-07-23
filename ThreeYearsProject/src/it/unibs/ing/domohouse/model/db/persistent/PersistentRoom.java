@@ -6,18 +6,17 @@ import it.unibs.ing.domohouse.model.components.elements.Room;
 import it.unibs.ing.domohouse.model.db.Query;
 import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class PersistentRoom implements PersistentObject {
+public class PersistentRoom extends PersistentObject {
 
 	private String user;
 	private String housingUnit;
 	private Room room;
-	private PersistentObjectState objectState;
 
-	public PersistentRoom(String user, String housingUnit, Room room, PersistentObjectState objectState) {
+	public PersistentRoom(String user, String housingUnit, Room room, PersistentObjectState persistentObjectState) {
+		super(persistentObjectState);
 		this.user = user;
 		this.housingUnit = housingUnit;
 		this.room = room;
-		this.objectState = objectState;
 	}
 
 	@Override
@@ -61,25 +60,5 @@ public class PersistentRoom implements PersistentObject {
 		query.setStringParameter(2, housingUnit);
 		query.setStringParameter(3, user);
 		return query;
-	}
-
-	@Override
-	public Query getUpdateQuery() {
-		return objectState.getUpdateQuery(this);
-	}
-
-	@Override
-	public void setObjectState(PersistentObjectState objectState) {
-		this.objectState = objectState;
-	}
-
-	@Override
-	public void modify() {
-		objectState.modify(this);
-	}
-
-	@Override
-	public void delete() {
-		objectState.delete(this);
 	}
 }

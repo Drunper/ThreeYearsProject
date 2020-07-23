@@ -6,21 +6,20 @@ import it.unibs.ing.domohouse.model.components.elements.Actuator;
 import it.unibs.ing.domohouse.model.db.Query;
 import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class PersistentActuator implements PersistentObject {
+public class PersistentActuator extends PersistentObject {
 
 	private String user;
 	private String housingUnit;
 	private String location;
 	private Actuator actuator;
-	private PersistentObjectState objectState;
 	
 	public PersistentActuator(String user, String housingUnit, String location, Actuator actuator,
-			PersistentObjectState objectState) {
+			PersistentObjectState persistentObjectState) {
+		super(persistentObjectState);
 		this.user = user;
 		this.housingUnit = housingUnit;
 		this.location = location;
 		this.actuator = actuator;
-		this.objectState = objectState;
 	}
 
 	@Override
@@ -64,25 +63,5 @@ public class PersistentActuator implements PersistentObject {
 		query.setStringParameter(2, housingUnit);
 		query.setStringParameter(3, user);
 		return query;
-	}
-	
-	@Override
-	public Query getUpdateQuery() {
-		return objectState.getUpdateQuery(this);
-	}
-
-	@Override
-	public void setObjectState(PersistentObjectState objectState) {
-		this.objectState = objectState;
-	}
-
-	@Override
-	public void modify() {
-		objectState.modify(this);
-	}
-
-	@Override
-	public void delete() {
-		objectState.delete(this);
 	}
 }

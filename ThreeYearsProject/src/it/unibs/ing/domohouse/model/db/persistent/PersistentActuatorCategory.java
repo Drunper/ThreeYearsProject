@@ -6,14 +6,13 @@ import it.unibs.ing.domohouse.model.components.properties.ActuatorCategory;
 import it.unibs.ing.domohouse.model.db.Query;
 import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class PersistentActuatorCategory implements PersistentObject {
+public class PersistentActuatorCategory extends PersistentObject {
 
 	private ActuatorCategory actuatorCategory;
-	private PersistentObjectState objectState;
 
-	public PersistentActuatorCategory(ActuatorCategory actuatorCategory, PersistentObjectState objectState) {
+	public PersistentActuatorCategory(ActuatorCategory actuatorCategory, PersistentObjectState persistentObjectState) {
+		super(persistentObjectState);
 		this.actuatorCategory = actuatorCategory;
-		this.objectState = objectState;
 	}
 
 	@Override
@@ -49,25 +48,5 @@ public class PersistentActuatorCategory implements PersistentObject {
 		Query query = new Query(QueryStrings.DELETE_ACTUATOR_CATEGORY);
 		query.setStringParameter(1, actuatorCategory.getName());
 		return query;
-	}
-
-	@Override
-	public Query getUpdateQuery() {
-		return objectState.getUpdateQuery(this);
-	}
-
-	@Override
-	public void setObjectState(PersistentObjectState objectState) {
-		this.objectState = objectState;
-	}
-
-	@Override
-	public void modify() {
-		objectState.modify(this);
-	}
-
-	@Override
-	public void delete() {
-		objectState.delete(this);
 	}
 }

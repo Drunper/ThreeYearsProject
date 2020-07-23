@@ -4,19 +4,18 @@ import it.unibs.ing.domohouse.model.components.rule.Rule;
 import it.unibs.ing.domohouse.model.db.Query;
 import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class PersistentRule implements PersistentObject {
+public class PersistentRule extends PersistentObject {
 
 	private String user;
 	private String housingUnit;
 	private Rule rule;
-	private PersistentObjectState objectState;
 	
 	public PersistentRule(String user, String housingUnit, Rule rule,
-			PersistentObjectState objectState) {
+			PersistentObjectState persistentObjectState) {
+		super(persistentObjectState);
 		this.user = user;
 		this.housingUnit = housingUnit;
 		this.rule = rule;
-		this.objectState = objectState;
 	}
 
 	@Override
@@ -43,25 +42,5 @@ public class PersistentRule implements PersistentObject {
 		query.setStringParameter(2, housingUnit);
 		query.setStringParameter(3, user);
 		return query;
-	}
-	
-	@Override
-	public Query getUpdateQuery() {
-		return objectState.getUpdateQuery(this);
-	}
-
-	@Override
-	public void setObjectState(PersistentObjectState objectState) {
-		this.objectState = objectState;
-	}
-	
-	@Override
-	public void modify() {
-		objectState.modify(this);
-	}
-
-	@Override
-	public void delete() {
-		objectState.delete(this);
 	}
 }

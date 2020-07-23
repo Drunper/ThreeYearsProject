@@ -4,14 +4,13 @@ import it.unibs.ing.domohouse.model.components.elements.User;
 import it.unibs.ing.domohouse.model.db.Query;
 import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class PersistentUser implements PersistentObject {
+public class PersistentUser extends PersistentObject {
 
 	private User user;
-	private PersistentObjectState objectState;
 
-	public PersistentUser(User user, PersistentObjectState objectState) {
+	public PersistentUser(User user, PersistentObjectState persistentObjectState) {
+		super(persistentObjectState);
 		this.user = user;
-		this.objectState = objectState;
 	}
 
 	@Override
@@ -31,25 +30,5 @@ public class PersistentUser implements PersistentObject {
 		Query query = new Query(QueryStrings.DELETE_USER);
 		query.setStringParameter(1, user.getName());
 		return query;
-	}
-
-	@Override
-	public Query getUpdateQuery() {
-		return objectState.getUpdateQuery(this);
-	}
-
-	@Override
-	public void setObjectState(PersistentObjectState objectState) {
-		this.objectState = objectState;
-	}
-
-	@Override
-	public void modify() {
-		objectState.modify(this);
-	}
-
-	@Override
-	public void delete() {
-		objectState.delete(this);
 	}
 }

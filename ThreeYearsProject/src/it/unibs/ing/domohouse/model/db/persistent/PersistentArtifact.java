@@ -6,21 +6,20 @@ import it.unibs.ing.domohouse.model.components.elements.Artifact;
 import it.unibs.ing.domohouse.model.db.Query;
 import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class PersistentArtifact implements PersistentObject {
+public class PersistentArtifact extends PersistentObject {
 
 	private String user;
 	private String housingUnit;
 	private String location;
 	private Artifact artifact;
-	private PersistentObjectState objectState;
 	
 	public PersistentArtifact(String user, String housingUnit, String location, Artifact artifact,
-			PersistentObjectState objectState) {
+			PersistentObjectState persistentObjectState) {
+		super(persistentObjectState);
 		this.user = user;
 		this.housingUnit = housingUnit;
 		this.location = location;
 		this.artifact = artifact;
-		this.objectState = objectState;
 	}
 
 	@Override
@@ -66,25 +65,5 @@ public class PersistentArtifact implements PersistentObject {
 		query.setStringParameter(2, housingUnit);
 		query.setStringParameter(3, user);
 		return query;
-	}
-	
-	@Override
-	public Query getUpdateQuery() {
-		return objectState.getUpdateQuery(this);
-	}
-
-	@Override
-	public void setObjectState(PersistentObjectState objectState) {
-		this.objectState = objectState;
-	}
-	
-	@Override
-	public void modify() {
-		objectState.modify(this);
-	}
-
-	@Override
-	public void delete() {
-		objectState.delete(this);
 	}
 }

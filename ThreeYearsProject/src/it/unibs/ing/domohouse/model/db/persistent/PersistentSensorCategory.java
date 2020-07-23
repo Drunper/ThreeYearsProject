@@ -6,14 +6,13 @@ import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
 import it.unibs.ing.domohouse.model.db.Query;
 import it.unibs.ing.domohouse.model.db.QueryStrings;
 
-public class PersistentSensorCategory implements PersistentObject {
+public class PersistentSensorCategory extends PersistentObject {
 
 	private SensorCategory sensorCategory;
-	private PersistentObjectState objectState;
 
-	public PersistentSensorCategory(SensorCategory sensorCategory, PersistentObjectState objectState) {
+	public PersistentSensorCategory(SensorCategory sensorCategory, PersistentObjectState persistentObjectState) {
+		super(persistentObjectState);
 		this.sensorCategory = sensorCategory;
-		this.objectState = objectState;
 	}
 
 	@Override
@@ -51,25 +50,5 @@ public class PersistentSensorCategory implements PersistentObject {
 		Query query = new Query(QueryStrings.DELETE_SENSOR_CATEGORY);
 		query.setStringParameter(1, sensorCategory.getName());
 		return query;
-	}
-
-	@Override
-	public Query getUpdateQuery() {
-		return objectState.getUpdateQuery(this);
-	}
-
-	@Override
-	public void setObjectState(PersistentObjectState objectState) {
-		this.objectState = objectState;
-	}
-
-	@Override
-	public void modify() {
-		objectState.modify(this);
-	}
-
-	@Override
-	public void delete() {
-		objectState.delete(this);
 	}
 }
