@@ -66,7 +66,7 @@ public class QueryStrings {
 
 	// Query di inserimento
 
-	public static final String INSERT_MAINTAINER = "INSERT INTO manutentore (nome_manutentore, password) VALUES (?, ?)";
+	public static final String INSERT_MAINTAINER = "INSERT INTO manutentore (nome_manutentore, password, sale) VALUES (?, ?, ?)";
 
 	public static final String INSERT_USER = "INSERT INTO utente (nome_utente) VALUES (?)";
 

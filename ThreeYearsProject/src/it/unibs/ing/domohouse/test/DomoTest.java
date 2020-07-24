@@ -1,25 +1,23 @@
 package it.unibs.ing.domohouse.test;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.junit.Test;
 
+
 import it.unibs.ing.domohouse.controller.ControllerStrings;
-import it.unibs.ing.domohouse.controller.inputhandler.MaintainerUnitInputHandler;
 import it.unibs.ing.domohouse.controller.modules.MasterController;
-import it.unibs.ing.domohouse.model.ModelStrings;
-import it.unibs.ing.domohouse.model.components.elements.HousingUnit;
-import it.unibs.ing.domohouse.model.components.elements.Room;
-import it.unibs.ing.domohouse.model.components.rule.RuleParser;
-import it.unibs.ing.domohouse.model.util.DataFacade;
-import it.unibs.ing.domohouse.view.RawInputHandler;
+import it.unibs.ing.domohouse.model.db.Connector;
+import it.unibs.ing.domohouse.model.db.DatabaseAuthenticator;
+import it.unibs.ing.domohouse.model.util.Authenticator;
+import it.unibs.ing.domohouse.model.util.HashCalculator;
 import it.unibs.ing.domohouse.view.ViewStrings;
 
 public class DomoTest {
@@ -34,6 +32,14 @@ public class DomoTest {
 		Scanner input = buildInput("0");
 		MasterController controller = new MasterController(input, writer);
 		controller.start();
+	}
+	
+	@Test
+	public void shouldSayUserNonExistent() {
+		Scanner input = buildInput("1", "signor Verdi", "0");
+		MasterController controller = new MasterController(input, writer);
+		controller.start();
+		assertTrue(getOutput().contains(ControllerStrings.ERROR_NON_EXISTENT_USER));
 	}
 
 	@Test
@@ -123,6 +129,32 @@ public class DomoTest {
 		assertTrue(getOutput().contains(
 				"Nome: i1_igrometri\r\n" + "Categoria: igrometri\r\n" + "Lista delle stanze o artefatti misurati:\r\n"
 						+ "Soggiorno\r\n" + "Ultimo valore rilevato: 25.0 %\r\n" + "Stato: acceso"));
+	}
+	
+	@Test
+	public void testCheckPassword() {
+		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
+		Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
+		assertTrue(authenticator.checkMaintainerPassword("prova", "pippo123456"));
+	}
+	
+	@Test
+	public void testCheckWrongPassword() {
+		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
+		Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
+		assertFalse(authenticator.checkMaintainerPassword("prova", "pippo12346"));
+	}
+	
+	@Test
+	public void testAddMaintainer() {
+		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
+		Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
+		if(authenticator.checkMaintainerPassword("prova3", "paperino"))
+			fail("prova3 già presente");
+		else {
+			authenticator.addMaintainer("prova3", "paperino");
+			assertTrue(authenticator.checkMaintainerPassword("prova3", "paperino"));
+		}
 	}
 
 	private Scanner buildInput(String... inputs) {

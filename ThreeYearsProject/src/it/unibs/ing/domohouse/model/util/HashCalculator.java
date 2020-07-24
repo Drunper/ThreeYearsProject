@@ -34,7 +34,7 @@ public class HashCalculator {
         return salt;
 	}
 	
-	private String bytesToHex(byte[] hash) {
+	public String bytesToHex(byte[] hash) {
 		assert hash != null;
 
 		StringBuffer hexString = new StringBuffer();

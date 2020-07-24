@@ -93,7 +93,7 @@ public class DatabaseFacade {
 		query.setStringParameter(2, infoStrategy.getMeasuredProperty());
 		query.setIntegerParameter(3, 1);
 
-		int pos = 3;
+		int pos = 4;
 		for (String domainValue : infoStrategy.getDomainValues()) {
 			query.setIntegerParameter(pos++, infoStrategy.getID());
 			query.setStringParameter(pos++, infoStrategy.getMeasuredProperty());
