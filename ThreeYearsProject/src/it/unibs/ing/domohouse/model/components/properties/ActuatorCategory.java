@@ -25,15 +25,15 @@ public class ActuatorCategory implements Manageable, Serializable {
 		this.descr = descr;
 		operatingModesMap = new HashMap<>();
 	}
-	
+
 	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
-	
+
 	public void modify() {
 		saveable.modify();
 	}
-	
+
 	public void delete() {
 		saveable.delete();
 	}

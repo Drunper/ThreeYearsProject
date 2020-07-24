@@ -35,7 +35,8 @@ public class MaintainerController {
 	private ClockStrategy clock;
 	private ConfigFileManager configFileManager;
 
-	public MaintainerController(DataFacade dataFacade, ObjectRemover objectRemover, LogWriter log, ConfigFileManager configFileManager, ManageableRenderer renderer,
+	public MaintainerController(DataFacade dataFacade, ObjectRemover objectRemover, LogWriter log,
+			ConfigFileManager configFileManager, ManageableRenderer renderer,
 			MaintainerInputHandler maintainerInputHandler, LibImporter libImporter, ClockStrategy clock,
 			PrintWriter output, RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.MAINTAINER_MAIN_MENU_TITLE,
@@ -69,7 +70,7 @@ public class MaintainerController {
 					break;
 				case 2:
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
-					if(dataFacade.hasUser(user)) {
+					if (dataFacade.hasUser(user)) {
 						objectRemover.removeUser(user);
 						dataFacade.saveData();
 					}
@@ -79,7 +80,7 @@ public class MaintainerController {
 				case 3:
 					menuManager.clearOutput();
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
-					if(dataFacade.hasUser(user)) {
+					if (dataFacade.hasUser(user)) {
 						if (dataFacade.doesHousingUnitExist(user)) {
 							menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
 							String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
@@ -99,7 +100,7 @@ public class MaintainerController {
 					break;
 				case 5:
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
-					if(dataFacade.hasUser(user)) {
+					if (dataFacade.hasUser(user)) {
 						if (dataFacade.doesHousingUnitExist(user)) {
 							menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
 							String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
@@ -119,7 +120,7 @@ public class MaintainerController {
 						output.println();
 						output.println();
 
-						String selectedSensCategory = maintainerInputHandler.safeInsertSensorCategory(); 
+						String selectedSensCategory = maintainerInputHandler.safeInsertSensorCategory();
 						log.write(ControllerStrings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
 						output.println(renderer.render(dataFacade.getSensorCategory(selectedSensCategory)));
 					}
@@ -131,10 +132,10 @@ public class MaintainerController {
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorCategoryExist()) {
 						menuManager.printCollectionOfString(dataFacade.getActuatorCategoryList());
-						output.println(); 
+						output.println();
 						output.println();
 
-						String selectedActuCategory = maintainerInputHandler.safeInsertActuatorCategory(); 
+						String selectedActuCategory = maintainerInputHandler.safeInsertActuatorCategory();
 						log.write(ControllerStrings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
 						output.println(renderer.render(dataFacade.getActuatorCategory(selectedActuCategory)));
 					}
@@ -160,7 +161,7 @@ public class MaintainerController {
 						output.println();
 						output.println();
 
-						String selectedSensCategory = maintainerInputHandler.safeInsertSensorCategory(); 
+						String selectedSensCategory = maintainerInputHandler.safeInsertSensorCategory();
 						objectRemover.removeSensorCategory(selectedSensCategory);
 						dataFacade.saveData();
 					}
@@ -171,10 +172,10 @@ public class MaintainerController {
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorCategoryExist()) {
 						menuManager.printCollectionOfString(dataFacade.getActuatorCategoryList());
-						output.println(); 
+						output.println();
 						output.println();
 
-						String selectedActuCategory = maintainerInputHandler.safeInsertActuatorCategory(); 
+						String selectedActuCategory = maintainerInputHandler.safeInsertActuatorCategory();
 						objectRemover.removeActuatorCategory(selectedActuCategory);
 						dataFacade.saveData();
 					}
@@ -186,7 +187,7 @@ public class MaintainerController {
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_IMPORTING_FILE);
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
-					if(dataFacade.hasUser(user)) {
+					if (dataFacade.hasUser(user)) {
 						dataFacade.loadHousingUnits(user);
 						if (libImporter.importFile(user)) {
 							log.write(ControllerStrings.SUCCESS_IMPORT_FILE);
@@ -200,11 +201,12 @@ public class MaintainerController {
 					}
 					else
 						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
-						
+
 					break;
 				case 13:
 					// mostra file di help
-					configFileManager.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.MAINTAINER_HELP_FILE_NAME);
+					configFileManager.runFileFromSource(
+							ControllerStrings.HELP_PATH + ControllerStrings.MAINTAINER_HELP_FILE_NAME);
 					break;
 				case 14:
 					// visualizza log

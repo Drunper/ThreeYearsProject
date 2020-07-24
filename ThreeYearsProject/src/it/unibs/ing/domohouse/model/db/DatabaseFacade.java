@@ -52,7 +52,7 @@ public class DatabaseFacade {
 	public Map<Integer, DoubleInfoStrategy> getNumericInfoStrategies() {
 		return databaseLoader.getNumericInfoStrategies();
 	}
-	
+
 	public Map<Integer, StringInfoStrategy> getNonNumericInfoStrategies() {
 		return databaseLoader.getNonNumericInfoStrategies();
 	}

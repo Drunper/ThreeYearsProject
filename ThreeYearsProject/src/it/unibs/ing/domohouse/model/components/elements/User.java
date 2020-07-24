@@ -15,20 +15,20 @@ public class User implements Manageable {
 	private String name;
 	private Manager housingUnitManager;
 	private PersistentObject saveable;
-	
+
 	public User(String name) {
 		this.name = name;
 		housingUnitManager = new Manager();
 	}
-	
+
 	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
-	
+
 	public void modify() {
 		saveable.modify();
 	}
-	
+
 	public void delete() {
 		saveable.delete();
 	}
@@ -42,7 +42,7 @@ public class User implements Manageable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public boolean hasHousingUnit(String selectedHouse) {
 		assert selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -81,7 +81,7 @@ public class User implements Manageable {
 
 		return selected.getRoomSet();
 	}
-	
+
 	public String getCategoryOfASensor(String selectedHouse, String selectedSensor) {
 		assert selectedHouse != null && selectedSensor != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -141,7 +141,7 @@ public class User implements Manageable {
 		HousingUnit house = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return house.doesActuatorExist(selectedRoom);
 	}
-	
+
 	public Set<String> getActuatorOperatingModes(String selectedHouse, String selectedActuator) {
 		return getHousingUnit(selectedHouse).getActuatorOperatingModes(selectedActuator);
 	}
@@ -412,7 +412,7 @@ public class User implements Manageable {
 	public boolean doesRuleExist(String selectedHouse) {
 		return getHousingUnit(selectedHouse).doesRuleExist();
 	}
-	
+
 	private boolean userInvariant() {
 		return housingUnitManager != null;
 	}
@@ -436,7 +436,7 @@ public class User implements Manageable {
 	public boolean ruleContainsSensor(String selectedHouse, String selectedRule, String selectedSensor) {
 		return getHousingUnit(selectedHouse).ruleContainsSensor(selectedRule, selectedSensor);
 	}
-	
+
 	public boolean ruleContainsActuator(String selectedHouse, String selectedRule, String selectedActuator) {
 		return getHousingUnit(selectedHouse).ruleContainsActuator(selectedRule, selectedActuator);
 	}

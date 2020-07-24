@@ -227,7 +227,7 @@ public class DatabaseLoader {
 		Query query = new Query("");
 		query.setStringParameter(1, selectedHouse);
 		query.setStringParameter(2, user);
-		for(String room : dataFacade.getRoomsSet(user, selectedHouse)) {
+		for (String room : dataFacade.getRoomsSet(user, selectedHouse)) {
 			query.setStringParameter(3, room);
 			query.setQuery(QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ROOM);
 			try (ResultSet set = connector.executeQuery(query)) {
@@ -246,8 +246,8 @@ public class DatabaseLoader {
 				e.printStackTrace();
 			}
 		}
-		
-		for(String artifact : dataFacade.getArtifactSet(user, selectedHouse)) {
+
+		for (String artifact : dataFacade.getArtifactSet(user, selectedHouse)) {
 			query.setStringParameter(3, artifact);
 			query.setQuery(QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ARTIFACT);
 			try (ResultSet set = connector.executeQuery(query)) {
@@ -316,7 +316,8 @@ public class DatabaseLoader {
 			while (set.next()) {
 				Artifact artifact = new Artifact(set.getString("nome_artefatto"), set.getString("descrizione"),
 						getProperties(user, selectedHouse, set.getString("nome_artefatto"), false));
-				PersistentObject saveable = new PersistentArtifact(user, selectedHouse, location, artifact, new OldObjectState());
+				PersistentObject saveable = new PersistentArtifact(user, selectedHouse, location, artifact,
+						new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				artifact.setSaveable(saveable);
 				artifacts.add(artifact);
@@ -341,7 +342,8 @@ public class DatabaseLoader {
 						set.getBoolean("stanze_o_artefatti"), getDeviceObjects(user, selectedHouse,
 								set.getString("nome_sensore"), true, set.getBoolean("stanze_o_artefatti")));
 
-				PersistentObject saveable = new PersistentSensor(user, selectedHouse.getName(), location, sensor, new OldObjectState());
+				PersistentObject saveable = new PersistentSensor(user, selectedHouse.getName(), location, sensor,
+						new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				sensor.setSaveable(saveable);
 				sensors.add(sensor);
@@ -365,7 +367,8 @@ public class DatabaseLoader {
 						dataFacade.getActuatorCategory(set.getString("nome_categoria_attuatori")),
 						set.getBoolean("stanze_o_artefatti"), getDeviceObjects(user, selectedHouse,
 								set.getString("nome_attuatore"), false, set.getBoolean("stanze_o_artefatti")));
-				PersistentObject saveable = new PersistentActuator(user, selectedHouse.getName(), location, actuator, new OldObjectState());
+				PersistentObject saveable = new PersistentActuator(user, selectedHouse.getName(), location, actuator,
+						new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				actuator.setSaveable(saveable);
 				actuators.add(actuator);
@@ -415,7 +418,8 @@ public class DatabaseLoader {
 						set.getString("testo_conseguente"),
 						getSensorFromAntString(user, selectedHouse, set.getString("testo_antecedente")),
 						getActuatorsFromConsString(user, selectedHouse, set.getString("testo_conseguente")), state);
-				PersistentObject saveable = new PersistentRule(user, selectedHouse.getName(), rule, new OldObjectState());
+				PersistentObject saveable = new PersistentRule(user, selectedHouse.getName(), rule,
+						new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				rule.setSaveable(saveable);
 				rules.add(rule);

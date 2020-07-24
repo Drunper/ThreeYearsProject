@@ -31,15 +31,15 @@ public class Sensor implements Manageable, Serializable, Stateable {
 		notAssociatedObjects = new ArrayList<>();
 		state = new ActiveState();
 	}
-	
+
 	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
-	
+
 	public void modify() {
 		saveable.modify();
 	}
-	
+
 	public void delete() {
 		saveable.delete();
 	}
@@ -111,17 +111,17 @@ public class Sensor implements Manageable, Serializable, Stateable {
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
 		return category.getName();
 	}
-	
+
 	public void removeMeasuredObject(String toRemove) {
 		modify();
 		measuredObjects.removeElement(toRemove);
 		notAssociatedObjects.add(toRemove);
 	}
-	
+
 	public List<String> getNotAssociatedObjects() {
 		return notAssociatedObjects;
 	}
-	
+
 	public boolean isMeasuringObject(String element) {
 		return measuredObjects.hasElement(element);
 	}

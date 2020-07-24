@@ -71,15 +71,15 @@ public class Actuator implements Manageable, Serializable, Stateable {
 	public void trigger() {
 		state.trigger(this);
 	}
-	
+
 	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
-	
+
 	public void modify() {
 		saveable.modify();
 	}
-	
+
 	public void delete() {
 		saveable.delete();
 	}
@@ -88,7 +88,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 		assert actuatorInvariant() : ModelStrings.WRONG_INVARIANT;
 		return this.category;
 	}
-	
+
 	public String getCategoryName() {
 		return this.category.getName();
 	}
@@ -102,15 +102,15 @@ public class Actuator implements Manageable, Serializable, Stateable {
 	public boolean isNotAssociated() {
 		return controlledObjects.isEmpty();
 	}
-	
+
 	public boolean isControllingObject(String element) {
 		return controlledObjects.hasElement(element);
 	}
-	
+
 	public List<String> getNotAssociatedObjects() {
 		return notAssociatedObjects;
 	}
-	
+
 	public Set<String> getControlledObjectSet() {
 		return controlledObjects.getSetOfElements();
 	}
@@ -124,7 +124,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 		assert controlledObjects.size() == size + 1;
 		assert actuatorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
-	
+
 	public boolean isControllingRoom() {
 		assert actuatorInvariant() : ModelStrings.WRONG_INVARIANT;
 		return controllingRoom;
@@ -138,7 +138,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 	public String getOperatingMode() {
 		return operatingMode;
 	}
-	
+
 	public Set<String> getOperatingModes() {
 		return category.getOperatingModesSet();
 	}

@@ -72,7 +72,7 @@ public class Connector {
 		}
 		return res;
 	}
-	
+
 	public ResultSet executeQuery(String query) {
 		ResultSet res = null;
 		try {
@@ -93,9 +93,9 @@ public class Connector {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void executeQueryWithoutResult(Query query) {
-		if(query != null)
+		if (query != null)
 			try {
 				setQuery(query);
 				preparedStatement.execute();
@@ -105,7 +105,7 @@ public class Connector {
 				e.printStackTrace();
 			}
 	}
-	
+
 	public ResultSet executeQuery(Query query) {
 		ResultSet set = null;
 		try {
@@ -117,15 +117,15 @@ public class Connector {
 		}
 		return set;
 	}
-	
+
 	private void setQuery(Query query) {
 		try {
 			preparedStatement = connection.prepareStatement(query.getQuery());
-			for(Entry<Integer, Integer> param : query.getIntegerParameters().entrySet())
+			for (Entry<Integer, Integer> param : query.getIntegerParameters().entrySet())
 				preparedStatement.setInt(param.getKey(), param.getValue());
-			for(Entry<Integer, String> param : query.getStringParameters().entrySet())
+			for (Entry<Integer, String> param : query.getStringParameters().entrySet())
 				preparedStatement.setString(param.getKey(), param.getValue());
-			for(Entry<Integer, Double> param : query.getDoubleParameters().entrySet())
+			for (Entry<Integer, Double> param : query.getDoubleParameters().entrySet())
 				preparedStatement.setDouble(param.getKey(), param.getValue());
 		}
 		catch (SQLException e) {

@@ -14,7 +14,7 @@ public class Artifact implements Gettable, Serializable {
 	private String text;
 	private Map<String, String> propertiesMap;
 	public PersistentObject saveable;
-	
+
 	public Artifact(String name, String text, Map<String, String> propertiesMap) {
 		this.name = name;
 		this.text = text;
@@ -31,7 +31,7 @@ public class Artifact implements Gettable, Serializable {
 		assert artifactInvariant() : ModelStrings.WRONG_INVARIANT;
 		return this.text;
 	}
-	
+
 	@Override
 	public void setName(String newName) {
 		assert newName.length() > 0 && newName != null;
@@ -50,7 +50,7 @@ public class Artifact implements Gettable, Serializable {
 	public String getProperty(String variableName) {
 		return propertiesMap.get(variableName);
 	}
-	
+
 	@Override
 	public void setProperty(String variableName, String newValue) {
 		propertiesMap.put(variableName, newValue);
@@ -60,25 +60,25 @@ public class Artifact implements Gettable, Serializable {
 	public boolean hasProperty(String variableName) {
 		return propertiesMap.containsKey(variableName);
 	}
-	
+
 	@Override
 	public boolean doesPropertyExist() {
 		return !propertiesMap.isEmpty();
 	}
-	
+
 	@Override
 	public Set<String> getPropertiesNameSet() {
 		return propertiesMap.keySet();
 	}
-	
+
 	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
-	
+
 	public void modify() {
 		saveable.modify();
 	}
-	
+
 	public void delete() {
 		saveable.delete();
 	}

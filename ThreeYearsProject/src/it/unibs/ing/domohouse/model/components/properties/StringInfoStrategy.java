@@ -31,16 +31,16 @@ public class StringInfoStrategy implements InfoStrategy, Serializable {
 	public int getID() {
 		return ID;
 	}
-	
+
 	@Override
 	public String getMeasuredProperty() {
 		return measuredProperty;
 	}
-	
+
 	public String toString() {
 		return String.join(ModelStrings.COMMA_WITH_SPACE, domain);
 	}
-	
+
 	public List<String> getDomainValues() {
 		return domain;
 	}

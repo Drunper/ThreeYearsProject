@@ -18,8 +18,7 @@ public class UserUnitInputHandler {
 	protected PrintWriter output;
 	protected RawInputHandler input;
 
-	public UserUnitInputHandler(DataFacade dataFacade, PrintWriter output,
-			RawInputHandler input) {
+	public UserUnitInputHandler(DataFacade dataFacade, PrintWriter output, RawInputHandler input) {
 		this.dataFacade = dataFacade;
 		this.output = output;
 		this.input = input;
@@ -43,7 +42,7 @@ public class UserUnitInputHandler {
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 		return selectedRoom;
 	}
-	
+
 	public String safeInsertRule(String user, String selectedHouse) {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;

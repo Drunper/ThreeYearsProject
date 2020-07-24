@@ -26,7 +26,7 @@ public class DoubleInfoStrategy implements InfoStrategy, Serializable {
 			try {
 				value = Double.parseDouble(values.get(i));
 			}
-			catch(NumberFormatException e) {
+			catch (NumberFormatException e) {
 				value = 0;
 			}
 			if (value < lowerBound)
@@ -43,7 +43,7 @@ public class DoubleInfoStrategy implements InfoStrategy, Serializable {
 	public int getID() {
 		return ID;
 	}
-	
+
 	@Override
 	public String getMeasuredProperty() {
 		return measuredProperty;
@@ -52,11 +52,11 @@ public class DoubleInfoStrategy implements InfoStrategy, Serializable {
 	public String toString() {
 		return lowerBound + " -to- " + upperBound;
 	}
-	
+
 	public double getLowerBound() {
 		return lowerBound;
 	}
-	
+
 	public double getUpperBound() {
 		return upperBound;
 	}

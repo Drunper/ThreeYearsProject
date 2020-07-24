@@ -28,8 +28,8 @@ public class LoginController {
 	private LogWriter log;
 	private Authenticator authenticator;
 
-	public LoginController(DataFacade dataFacade, LogWriter log, Authenticator authenticator,
-			ClockStrategy clock, PrintWriter output, RawInputHandler input) {
+	public LoginController(DataFacade dataFacade, LogWriter log, Authenticator authenticator, ClockStrategy clock,
+			PrintWriter output, RawInputHandler input) {
 		menu = new MenuManager(ControllerStrings.LOGIN_MENU_TITLE, ControllerStrings.LOGIN_MENU_VOICES, output, input);
 		this.dataFacade = dataFacade;
 		this.log = log;
@@ -52,7 +52,7 @@ public class LoginController {
 				case 1: // login fruitore
 					String user = input.readNotVoidString(ControllerStrings.INSERT_USER);
 					if (dataFacade.hasUser(user)) {
-						if(dataFacade.doesHousingUnitExist(user))
+						if (dataFacade.doesHousingUnitExist(user))
 							userController.show(user);
 					}
 					else

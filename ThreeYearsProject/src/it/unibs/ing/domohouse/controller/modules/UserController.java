@@ -26,8 +26,9 @@ public class UserController {
 	private PrintWriter output;
 	private ConfigFileManager configFileManager;
 
-	public UserController(DataFacade dataFacade, LogWriter log, ConfigFileManager configFileManager, ManageableRenderer renderer,
-			UserInputHandler userInputHandler, ClockStrategy clock, PrintWriter output, RawInputHandler input) {
+	public UserController(DataFacade dataFacade, LogWriter log, ConfigFileManager configFileManager,
+			ManageableRenderer renderer, UserInputHandler userInputHandler, ClockStrategy clock, PrintWriter output,
+			RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.USER_MAIN_MENU_TILE, ControllerStrings.USER_MAIN_MENU_VOICES,
 				output, input);
 		this.dataFacade = dataFacade;
@@ -90,7 +91,8 @@ public class UserController {
 				case 4:
 					// mostra file di help
 					menuManager.clearOutput();
-					configFileManager.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.USER_HELP_FILE_NAME);
+					configFileManager
+							.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.USER_HELP_FILE_NAME);
 					break;
 				case 5:
 					// aggiorna ora

@@ -10,21 +10,22 @@ public class DatabaseAuthenticator implements Authenticator {
 
 	private HashCalculator hashCalculator;
 	private Connector connector;
-	
+
 	public DatabaseAuthenticator(HashCalculator hashCalculator, Connector connector) {
 		this.hashCalculator = hashCalculator;
 		this.connector = connector;
 		connector.openConnection();
 	}
-	
+
 	@Override
 	public boolean checkMaintainerPassword(String user, String password) {
 		boolean result = false;
 		Query query = new Query(QueryStrings.GET_MAINTAINER_PASSWORD_AND_SALT);
 		query.setStringParameter(1, user);
 		try (ResultSet set = connector.executeQuery(query)) {
-			if(set.next()) {
-				result = set.getString("password").equalsIgnoreCase(hashCalculator.hash(password, hashCalculator.hexToBytes(set.getString("sale"))));
+			if (set.next()) {
+				result = set.getString("password").equalsIgnoreCase(
+						hashCalculator.hash(password, hashCalculator.hexToBytes(set.getString("sale"))));
 			}
 		}
 		catch (SQLException e) {
@@ -42,7 +43,7 @@ public class DatabaseAuthenticator implements Authenticator {
 		query.setStringParameter(3, hashCalculator.bytesToHex(salt));
 		connector.executeQueryWithoutResult(query);
 	}
-	
+
 	@Override
 	public boolean checkUser(String user) {
 		boolean result = false;

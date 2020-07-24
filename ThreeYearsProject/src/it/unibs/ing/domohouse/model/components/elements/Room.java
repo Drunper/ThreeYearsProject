@@ -25,17 +25,16 @@ public class Room implements Gettable, Serializable {
 		actuatorManager = new Manager();
 		artifactManager = new Manager();
 		this.propertiesMap = propertiesMap;
-
 	}
-	
+
 	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
-	
+
 	public void modify() {
 		saveable.modify();
 	}
-	
+
 	public void delete() {
 		saveable.delete();
 	}
@@ -177,7 +176,7 @@ public class Room implements Gettable, Serializable {
 	public boolean hasProperty(String variableName) {
 		return propertiesMap.containsKey(variableName);
 	}
-	
+
 	@Override
 	public boolean doesPropertyExist() {
 		return !propertiesMap.isEmpty();
@@ -199,7 +198,7 @@ public class Room implements Gettable, Serializable {
 		assert propertiesMap.size() >= pre_size;
 		assert roomInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
-	
+
 	@Override
 	public Set<String> getPropertiesNameSet() {
 		return propertiesMap.keySet();

@@ -25,15 +25,15 @@ public class SensorCategory implements Manageable, Serializable {
 		this.infoDomainMap = infoDomainMap;
 		this.measurementUnitMap = measurementUnitMap;
 	}
-	
+
 	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
-	
+
 	public void modify() {
 		saveable.modify();
 	}
-	
+
 	public void delete() {
 		saveable.delete();
 	}
@@ -72,7 +72,7 @@ public class SensorCategory implements Manageable, Serializable {
 	public Set<String> getInfoStrategySet() {
 		return infoDomainMap.keySet();
 	}
-	
+
 	public int getInfoID(String property) {
 		return infoDomainMap.get(property).getID();
 	}

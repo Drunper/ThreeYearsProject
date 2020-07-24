@@ -11,8 +11,7 @@ import it.unibs.ing.domohouse.controller.ControllerStrings;
 
 public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 
-	public MaintainerUnitInputHandler(DataFacade dataFacade, PrintWriter output,
-			RawInputHandler input) {
+	public MaintainerUnitInputHandler(DataFacade dataFacade, PrintWriter output, RawInputHandler input) {
 		super(dataFacade, output, input);
 	}
 
@@ -61,7 +60,7 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 				}
 				propertiesMap.put(propertyName, propertyValue);
 			}
-			else if(propertyName.equals(ControllerStrings.BACK_CHARACTER))
+			else if (propertyName.equals(ControllerStrings.BACK_CHARACTER))
 				remain = false;
 		}
 		while (remain);

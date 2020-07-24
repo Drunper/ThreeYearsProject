@@ -99,39 +99,43 @@ public class MaintainerInputHandler extends UserInputHandler {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	private void readInfoStrategies(Map<String, InfoStrategy> infoDomainMap, Map<String, String> measurementUnitMap, MenuManager view) {
-		boolean remain = true;		
-		
+	private void readInfoStrategies(Map<String, InfoStrategy> infoDomainMap, Map<String, String> measurementUnitMap,
+			MenuManager view) {
+		boolean remain = true;
+
 		int dbID = dataFacade.getCurrentMaxID();
-		
+
 		do {
 			if (input.yesOrNo(ControllerStrings.INSERT_NUMERIC_INFO)) {
 				view.printCollectionOfString(dataFacade.getNumericInfoStrategySet());
-				if(input.yesOrNo(ControllerStrings.INSERT_INFO_IN_LIST)) {
+				if (input.yesOrNo(ControllerStrings.INSERT_INFO_IN_LIST)) {
 					int ID = input.readInt(ControllerStrings.INPUT_INFO_ID);
-					if(dataFacade.hasNumericInfoStrategy(ID)) {
+					if (dataFacade.hasNumericInfoStrategy(ID)) {
 						DoubleInfoStrategy infoStrategy = dataFacade.getNumericInfoStrategy(ID);
-						if(!infoDomainMap.containsKey(infoStrategy.getMeasuredProperty())) {
+						if (!infoDomainMap.containsKey(infoStrategy.getMeasuredProperty())) {
 							infoDomainMap.put(infoStrategy.getMeasuredProperty(), infoStrategy);
-							measurementUnitMap.put(infoStrategy.getMeasuredProperty(), input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_DETECTABLE_INFO));
+							measurementUnitMap.put(infoStrategy.getMeasuredProperty(),
+									input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_DETECTABLE_INFO));
 						}
 						else
 							output.println(ControllerStrings.ERROR_INFO_ALREADY_INSERTED);
 					}
 					else
-						output.println(ControllerStrings.ERROR_INFO_NOT_IN_DB);	
+						output.println(ControllerStrings.ERROR_INFO_NOT_IN_DB);
 				}
 				else {
 					String detectableInfo = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_INPUT_INFO);
-					if(!dataFacade.hasProperty(detectableInfo)) {
-						String defaultValue = input.readStringWithMaximumLength(ControllerStrings.NOT_IN_DB_PROPERTY_INPUT_VALUE, 20);
+					if (!dataFacade.hasProperty(detectableInfo)) {
+						String defaultValue = input
+								.readStringWithMaximumLength(ControllerStrings.NOT_IN_DB_PROPERTY_INPUT_VALUE, 20);
 						dataFacade.addProperty(detectableInfo, defaultValue);
 					}
 					if (!infoDomainMap.containsKey(detectableInfo)) {
 						double min = input.readDouble(ControllerStrings.INSERT_SENSOR_CATEGORY_MIN_VALUE);
 						double max = input.readDouble(ControllerStrings.INSERT_SENSOR_CATEGORY_MAX_VALUE);
-						String measurementUnit = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_DETECTABLE_INFO);
-	
+						String measurementUnit = input
+								.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_DETECTABLE_INFO);
+
 						DoubleInfoStrategy domainInfo = new DoubleInfoStrategy(min, max, ++dbID, detectableInfo);
 						dataFacade.addNumericInfoStrategy(dbID, domainInfo);
 						infoDomainMap.put(detectableInfo, domainInfo);
@@ -145,23 +149,24 @@ public class MaintainerInputHandler extends UserInputHandler {
 			}
 			else {
 				view.printCollectionOfString(dataFacade.getNonNumericInfoStrategySet());
-				if(input.yesOrNo(ControllerStrings.INSERT_INFO_IN_LIST)) {
+				if (input.yesOrNo(ControllerStrings.INSERT_INFO_IN_LIST)) {
 					int ID = input.readInt(ControllerStrings.INPUT_INFO_ID);
-					if(dataFacade.hasNonNumericInfoStrategy(ID)) {
+					if (dataFacade.hasNonNumericInfoStrategy(ID)) {
 						StringInfoStrategy infoStrategy = dataFacade.getNonNumericInfoStrategy(ID);
-						if(!infoDomainMap.containsKey(infoStrategy.getMeasuredProperty())) {
+						if (!infoDomainMap.containsKey(infoStrategy.getMeasuredProperty())) {
 							infoDomainMap.put(infoStrategy.getMeasuredProperty(), infoStrategy);
 						}
 						else
 							output.println(ControllerStrings.ERROR_INFO_ALREADY_INSERTED);
 					}
 					else
-						output.println(ControllerStrings.ERROR_INFO_NOT_IN_DB);	
+						output.println(ControllerStrings.ERROR_INFO_NOT_IN_DB);
 				}
 				else {
 					String detectableInfo = input.readNotVoidString(ControllerStrings.SENSOR_CATEGORY_INPUT_INFO);
-					if(!dataFacade.hasProperty(detectableInfo)) {
-						String defaultValue = input.readStringWithMaximumLength(ControllerStrings.NOT_IN_DB_PROPERTY_INPUT_VALUE, 20);
+					if (!dataFacade.hasProperty(detectableInfo)) {
+						String defaultValue = input
+								.readStringWithMaximumLength(ControllerStrings.NOT_IN_DB_PROPERTY_INPUT_VALUE, 20);
 						dataFacade.addProperty(detectableInfo, defaultValue);
 					}
 					if (!infoDomainMap.containsKey(detectableInfo)) {

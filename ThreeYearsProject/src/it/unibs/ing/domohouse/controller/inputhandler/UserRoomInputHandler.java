@@ -62,7 +62,8 @@ public class UserRoomInputHandler {
 		return selectedActuator;
 	}
 
-	public void setOperatingMode(String user, String selectedHouse, String selectedRoom, String selectedActuator, MenuManager view) {
+	public void setOperatingMode(String user, String selectedHouse, String selectedRoom, String selectedActuator,
+			MenuManager view) {
 		assert selectedHouse != null && selectedRoom != null && selectedActuator != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 

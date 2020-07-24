@@ -185,7 +185,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 				}
 				propertyMap.put(propertyName, propertyValue);
 			}
-			else if(propertyName.equals(ControllerStrings.BACK_CHARACTER))
+			else if (propertyName.equals(ControllerStrings.BACK_CHARACTER))
 				remain = false;
 		}
 		while (remain);

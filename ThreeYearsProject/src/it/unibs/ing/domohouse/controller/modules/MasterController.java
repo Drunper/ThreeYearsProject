@@ -86,17 +86,18 @@ public class MasterController {
 	}
 
 	private void setControllers(PrintWriter output, RawInputHandler input) {
-		maintainerRoomController = new MaintainerRoomController(dataFacade, objectRemover, maintainerRoomInputHandler, log, renderer,
-				clock, output, input);
-		maintainerUnitController = new MaintainerUnitController(dataFacade, objectRemover, log, renderer, maintainerUnitInputHandler,
-				clock, output, input);
-		maintainerController = new MaintainerController(dataFacade, objectRemover, log, configFileManager, renderer, maintainerInputHandler, libImporter,
-				clock, output, input);
+		maintainerRoomController = new MaintainerRoomController(dataFacade, objectRemover, maintainerRoomInputHandler,
+				log, renderer, clock, output, input);
+		maintainerUnitController = new MaintainerUnitController(dataFacade, objectRemover, log, renderer,
+				maintainerUnitInputHandler, clock, output, input);
+		maintainerController = new MaintainerController(dataFacade, objectRemover, log, configFileManager, renderer,
+				maintainerInputHandler, libImporter, clock, output, input);
 		userRoomController = new UserRoomController(dataFacade, log, renderer, userRoomInputHandler, clock, output,
 				input);
 		userUnitController = new UserUnitController(dataFacade, log, renderer, userUnitInputHandler, clock, output,
 				input);
-		userController = new UserController(dataFacade, log, configFileManager, renderer, userInputHandler, clock, output, input);
+		userController = new UserController(dataFacade, log, configFileManager, renderer, userInputHandler, clock,
+				output, input);
 		loginController = new LoginController(dataFacade, log, authenticator, clock, output, input);
 
 		loginController.setMaintainerController(maintainerController);

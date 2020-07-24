@@ -27,9 +27,9 @@ public class MaintainerUnitController {
 
 	private MaintainerUnitInputHandler maintainedUnitInputHandler;
 
-	public MaintainerUnitController(DataFacade dataFacade, ObjectRemover objectRemover, LogWriter log, ManageableRenderer renderer,
-			MaintainerUnitInputHandler maintainerUnitInputHandler, ClockStrategy clock, PrintWriter output,
-			RawInputHandler input) {
+	public MaintainerUnitController(DataFacade dataFacade, ObjectRemover objectRemover, LogWriter log,
+			ManageableRenderer renderer, MaintainerUnitInputHandler maintainerUnitInputHandler, ClockStrategy clock,
+			PrintWriter output, RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.MAINTAINER_UNIT_MENU_TITLE,
 				ControllerStrings.MAINTAINER_UNIT_MENU_VOICES, output, input);
 		this.dataFacade = dataFacade;
@@ -121,7 +121,7 @@ public class MaintainerUnitController {
 					maintainedUnitInputHandler.readRuleStateFromUser(user, selectedHouse, menuManager);
 					break;
 				case 10:
-					//rimuovi regola
+					// rimuovi regola
 					menuManager.clearOutput();
 					if (dataFacade.doesRuleExist(user, selectedHouse)) {
 						String selectedRule = maintainedUnitInputHandler.safeInsertRule(user, selectedHouse);

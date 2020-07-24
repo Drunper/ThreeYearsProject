@@ -43,31 +43,31 @@ public class HousingUnit implements Serializable, Manageable {
 		associationManager = new AssociationManager();
 		rulesManager = new Manager();
 	}
-	
+
 	public void setSaveable(PersistentObject saveable) {
 		this.saveable = saveable;
 	}
-	
+
 	public void modify() {
 		saveable.modify();
 	}
-	
+
 	public void delete() {
 		saveable.delete();
 	}
-	
+
 	public String getType() {
 		return type;
 	}
-	
+
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 	public String getUser() {
 		return user;
 	}
-	
+
 	public void setUser(String user) {
 		this.user = user;
 	}
@@ -252,7 +252,7 @@ public class HousingUnit implements Serializable, Manageable {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
-	
+
 	public Set<String> getActuatorOperatingModes(String selectedActuator) {
 		return getActuator(selectedActuator).getOperatingModes();
 	}
@@ -414,7 +414,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public void removeRule(String selectedRule) {
 		rulesManager.removeElement(selectedRule);
 	}
-	
+
 	public Rule getRule(String selectedRule) {
 		return (Rule) rulesManager.getElement(selectedRule);
 	}
@@ -422,7 +422,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public boolean ruleContainsSensor(String selectedRule, String selectedSensor) {
 		return getRule(selectedRule).containsSensor(selectedSensor);
 	}
-	
+
 	public boolean ruleContainsActuator(String selectedRule, String selectedActuator) {
 		return getRule(selectedRule).containsActuator(selectedActuator);
 	}
@@ -444,7 +444,7 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 
 	public void removeArtifactAssociationWithCategory(String artifact, String category) {
-		associationManager.removeArtifactAssociationWithCategory(artifact, category);		
+		associationManager.removeArtifactAssociationWithCategory(artifact, category);
 	}
 
 	public void removeSensor(String selectedRoom, String selectedSensor) {
@@ -457,8 +457,8 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 
 	public String getRoomOfSensor(String selectedSensor) {
-		for(String room : getRoomSet())
-			if(getRoom(room).hasSensor(selectedSensor))
+		for (String room : getRoomSet())
+			if (getRoom(room).hasSensor(selectedSensor))
 				return room;
 		return null;
 	}
@@ -481,8 +481,8 @@ public class HousingUnit implements Serializable, Manageable {
 	}
 
 	public String getRoomOfActuator(String selectedActuator) {
-		for(String room : getRoomSet())
-			if(getRoom(room).hasActuator(selectedActuator))
+		for (String room : getRoomSet())
+			if (getRoom(room).hasActuator(selectedActuator))
 				return room;
 		return null;
 	}
