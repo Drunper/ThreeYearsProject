@@ -39,8 +39,8 @@ public class DatabaseAuthenticator implements Authenticator {
 		byte[] salt = hashCalculator.getSalt();
 		query.setStringParameter(1, user);
 		query.setStringParameter(2, hashCalculator.hash(password, salt));
+		query.setStringParameter(3, hashCalculator.bytesToHex(salt));
 		connector.executeQueryWithoutResult(query);
-		//gestire bene le eccezioni
 	}
 	
 	@Override

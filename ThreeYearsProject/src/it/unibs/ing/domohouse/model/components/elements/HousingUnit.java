@@ -111,15 +111,15 @@ public class HousingUnit implements Serializable, Manageable {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public Set<String> getRoomList() {
+	public Set<String> getRoomSet() {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 		return roomManager.getSetOfElements();
 	}
 
 	public Room getRoom(String name) {
-		assert name != null && (Room) roomManager.getElementByName(name) != null;
+		assert name != null && (Room) roomManager.getElement(name) != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
-		return (Room) roomManager.getElementByName(name);
+		return (Room) roomManager.getElement(name);
 	}
 
 	public boolean hasRoom(String name) {
@@ -132,7 +132,7 @@ public class HousingUnit implements Serializable, Manageable {
 		assert selectedSensor != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Sensor sens = (Sensor) sensorManager.getElementByName(selectedSensor);
+		Sensor sens = (Sensor) sensorManager.getElement(selectedSensor);
 
 		assert sens != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -143,7 +143,7 @@ public class HousingUnit implements Serializable, Manageable {
 		assert selectedActuator != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Actuator act = (Actuator) actuatorManager.getElementByName(selectedActuator);
+		Actuator act = (Actuator) actuatorManager.getElement(selectedActuator);
 
 		assert act != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -152,7 +152,7 @@ public class HousingUnit implements Serializable, Manageable {
 
 	public Artifact getArtifact(String name) {
 		assert name != null && name.length() > 0;
-		Artifact art = (Artifact) artifactManager.getElementByName(name);
+		Artifact art = (Artifact) artifactManager.getElement(name);
 		assert art != null : ModelStrings.ARTIFACT_PRECONDITION;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 		return art;
@@ -161,7 +161,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public void setRoomDescription(String selectedRoom, String descr) {
 		assert selectedRoom != null && selectedRoom.length() > 0 && descr != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
-		Room room = (Room) roomManager.getElementByName(selectedRoom);
+		Room room = (Room) roomManager.getElement(selectedRoom);
 		room.setDescr(descr);
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
@@ -170,7 +170,7 @@ public class HousingUnit implements Serializable, Manageable {
 		assert location != null && location.length() > 0;
 		assert toAdd != null;
 		int pre_size = sensorManager.size();
-		Room room = (Room) roomManager.getElementByName(location);
+		Room room = (Room) roomManager.getElement(location);
 		room.addSensor(toAdd);
 		sensorManager.addElement(toAdd);
 		assert sensorManager.size() >= pre_size;
@@ -226,7 +226,7 @@ public class HousingUnit implements Serializable, Manageable {
 		int pre_size_artifactManager = artifactManager.size();
 		int pre_size_associationManager = artifactManager.size();
 
-		Room room = (Room) roomManager.getElementByName(location);
+		Room room = (Room) roomManager.getElement(location);
 		room.addArtifact(toAdd);
 		artifactManager.addElement(toAdd);
 		associationManager.addAssociation(new Association(toAdd.getName()));
@@ -243,7 +243,7 @@ public class HousingUnit implements Serializable, Manageable {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 		int pre_size = actuatorManager.size();
 
-		Room room = (Room) roomManager.getElementByName(location);
+		Room room = (Room) roomManager.getElement(location);
 		room.addActuator(toAdd);
 		actuatorManager.addElement(toAdd);
 
@@ -278,14 +278,14 @@ public class HousingUnit implements Serializable, Manageable {
 	public boolean doesArtifactExist(String selectedRoom) {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Room room = (Room) roomManager.getElementByName(selectedRoom);
+		Room room = (Room) roomManager.getElement(selectedRoom);
 		return room.doesArtifactExist();
 	}
 
 	public boolean doesSensorExist(String selectedRoom) {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Room room = (Room) roomManager.getElementByName(selectedRoom);
+		Room room = (Room) roomManager.getElement(selectedRoom);
 		return room.doesSensorExist();
 	}
 
@@ -302,7 +302,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public boolean doesActuatorExist(String selectedRoom) {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Room room = (Room) roomManager.getElementByName(selectedRoom);
+		Room room = (Room) roomManager.getElement(selectedRoom);
 		return room.doesActuatorExist();
 	}
 
@@ -310,10 +310,7 @@ public class HousingUnit implements Serializable, Manageable {
 		assert selectedSensor != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Sensor sens = (Sensor) sensorManager.getElementByName(selectedSensor);
-
-		assert sens != null;
-		return sens.getCategory();
+		return getSensor(selectedSensor).getCategory();
 	}
 
 	public void updateRulesState() {
@@ -321,7 +318,7 @@ public class HousingUnit implements Serializable, Manageable {
 
 		State rule_state = new ActiveState();
 		for (String ruleName : rulesManager.getSetOfElements()) {
-			Rule rule = (Rule) rulesManager.getElementByName(ruleName);
+			Rule rule = (Rule) rulesManager.getElement(ruleName);
 			for (String involved_sensor : rule.getInvolvedSensors()) {
 				Sensor sens = getSensor(involved_sensor);
 				if (!sens.getState().isActive())
@@ -329,7 +326,7 @@ public class HousingUnit implements Serializable, Manageable {
 			}
 
 			for (String involved_actuator : rule.getInvolvedActuators()) {
-				Actuator act = (Actuator) actuatorManager.getElementByName(involved_actuator);
+				Actuator act = (Actuator) actuatorManager.getElement(involved_actuator);
 				if (!act.getState().isActive())
 					rule_state = new InactiveState();
 			}
@@ -353,7 +350,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public List<Rule> getEnabledRulesList() {
 		List<Rule> enabledRulesList = new ArrayList<>();
 		for (String ruleName : rulesManager.getSetOfElements()) {
-			Rule rule = (Rule) rulesManager.getElementByName(ruleName);
+			Rule rule = (Rule) rulesManager.getElement(ruleName);
 			if (rule.getState().isActive())
 				enabledRulesList.add(rule);
 		}
@@ -367,7 +364,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public List<String> getEnabledRulesNamesList() {
 		List<String> enabledRulesNamesList = new ArrayList<>();
 		for (String ruleName : rulesManager.getSetOfElements()) {
-			if (((Rule) rulesManager.getElementByName(ruleName)).getState().isActive())
+			if (((Rule) rulesManager.getElement(ruleName)).getState().isActive())
 				enabledRulesNamesList.add(ruleName);
 		}
 		return enabledRulesNamesList;
@@ -376,8 +373,8 @@ public class HousingUnit implements Serializable, Manageable {
 	public List<String> getEnabledRulesStrings() {
 		List<String> enabledRulesString = new ArrayList<>();
 		for (String ruleName : rulesManager.getSetOfElements()) {
-			if (((Rule) rulesManager.getElementByName(ruleName)).getState().isActive())
-				enabledRulesString.add(((Rule) rulesManager.getElementByName(ruleName)).toString());
+			if (((Rule) rulesManager.getElement(ruleName)).getState().isActive())
+				enabledRulesString.add(((Rule) rulesManager.getElement(ruleName)).toString());
 		}
 		return enabledRulesString;
 	}
@@ -385,12 +382,12 @@ public class HousingUnit implements Serializable, Manageable {
 	public List<String> getRulesStrings() {
 		List<String> enabledRulesString = new ArrayList<>();
 		for (String ruleName : rulesManager.getSetOfElements())
-			enabledRulesString.add(((Rule) rulesManager.getElementByName(ruleName)).toString());
+			enabledRulesString.add(((Rule) rulesManager.getElement(ruleName)).toString());
 		return enabledRulesString;
 	}
 
 	public void changeRuleState(String selectedRule) {
-		Rule rule = (Rule) rulesManager.getElementByName(selectedRule);
+		Rule rule = (Rule) rulesManager.getElement(selectedRule);
 		rule.trigger();
 	}
 
@@ -404,5 +401,130 @@ public class HousingUnit implements Serializable, Manageable {
 
 	public Set<String> getArtifactSet() {
 		return artifactManager.getSetOfElements();
+	}
+
+	public Set<String> getActuatorSet() {
+		return actuatorManager.getSetOfElements();
+	}
+
+	public Set<String> getSensorSet() {
+		return sensorManager.getSetOfElements();
+	}
+
+	public void removeRule(String selectedRule) {
+		rulesManager.removeElement(selectedRule);
+	}
+	
+	public Rule getRule(String selectedRule) {
+		return (Rule) rulesManager.getElement(selectedRule);
+	}
+
+	public boolean ruleContainsSensor(String selectedRule, String selectedSensor) {
+		return getRule(selectedRule).containsSensor(selectedSensor);
+	}
+	
+	public boolean ruleContainsActuator(String selectedRule, String selectedActuator) {
+		return getRule(selectedRule).containsActuator(selectedActuator);
+	}
+
+	public boolean isMeasuringRoom(String selectedSensor) {
+		return getSensor(selectedSensor).isMeasuringRoom();
+	}
+
+	public boolean isControllingRoom(String selectedActuator) {
+		return getActuator(selectedActuator).isControllingRoom();
+	}
+
+	public Set<String> getMeasuredObjectSet(String selectedSensor) {
+		return getSensor(selectedSensor).getMeasuredObjectSet();
+	}
+
+	public void removeRoomAssociationWithCategory(String room, String category) {
+		associationManager.removeRoomAssociationWithCategory(room, category);
+	}
+
+	public void removeArtifactAssociationWithCategory(String artifact, String category) {
+		associationManager.removeArtifactAssociationWithCategory(artifact, category);		
+	}
+
+	public void removeSensor(String selectedRoom, String selectedSensor) {
+		getRoom(selectedRoom).removeSensor(selectedSensor);
+		sensorManager.removeElement(selectedSensor);
+	}
+
+	public boolean isSensorInstanceOf(String selectedSensor, String selectedCategory) {
+		return getSensor(selectedSensor).isInstanceOf(selectedCategory);
+	}
+
+	public String getRoomOfSensor(String selectedSensor) {
+		for(String room : getRoomSet())
+			if(getRoom(room).hasSensor(selectedSensor))
+				return room;
+		return null;
+	}
+
+	public String getCategoryOfAnActuator(String selectedActuator) {
+		return getActuator(selectedActuator).getCategoryName();
+	}
+
+	public Set<String> getControlledObjectSet(String selectedActuator) {
+		return getActuator(selectedActuator).getControlledObjectSet();
+	}
+
+	public void removeActuator(String selectedRoom, String selectedActuator) {
+		getRoom(selectedRoom).removeActuator(selectedActuator);
+		actuatorManager.removeElement(selectedActuator);
+	}
+
+	public boolean isActuatorInstanceOf(String selectedActuator, String selectedCategory) {
+		return getActuator(selectedActuator).isInstanceOf(selectedCategory);
+	}
+
+	public String getRoomOfActuator(String selectedActuator) {
+		for(String room : getRoomSet())
+			if(getRoom(room).hasActuator(selectedActuator))
+				return room;
+		return null;
+	}
+
+	public boolean isSensorAssociatedWith(String selectedSensor, String object) {
+		return getSensor(selectedSensor).isMeasuringObject(object);
+	}
+
+	public void removeSensorAssociation(String selectedSensor, String object) {
+		getSensor(selectedSensor).removeMeasuredObject(object);
+	}
+
+	public boolean isSensorNotAssociated(String selectedSensor) {
+		return getSensor(selectedSensor).isNotAssociated();
+	}
+
+	public boolean isActuatorAssociatedWith(String selectedActuator, String object) {
+		return getActuator(selectedActuator).isControllingObject(object);
+	}
+
+	public void removeActuatorAssociation(String selectedActuator, String object) {
+		getActuator(selectedActuator).removeControlledObject(object);
+	}
+
+	public boolean isActuatorNotAssociated(String selectedActuator) {
+		return getActuator(selectedActuator).isNotAssociated();
+	}
+
+	public void removeRoomAssociation(String selectedRoom) {
+		associationManager.removeRoomAssociation(selectedRoom);
+	}
+
+	public void removeRoom(String selectedRoom) {
+		roomManager.removeElement(selectedRoom);
+	}
+
+	public void removeArtifactAssociation(String selectedArtifact) {
+		associationManager.removeArtifactAssociation(selectedArtifact);
+	}
+
+	public void removeArtifact(String selectedRoom, String selectedArtifact) {
+		getRoom(selectedRoom).removeArtifact(selectedArtifact);
+		artifactManager.removeElement(selectedArtifact);
 	}
 }

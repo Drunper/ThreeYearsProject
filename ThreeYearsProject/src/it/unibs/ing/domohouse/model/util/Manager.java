@@ -1,6 +1,6 @@
 package it.unibs.ing.domohouse.model.util;
 
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import it.unibs.ing.domohouse.model.components.elements.Manageable;
 import it.unibs.ing.domohouse.model.ModelStrings;
@@ -11,13 +11,13 @@ import java.io.Serializable;
 public class Manager implements Serializable {
 
 	private static final long serialVersionUID = -5803882506409735012L;
-	private TreeMap<String, Manageable> elementMap;
+	private ConcurrentHashMap<String, Manageable> elementMap;
 
 	/*
 	 * invariante elementMap != null;
 	 */
 	public Manager() {
-		elementMap = new TreeMap<>();
+		elementMap = new ConcurrentHashMap<>();
 	}
 
 	public int size() {
@@ -25,7 +25,7 @@ public class Manager implements Serializable {
 		return elementMap.size();
 	}
 
-	public Manageable getElementByName(String name) {
+	public Manageable getElement(String name) {
 		assert name != null;
 		assert elementMap.containsKey(name) : ModelStrings.ELEMENT_MAP_PRECONDITION + name;
 		assert managerInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -69,5 +69,10 @@ public class Manager implements Serializable {
 
 	private boolean managerInvariant() {
 		return elementMap != null;
+	}
+
+	public void removeElement(String element) {
+		elementMap.get(element).delete();
+		elementMap.remove(element);
 	}
 }

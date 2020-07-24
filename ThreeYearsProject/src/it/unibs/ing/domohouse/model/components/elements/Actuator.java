@@ -1,6 +1,7 @@
 package it.unibs.ing.domohouse.model.components.elements;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 	private static final long serialVersionUID = 8133324316964731994L;
 	private String name;
 	private Manager controlledObjects;
+	private List<String> notAssociatedObjects;
 	private ActuatorCategory category;
 	private String operatingMode;
 	private String defaultMode;
@@ -35,6 +37,7 @@ public class Actuator implements Manageable, Serializable, Stateable {
 		defaultMode = category.getDefaultMode();
 		operatingMode = defaultMode;
 		controlledObjects = new Manager();
+		notAssociatedObjects = new ArrayList<>();
 		state = new ActiveState();
 		performing = false;
 	}
@@ -85,8 +88,30 @@ public class Actuator implements Manageable, Serializable, Stateable {
 		assert actuatorInvariant() : ModelStrings.WRONG_INVARIANT;
 		return this.category;
 	}
+	
+	public String getCategoryName() {
+		return this.category.getName();
+	}
 
-	public Set<String> getControlledObjectsSet() {
+	public void removeControlledObject(String toRemove) {
+		modify();
+		controlledObjects.removeElement(toRemove);
+		notAssociatedObjects.add(toRemove);
+	}
+
+	public boolean isNotAssociated() {
+		return controlledObjects.isEmpty();
+	}
+	
+	public boolean isControllingObject(String element) {
+		return controlledObjects.hasElement(element);
+	}
+	
+	public List<String> getNotAssociatedObjects() {
+		return notAssociatedObjects;
+	}
+	
+	public Set<String> getControlledObjectSet() {
 		return controlledObjects.getSetOfElements();
 	}
 
@@ -125,14 +150,18 @@ public class Actuator implements Manageable, Serializable, Stateable {
 		OperatingMode mode = category.getOperatingMode(operatingMode);
 		for (String parameter : parameters)
 			mode.setParamaterValue(parameter);
-		for (String object : getControlledObjectsSet())
-			mode.operate((Gettable) controlledObjects.getElementByName(object));
+		for (String object : getControlledObjectSet())
+			mode.operate((Gettable) controlledObjects.getElement(object));
 		performing = false;
 		assert actuatorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
 	private boolean actuatorInvariant() {
 		return controlledObjects != null && name != null && name.length() > 0;
+	}
+
+	public boolean isInstanceOf(String selectedCategory) {
+		return category.getName().equalsIgnoreCase(selectedCategory);
 	}
 
 }

@@ -6,6 +6,7 @@ import it.unibs.ing.domohouse.model.util.ConfigFileManager;
 import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.LibImporter;
 import it.unibs.ing.domohouse.model.util.LogWriter;
+import it.unibs.ing.domohouse.model.util.ObjectRemover;
 import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.view.ManageableRenderer;
@@ -27,18 +28,20 @@ public class MaintainerController {
 
 	// Model
 	private DataFacade dataFacade;
+	private ObjectRemover objectRemover;
 	private LogWriter log;
 	private ManageableRenderer renderer;
 	private LibImporter libImporter;
 	private ClockStrategy clock;
 	private ConfigFileManager configFileManager;
 
-	public MaintainerController(DataFacade dataFacade, LogWriter log, ConfigFileManager configFileManager, ManageableRenderer renderer,
+	public MaintainerController(DataFacade dataFacade, ObjectRemover objectRemover, LogWriter log, ConfigFileManager configFileManager, ManageableRenderer renderer,
 			MaintainerInputHandler maintainerInputHandler, LibImporter libImporter, ClockStrategy clock,
 			PrintWriter output, RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.MAINTAINER_MAIN_MENU_TITLE,
 				ControllerStrings.MAINTAINER_MAIN_MENU_VOICES, output, input);
 		this.dataFacade = dataFacade;
+		this.objectRemover = objectRemover;
 		this.configFileManager = configFileManager;
 		this.log = log;
 		this.input = input;
@@ -65,11 +68,20 @@ public class MaintainerController {
 					maintainerInputHandler.readUser();
 					break;
 				case 2:
+					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
+					if(dataFacade.hasUser(user)) {
+						objectRemover.removeUser(user);
+						dataFacade.saveData();
+					}
+					else
+						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
+					break;
+				case 3:
 					menuManager.clearOutput();
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
 					if(dataFacade.hasUser(user)) {
 						if (dataFacade.doesHousingUnitExist(user)) {
-							menuManager.printCollectionOfString(dataFacade.getHousingUnitsList(user));
+							menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
 							String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
 							maintainerUnitController.show(user, selectedHouse);
 						}
@@ -79,13 +91,27 @@ public class MaintainerController {
 					else
 						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					break;
-				case 3:
+				case 4:
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_INSERT_HOUSE);
 					maintainerInputHandler.readHouseFromUser();
 					log.write(ControllerStrings.LOG_INSERT_HOUSE_SUCCESS);
 					break;
-				case 4:
+				case 5:
+					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
+					if(dataFacade.hasUser(user)) {
+						if (dataFacade.doesHousingUnitExist(user)) {
+							menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
+							String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
+							objectRemover.removeHousingUnit(user, selectedHouse);
+						}
+						else
+							output.println(ControllerStrings.NO_HOUSE);
+					}
+					else
+						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
+					break;
+				case 6:
 					// visualizza categorie di sensori
 					menuManager.clearOutput();
 					if (dataFacade.doesSensorCategoryExist()) {
@@ -100,7 +126,7 @@ public class MaintainerController {
 					else
 						output.println(ControllerStrings.NO_SENSOR_CATEGORY);
 					break;
-				case 5:
+				case 7:
 					// visualizza categoria di attuatore
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorCategoryExist()) {
@@ -115,19 +141,47 @@ public class MaintainerController {
 					else
 						output.println(ControllerStrings.NO_ACTUATOR_CATEGORY);
 					break;
-				case 6:
+				case 8:
 					// crea sensor category
 					log.write(ControllerStrings.LOG_INSERT_SENSOR_CATEGORY);
 					maintainerInputHandler.readSensorCategoryFromUser(menuManager);
 					log.write(ControllerStrings.LOG_INSERT_SENSOR_CATEGORY_SUCCESS);
 					break;
-				case 7:
+				case 9:
 					// crea actuator category
 					log.write(ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY);
 					maintainerInputHandler.readActuatorCategoryFromUser();
 					log.write(ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY_SUCCESS);
 					break;
-				case 8:
+				case 10:
+					menuManager.clearOutput();
+					if (dataFacade.doesSensorCategoryExist()) {
+						menuManager.printCollectionOfString(dataFacade.getSensorCategoryList());
+						output.println();
+						output.println();
+
+						String selectedSensCategory = maintainerInputHandler.safeInsertSensorCategory(); 
+						objectRemover.removeSensorCategory(selectedSensCategory);
+						dataFacade.saveData();
+					}
+					else
+						output.println(ControllerStrings.NO_SENSOR_CATEGORY);
+					break;
+				case 11:
+					menuManager.clearOutput();
+					if (dataFacade.doesActuatorCategoryExist()) {
+						menuManager.printCollectionOfString(dataFacade.getActuatorCategoryList());
+						output.println(); 
+						output.println();
+
+						String selectedActuCategory = maintainerInputHandler.safeInsertActuatorCategory(); 
+						objectRemover.removeActuatorCategory(selectedActuCategory);
+						dataFacade.saveData();
+					}
+					else
+						output.println(ControllerStrings.NO_ACTUATOR_CATEGORY);
+					break;
+				case 12:
 					// importa file
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_IMPORTING_FILE);
@@ -148,15 +202,15 @@ public class MaintainerController {
 						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 						
 					break;
-				case 9:
+				case 13:
 					// mostra file di help
 					configFileManager.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.MAINTAINER_HELP_FILE_NAME);
 					break;
-				case 10:
+				case 14:
 					// visualizza log
 					configFileManager.runFileFromSource(ControllerStrings.LOG_PATH + ControllerStrings.LOG_NAME_FILE);
 					break;
-				case 11:
+				case 15:
 					// aggiorna ora
 					log.write(ControllerStrings.LOG_REFRESH_HOUR);
 					menuManager.clearOutput();

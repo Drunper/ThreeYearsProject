@@ -6,11 +6,18 @@ import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class ConfigFileManager {
 
+	private PrintWriter output;
+	
+	public ConfigFileManager(PrintWriter output) {
+		this.output = output;
+	}
+	
 	public void runFileFromSource(String sourceName) {
 		try {
 			File f = new File(sourceName);
@@ -18,10 +25,10 @@ public class ConfigFileManager {
 				if (Desktop.isDesktopSupported())
 					Desktop.getDesktop().open(f);
 				else
-					System.out.println(ModelStrings.ERROR_HELP_FILE);
+					output.println(ModelStrings.ERROR_HELP_FILE);
 			}
 			else
-				System.out.println(ModelStrings.ERROR_HELP_FILE);
+				output.println(ModelStrings.ERROR_HELP_FILE);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -20,15 +20,15 @@ public class ControllerStrings {
 			"Visualizza attuatore", "Aziona attuatore", "Visualizza artefatto", "Attiva/disattiva dispositivo",
 			"Aggiorna ora" };
 	public static final String[] MAINTAINER_UNIT_MENU_VOICES = { "Visualizzare descrizione unità immobiliare",
-			"Modifica descrizione unità immobilare", "Visualizza stanza", "Inserisci stanza", "Aggiungi regola",
-			"Visualizza regole attive", "Visualizza tutte le regole", "Attiva/disattiva regola", "Aggiorna ora" };
+			"Modifica descrizione unità immobilare", "Visualizza stanza", "Inserisci stanza", "Rimuovi stanza", "Aggiungi regola",
+			"Visualizza regole attive", "Visualizza tutte le regole", "Attiva/disattiva regola", "Rimuovi regola", "Aggiorna ora" };
 	public static final String[] MAINTAINER_ROOM_VOICES = { "Visualizza descrizione stanza", "Visualizza sensore",
 			"Visualizza attuatore", "Aziona attuatore", "Visualizza artefatto", "Modifica descrizione stanza",
-			"Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto", "Attiva/disattiva dispositivo",
+			"Inserisci sensore", "Inserisci attuatore", "Inserisci artefatto", "Rimuovi sensore", "Rimuovi attuatore", "Rimuovi artefatto", "Attiva/disattiva dispositivo",
 			"Aggiorna ora" };
-	public static final String[] MAINTAINER_MAIN_MENU_VOICES = { "Aggiungi fruitore", "Visualizza unità immobiliare",
-			"Aggiungi unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori",
-			"Inserisci categoria di sensori", "Inserisci categoria di attuatori", "Importa file di libreria",
+	public static final String[] MAINTAINER_MAIN_MENU_VOICES = { "Aggiungi fruitore", "Rimuovi fruitore", "Visualizza unità immobiliare",
+			"Aggiungi unità immobiliare", "Rimuovi unità immobiliare", "Visualizza categorie di sensori", "Visualizza categorie di attuatori",
+			"Inserisci categoria di sensori", "Inserisci categoria di attuatori", "Rimuovi categoria sensori", "Rimuovi categoria attuatori", "Importa file di libreria",
 			"Apri Help", "Visualizza Log", "Aggiorna ora" };
 	public static final String[] USER_MAIN_MENU_VOICES = { "Visualizza unità immobiliare",
 			"Visualizza categorie di sensori", "Visualizza categorie di attuatori", "Apri Help", "Aggiorna ora" };
@@ -260,7 +260,6 @@ public class ControllerStrings {
 	public static final String OPEN_BRACKET = "(";
 	public static final String CLOSED_BRACKET = ")";
 
-	// INVARIANT, PRECONDITIONS, POSTCONDITIONS
 	public static final String WRONG_INVARIANT = "Invariante della classe non soddisfatto";
 	public static final String USER_INPUT_NAME = "Inserisci il nome dell'utente";
 	public static final String ERROR_USER_ALREADY_EXISTENT = "Un nome utente con lo stesso nome esiste già";
@@ -272,4 +271,7 @@ public class ControllerStrings {
 	public static final String INPUT_INFO_ID = "Inserisci l'ID dell'informazione rilevabile desiderata";
 	public static final String ERROR_INFO_NOT_IN_DB = "L'ID inserito non è presente nella lista";
 	public static final String NOT_IN_DB_PROPERTY_INPUT_VALUE = "La proprietà inserita non è presente, inserisci il valore di default della proprietà";
+	public static final String INSERT_RULE = "Inserisci il nome di una regola";
+	public static final String ERROR_NON_EXISTENT_RULE = "Il nome della regola inserita non esiste";
+	public static final String NO_RULE = "Non esistono regole nell'unità selezionata";
 }

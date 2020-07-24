@@ -123,4 +123,12 @@ public class Rule implements Serializable, Stateable, Manageable {
 		String stateString = state.isActive() ? "attiva" : "disattiva";
 		return "[if]" + antecedentRoot.toString() + "[then]" + firstAction.toString() + "\tStato: " + stateString;
 	}
+
+	public boolean containsSensor(String selectedSensor) {
+		return involvedSensors.contains(selectedSensor);
+	}
+	
+	public boolean containsActuator(String selectedActuator) {
+		return involvedActuators.contains(selectedActuator);
+	}
 }

@@ -17,13 +17,13 @@ public class ActuatorRenderer implements ManageableRenderer {
 	public String render(Manageable m) {
 		if (m instanceof Actuator) {
 			Actuator actuator = (Actuator) m;
-			String controlledElements = actuator.getControlledObjectsSet().stream()
+			String controlledElements = actuator.getControlledObjectSet().stream()
 					.collect(Collectors.joining(ViewStrings.LINE_SEPARATOR));
 			String result = String.format(ViewStrings.ACTUATOR + ViewStrings.LINE_SEPARATOR + ViewStrings.NAME + "%s"
 					+ ViewStrings.LINE_SEPARATOR + ViewStrings.CATEGORY + "%s" + ViewStrings.LINE_SEPARATOR
 					+ ViewStrings.CONTROLLED_ELEMENTS + ViewStrings.LINE_SEPARATOR + "%s" + ViewStrings.LINE_SEPARATOR
 					+ ViewStrings.OPERATING_MODE + "%s" + ViewStrings.LINE_SEPARATOR + ViewStrings.STATUS + "%s",
-					actuator.getName(), actuator.getCategory().getName(), controlledElements,
+					actuator.getName(), actuator.getCategoryName(), controlledElements,
 					actuator.getOperatingMode(), actuator.getState());
 			return result;
 		}

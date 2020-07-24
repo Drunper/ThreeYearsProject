@@ -87,7 +87,7 @@ public class OperatingModesManager implements Serializable {
 
 			@Override
 			public void operate(Gettable object) {
-				double umidita = Double.parseDouble(object.getProperty("umidità"));
+				double umidita = Double.parseDouble(object.getProperty("umidita"));
 				object.setProperty("umidità", String.valueOf(umidita - 2));
 			}
 		};
@@ -97,7 +97,7 @@ public class OperatingModesManager implements Serializable {
 
 			@Override
 			public void operate(Gettable object) {
-				double umidita = Double.parseDouble(object.getProperty("umidità"));
+				double umidita = Double.parseDouble(object.getProperty("umidita"));
 				object.setProperty("umidità", String.valueOf(umidita + 2));
 			}
 		};

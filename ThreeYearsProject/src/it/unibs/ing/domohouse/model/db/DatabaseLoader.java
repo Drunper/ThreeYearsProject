@@ -319,8 +319,7 @@ public class DatabaseLoader {
 				PersistentObject saveable = new PersistentArtifact(user, selectedHouse, location, artifact, new OldObjectState());
 				dataFacade.addSaveable(saveable);
 				artifact.setSaveable(saveable);
-				artifacts.add(new Artifact(set.getString("nome_artefatto"), set.getString("descrizione"),
-						getProperties(user, selectedHouse, set.getString("nome_artefatto"), false)));
+				artifacts.add(artifact);
 			}
 		}
 		catch (SQLException e) {

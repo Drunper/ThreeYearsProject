@@ -43,6 +43,25 @@ public class UserUnitInputHandler {
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 		return selectedRoom;
 	}
+	
+	public String safeInsertRule(String user, String selectedHouse) {
+		assert selectedHouse != null;
+		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
+
+		String selectedRule = input.readNotVoidString(ControllerStrings.INSERT_RULE);
+		if (dataFacade.hasRule(user, selectedHouse, selectedRule))
+			return selectedRule;
+		else
+			do {
+				selectedRule = input.readNotVoidString(ControllerStrings.ERROR_NON_EXISTENT_RULE
+						+ ControllerStrings.SPACE + ControllerStrings.INSERT_RULE);
+			}
+			while (!dataFacade.hasRule(user, selectedHouse, selectedRule));
+
+		assert selectedRule != null;
+		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
+		return selectedRule;
+	}
 
 	public void readRuleFromUser(String user, String selectedHouse, MenuManager view) {
 		assert selectedHouse != null;
