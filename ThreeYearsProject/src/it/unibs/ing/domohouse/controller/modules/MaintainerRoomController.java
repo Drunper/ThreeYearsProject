@@ -4,6 +4,7 @@ import it.unibs.ing.domohouse.controller.inputhandler.MaintainerRoomInputHandler
 import it.unibs.ing.domohouse.model.components.clock.ClockStrategy;
 import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.LogWriter;
+import it.unibs.ing.domohouse.model.util.ObjectRemover;
 import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.view.ManageableRenderer;
@@ -18,18 +19,20 @@ public class MaintainerRoomController {
 	private ManageableRenderer renderer;
 
 	private DataFacade dataFacade;
+	private ObjectRemover objectRemover;
 	private LogWriter log;
 	private ClockStrategy clock;
 	private PrintWriter output;
 
 	private MaintainerRoomInputHandler maintainerRoomInputHandler;
 
-	public MaintainerRoomController(DataFacade dataFacade, MaintainerRoomInputHandler maintainerRoomInputHandler,
+	public MaintainerRoomController(DataFacade dataFacade, ObjectRemover objectRemover, MaintainerRoomInputHandler maintainerRoomInputHandler,
 			LogWriter log, ManageableRenderer renderer, ClockStrategy clock, PrintWriter output,
 			RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.MAINTAINER_ROOM_MENU_TITLE,
 				ControllerStrings.MAINTAINER_ROOM_VOICES, output, input);
 		this.dataFacade = dataFacade;
+		this.objectRemover = objectRemover;
 		this.log = log;
 		this.renderer = renderer;
 		this.maintainerRoomInputHandler = maintainerRoomInputHandler;
@@ -136,12 +139,54 @@ public class MaintainerRoomController {
 					log.write(ControllerStrings.LOG_INSERT_ARTIFACT_SUCCESS);
 					break;
 				case 10:
+					// rimozione sensore
+					menuManager.clearOutput();
+					if (dataFacade.doesSensorExist(user, selectedHouse, selectedRoom)) {
+						menuManager.printCollectionOfString(dataFacade.getSensorNames(user, selectedHouse, selectedRoom));
+						output.println();
+						output.println();
+						String selectedSensor = maintainerRoomInputHandler.safeInsertSensor(user, selectedHouse,
+								selectedRoom);
+						objectRemover.removeSensor(user, selectedHouse, selectedRoom, selectedSensor);
+					}
+					else
+						output.println(ControllerStrings.NO_SENSOR);
+					break;
+				case 11:
+					// rimozione attuatore
+					menuManager.clearOutput();
+					if (dataFacade.doesActuatorExist(user, selectedHouse, selectedRoom)) {
+						menuManager.printCollectionOfString(dataFacade.getActuatorNames(user, selectedHouse, selectedRoom));
+						output.println();
+						output.println();
+						String selectedActuator = maintainerRoomInputHandler.safeInsertActuator(user, selectedHouse,
+								selectedRoom);
+						objectRemover.removeActuator(user, selectedHouse, selectedRoom, selectedActuator);
+					}
+					else
+						output.println(ControllerStrings.NO_ACTUATOR);
+					break;
+				case 12:
+					// rimozione artefatto
+					menuManager.clearOutput();
+					if (dataFacade.doesArtifactExist(user, selectedHouse, selectedRoom)) {
+						menuManager.printCollectionOfString(dataFacade.getArtifactNames(user, selectedHouse, selectedRoom));
+						output.println();
+						output.println();
+						String selectedArtifact = maintainerRoomInputHandler.safeInsertArtifact(user, selectedHouse,
+								selectedRoom);
+						objectRemover.removeArtifact(user, selectedHouse, selectedRoom, selectedArtifact);
+					}
+					else
+						output.println(ControllerStrings.NO_ARTIFACT);
+					break;
+				case 13:
 					// attiva/dis disp
 					maintainerRoomInputHandler.readDeviceStateFromUser(user, selectedHouse, selectedRoom, menuManager);
 					log.write(ControllerStrings.LOG_ENABLE_DISABLE_DISP);
 					dataFacade.updateRulesState(user, selectedHouse);
 					break;
-				case 11:
+				case 14:
 					// aggiorna ora
 					log.write(ControllerStrings.LOG_REFRESH_HOUR);
 					menuManager.clearOutput();

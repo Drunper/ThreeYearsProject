@@ -13,8 +13,8 @@ public class Artifact implements Gettable, Serializable {
 	private String name;
 	private String text;
 	private Map<String, String> propertiesMap;
-	private PersistentObject saveable;
-
+	public PersistentObject saveable;
+	
 	public Artifact(String name, String text, Map<String, String> propertiesMap) {
 		this.name = name;
 		this.text = text;

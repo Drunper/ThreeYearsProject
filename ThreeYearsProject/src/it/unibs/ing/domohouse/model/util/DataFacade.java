@@ -70,7 +70,7 @@ public class DataFacade {
 	}
 
 	public User getUser(String selectedUser) {
-		return (User) userManager.getElementByName(selectedUser);
+		return (User) userManager.getElement(selectedUser);
 	}
 
 	public Set<String> getUserSet() {
@@ -91,7 +91,7 @@ public class DataFacade {
 		return getUser(selectedUser).hasHousingUnit(selectedHouse);
 	}
 
-	public Set<String> getHousingUnitsList(String selectedUser) {
+	public Set<String> getHousingUnitSet(String selectedUser) {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 		return getUser(selectedUser).getHousingUnitsList();
 	}
@@ -136,22 +136,22 @@ public class DataFacade {
 		return !sensorCategoryManager.isEmpty();
 	}
 
-	public SensorCategory getSensorCategoryByInfo(String info) {
+	public List<String> getSensorCategoriesByInfo(String info) {
 		assert info != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
+		List<String> catList = new ArrayList<>();
 		for (String cat : sensorCategoryManager.getSetOfElements()) {
 			SensorCategory sensCat = getSensorCategory(cat);
 
-			Set<String> detectableInfoList = sensCat.getInfoStrategySet();
-			for (String inf : detectableInfoList) {
+			for (String inf : sensCat.getInfoStrategySet()) {
 				if (info.equalsIgnoreCase(inf)) {
 					assert sensCat != null;
-					return sensCat;
+					catList.add(cat);
 				}
 			}
 		}
-		return null;
+		return catList;
 	}
 
 	public Set<String> getActuatorCategoryList() {
@@ -212,7 +212,7 @@ public class DataFacade {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 		assert sensorCategoryManager.hasElement(category) : "sensorCategoryManager non contiene " + category;
 
-		SensorCategory s = (SensorCategory) sensorCategoryManager.getElementByName(category);
+		SensorCategory s = (SensorCategory) sensorCategoryManager.getElement(category);
 
 		assert s != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -225,7 +225,7 @@ public class DataFacade {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 		assert actuatorCategoryManager.hasElement(category) : "actuatorCategoryManager non contiene " + category;
 
-		ActuatorCategory act = (ActuatorCategory) actuatorCategoryManager.getElementByName(category);
+		ActuatorCategory act = (ActuatorCategory) actuatorCategoryManager.getElement(category);
 
 		assert act != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -635,5 +635,139 @@ public class DataFacade {
 
 	public Set<String> getArtifactSet(String user, String selectedHouse) {
 		return getUser(user).getArtifactSet(selectedHouse);
+	}
+	
+	public Set<String> getSensorSet(String user, String selectedHouse) {
+		return getUser(user).getSensorSet(selectedHouse);
+	}
+	
+	public Set<String> getActuatorSet(String user, String selectedHouse) {
+		return getUser(user).getActuatorSet(selectedHouse);
+	}
+
+	public void removeRule(String user, String selectedHouse, String selectedRule) {
+		getUser(user).removeRule(selectedHouse, selectedRule);
+	}
+
+	public boolean ruleContainsSensor(String user, String selectedHouse, String selectedRule, String selectedSensor) {
+		return getUser(user).ruleContainsSensor(selectedHouse, selectedRule, selectedSensor);
+	}
+	
+	public boolean ruleContainsActuator(String user, String selectedHouse, String selectedRule, String selectedActuator) {
+		return getUser(user).ruleContainsActuator(selectedHouse, selectedRule, selectedActuator);
+	}
+
+	public boolean isMeasuringRoom(String user, String selectedHouse, String selectedSensor) {
+		return getUser(user).isMeasuringRoom(selectedHouse, selectedSensor);
+	}
+	
+	public boolean isControllingRoom(String user, String selectedHouse, String selectedActuator) {
+		return getUser(user).isControllingRoom(selectedHouse, selectedActuator);
+	}
+
+	public Set<String> getMeasuredObjectSet(String user, String selectedHouse, String selectedSensor) {
+		return getUser(user).getMeasuredObjectSet(selectedHouse, selectedSensor);
+	}
+
+	public void removeRoomAssociationWithCategory(String user, String selectedHouse, String room, String category) {
+		getUser(user).removeRoomAssociationWithCategory(selectedHouse, room, category);
+	}
+
+	public void removeArtifactAssociationWithCategory(String user, String selectedHouse, String artifact,
+			String category) {
+		getUser(user).removeArtifactAssociationWithCategory(selectedHouse, artifact, category);
+	}
+
+	public void removeSensor(String user, String selectedHouse, String selectedRoom, String selectedSensor) {
+		getUser(user).removeSensor(selectedHouse, selectedRoom, selectedSensor);
+	}
+
+	public boolean isSensorInstanceOf(String user, String selectedHouse, String selectedSensor,
+			String selectedCategory) {
+		return getUser(user).isSensorInstanceOf(selectedHouse, selectedSensor, selectedCategory);
+	}
+
+	public String getRoomOfSensor(String user, String selectedHouse, String selectedSensor) {
+		return getUser(user).getRoomOfSensor(selectedHouse, selectedSensor);
+	}
+
+	public void removeSensorCategory(String selectedCategory) {
+		sensorCategoryManager.removeElement(selectedCategory);		
+	}
+
+	public String getCategoryOfAnActuator(String user, String selectedHouse, String selectedActuator) {
+		return getUser(user).getCategoryOfAnActuator(selectedHouse, selectedActuator);
+	}
+
+	public Set<String> getControlledObjectSet(String user, String selectedHouse, String selectedActuator) {
+		return getUser(user).getControlledObjectSet(selectedHouse, selectedActuator);
+	}
+
+	public void removeActuator(String user, String selectedHouse, String selectedRoom, String selectedActuator) {
+		getUser(user).removeActuator(selectedHouse, selectedRoom, selectedActuator);
+	}
+
+	public boolean isActuatorInstanceOf(String user, String selectedHouse, String selectedActuator,
+			String selectedCategory) {
+		return getUser(user).isActuatorInstanceOf(selectedHouse, selectedActuator, selectedCategory);
+	}
+
+	public String getRoomOfActuator(String user, String selectedHouse, String selectedActuator) {
+		return getUser(user).getRoomOfActuator(selectedHouse, selectedActuator);
+	}
+
+	public void removeActuatorCategory(String selectedCategory) {
+		actuatorCategoryManager.removeElement(selectedCategory);
+	}
+
+	public boolean isSensorAssociatedWith(String user, String selectedHouse, String selectedSensor,
+			String object) {
+		return getUser(user).isSensorAssociatedWith(selectedHouse, selectedSensor, object);
+	}
+
+	public void removeSensorAssociation(String user, String selectedHouse, String selectedSensor, String object) {
+		getUser(user).removeSensorAssociation(selectedHouse, selectedSensor, object);
+	}
+
+	public boolean isSensorNotAssociated(String user, String selectedHouse, String selectedSensor) {
+		return getUser(user).isSensorNotAssociated(selectedHouse, selectedSensor);
+	}
+
+	public boolean isActuatorAssociatedWith(String user, String selectedHouse, String selectedActuator,
+			String object) {
+		return getUser(user).isActuatorAssociatedWith(selectedHouse, selectedActuator, object);
+	}
+
+	public void removeActuatorAssociation(String user, String selectedHouse, String selectedActuator,
+			String object) {
+		getUser(user).removeActuatorAssociation(selectedHouse, selectedActuator, object);
+	}
+
+	public boolean isActuatorNotAssociated(String user, String selectedHouse, String selectedActuator) {
+		return getUser(user).isActuatorNotAssociated(selectedHouse, selectedActuator);
+	}
+
+	public void removeRoomAssociation(String user, String selectedHouse, String selectedRoom) {
+		getUser(user).removeRoomAssociation(selectedHouse, selectedRoom);
+	}
+
+	public void removeRoom(String user, String selectedHouse, String selectedRoom) {
+		getUser(user).removeRoom(selectedHouse, selectedRoom);
+	}
+
+	public void removeArtifactAssociation(String user, String selectedHouse, String selectedArtifact) {
+		getUser(user).removeArtifactAssociation(selectedHouse, selectedArtifact);		
+	}
+
+	public void removeArtifact(String user, String selectedHouse, String selectedRoom, String selectedArtifact) {
+		getUser(user).removeArtifact(selectedHouse, selectedRoom, selectedArtifact);
+	}
+
+	public void removeHousingUnit(String user, String selectedHouse) {
+		getUser(user).removeHousingUnit(selectedHouse);		
+	}
+
+	public void removeUser(String user) {
+		userManager.removeElement(user);
 	}
 }

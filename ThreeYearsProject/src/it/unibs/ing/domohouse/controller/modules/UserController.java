@@ -53,7 +53,7 @@ public class UserController {
 				case 1:
 					menuManager.clearOutput();
 					if (dataFacade.doesHousingUnitExist(user)) {
-						menuManager.printCollectionOfString(dataFacade.getHousingUnitsList(user));
+						menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
 						String selectedHouse = userInputHandler.safeInsertHouse(user);
 						userUnitController.show(user, selectedHouse);
 					}

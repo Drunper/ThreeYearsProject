@@ -18,6 +18,7 @@ public class MasterController {
 
 	// Model
 	private DataFacade dataFacade;
+	private ObjectRemover objectRemover;
 	private Authenticator authenticator;
 	private ClockStrategy clock;
 	private LibImporter libImporter;
@@ -57,10 +58,12 @@ public class MasterController {
 				"^v1Iz1rFOnqx");
 		connector.openConnection();
 		dataFacade = new DataFacade(connector);
+		objectRemover = new ObjectRemover(dataFacade);
 		authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
 		rulesWorker = new RulesWorker(dataFacade, clock);
 		libImporter = new LibImporter(dataFacade);
 		dataFacade.loadCategories();
+		rulesWorker.startRulesWorker();
 
 		RawInputHandler input = new RawInputHandler(in, output);
 		buildInputHandlers(output, input);
@@ -83,11 +86,11 @@ public class MasterController {
 	}
 
 	private void setControllers(PrintWriter output, RawInputHandler input) {
-		maintainerRoomController = new MaintainerRoomController(dataFacade, maintainerRoomInputHandler, log, renderer,
+		maintainerRoomController = new MaintainerRoomController(dataFacade, objectRemover, maintainerRoomInputHandler, log, renderer,
 				clock, output, input);
-		maintainerUnitController = new MaintainerUnitController(dataFacade, log, renderer, maintainerUnitInputHandler,
+		maintainerUnitController = new MaintainerUnitController(dataFacade, objectRemover, log, renderer, maintainerUnitInputHandler,
 				clock, output, input);
-		maintainerController = new MaintainerController(dataFacade, log, configFileManager, renderer, maintainerInputHandler, libImporter,
+		maintainerController = new MaintainerController(dataFacade, objectRemover, log, configFileManager, renderer, maintainerInputHandler, libImporter,
 				clock, output, input);
 		userRoomController = new UserRoomController(dataFacade, log, renderer, userRoomInputHandler, clock, output,
 				input);

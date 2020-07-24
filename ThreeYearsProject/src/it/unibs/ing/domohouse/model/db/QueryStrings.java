@@ -124,7 +124,7 @@ public class QueryStrings {
 
 	public static final String DELETE_ROOM = "DELETE FROM stanza WHERE nome_stanza = ? AND nome_unità = ? AND nome_utente = ?";
 
-	public static final String DELETE_ACTUATOR = "DELETE FROM actuator WHERE nome_attuatore = ? AND nome_unità = ? AND nome_utente = ?";
+	public static final String DELETE_ACTUATOR = "DELETE FROM attuatore WHERE nome_attuatore = ? AND nome_unità = ? AND nome_utente = ?";
 
 	public static final String DELETE_SENSOR = "DELETE FROM sensore WHERE nome_sensore = ? AND nome_unità = ? AND nome_utente = ?";
 
@@ -140,6 +140,13 @@ public class QueryStrings {
 
 	public static final String DELETE_ACTUATOR_CATEGORY = "DELETE FROM categoria_attuatori WHERE nome_categoria_attuatori = ?";
 
+	public static final String DELETE_MEASURED_ROOM = "DELETE FROM misura_stanze WHERE nome_sensore = ? AND nome_unità = ? AND nome_utente = ? AND nome_stanza = ?;";
+	
+	public static final String DELETE_MEASURED_ARTIFACT = "DELETE FROM misura_artefatti WHERE nome_sensore = ? AND nome_unità = ? AND nome_utente = ? AND nome_artefatto = ?;";
+	
+	public static final String DELETE_CONTROLLED_ROOM = "DELETE FROM controlla_stanze WHERE nome_attuatore = ? AND nome_unità = ? AND nome_utente = ? AND nome_stanza = ?;";
+	
+	public static final String DELETE_CONTROLLED_ARTIFACT = "DELETE FROM controlla_artefatti WHERE nome_attuatore = ? AND nome_unità = ? AND nome_utente = ? AND nome_artefatto = ?;";
 	// Stringhe di utilità
 
 	public static final String FOUR_VALUES = " (?, ?, ?, ?)";

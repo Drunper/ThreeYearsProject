@@ -24,7 +24,17 @@ public class PersistentSensor extends PersistentObject {
 
 	@Override
 	public Query getModifyQuery() {
-		return null;
+		Query query = new Query("");
+		query.setStringParameter(1, sensor.getName());
+		query.setStringParameter(2, housingUnit);
+		query.setStringParameter(3, user);
+		int pos = 4;
+		String queryString = sensor.isMeasuringRoom() ? QueryStrings.DELETE_MEASURED_ROOM : QueryStrings.DELETE_MEASURED_ARTIFACT;
+		for(String object : sensor.getNotAssociatedObjects())
+			query.setStringParameter(pos++,object);
+		queryString = String.join(" ", Collections.nCopies(sensor.getNotAssociatedObjects().size(), queryString));
+		query.setQuery(queryString);
+		return query;
 	}
 	
 	@Override
@@ -45,13 +55,13 @@ public class PersistentSensor extends PersistentObject {
 		query.setStringParameter(7, sensor.getCategory());
 		
 		int pos = 8;
-		for(String measuredObject : sensor.getMeasuredObjectsSet()) {
+		for(String measuredObject : sensor.getMeasuredObjectSet()) {
 			query.setStringParameter(pos++, sensor.getName());
 			query.setStringParameter(pos++, housingUnit);
 			query.setStringParameter(pos++, user);
 			query.setStringParameter(pos++, measuredObject);
 		}
-		queryString += String.join(", ", Collections.nCopies(sensor.getMeasuredObjectsSet().size(), QueryStrings.FOUR_VALUES)) + ";";
+		queryString += String.join(", ", Collections.nCopies(sensor.getMeasuredObjectSet().size(), QueryStrings.FOUR_VALUES)) + ";";
 		query.setQuery(queryString);
 		return query;
 	}

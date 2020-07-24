@@ -23,7 +23,7 @@ public class HousingUnitRenderer implements ManageableRenderer {
 							+ ViewStrings.HOUSING_UNIT_TYPE + "%s" + ViewStrings.LINE_SEPARATOR
 							+ ViewStrings.ROOMS_AVAILABLE + ViewStrings.LINE_SEPARATOR + "%s",
 					house.getName(), house.getDescr(), house.getType(),
-					house.getRoomList().stream().collect(Collectors.joining(ViewStrings.LINE_SEPARATOR)));
+					house.getRoomSet().stream().collect(Collectors.joining(ViewStrings.LINE_SEPARATOR)));
 			return result;
 		}
 		return next.render(m);

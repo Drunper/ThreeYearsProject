@@ -8,7 +8,6 @@ import it.unibs.ing.domohouse.model.components.properties.InfoStrategy;
 import it.unibs.ing.domohouse.model.components.properties.OperatingModesManager;
 import it.unibs.ing.domohouse.model.components.properties.DoubleInfoStrategy;
 import it.unibs.ing.domohouse.model.components.properties.InactiveState;
-import it.unibs.ing.domohouse.model.components.properties.SensorCategory;
 import it.unibs.ing.domohouse.model.components.properties.State;
 import it.unibs.ing.domohouse.model.components.properties.StringInfoStrategy;
 import it.unibs.ing.domohouse.model.ModelStrings;
@@ -627,11 +626,11 @@ public class LibImporter {
 
 			if (dataFacade.hasSensor(user, selectedHouse, sensor)) {
 
-				SensorCategory cat = dataFacade.getSensorCategoryByInfo(info);
+				List<String> catList = dataFacade.getSensorCategoriesByInfo(info);
 
 				boolean sensorCategoryHasInfo = false;
 				String category = dataFacade.getCategoryOfASensor(user, selectedHouse, sensor);
-				if (category.equalsIgnoreCase(cat.getName()))
+				if (catList.contains(category))
 					sensorCategoryHasInfo = true;
 				if (!sensorCategoryHasInfo)
 					return false;

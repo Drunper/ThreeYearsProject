@@ -21,6 +21,9 @@ public class RulesWorker {
 		this.clock = clock;
 		queuedRulesMap = new HashMap<>();
 		checkThread = Executors.newSingleThreadScheduledExecutor();
+	}
+
+	public void startRulesWorker() {
 		checkThread.scheduleAtFixedRate(new Runnable() {
 			public void run() {
 				try {
@@ -34,19 +37,12 @@ public class RulesWorker {
 	}
 
 	public void checkRules() {
-		boolean check = false;
-		for (String user : dataFacade.getUserSet())
-			if(dataFacade.doesHousingUnitExist(user))
-				check = true;
-				
-		if(check) {
-			for (Rule rule : dataFacade.getEnabledRulesList())
-				checkRule(rule);
-	
-			for (Rule rule : queuedRulesMap.keySet())
-				if (queuedRulesMap.get(rule) == Double.parseDouble(clock.getCurrentTime()))
-					rule.doAction();
-		}
+		for (Rule rule : dataFacade.getEnabledRulesList())
+			checkRule(rule);
+
+		for (Rule rule : queuedRulesMap.keySet())
+			if (queuedRulesMap.get(rule) == Double.parseDouble(clock.getCurrentTime()))
+				rule.doAction();
 	}
 
 	public void addQueuedRule(Rule rule, double time) {

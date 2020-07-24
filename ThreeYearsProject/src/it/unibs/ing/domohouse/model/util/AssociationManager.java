@@ -98,4 +98,20 @@ public class AssociationManager implements Serializable {
 		boolean check = associationList != null;
 		return check;
 	}
+
+	public void removeArtifactAssociation(String selectedArtifact) {
+		associationList.remove(getAssociation(selectedArtifact));
+	}
+
+	public void removeRoomAssociation(String selectedRoom) {
+		associationList.remove(getAssociation(selectedRoom));
+	}
+
+	public void removeArtifactAssociationWithCategory(String artifact, String category) {
+		getAssociation(artifact).removeAssociationWithCategory(category);
+	}
+
+	public void removeRoomAssociationWithCategory(String room, String category) {
+		getAssociation(room).removeAssociationWithCategory(category);
+	}
 }

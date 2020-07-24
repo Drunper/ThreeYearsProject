@@ -87,7 +87,7 @@ public class Room implements Gettable, Serializable {
 		assert prec : "actuatorManager non contiene " + toGet;
 		int pre_size = actuatorManager.size();
 
-		Actuator act = (Actuator) actuatorManager.getElementByName(toGet);
+		Actuator act = (Actuator) actuatorManager.getElement(toGet);
 
 		assert act != null;
 		assert actuatorManager.size() == pre_size;
@@ -125,7 +125,7 @@ public class Room implements Gettable, Serializable {
 		assert sensorManager.hasElement(toGet) : "sensorManager non contiene " + toGet;
 		assert roomInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Sensor s = (Sensor) sensorManager.getElementByName(toGet);
+		Sensor s = (Sensor) sensorManager.getElement(toGet);
 
 		assert s != null;
 		assert roomInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -212,5 +212,17 @@ public class Room implements Gettable, Serializable {
 		boolean checkMaps = propertiesMap != null;
 
 		return checkName && checkDescr && checkManagers && checkMaps;
+	}
+
+	public void removeArtifact(String selectedArtifact) {
+		artifactManager.removeElement(selectedArtifact);
+	}
+
+	public void removeActuator(String selectedActuator) {
+		actuatorManager.removeElement(selectedActuator);
+	}
+
+	public void removeSensor(String selectedSensor) {
+		sensorManager.removeElement(selectedSensor);
 	}
 }

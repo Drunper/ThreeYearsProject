@@ -68,4 +68,8 @@ public class Association implements Serializable {
 
 		return checkElement && checkAssociatedCategory;
 	}
+
+	public void removeAssociationWithCategory(String category) {
+		associatedCategories.remove(category);
+	}
 }

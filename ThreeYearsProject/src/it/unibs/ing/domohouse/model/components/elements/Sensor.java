@@ -19,6 +19,7 @@ public class Sensor implements Manageable, Serializable, Stateable {
 	private String name;
 	private SensorCategory category;
 	private Manager measuredObjects;
+	private List<String> notAssociatedObjects;
 	private State state;
 	private boolean measuringRoom;
 	private PersistentObject saveable;
@@ -27,6 +28,7 @@ public class Sensor implements Manageable, Serializable, Stateable {
 		this.name = name;
 		this.category = category;
 		measuredObjects = new Manager();
+		notAssociatedObjects = new ArrayList<>();
 		state = new ActiveState();
 	}
 	
@@ -64,7 +66,7 @@ public class Sensor implements Manageable, Serializable, Stateable {
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public Set<String> getMeasuredObjectsSet() {
+	public Set<String> getMeasuredObjectSet() {
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
 		return measuredObjects.getSetOfElements();
 	}
@@ -73,7 +75,7 @@ public class Sensor implements Manageable, Serializable, Stateable {
 		assert name != null && name.length() > 0;
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Gettable g = (Gettable) measuredObjects.getElementByName(name);
+		Gettable g = (Gettable) measuredObjects.getElement(name);
 
 		assert g != null;
 		return g;
@@ -107,13 +109,30 @@ public class Sensor implements Manageable, Serializable, Stateable {
 
 	public String getCategory() {
 		assert sensorInvariant() : ModelStrings.WRONG_INVARIANT;
-
 		return category.getName();
+	}
+	
+	public void removeMeasuredObject(String toRemove) {
+		modify();
+		measuredObjects.removeElement(toRemove);
+		notAssociatedObjects.add(toRemove);
+	}
+	
+	public List<String> getNotAssociatedObjects() {
+		return notAssociatedObjects;
+	}
+	
+	public boolean isMeasuringObject(String element) {
+		return measuredObjects.hasElement(element);
+	}
+
+	public boolean isNotAssociated() {
+		return measuredObjects.isEmpty();
 	}
 
 	public String getMeasurementOf(String info) {
 		List<String> valuesFromObjects = new ArrayList<>();
-		Set<String> objectNames = getMeasuredObjectsSet();
+		Set<String> objectNames = getMeasuredObjectSet();
 		for (String name : objectNames) {
 			Gettable element = getElementByName(name);
 			if (element.hasProperty(info)) { // Se è possibile rilevare informazioni allora le rileva
@@ -144,5 +163,9 @@ public class Sensor implements Manageable, Serializable, Stateable {
 		boolean checkManager = measuredObjects != null;
 
 		return checkName && checkCategory && checkManager;
+	}
+
+	public boolean isInstanceOf(String selectedCategory) {
+		return category.getName().equalsIgnoreCase(selectedCategory);
 	}
 }

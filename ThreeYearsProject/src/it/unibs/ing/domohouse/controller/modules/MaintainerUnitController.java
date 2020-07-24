@@ -4,6 +4,7 @@ import it.unibs.ing.domohouse.controller.inputhandler.MaintainerUnitInputHandler
 import it.unibs.ing.domohouse.model.components.clock.ClockStrategy;
 import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.LogWriter;
+import it.unibs.ing.domohouse.model.util.ObjectRemover;
 import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.view.ManageableRenderer;
@@ -18,6 +19,7 @@ public class MaintainerUnitController {
 
 	private MaintainerRoomController maintainerRoomController;
 	private DataFacade dataFacade;
+	private ObjectRemover objectRemover;
 	private LogWriter log;
 	private ManageableRenderer renderer;
 	private ClockStrategy clock;
@@ -25,12 +27,13 @@ public class MaintainerUnitController {
 
 	private MaintainerUnitInputHandler maintainedUnitInputHandler;
 
-	public MaintainerUnitController(DataFacade dataFacade, LogWriter log, ManageableRenderer renderer,
+	public MaintainerUnitController(DataFacade dataFacade, ObjectRemover objectRemover, LogWriter log, ManageableRenderer renderer,
 			MaintainerUnitInputHandler maintainerUnitInputHandler, ClockStrategy clock, PrintWriter output,
 			RawInputHandler input) {
 		menuManager = new MenuManager(ControllerStrings.MAINTAINER_UNIT_MENU_TITLE,
 				ControllerStrings.MAINTAINER_UNIT_MENU_VOICES, output, input);
 		this.dataFacade = dataFacade;
+		this.objectRemover = objectRemover;
 		this.log = log;
 		this.renderer = renderer;
 		this.maintainedUnitInputHandler = maintainerUnitInputHandler;
@@ -80,31 +83,54 @@ public class MaintainerUnitController {
 					log.write(ControllerStrings.LOG_INSERT_ROOM_SUCCESS);
 					break;
 				case 5:
+					// Rimozione stanza
+					menuManager.clearOutput();
+					if (dataFacade.doesRoomExist(user, selectedHouse)) {
+						menuManager.printCollectionOfString(dataFacade.getRoomsSet(user, selectedHouse));
+						output.println();
+						output.println();
+						String selectedRoom = maintainedUnitInputHandler.safeInsertRoom(user, selectedHouse);
+						objectRemover.removeRoom(user, selectedHouse, selectedRoom);
+					}
+					else
+						output.println(ControllerStrings.NO_ROOM);
+					break;
+				case 6:
 					// aggiungi regola
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_INSERT_NEW_RULE);
 					maintainedUnitInputHandler.readRuleFromUser(user, selectedHouse, menuManager);
 					log.write(ControllerStrings.LOG_INSERT_NEW_RULE_SUCCESS);
 					break;
-				case 6:
+				case 7:
 					// visualizza regole attive
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_SHOW_ENABLED_RULES);
 					menuManager.printCollectionOfString(dataFacade.getEnabledRulesStrings(user, selectedHouse));
 					break;
-				case 7:
+				case 8:
 					// visualizza tutte le regole
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_SHOW_ALL_RULES);
 					menuManager.printCollectionOfString(dataFacade.getRulesStrings(user, selectedHouse));
 					break;
-				case 8:
+				case 9:
 					// attiva/disattiva regola
 					menuManager.clearOutput();
 					log.write(ControllerStrings.LOG_ENABLE_DISABLE_RULE);
 					maintainedUnitInputHandler.readRuleStateFromUser(user, selectedHouse, menuManager);
 					break;
-				case 9:
+				case 10:
+					//rimuovi regola
+					menuManager.clearOutput();
+					if (dataFacade.doesRuleExist(user, selectedHouse)) {
+						String selectedRule = maintainedUnitInputHandler.safeInsertRule(user, selectedHouse);
+						objectRemover.removeRule(user, selectedHouse, selectedRule);
+					}
+					else
+						output.println(ControllerStrings.NO_RULE);
+					break;
+				case 11:
 					// aggiorna ora
 					log.write(ControllerStrings.LOG_REFRESH_HOUR);
 					menuManager.clearOutput();

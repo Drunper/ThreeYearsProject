@@ -63,7 +63,7 @@ public class User implements Manageable {
 	public HousingUnit getHousingUnit(String selectedHouse) {
 		assert selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
-		return (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		return (HousingUnit) housingUnitManager.getElement(selectedHouse);
 	}
 
 	public void addHousingUnit(HousingUnit toAdd) {
@@ -75,23 +75,23 @@ public class User implements Manageable {
 	public Set<String> getRoomsList(String selectedHouse) {
 		assert selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
-		assert (HousingUnit) housingUnitManager.getElementByName(selectedHouse) != null;
+		assert (HousingUnit) housingUnitManager.getElement(selectedHouse) != null;
 
-		HousingUnit selected = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit selected = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 
-		return selected.getRoomList();
+		return selected.getRoomSet();
 	}
 	
 	public String getCategoryOfASensor(String selectedHouse, String selectedSensor) {
 		assert selectedHouse != null && selectedSensor != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit house = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return house.getCategoryOfASensor(selectedSensor);
 	}
 
 	public Sensor getSensor(String selectedHouse, String selectedSensor) {
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return _selectedHouse.getSensor(selectedSensor);
 	}
 
@@ -99,7 +99,7 @@ public class User implements Manageable {
 		assert selectedRoom != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		Room room = _selectedHouse.getRoom(selectedRoom);
 
 		assert room != null;
@@ -111,12 +111,12 @@ public class User implements Manageable {
 		assert selectedRoom != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit house = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return house.doesSensorExist(selectedRoom);
 	}
 
 	public Actuator getActuator(String selectedHouse, String selectedActuator) {
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return _selectedHouse.getActuator(selectedActuator);
 	}
 
@@ -125,7 +125,7 @@ public class User implements Manageable {
 		assert selectedRoom != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		Room room = _selectedHouse.getRoom(selectedRoom);
 
 		assert room != null;
@@ -138,7 +138,7 @@ public class User implements Manageable {
 		assert selectedRoom != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit house = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return house.doesActuatorExist(selectedRoom);
 	}
 	
@@ -150,7 +150,7 @@ public class User implements Manageable {
 		assert selectedRoom != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit house = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return house.doesArtifactExist(selectedRoom);
 	}
 
@@ -158,7 +158,7 @@ public class User implements Manageable {
 		assert selectedRoom != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		Room room = _selectedHouse.getRoom(selectedRoom);
 
 		assert room != null;
@@ -170,7 +170,7 @@ public class User implements Manageable {
 		assert descr != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		_selectedHouse.setDescr(descr);
 
 		assert _selectedHouse.getDescr() != null;
@@ -181,7 +181,7 @@ public class User implements Manageable {
 		assert name != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return _selectedHouse.hasRoom(name);
 	}
 
@@ -189,7 +189,7 @@ public class User implements Manageable {
 		assert toAdd != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		_selectedHouse.addRoom(toAdd);
 
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -200,7 +200,7 @@ public class User implements Manageable {
 		assert selectedRoom != null && descr != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		_selectedHouse.setRoomDescription(selectedRoom, descr);
 
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -211,7 +211,7 @@ public class User implements Manageable {
 		assert location != null && sensor != null && sensor.getName() != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		_selectedHouse.addSensor(location, sensor);
 
 		assert _selectedHouse.getRoom(location).getSensorByName(sensor.getName()) != null;
@@ -222,7 +222,7 @@ public class User implements Manageable {
 		assert name != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return _selectedHouse.hasRoomOrArtifact(name);
 	}
 
@@ -230,7 +230,7 @@ public class User implements Manageable {
 		assert name != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return _selectedHouse.hasSensor(name);
 	}
 
@@ -238,7 +238,7 @@ public class User implements Manageable {
 		assert name != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return _selectedHouse.hasActuator(name);
 	}
 
@@ -246,7 +246,7 @@ public class User implements Manageable {
 		assert name != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return _selectedHouse.hasArtifact(name);
 	}
 
@@ -254,7 +254,7 @@ public class User implements Manageable {
 		assert selectedHouse != null && rule != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 
 		assert _selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -265,7 +265,7 @@ public class User implements Manageable {
 		assert toAssoc != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return _selectedHouse.isElementARoom(toAssoc);
 	}
 
@@ -273,16 +273,16 @@ public class User implements Manageable {
 		assert toAssoc != null && category != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		return _selectedHouse.isAssociatedWith(toAssoc, category);
 	}
 
 	public void addAssociation(String selectedHouse, String object, String category) {
 		assert object != null && category != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
-		assert housingUnitManager.getElementByName(selectedHouse) != null;
+		assert housingUnitManager.getElement(selectedHouse) != null;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		_selectedHouse.addAssociationWith(object, category);
 
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -291,9 +291,9 @@ public class User implements Manageable {
 	public Room getRoom(String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
-		assert housingUnitManager.getElementByName(selectedHouse) != null;
+		assert housingUnitManager.getElement(selectedHouse) != null;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		Room room = _selectedHouse.getRoom(name);
 
 		assert room != null;
@@ -306,7 +306,7 @@ public class User implements Manageable {
 		assert name != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		Artifact art = _selectedHouse.getArtifact(name);
 
 		assert art != null;
@@ -318,7 +318,7 @@ public class User implements Manageable {
 		assert location != null && toAdd != null && toAdd.getName() != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		_selectedHouse.addArtifact(toAdd, location);
 
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -328,7 +328,7 @@ public class User implements Manageable {
 		assert location != null && toAdd != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		_selectedHouse.addActuator(toAdd, location);
 
 		assert _selectedHouse != null;
@@ -345,7 +345,7 @@ public class User implements Manageable {
 		assert selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 
 		assert _selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -356,7 +356,7 @@ public class User implements Manageable {
 		assert selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 
 		assert _selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -367,7 +367,7 @@ public class User implements Manageable {
 		assert selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 
 		assert _selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -377,7 +377,7 @@ public class User implements Manageable {
 	public void updateRulesState(String selectedHouse) {
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit house = (HousingUnit) housingUnitManager.getElementByName(selectedHouse);
+		HousingUnit house = (HousingUnit) housingUnitManager.getElement(selectedHouse);
 		house.updateRulesState();
 	}
 
@@ -419,5 +419,121 @@ public class User implements Manageable {
 
 	public Set<String> getArtifactSet(String selectedHouse) {
 		return getHousingUnit(selectedHouse).getArtifactSet();
+	}
+
+	public Set<String> getSensorSet(String selectedHouse) {
+		return getHousingUnit(selectedHouse).getSensorSet();
+	}
+
+	public Set<String> getActuatorSet(String selectedHouse) {
+		return getHousingUnit(selectedHouse).getActuatorSet();
+	}
+
+	public void removeRule(String selectedHouse, String selectedRule) {
+		getHousingUnit(selectedHouse).removeRule(selectedRule);
+	}
+
+	public boolean ruleContainsSensor(String selectedHouse, String selectedRule, String selectedSensor) {
+		return getHousingUnit(selectedHouse).ruleContainsSensor(selectedRule, selectedSensor);
+	}
+	
+	public boolean ruleContainsActuator(String selectedHouse, String selectedRule, String selectedActuator) {
+		return getHousingUnit(selectedHouse).ruleContainsActuator(selectedRule, selectedActuator);
+	}
+
+	public boolean isMeasuringRoom(String selectedHouse, String selectedSensor) {
+		return getHousingUnit(selectedHouse).isMeasuringRoom(selectedSensor);
+	}
+
+	public boolean isControllingRoom(String selectedHouse, String selectedActuator) {
+		return getHousingUnit(selectedHouse).isControllingRoom(selectedActuator);
+	}
+
+	public void removeHousingUnit(String selectedHouse) {
+		housingUnitManager.removeElement(selectedHouse);
+	}
+
+	public void removeArtifact(String selectedHouse, String selectedRoom, String selectedArtifact) {
+		getHousingUnit(selectedHouse).removeArtifact(selectedRoom, selectedArtifact);
+	}
+
+	public void removeArtifactAssociation(String selectedHouse, String selectedArtifact) {
+		getHousingUnit(selectedHouse).removeArtifactAssociation(selectedArtifact);
+	}
+
+	public void removeRoom(String selectedHouse, String selectedRoom) {
+		getHousingUnit(selectedHouse).removeRoom(selectedRoom);
+	}
+
+	public void removeRoomAssociation(String selectedHouse, String selectedRoom) {
+		getHousingUnit(selectedHouse).removeRoomAssociation(selectedRoom);
+	}
+
+	public boolean isActuatorNotAssociated(String selectedHouse, String selectedActuator) {
+		return getHousingUnit(selectedHouse).isActuatorNotAssociated(selectedActuator);
+	}
+
+	public void removeActuatorAssociation(String selectedHouse, String selectedActuator, String object) {
+		getHousingUnit(selectedHouse).removeActuatorAssociation(selectedActuator, object);
+	}
+
+	public boolean isActuatorAssociatedWith(String selectedHouse, String selectedActuator, String object) {
+		return getHousingUnit(selectedHouse).isActuatorAssociatedWith(selectedActuator, object);
+	}
+
+	public boolean isSensorNotAssociated(String selectedHouse, String selectedSensor) {
+		return getHousingUnit(selectedHouse).isSensorNotAssociated(selectedSensor);
+	}
+
+	public void removeSensorAssociation(String selectedHouse, String selectedSensor, String object) {
+		getHousingUnit(selectedHouse).removeSensorAssociation(selectedSensor, object);
+	}
+
+	public boolean isSensorAssociatedWith(String selectedHouse, String selectedSensor, String object) {
+		return getHousingUnit(selectedHouse).isSensorAssociatedWith(selectedSensor, object);
+	}
+
+	public String getRoomOfActuator(String selectedHouse, String selectedActuator) {
+		return getHousingUnit(selectedHouse).getRoomOfActuator(selectedActuator);
+	}
+
+	public boolean isActuatorInstanceOf(String selectedHouse, String selectedActuator, String selectedCategory) {
+		return getHousingUnit(selectedHouse).isActuatorInstanceOf(selectedActuator, selectedCategory);
+	}
+
+	public void removeActuator(String selectedHouse, String selectedRoom, String selectedActuator) {
+		getHousingUnit(selectedHouse).removeActuator(selectedRoom, selectedActuator);
+	}
+
+	public Set<String> getControlledObjectSet(String selectedHouse, String selectedActuator) {
+		return getHousingUnit(selectedHouse).getControlledObjectSet(selectedActuator);
+	}
+
+	public String getCategoryOfAnActuator(String selectedHouse, String selectedActuator) {
+		return getHousingUnit(selectedHouse).getCategoryOfAnActuator(selectedActuator);
+	}
+
+	public String getRoomOfSensor(String selectedHouse, String selectedSensor) {
+		return getHousingUnit(selectedHouse).getRoomOfSensor(selectedSensor);
+	}
+
+	public boolean isSensorInstanceOf(String selectedHouse, String selectedSensor, String selectedCategory) {
+		return getHousingUnit(selectedHouse).isSensorInstanceOf(selectedSensor, selectedCategory);
+	}
+
+	public void removeSensor(String selectedHouse, String selectedRoom, String selectedSensor) {
+		getHousingUnit(selectedHouse).removeSensor(selectedRoom, selectedSensor);
+	}
+
+	public void removeArtifactAssociationWithCategory(String selectedHouse, String artifact, String category) {
+		getHousingUnit(selectedHouse).removeArtifactAssociationWithCategory(artifact, category);
+	}
+
+	public void removeRoomAssociationWithCategory(String selectedHouse, String room, String category) {
+		getHousingUnit(selectedHouse).removeRoomAssociationWithCategory(room, category);
+	}
+
+	public Set<String> getMeasuredObjectSet(String selectedHouse, String selectedSensor) {
+		return getHousingUnit(selectedHouse).getMeasuredObjectSet(selectedSensor);
 	}
 }

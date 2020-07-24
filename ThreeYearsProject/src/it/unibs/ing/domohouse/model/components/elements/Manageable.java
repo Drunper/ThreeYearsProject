@@ -4,4 +4,6 @@ public interface Manageable {
 
 	String getName();
 	void setName(String newName);
+	void modify();
+	void delete();
 }
