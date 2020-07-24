@@ -99,7 +99,7 @@ public class DomoTest {
 				"Sigla: IGRM\r\n" + 
 				"Costruttore: Sensors&Co\r\n" + 
 				"Informazioni rilevabili:\r\n" + 
-				"Nome informazione: umidità Dominio_info: 0.0 -to- 100.0"));
+				"Nome informazione: umidita Dominio_info: 0.0 -to- 100.0"));
 	}
 	
 	@Test

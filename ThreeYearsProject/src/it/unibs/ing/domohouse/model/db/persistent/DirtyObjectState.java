@@ -6,7 +6,7 @@ public class DirtyObjectState implements PersistentObjectState {
 
 	@Override
 	public Query getUpdateQuery(PersistentObject context) {
-		return context.getUpdateQuery();
+		return context.getModifyQuery();
 	}
 
 	@Override
