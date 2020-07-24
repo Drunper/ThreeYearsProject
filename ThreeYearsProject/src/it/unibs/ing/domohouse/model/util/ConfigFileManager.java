@@ -13,11 +13,11 @@ import it.unibs.ing.domohouse.model.ModelStrings;
 public class ConfigFileManager {
 
 	private PrintWriter output;
-	
+
 	public ConfigFileManager(PrintWriter output) {
 		this.output = output;
 	}
-	
+
 	public void runFileFromSource(String sourceName) {
 		try {
 			File f = new File(sourceName);
@@ -34,12 +34,12 @@ public class ConfigFileManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public boolean loadConfigFile() {
 		String configFile = ModelStrings.CONFIG_FILE_PATH + ModelStrings.CONFIG_FILE_NAME;
-		
+
 		File f = new File(configFile);
-		if(f.isFile() && f.canRead()) {
+		if (f.isFile() && f.canRead()) {
 			try (FileInputStream fileInput = new FileInputStream(f)) {
 				System.getProperties().load(fileInput);
 				return true;
@@ -50,7 +50,23 @@ public class ConfigFileManager {
 		}
 		return false;
 	}
-	
+
+	public String getDBUserName() {
+		return System.getProperty("db.username");
+	}
+
+	public String getDBpassword() {
+		return System.getProperty("db.password");
+	}
+
+	public String getDBURL() {
+		String url = System.getProperty("db.driver") + ":" + System.getProperty("db.dbms") + "://"
+				+ System.getProperty("db.ip") + ":" + System.getProperty("db.port") + "/" + System.getProperty("db.name");
+		if(System.getProperty("db.allowMultiQueries") != null)
+			url += "?allowMultiQueries=" + System.getProperty("db.allowMultiQueries");
+		return url;
+	}
+
 	private void createDirs(String path) {
 		File file = new File(path);
 		file.mkdirs();

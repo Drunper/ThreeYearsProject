@@ -54,8 +54,8 @@ public class MasterController {
 		log = new LogWriter();
 		renderer = buildChain();
 
-		connector = new Connector("jdbc:mysql://localhost:3306/domohouse?allowMultiQueries=true", "domohouse",
-				"^v1Iz1rFOnqx");
+		connector = new Connector(configFileManager.getDBURL(), configFileManager.getDBUserName(),
+				configFileManager.getDBpassword());
 		connector.openConnection();
 		dataFacade = new DataFacade(connector);
 		objectRemover = new ObjectRemover(dataFacade);
