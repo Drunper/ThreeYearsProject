@@ -603,7 +603,6 @@ public class DataFacade {
 	}
 	
 	public int getCurrentMaxID() {
-		System.out.println("IO SONO L'ID MAX " + (nonNumericInfoStrategiesMap.size() + numericInfoStrategiesMap.size()));
 		return nonNumericInfoStrategiesMap.size() + numericInfoStrategiesMap.size();
 	}
 	

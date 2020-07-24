@@ -49,7 +49,7 @@ public class MasterController {
 
 	public MasterController(Scanner in, PrintWriter output) {
 		OperatingModesManager.fillOperatingModes();
-		configFileManager = new ConfigFileManager();
+		configFileManager = new ConfigFileManager(output);
 		checkConfigFileExistence(output);
 		log = new LogWriter();
 		renderer = buildChain();

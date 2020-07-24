@@ -125,6 +125,8 @@ public class Connector {
 				preparedStatement.setInt(param.getKey(), param.getValue());
 			for(Entry<Integer, String> param : query.getStringParameters().entrySet())
 				preparedStatement.setString(param.getKey(), param.getValue());
+			for(Entry<Integer, Double> param : query.getDoubleParameters().entrySet())
+				preparedStatement.setDouble(param.getKey(), param.getValue());
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

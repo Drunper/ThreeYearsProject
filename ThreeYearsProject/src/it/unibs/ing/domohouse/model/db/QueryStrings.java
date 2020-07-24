@@ -72,9 +72,9 @@ public class QueryStrings {
 
 	public static final String INSERT_PROPERTY = "INSERT INTO proprietà (nome_proprietà, tipo, valore_di_default) VALUES (?, ?, ?)";
 
-	public static final String INSERT_NUMERIC_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (id_informazione, nome_proprietà, selettore_informazione, minimo, massimo) VALUES  (?, ?, 0, ?, ?)";
+	public static final String INSERT_NUMERIC_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (id_informazione, nome_proprietà, selettore_informazione, minimo, massimo) VALUES  (?, ?, ?, ?, ?)";
 
-	public static final String INSERT_NON_NUMERIC_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (id_informazione, nome_proprietà, selettore_informazione) VALUES (?, ?, 1);";
+	public static final String INSERT_NON_NUMERIC_INFO_STRATEGY = "INSERT INTO informazione_rilevabile (id_informazione, nome_proprietà, selettore_informazione) VALUES (?, ?, ?);";
 
 	public static final String INSERT_NON_NUMERIC_DOMAIN_VALUE = "INSERT INTO valore_dominio (id_informazione, nome_proprietà, nome_valore) VALUES";
 

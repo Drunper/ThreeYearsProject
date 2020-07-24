@@ -70,7 +70,7 @@ public class DatabaseFacade {
 	public void addProperty(String propertyName, String defaultValue) {
 		Query query = new Query(QueryStrings.INSERT_PROPERTY);
 		query.setStringParameter(1, propertyName);
-		query.setStringParameter(2, null); // temporaneo, ma in futuro potrebbe essere rimosso
+		query.setStringParameter(2, null);
 		query.setStringParameter(3, defaultValue);
 		connector.executeQueryWithoutResult(query);
 	}
@@ -79,8 +79,9 @@ public class DatabaseFacade {
 		Query query = new Query(QueryStrings.INSERT_NUMERIC_INFO_STRATEGY);
 		query.setIntegerParameter(1, infoStrategy.getID());
 		query.setStringParameter(2, infoStrategy.getMeasuredProperty());
-		query.setDoubleParameter(3, infoStrategy.getLowerBound());
-		query.setDoubleParameter(4, infoStrategy.getUpperBound());
+		query.setIntegerParameter(3, 0);
+		query.setDoubleParameter(4, infoStrategy.getLowerBound());
+		query.setDoubleParameter(5, infoStrategy.getUpperBound());
 		connector.executeQueryWithoutResult(query);
 	}
 
@@ -90,6 +91,7 @@ public class DatabaseFacade {
 		Query query = new Query("");
 		query.setIntegerParameter(1, infoStrategy.getID());
 		query.setStringParameter(2, infoStrategy.getMeasuredProperty());
+		query.setIntegerParameter(3, 1);
 
 		int pos = 3;
 		for (String domainValue : infoStrategy.getDomainValues()) {

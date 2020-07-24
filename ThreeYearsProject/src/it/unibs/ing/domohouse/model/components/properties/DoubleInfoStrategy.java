@@ -22,7 +22,13 @@ public class DoubleInfoStrategy implements InfoStrategy, Serializable {
 	public String getSingleValue(List<String> values) {
 		double result = 0;
 		for (int i = 0; i < values.size(); i++) {
-			double value = Double.parseDouble(values.get(i));
+			double value;
+			try {
+				value = Double.parseDouble(values.get(i));
+			}
+			catch(NumberFormatException e) {
+				value = 0;
+			}
 			if (value < lowerBound)
 				value = lowerBound;
 			else if (value > upperBound)
