@@ -78,6 +78,14 @@ public class ConfigFileManager {
 		createDirs(ModelStrings.CONFIG_FILE_PATH);
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
 			writer.write(ModelStrings.DEFAULT_CLOCK_STRATEGY);
+			writer.write("db.username=domohouse");
+			writer.write("db.password=^v1Iz1rFOnqx");
+			writer.write("db.driver=jdbc");
+			writer.write("db.dbms=mysql");
+			writer.write("db.ip=localhost");
+			writer.write("db.port=3306");
+			writer.write("db.name=domohouse");
+			writer.write("db.allowMultiQueries=true");
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
