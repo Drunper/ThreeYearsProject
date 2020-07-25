@@ -4,6 +4,7 @@ public class ModelStrings {
 
 	// PATHS, FILELOADER AND FILESAVER
 	private static final String FILE_SEPARATOR = System.getProperty("file.separator");
+	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	public static final String DATA_FACADE_PATH = "data";
 	public static final String DATA_FACADE_NAME_FILE = FILE_SEPARATOR + "dataFacade.dat";
 	public static final String LOG_PATH = "data";

@@ -77,15 +77,15 @@ public class ConfigFileManager {
 		String configFile = ModelStrings.CONFIG_FILE_PATH + ModelStrings.CONFIG_FILE_NAME;
 		createDirs(ModelStrings.CONFIG_FILE_PATH);
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
-			writer.write(ModelStrings.DEFAULT_CLOCK_STRATEGY);
-			writer.write("db.username=domohouse");
-			writer.write("db.password=^v1Iz1rFOnqx");
-			writer.write("db.driver=jdbc");
-			writer.write("db.dbms=mysql");
-			writer.write("db.ip=localhost");
-			writer.write("db.port=3306");
-			writer.write("db.name=domohouse");
-			writer.write("db.allowMultiQueries=true");
+			writer.write(ModelStrings.DEFAULT_CLOCK_STRATEGY+ModelStrings.LINE_SEPARATOR);
+			writer.write("db.username=domohouse"+ModelStrings.LINE_SEPARATOR);
+			writer.write("db.password=^v1Iz1rFOnqx"+ModelStrings.LINE_SEPARATOR);
+			writer.write("db.driver=jdbc"+ModelStrings.LINE_SEPARATOR);
+			writer.write("db.dbms=mysql"+ModelStrings.LINE_SEPARATOR);
+			writer.write("db.ip=localhost"+ModelStrings.LINE_SEPARATOR);
+			writer.write("db.port=3306"+ModelStrings.LINE_SEPARATOR);
+			writer.write("db.name=domohouse"+ModelStrings.LINE_SEPARATOR);
+			writer.write("db.allowMultiQueries=true"+ModelStrings.LINE_SEPARATOR);
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
