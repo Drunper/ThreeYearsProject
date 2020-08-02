@@ -154,4 +154,6 @@ public class QueryStrings {
 	public static final String THREE_VALUES = " (?, ?, ?)";
 
 	public static final String TWO_VALUES = " (?, ?)";
+	
+	public static final String GET_USERS_LIKE = "SELECT * FROM utente WHERE nome_utente LIKE ?";
 }

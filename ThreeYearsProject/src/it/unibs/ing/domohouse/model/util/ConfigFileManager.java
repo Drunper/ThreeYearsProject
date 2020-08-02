@@ -66,26 +66,74 @@ public class ConfigFileManager {
 			url += "?allowMultiQueries=" + System.getProperty("db.allowMultiQueries");
 		return url;
 	}
+	
+	public String getIP() {
+		return System.getProperty("db.ip");
+	}
+	
+	public String getPort() {
+		return System.getProperty("db.port");
+	}
+	
+	public String getDBName() {
+		return System.getProperty("db.name");
+	}
 
 	private void createDirs(String path) {
 		File file = new File(path);
 		file.mkdirs();
 		assert file.isDirectory() : "Errore nella creazione della directory" + file.getAbsolutePath();
 	}
+	
+	public void updateConfigFile(String username, String password, String ip, String port, String dbName) {
+		String configFile = ModelStrings.CONFIG_FILE_PATH + ModelStrings.CONFIG_FILE_NAME;
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile, false))) {
+			writer.write(ModelStrings.DEFAULT_CLOCK_STRATEGY);
+			writer.newLine();
+			writer.write("db.username="+username);
+			writer.newLine();
+			writer.write("db.password="+password);
+			writer.newLine();
+			writer.write("db.driver=jdbc");
+			writer.newLine();
+			writer.write("db.dbms=mysql");
+			writer.newLine();
+			writer.write("db.ip="+ip);
+			writer.newLine();
+			writer.write("db.port="+port);
+			writer.newLine();
+			writer.write("db.name="+dbName);
+			writer.newLine();
+			writer.write("db.allowMultiQueries=true");
+			writer.newLine();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 
 	public void createConfigFile() {
 		String configFile = ModelStrings.CONFIG_FILE_PATH + ModelStrings.CONFIG_FILE_NAME;
 		createDirs(ModelStrings.CONFIG_FILE_PATH);
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
-			writer.write(ModelStrings.DEFAULT_CLOCK_STRATEGY+ModelStrings.LINE_SEPARATOR);
-			writer.write("db.username=domohouse"+ModelStrings.LINE_SEPARATOR);
-			writer.write("db.password=^v1Iz1rFOnqx"+ModelStrings.LINE_SEPARATOR);
-			writer.write("db.driver=jdbc"+ModelStrings.LINE_SEPARATOR);
-			writer.write("db.dbms=mysql"+ModelStrings.LINE_SEPARATOR);
-			writer.write("db.ip=localhost"+ModelStrings.LINE_SEPARATOR);
-			writer.write("db.port=3306"+ModelStrings.LINE_SEPARATOR);
-			writer.write("db.name=domohouse"+ModelStrings.LINE_SEPARATOR);
-			writer.write("db.allowMultiQueries=true"+ModelStrings.LINE_SEPARATOR);
+			writer.write(ModelStrings.DEFAULT_CLOCK_STRATEGY);
+			writer.newLine();
+			writer.write("db.username=domohouse");
+			writer.newLine();
+			writer.write("db.password=^v1Iz1rFOnqx");
+			writer.newLine();
+			writer.write("db.driver=jdbc");
+			writer.newLine();
+			writer.write("db.dbms=mysql");
+			writer.newLine();
+			writer.write("db.ip=localhost");
+			writer.newLine();
+			writer.write("db.port=3306");
+			writer.newLine();
+			writer.write("db.name=domohouse");
+			writer.newLine();
+			writer.write("db.allowMultiQueries=true");
+			writer.newLine();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();

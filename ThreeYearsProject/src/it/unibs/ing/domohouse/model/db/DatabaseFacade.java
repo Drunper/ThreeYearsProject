@@ -1,5 +1,7 @@
 package it.unibs.ing.domohouse.model.db;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -109,5 +111,21 @@ public class DatabaseFacade {
 
 	public void addAssociations(String user, String house) {
 		databaseLoader.addAssociations(user, house);
+	}
+
+	public List<String> getUsersFromDB(String prefix) {
+		List<String> result = new ArrayList<>();
+		Query query = new Query(QueryStrings.GET_USERS_LIKE);
+		query.setStringParameter(1, prefix+"%");
+		
+		try (ResultSet set = connector.executeQuery(query)) {
+			while (set.next()) {
+				result.add(set.getString("nome_utente"));
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

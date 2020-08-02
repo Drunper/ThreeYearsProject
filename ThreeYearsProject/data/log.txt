@@ -1,1 +1,23 @@
 
+[24/07/2020 23:35:04] Il manutentore prova ha effettuato l'accesso al sistema
+[24/07/2020 23:35:05] Uscita dal menù corrente
+[31/07/2020 16:06:37] Visualizzazione della descrizione dell'unità immobiliare
+[31/07/2020 16:08:17] Visualazzazione della descrizioned della stanza Soggiorno
+[31/07/2020 16:08:42] Aggiornamento della visualizzazione dell'orario
+[31/07/2020 16:09:08] Uscita dal menù corrente
+[31/07/2020 16:09:09] Uscita dal menù corrente
+[31/07/2020 16:09:11] Uscita dal menù corrente
+[31/07/2020 16:09:29] Visualazzazione della descrizioned della stanza Soggiorno
+[31/07/2020 16:09:56] Visualizzazione dell'artefatto 
+[31/07/2020 16:10:33] Uscita dal menù corrente
+[31/07/2020 16:10:35] Uscita dal menù corrente
+[31/07/2020 16:10:35] Uscita dal menù corrente
+[31/07/2020 16:10:41] Il manutentore prova ha effettuato l'accesso al sistema
+[31/07/2020 16:11:04] Visualizzazione della descrizione dell'unità immobiliare
+[31/07/2020 16:11:18] Visualizzazione di tutte le regole
+[31/07/2020 16:11:35] Attivazione o disattivazione di una regola
+[31/07/2020 16:11:45] Visualizzazione di tutte le regole
+[31/07/2020 16:11:57] Visualizzazione di tutte le regole
+[31/07/2020 16:12:13] Uscita dal menù corrente
+[31/07/2020 16:12:41] Visualizzazione della categoria di sensore sensoriDiLuce
+[31/07/2020 16:13:38] Visualizzazione della categoria di attuatore deumidificatori

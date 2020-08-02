@@ -769,4 +769,8 @@ public class DataFacade {
 	public void removeUser(String user) {
 		userManager.removeElement(user);
 	}
+	
+	public List<String> getUsersFromDB(String prefix) {
+		return databaseFacade.getUsersFromDB(prefix);
+	}
 }
