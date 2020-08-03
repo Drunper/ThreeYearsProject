@@ -92,7 +92,7 @@ public class UserFormController {
 					frame.repaint();
 				}
 				else
-					userFormPanel.showErrorPopup("Per effettuare l'inserimento è necessario inserire un nome");
+					userFormPanel.showErrorPopup("E' necessario inserire un nome");
 			}
 		});
 

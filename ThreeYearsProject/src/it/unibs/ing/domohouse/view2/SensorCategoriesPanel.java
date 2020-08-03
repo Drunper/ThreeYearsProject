@@ -2,12 +2,11 @@ package it.unibs.ing.domohouse.view2;
 
 import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -17,8 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 public class SensorCategoriesPanel extends JPanel {
-	private JTextField textField;
-	private JButton btnSearch;
 	private JButton btnAddCategory;
 	private JScrollPane infoScrollPane;
 	private JButton btnOptions;
@@ -34,46 +31,35 @@ public class SensorCategoriesPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public SensorCategoriesPanel() {
-		setLayout(new MigLayout("", "[][grow][][][grow]", "[][grow][grow][][]"));
+		setLayout(new MigLayout("", "[][grow][grow][grow]", "[][grow][grow][][]"));
 		
 		lblNewLabel = new JLabel("Lista categorie");
 		add(lblNewLabel, "cell 0 0,alignx trailing");
 		
-		textField = new JTextField();
-		add(textField, "cell 1 0,growx");
-		textField.setColumns(10);
-		
-		btnSearch = new JButton("Cerca");
-		add(btnSearch, "cell 2 0");
-		
 		btnAddCategory = new JButton("Aggiungi");
-		add(btnAddCategory, "cell 3 0");
+		add(btnAddCategory, "cell 2 0");
 		
 		btnRemoveCategory = new JButton("Rimuovi");
-		add(btnRemoveCategory, "cell 4 0");
+		add(btnRemoveCategory, "cell 3 0");
 		
 		categoriesScrollPane = new JScrollPane();
 		add(categoriesScrollPane, "cell 0 1 2 2,grow");
 		
 		textArea = new JTextArea();
-		add(textArea, "cell 4 1,grow");
+		add(textArea, "cell 2 1 2 1,grow");
 		
 		infoScrollPane = new JScrollPane();
-		add(infoScrollPane, "cell 4 2,grow");
+		add(infoScrollPane, "cell 2 2 2 1,grow");
 		
 		btnOptions = new JButton("Opzioni");
-		add(btnOptions, "cell 4 3");
+		add(btnOptions, "cell 3 3");
 		
 		btnBack = new JButton("Indietro");
-		add(btnBack, "cell 4 4");
+		add(btnBack, "cell 3 4");
 	}
 	
-	public String getSearchBoxText() {
-		return textField.getText();
-	}
-
-	public void addSearchListener(ActionListener l) {
-		btnSearch.addActionListener(l);
+	public void setTextAreaText(String text) {
+		textArea.setText(text);
 	}
 
 	public void addAddCategoryListener(ActionListener l) {
@@ -101,7 +87,7 @@ public class SensorCategoriesPanel extends JPanel {
 		return (String) categoriesList.getSelectedValue();
 	}
 
-	public void setCategoriesList(List<String> categories) {
+	public void setCategoriesList(Set<String> categories) {
 		categoriesList = new JList();
 		DefaultListModel dm = new DefaultListModel();
 		for (String category : categories) {
@@ -118,7 +104,7 @@ public class SensorCategoriesPanel extends JPanel {
 		categoriesScrollPane.setViewportView(categoriesList);
 	}
 	
-	public void setInfoList(List<String> infos) {
+	public void setInfoList(Set<String> infos) {
 		infoList = new JList();
 		DefaultListModel dm = new DefaultListModel();
 		for (String info : infos) {

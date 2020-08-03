@@ -64,7 +64,7 @@ public class UserController {
 				case 2:
 					menuManager.clearOutput();
 					if (dataFacade.doesSensorCategoryExist()) {
-						menuManager.printCollectionOfString(dataFacade.getSensorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getSensorCategorySet());
 						output.println();
 						output.println();
 
