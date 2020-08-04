@@ -1,25 +1,38 @@
 package it.unibs.ing.domohouse.model.util;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class LogWriter {
-	DateFormat dateFormat = new SimpleDateFormat(ModelStrings.LOG_DATE_FORMAT);
+	private Logger logger = Logger.getLogger(LogWriter.class.getName());
 
-	public void write(String toWrite) {
-		Date date = new Date();
-		try (BufferedWriter bw = new BufferedWriter(
-				new FileWriter(ModelStrings.LOG_PATH + ModelStrings.LOG_NAME_FILE, true))) {
-			bw.write("[" + dateFormat.format(date) + "] " + toWrite + "\n");
+	public LogWriter() throws Exception {
+		try {
+			LogManager.getLogManager().reset();
+			System.setProperty("java.util.logging.SimpleFormatter.format",
+					"%1$tFT%1$tT.%1$tL%1$tz [%4$s] %2$s: %5$s %6$s%n");
+			Handler handler = new FileHandler(ModelStrings.LOG_PATH + ModelStrings.LOG_NAME_FILE);
+			handler.setFormatter(new SimpleFormatter());
+			logger.addHandler(handler);
 		}
-		catch (IOException e) {
-			e.printStackTrace();
+		catch (SecurityException | IOException e) {
+			throw new Exception("Errore durante la configurazione del logging", e);
 		}
+		logger.setLevel(Level.FINE);
+	}
+
+	public void write(Level severity, String logMessage) {
+		logger.log(severity, logMessage);
+	}
+
+	public void write(Level severity, String logMessage, Throwable thrown) {
+		logger.log(severity, logMessage, thrown);
 	}
 }

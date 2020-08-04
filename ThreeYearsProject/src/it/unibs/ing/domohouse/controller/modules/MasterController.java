@@ -51,18 +51,24 @@ public class MasterController {
 		OperatingModesManager.fillOperatingModes();
 		configFileManager = new ConfigFileManager(output);
 		checkConfigFileExistence(output);
-		log = new LogWriter();
 		renderer = buildChain();
 
 		connector = new Connector(configFileManager.getDBURL(), configFileManager.getDBUserName(),
 				configFileManager.getDBpassword());
-		connector.openConnection();
-		dataFacade = new DataFacade(connector);
-		objectRemover = new ObjectRemover(dataFacade);
-		authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
-		rulesWorker = new RulesWorker(dataFacade, clock);
-		libImporter = new LibImporter(dataFacade);
-		dataFacade.loadCategories();
+		try {
+			log = new LogWriter();
+			connector.openConnection();
+			dataFacade = new DataFacade(connector);
+			objectRemover = new ObjectRemover(dataFacade);
+			authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
+			rulesWorker = new RulesWorker(dataFacade, clock);
+			libImporter = new LibImporter(dataFacade);
+			dataFacade.loadCategories();
+		}
+		catch (Exception e) {
+			//TOLOG
+			output.println("Errore durante l'inizializzazione del programma, verificare lo stato della configurazione");
+		}
 		rulesWorker.startRulesWorker();
 
 		RawInputHandler input = new RawInputHandler(in, output);
@@ -126,7 +132,8 @@ public class MasterController {
 			clock.startClock();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			//TOLOG
+			//Messaggio di errore impossibile caricare l'applicazione verificare che tutto sia a posto
 		}
 	}
 

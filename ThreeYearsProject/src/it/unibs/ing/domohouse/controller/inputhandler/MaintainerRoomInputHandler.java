@@ -148,7 +148,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readArtifactFromUser(String user, String selectedHouse, String location, MenuManager view) {
+	public void readArtifactFromUser(String user, String selectedHouse, String location, MenuManager view) throws Exception {
 		assert selectedHouse != null;
 		assert location != null;
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;

@@ -271,7 +271,7 @@ public class UserUnitInputHandler {
 					hour = Integer.parseInt(time.split("\\.")[0]);
 					minute = Integer.parseInt(time.split("\\.")[1]);
 				}
-				catch (Exception ex) {
+				catch (NumberFormatException e) {
 					hour = -1;
 					minute = -1;
 				}

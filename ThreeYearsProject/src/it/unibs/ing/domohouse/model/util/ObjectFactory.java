@@ -104,6 +104,8 @@ public class ObjectFactory {
 				rule.setTime(ruleParser.getTime(consString));
 		}
 		catch (Exception e) {
+			//TOLOG
+			//Impossibile creare la regola richiesta
 			e.printStackTrace();
 		}
 		return rule;

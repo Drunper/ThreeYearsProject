@@ -46,6 +46,8 @@ public class LibImporter {
 			errorString = errorString.substring(0, errorString.length() - 1);
 		}
 		catch (Exception ex) {
+			//TOLOG
+			//Impossibile importare il file corettamente, necessario throware a livello superiore
 			ex.printStackTrace();
 		}
 
@@ -58,7 +60,7 @@ public class LibImporter {
 		return this.errorString;
 	}
 
-	private boolean readLineOfFile(String user, String line) {
+	private boolean readLineOfFile(String user, String line) throws Exception {
 		assert line != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -202,7 +204,7 @@ public class LibImporter {
 	}
 
 	// artifact:selectedHouse,name,descr,location
-	private boolean importArtifact(String user, String importedText) {
+	private boolean importArtifact(String user, String importedText) throws Exception {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -271,7 +273,7 @@ public class LibImporter {
 	 * ] sensor_category:name,abbreviation,manufacturer,detectableInfo;type;domain1;
 	 * domain2;domain3...
 	 */
-	private boolean importSensorCategory(String user, String importedText) {
+	private boolean importSensorCategory(String user, String importedText) throws Exception {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -426,7 +428,7 @@ public class LibImporter {
 	}
 
 	// room:selectedHouse,name,descr,temp,umidita,pressione,vento,pres_pers
-	private boolean importRoom(String user, String importedText) {
+	private boolean importRoom(String user, String importedText) throws Exception {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -612,6 +614,8 @@ public class LibImporter {
 			}
 		}
 		catch (Exception ex) {
+			//TOLOG
+			//Non funziona così!
 			return false;
 		}
 

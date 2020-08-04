@@ -36,7 +36,7 @@ public class DataFacade {
 	private DatabaseFacade databaseFacade;
 	private ObjectFactory objectFactory;
 
-	public DataFacade(Connector connector) {
+	public DataFacade(Connector connector) throws Exception {
 		objectFactory = new ObjectFactory(new RuleParser());
 		databaseFacade = new DatabaseFacade(connector, new DatabaseLoader(connector, objectFactory, this));
 		sensorCategoryManager = new Manager();
@@ -47,7 +47,7 @@ public class DataFacade {
 		nonNumericInfoStrategiesMap = databaseFacade.getNonNumericInfoStrategies();
 	}
 
-	public void loadCategories() {
+	public void loadCategories() throws Exception {
 		for (SensorCategory cat : databaseFacade.loadSensorCategories())
 			sensorCategoryManager.addElement(cat);
 		for (ActuatorCategory cat : databaseFacade.loadActuatorCategories())
@@ -62,7 +62,7 @@ public class DataFacade {
 		userManager.addElement(userObj);
 	}
 
-	public boolean hasUser(String selectedUser) {
+	public boolean hasUser(String selectedUser) throws Exception {
 		if (!userManager.hasElement(selectedUser))
 			userManager.addElement(databaseFacade.loadUser(selectedUser));
 
@@ -77,7 +77,7 @@ public class DataFacade {
 		return userManager.getSetOfElements();
 	}
 
-	public void loadHousingUnits(String selectedUser) {
+	public void loadHousingUnits(String selectedUser) throws Exception {
 		for (HousingUnit house : databaseFacade.loadHousingUnits(selectedUser)) {
 			getUser(selectedUser).addHousingUnit(house);
 			databaseFacade.addAssociations(selectedUser, house.getName());
@@ -96,7 +96,7 @@ public class DataFacade {
 		return getUser(selectedUser).getHousingUnitsList();
 	}
 
-	public boolean doesHousingUnitExist(String selectedUser) {
+	public boolean doesHousingUnitExist(String selectedUser) throws Exception {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		if (!getUser(selectedUser).doesHousingUnitExist())
@@ -561,7 +561,7 @@ public class DataFacade {
 		return sensorCategoryManager != null && actuatorCategoryManager != null && userManager != null;
 	}
 
-	public void saveData() {
+	public void saveData() throws Exception {
 		databaseFacade.saveData();
 	}
 
@@ -577,7 +577,7 @@ public class DataFacade {
 		return propertiesMap.containsKey(property);
 	}
 	
-	public void addProperty(String propertyName, String defaultValue) {
+	public void addProperty(String propertyName, String defaultValue) throws Exception {
 		propertiesMap.put(propertyName, defaultValue);
 		databaseFacade.addProperty(propertyName, defaultValue);
 	}
@@ -614,12 +614,12 @@ public class DataFacade {
 		return nonNumericInfoStrategiesMap.containsKey(ID);
 	}
 	
-	public void addNumericInfoStrategy(int ID, DoubleInfoStrategy infoStrategy) {
+	public void addNumericInfoStrategy(int ID, DoubleInfoStrategy infoStrategy) throws Exception {
 		numericInfoStrategiesMap.put(ID, infoStrategy);
 		databaseFacade.addNumericInfoStrategy(infoStrategy);
 	}
 	
-	public void addNonNumericInfoStrategy(int ID, StringInfoStrategy infoStrategy) {
+	public void addNonNumericInfoStrategy(int ID, StringInfoStrategy infoStrategy) throws Exception {
 		nonNumericInfoStrategiesMap.put(ID, infoStrategy);
 		databaseFacade.addNonNumericInfoStrategy(infoStrategy);
 	}

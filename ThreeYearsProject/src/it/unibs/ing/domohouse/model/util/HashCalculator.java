@@ -18,6 +18,8 @@ public class HashCalculator {
 			sr = SecureRandom.getInstance(ModelStrings.SHA1PRNG);
 		}
 		catch (NoSuchAlgorithmException e) {
+			//TOLOG
+			//throware
 			e.printStackTrace();
 		}
 	}

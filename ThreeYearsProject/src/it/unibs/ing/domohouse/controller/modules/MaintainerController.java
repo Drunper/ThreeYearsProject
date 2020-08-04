@@ -12,6 +12,7 @@ import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.view.ManageableRenderer;
 
 import java.io.PrintWriter;
+import java.util.logging.Level;
 
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 
@@ -62,55 +63,91 @@ public class MaintainerController {
 			String user;
 			switch (selection) {
 				case 0:
-					dataFacade.saveData();
-					log.write(ControllerStrings.LOG_EXIT_MENU);
+					try {
+						dataFacade.saveData();
+					}
+					catch (Exception e) {
+						//TOLOG
+						output.println(ControllerStrings.DB_SAVE_ERROR);
+					}
+					log.write(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
 					break;
 				case 1:
-					maintainerInputHandler.readUser();
+					try {
+						maintainerInputHandler.readUser();
+					}
+					catch (Exception e1) {
+						//TOLOG
+						output.println("Errore durante l'inserimento di un utente, non è possibile verificare la presenza di altri utenti nel database");
+					}
 					break;
 				case 2:
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
-					if (dataFacade.hasUser(user)) {
-						objectRemover.removeUser(user);
-						dataFacade.saveData();
+					try {
+						if (dataFacade.hasUser(user)) {
+							objectRemover.removeUser(user);
+							dataFacade.saveData();
+						}
+						else
+							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
-					else
-						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
+					catch (Exception e1) {
+						//TOLOG
+						output.println("Errore durante la rimozione dell'utente, non è possibile verificare la presenza di altri utenti nel database");
+					}
 					break;
 				case 3:
 					menuManager.clearOutput();
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
-					if (dataFacade.hasUser(user)) {
-						if (dataFacade.doesHousingUnitExist(user)) {
-							menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
-							String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
-							maintainerUnitController.show(user, selectedHouse);
+					try {
+						if (dataFacade.hasUser(user)) {
+							if (dataFacade.doesHousingUnitExist(user)) {
+								menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
+								String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
+								maintainerUnitController.show(user, selectedHouse);
+							}
+							else
+								output.println(ControllerStrings.NO_HOUSE);
 						}
 						else
-							output.println(ControllerStrings.NO_HOUSE);
+							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
-					else
-						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
+					catch (Exception e1) {
+						//TOLOG
+						output.println("Errore durante l'ottenimento della casa selezionata dal database");
+					}
 					break;
 				case 4:
 					menuManager.clearOutput();
-					log.write(ControllerStrings.LOG_INSERT_HOUSE);
-					maintainerInputHandler.readHouseFromUser();
-					log.write(ControllerStrings.LOG_INSERT_HOUSE_SUCCESS);
+					log.write(Level.FINE, ControllerStrings.LOG_INSERT_HOUSE);
+					try {
+						maintainerInputHandler.readHouseFromUser();
+					}
+					catch (Exception e1) {
+						//TOLOG
+						output.println("Errore durante l'inserimento dell'unità immobiliare, verificare la connessione al database");
+					}
+					log.write(Level.FINE, ControllerStrings.LOG_INSERT_HOUSE_SUCCESS);
 					break;
 				case 5:
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
-					if (dataFacade.hasUser(user)) {
-						if (dataFacade.doesHousingUnitExist(user)) {
-							menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
-							String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
-							objectRemover.removeHousingUnit(user, selectedHouse);
+					try {
+						if (dataFacade.hasUser(user)) {
+							if (dataFacade.doesHousingUnitExist(user)) {
+								menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
+								String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
+								objectRemover.removeHousingUnit(user, selectedHouse);
+							}
+							else
+								output.println(ControllerStrings.NO_HOUSE);
 						}
 						else
-							output.println(ControllerStrings.NO_HOUSE);
+							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
-					else
-						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
+					catch (Exception e1) {
+						//TOLOG
+						output.println("Errore durante la rimozione dell'unità immobiliare, verificare la connessione al database");
+					}
 					break;
 				case 6:
 					// visualizza categorie di sensori
@@ -121,7 +158,7 @@ public class MaintainerController {
 						output.println();
 
 						String selectedSensCategory = maintainerInputHandler.safeInsertSensorCategory();
-						log.write(ControllerStrings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
+						log.write(Level.FINE, ControllerStrings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
 						output.println(renderer.render(dataFacade.getSensorCategory(selectedSensCategory)));
 					}
 					else
@@ -136,7 +173,7 @@ public class MaintainerController {
 						output.println();
 
 						String selectedActuCategory = maintainerInputHandler.safeInsertActuatorCategory();
-						log.write(ControllerStrings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
+						log.write(Level.FINE, ControllerStrings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
 						output.println(renderer.render(dataFacade.getActuatorCategory(selectedActuCategory)));
 					}
 					else
@@ -144,15 +181,21 @@ public class MaintainerController {
 					break;
 				case 8:
 					// crea sensor category
-					log.write(ControllerStrings.LOG_INSERT_SENSOR_CATEGORY);
-					maintainerInputHandler.readSensorCategoryFromUser(menuManager);
-					log.write(ControllerStrings.LOG_INSERT_SENSOR_CATEGORY_SUCCESS);
+					log.write(Level.FINE, ControllerStrings.LOG_INSERT_SENSOR_CATEGORY);
+					try {
+						maintainerInputHandler.readSensorCategoryFromUser(menuManager);
+					}
+					catch (Exception e1) {
+						//TOLOG
+						output.println("Errore durante l'inserimento della categoria di sensori, verificare la connessione al database");
+					}
+					log.write(Level.FINE, ControllerStrings.LOG_INSERT_SENSOR_CATEGORY_SUCCESS);
 					break;
 				case 9:
 					// crea actuator category
-					log.write(ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY);
+					log.write(Level.FINE, ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY);
 					maintainerInputHandler.readActuatorCategoryFromUser();
-					log.write(ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY_SUCCESS);
+					log.write(Level.FINE, ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY_SUCCESS);
 					break;
 				case 10:
 					menuManager.clearOutput();
@@ -163,7 +206,13 @@ public class MaintainerController {
 
 						String selectedSensCategory = maintainerInputHandler.safeInsertSensorCategory();
 						objectRemover.removeSensorCategory(selectedSensCategory);
-						dataFacade.saveData();
+						try {
+							dataFacade.saveData();
+						}
+						catch (Exception e) {
+							//TOLOG
+							output.println(ControllerStrings.DB_SAVE_ERROR);
+						}
 					}
 					else
 						output.println(ControllerStrings.NO_SENSOR_CATEGORY);
@@ -177,7 +226,13 @@ public class MaintainerController {
 
 						String selectedActuCategory = maintainerInputHandler.safeInsertActuatorCategory();
 						objectRemover.removeActuatorCategory(selectedActuCategory);
-						dataFacade.saveData();
+						try {
+							dataFacade.saveData();
+						}
+						catch (Exception e) {
+							//TOLOG
+							output.println(ControllerStrings.DB_SAVE_ERROR);
+						}
 					}
 					else
 						output.println(ControllerStrings.NO_ACTUATOR_CATEGORY);
@@ -185,22 +240,28 @@ public class MaintainerController {
 				case 12:
 					// importa file
 					menuManager.clearOutput();
-					log.write(ControllerStrings.LOG_IMPORTING_FILE);
+					log.write(Level.FINE, ControllerStrings.LOG_IMPORTING_FILE);
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
-					if (dataFacade.hasUser(user)) {
-						dataFacade.loadHousingUnits(user);
-						if (libImporter.importFile(user)) {
-							log.write(ControllerStrings.SUCCESS_IMPORT_FILE);
-							output.println(ControllerStrings.SUCCESS_IMPORT_FILE);
+					try {
+						if (dataFacade.hasUser(user)) {
+							dataFacade.loadHousingUnits(user);
+							if (libImporter.importFile(user)) {
+								log.write(Level.FINE, ControllerStrings.SUCCESS_IMPORT_FILE);
+								output.println(ControllerStrings.SUCCESS_IMPORT_FILE);
+							}
+							else {
+								String error = libImporter.getErrorsString();
+								output.println(error);
+								log.write(Level.FINE, ControllerStrings.LOG_ERROR_IMPORT + error);
+							}
 						}
-						else {
-							String error = libImporter.getErrorsString();
-							output.println(error);
-							log.write(ControllerStrings.LOG_ERROR_IMPORT + error);
-						}
+						else
+							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
-					else
-						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
+					catch (Exception e) {
+						//TOLOG
+						output.println(ControllerStrings.DB_LOAD_USER_ERROR);
+					}
 
 					break;
 				case 13:
@@ -214,7 +275,7 @@ public class MaintainerController {
 					break;
 				case 15:
 					// aggiorna ora
-					log.write(ControllerStrings.LOG_REFRESH_HOUR);
+					log.write(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
 					menuManager.clearOutput();
 					break;
 			}

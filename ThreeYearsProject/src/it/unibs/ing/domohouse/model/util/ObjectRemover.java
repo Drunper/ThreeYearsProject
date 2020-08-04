@@ -142,7 +142,7 @@ public class ObjectRemover {
 		}
 	}
 
-	public void removeUser(String user) {
+	public void removeUser(String user) throws Exception {
 		if(dataFacade.hasUser(user)) {
 			for(String housingUnit : dataFacade.getHousingUnitSet(user))
 				removeHousingUnit(user, housingUnit);

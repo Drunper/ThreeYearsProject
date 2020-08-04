@@ -20,6 +20,7 @@ import it.unibs.ing.domohouse.model.db.persistent.PersistentRule;
 import it.unibs.ing.domohouse.model.db.persistent.PersistentSensor;
 import it.unibs.ing.domohouse.model.db.persistent.PersistentSensorCategory;
 import it.unibs.ing.domohouse.model.db.persistent.PersistentUser;
+import it.unibs.ing.domohouse.model.ModelStrings;
 import it.unibs.ing.domohouse.model.components.elements.*;
 import it.unibs.ing.domohouse.model.util.DataFacade;
 import it.unibs.ing.domohouse.model.util.ObjectFactory;
@@ -36,7 +37,7 @@ public class DatabaseLoader {
 		this.dataFacade = dataFacade;
 	}
 
-	public List<SensorCategory> loadSensorCategories() {
+	public List<SensorCategory> loadSensorCategories() throws Exception {
 		List<SensorCategory> sensorCategories = new ArrayList<>();
 		try (ResultSet set = connector.executeQuery(QueryStrings.GET_SENSOR_CATEGORIES)) {
 			while (set.next()) {
@@ -52,13 +53,13 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return sensorCategories;
 	}
 
 	private Map<String, InfoStrategy> getSensorCategoryInfos(String categoryName,
-			Map<String, String> measurementUnitMap) {
+			Map<String, String> measurementUnitMap) throws Exception {
 		Map<String, InfoStrategy> infoDomainMap = new HashMap<>();
 
 		Query query = new Query(QueryStrings.GET_NUMERIC_INFO_OF_A_CATEGORY);
@@ -71,7 +72,7 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 
 		query.setQuery(QueryStrings.GET_NON_NUMERIC_INFO_OF_A_CATEGORY);
@@ -85,12 +86,12 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return infoDomainMap;
 	}
 
-	private List<String> getStringInfoDomainValues(int infoID, String propertyName) {
+	private List<String> getStringInfoDomainValues(int infoID, String propertyName) throws Exception {
 		List<String> domain = new ArrayList<>();
 
 		Query query = new Query(QueryStrings.GET_NON_NUMERIC_DOMAIN_VALUE);
@@ -102,13 +103,13 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 
 		return domain;
 	}
 
-	public List<ActuatorCategory> loadActuatorCategories() {
+	public List<ActuatorCategory> loadActuatorCategories() throws Exception {
 		List<ActuatorCategory> actuatorCategories = new ArrayList<>();
 		try (ResultSet set = connector.executeQuery(QueryStrings.GET_ACTUATOR_CATEGORIES)) {
 			while (set.next()) {
@@ -123,12 +124,12 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return actuatorCategories;
 	}
 
-	private List<String> getListOfModes(String categoryName) {
+	private List<String> getListOfModes(String categoryName) throws Exception {
 		List<String> listOfModes = new ArrayList<>();
 
 		Query query = new Query(QueryStrings.GET_OPERATING_MODES_OF_A_CATEGORY);
@@ -139,13 +140,13 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 
 		return listOfModes;
 	}
 
-	public User loadUser(String user) {
+	public User loadUser(String user) throws Exception {
 		Query query = new Query(QueryStrings.GET_USER);
 		query.setStringParameter(1, user);
 		try (ResultSet set = connector.executeQuery(query)) {
@@ -158,12 +159,12 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return null;
 	}
 
-	public List<HousingUnit> loadHousingUnits(String user) {
+	public List<HousingUnit> loadHousingUnits(String user) throws Exception {
 		List<HousingUnit> housingUnits = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_USER_HOUSING_UNITS);
 		query.setStringParameter(1, user);
@@ -197,12 +198,12 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return housingUnits;
 	}
 
-	private List<Room> loadRooms(String user, String selectedHouse) {
+	private List<Room> loadRooms(String user, String selectedHouse) throws Exception {
 		List<Room> rooms = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_ROOMS);
 		query.setStringParameter(1, user);
@@ -218,12 +219,12 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return rooms;
 	}
 
-	public void addAssociations(String user, String selectedHouse) {
+	public void addAssociations(String user, String selectedHouse) throws Exception {
 		Query query = new Query("");
 		query.setStringParameter(1, selectedHouse);
 		query.setStringParameter(2, user);
@@ -263,12 +264,12 @@ public class DatabaseLoader {
 					dataFacade.addAssociation(user, selectedHouse, artifact, set.getString("nome_categoria_attuatori"));
 			}
 			catch (SQLException e) {
-				e.printStackTrace();
+				throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 			}
 		}
 	}
 
-	public Map<String, String> getAllProperties() {
+	public Map<String, String> getAllProperties() throws Exception {
 		Map<String, String> propertyMap = new HashMap<>();
 		try (ResultSet set = connector.executeQuery(QueryStrings.GET_ALL_PROPERTIES)) {
 			while (set.next()) {
@@ -276,13 +277,13 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return propertyMap;
 	}
 
 	private Map<String, String> getProperties(String user, String selectedHouse, String object,
-			boolean roomOrArtifact) {
+			boolean roomOrArtifact) throws Exception {
 		Map<String, String> propertyMap = new HashMap<>();
 
 		Query query = new Query("");
@@ -300,13 +301,13 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 
 		return propertyMap;
 	}
 
-	private List<Artifact> loadArtifacts(String user, String selectedHouse, String location) {
+	private List<Artifact> loadArtifacts(String user, String selectedHouse, String location) throws Exception {
 		List<Artifact> artifacts = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_ARTIFACTS);
 		query.setStringParameter(1, user);
@@ -324,12 +325,12 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return artifacts;
 	}
 
-	private List<Sensor> loadSensors(String user, HousingUnit selectedHouse, String location) {
+	private List<Sensor> loadSensors(String user, HousingUnit selectedHouse, String location) throws Exception {
 		List<Sensor> sensors = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_SENSORS);
 		query.setStringParameter(1, user);
@@ -350,12 +351,12 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return sensors;
 	}
 
-	private List<Actuator> loadActuators(String user, HousingUnit selectedHouse, String location) {
+	private List<Actuator> loadActuators(String user, HousingUnit selectedHouse, String location) throws Exception {
 		List<Actuator> actuators = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_ACTUATORS);
 		query.setStringParameter(1, user);
@@ -375,13 +376,13 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return actuators;
 	}
 
 	private List<Gettable> getDeviceObjects(String user, HousingUnit selectedHouse, String device, boolean sensOrAct,
-			boolean roomOrArtifact) {
+			boolean roomOrArtifact) throws Exception {
 		List<Gettable> deviceObjects = new ArrayList<>();
 
 		String queryString = sensOrAct
@@ -400,13 +401,13 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 
 		return deviceObjects;
 	}
 
-	private List<Rule> loadRules(String user, HousingUnit selectedHouse) {
+	private List<Rule> loadRules(String user, HousingUnit selectedHouse) throws Exception {
 		List<Rule> rules = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_RULES);
 		query.setStringParameter(1, user);
@@ -426,7 +427,7 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 		return rules;
 	}
@@ -460,7 +461,7 @@ public class DatabaseLoader {
 		return actuators;
 	}
 
-	public Map<Integer, DoubleInfoStrategy> getNumericInfoStrategies() {
+	public Map<Integer, DoubleInfoStrategy> getNumericInfoStrategies() throws Exception {
 		Map<Integer, DoubleInfoStrategy> map = new HashMap<>();
 
 		try (ResultSet set = connector.executeQuery(QueryStrings.GET_NUMERIC_INFOS)) {
@@ -470,13 +471,13 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 
 		return map;
 	}
 
-	public Map<Integer, StringInfoStrategy> getNonNumericInfoStrategies() {
+	public Map<Integer, StringInfoStrategy> getNonNumericInfoStrategies() throws Exception {
 		Map<Integer, StringInfoStrategy> map = new HashMap<>();
 
 		try (ResultSet set = connector.executeQuery(QueryStrings.GET_NON_NUMERIC_INFOS)) {
@@ -488,13 +489,13 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 
 		return map;
 	}
 
-	private List<String> getDomainValues(int ID, String propertyName) {
+	private List<String> getDomainValues(int ID, String propertyName) throws Exception {
 		List<String> domain = new ArrayList<>();
 
 		Query query = new Query(QueryStrings.GET_NON_NUMERIC_DOMAIN_VALUE);
@@ -507,7 +508,7 @@ public class DatabaseLoader {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
 		}
 
 		return domain;

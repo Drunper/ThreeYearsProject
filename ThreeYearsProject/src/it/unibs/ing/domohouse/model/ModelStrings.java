@@ -57,4 +57,9 @@ public class ModelStrings {
 	public static final String PARAMETRIC_OPERATING_MODE_PRECONDITION = "parametricOperatingModesMap non contiene il nome richiesto";
 	public static final String ARTIFACT_PRECONDITION = "L'artefatto ottenuto è null";
 	public static final String SHA1PRNG = "SHA1PRNG";
+	public static final String DB_QUERY_EXCEPTION = "Errore durante l'accesso al database";
+	public static final String DB_CONNECTION_EXCEPTION = "Impossibile stabilire una connessione al database";
+	public static final String DB_QUERY_PARAMETERS_EXCEPTION = "Errore durante l'inserimento dei parametri";
+	public static final String DB_QUERY_RESULT_EXCEPTION = "Errore durante l'ottenimento dei risultati";
+	public static final String DB_UPDATE_EXCEPTION = "Errore durante l'aggiornamento del database";
 }

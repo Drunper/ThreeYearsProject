@@ -26,14 +26,9 @@ public class RulesWorker {
 	public void startRulesWorker() {
 		checkThread.scheduleAtFixedRate(new Runnable() {
 			public void run() {
-				try {
-					checkRules();
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
+				checkRules();
 			}
-		}, 0, 1, TimeUnit.SECONDS); // parte subito e ogni 1 secondi controlla le rules
+		}, 0, 1, TimeUnit.SECONDS); // parte subito e ogni 1 secondi controlla le regole
 	}
 
 	public void checkRules() {

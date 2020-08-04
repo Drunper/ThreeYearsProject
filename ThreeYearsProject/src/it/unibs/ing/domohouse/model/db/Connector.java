@@ -3,6 +3,8 @@ package it.unibs.ing.domohouse.model.db;
 import java.sql.*;
 import java.util.Map.Entry;
 
+import it.unibs.ing.domohouse.model.ModelStrings;
+
 public class Connector {
 
 	private String url;
@@ -17,12 +19,12 @@ public class Connector {
 		this.password = password;
 	}
 
-	public void openConnection() {
+	public void openConnection() throws Exception {
 		try {
 			connection = DriverManager.getConnection(url, user, password);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_CONNECTION_EXCEPTION, e);
 		}
 	}
 
@@ -31,94 +33,53 @@ public class Connector {
 			connection.close();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			//Non dovrebbe accadere
 		}
 	}
 
-	public void setIntParameter(int position, int parameter) {
-		try {
-			preparedStatement.setInt(position, parameter);
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void setStringParameter(int position, String parameter) {
-		try {
-			preparedStatement.setString(position, parameter);
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void submitParametrizedQuery(String query) {
-		try {
-			preparedStatement = connection.prepareStatement(query);
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public ResultSet executeQuery() {
-		ResultSet res = null;
-		try {
-			res = preparedStatement.executeQuery();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
-
-	public ResultSet executeQuery(String query) {
+	public ResultSet executeQuery(String query) throws Exception {
 		ResultSet res = null;
 		try {
 			preparedStatement = connection.prepareStatement(query);
 			res = preparedStatement.executeQuery();
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new Exception(ModelStrings.DB_QUERY_EXCEPTION, e);
 		}
 		return res;
 	}
-
-	public void execute() {
+	
+	public ResultSet executeQuery(Query query) throws DBAccessException, DBParametersException {
+		ResultSet set = null;
 		try {
-			preparedStatement.execute();
+			setQuery(query);
+			set = preparedStatement.executeQuery();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (SQLException e) {
+			throw new DBAccessException(ModelStrings.DB_QUERY_EXCEPTION, e);
 		}
+		catch (DBParametersException e) {
+			throw e;
+		}
+		return set;
 	}
 
-	public void executeQueryWithoutResult(Query query) {
+	public void executeQueryWithoutResult(Query query) throws DBAccessException, DBParametersException {
 		if (query != null)
 			try {
 				setQuery(query);
 				preparedStatement.execute();
 				preparedStatement.close();
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+		catch (SQLException e) {
+			throw new DBAccessException(ModelStrings.DB_QUERY_EXCEPTION, e);
+		}
+		catch (DBParametersException e) {
+			throw e;
+		}
 	}
 
-	public ResultSet executeQuery(Query query) {
-		ResultSet set = null;
-		try {
-			setQuery(query);
-			set = preparedStatement.executeQuery();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return set;
-	}
-
-	private void setQuery(Query query) {
+	private void setQuery(Query query) throws DBParametersException {
 		try {
 			preparedStatement = connection.prepareStatement(query.getQuery());
 			for (Entry<Integer, Integer> param : query.getIntegerParameters().entrySet())
@@ -129,17 +90,7 @@ public class Connector {
 				preparedStatement.setDouble(param.getKey(), param.getValue());
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new DBParametersException(ModelStrings.DB_QUERY_PARAMETERS_EXCEPTION, e);
 		}
-	}
-
-	public void closeStatement() {
-		if (preparedStatement != null)
-			try {
-				preparedStatement.close();
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-			}
 	}
 }

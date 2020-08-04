@@ -8,6 +8,7 @@ import it.unibs.ing.domohouse.view.MenuManager;
 import it.unibs.ing.domohouse.view.RawInputHandler;
 
 import java.io.PrintWriter;
+import java.util.logging.Level;
 
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 
@@ -51,12 +52,18 @@ public class LoginController {
 					break;
 				case 1: // login fruitore
 					String user = input.readNotVoidString(ControllerStrings.INSERT_USER);
-					if (dataFacade.hasUser(user)) {
-						if (dataFacade.doesHousingUnitExist(user))
-							userController.show(user);
+					try {
+						if (dataFacade.hasUser(user)) {
+							if (dataFacade.doesHousingUnitExist(user))
+								userController.show(user);
+						}
+						else
+							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
-					else
-						output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
+					catch (Exception e) {
+						//TOLOG
+						output.println(ControllerStrings.DB_LOAD_USER_ERROR);
+					}
 					break;
 				case 2: // login manutentore
 					String maintainer;
@@ -67,11 +74,17 @@ public class LoginController {
 						maintainer = input.readNotVoidString(ControllerStrings.INSERT_USER);
 						if (!maintainer.equalsIgnoreCase(ControllerStrings.BACK_CHARACTER)) {
 							password = input.readNotVoidString(ControllerStrings.INSERT_PASSWORD);
-							ok = authenticator.checkMaintainerPassword(maintainer, password);
-							if (!ok)
-								output.println(ControllerStrings.USER_OR_PASSWORD_ERROR);
+							try {
+								ok = authenticator.checkMaintainerPassword(maintainer, password);
+								if (!ok)
+									output.println(ControllerStrings.USER_OR_PASSWORD_ERROR);
+							}
+							catch (Exception e) {
+								//TOLOG
+								output.println(ControllerStrings.DB_AUTHENTICATION_ERROR);
+							}
 						}
-						log.write(ControllerStrings.MAINTAINER + maintainer + ControllerStrings.LOG_SYSTEM_ACCESS);
+						log.write(Level.FINE, ControllerStrings.MAINTAINER + maintainer + ControllerStrings.LOG_SYSTEM_ACCESS);
 					}
 					while (!maintainer.equalsIgnoreCase(ControllerStrings.BACK_CHARACTER) && !ok);
 					if (ok)

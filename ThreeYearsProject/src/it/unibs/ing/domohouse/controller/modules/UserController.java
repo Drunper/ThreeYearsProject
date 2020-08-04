@@ -10,6 +10,7 @@ import it.unibs.ing.domohouse.view.RawInputHandler;
 import it.unibs.ing.domohouse.view.ManageableRenderer;
 
 import java.io.PrintWriter;
+import java.util.logging.Level;
 
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 
@@ -48,18 +49,30 @@ public class UserController {
 			selection = menuManager.doChoice();
 			switch (selection) {
 				case 0:
-					dataFacade.saveData();
-					log.write(ControllerStrings.LOG_EXIT_MENU);
+					try {
+						dataFacade.saveData();
+					}
+					catch (Exception e) {
+						//TOLOG
+						output.println(ControllerStrings.DB_SAVE_ERROR);
+					}
+					log.write(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
 					break;
 				case 1:
 					menuManager.clearOutput();
-					if (dataFacade.doesHousingUnitExist(user)) {
-						menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
-						String selectedHouse = userInputHandler.safeInsertHouse(user);
-						userUnitController.show(user, selectedHouse);
+					try {
+						if (dataFacade.doesHousingUnitExist(user)) {
+							menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
+							String selectedHouse = userInputHandler.safeInsertHouse(user);
+							userUnitController.show(user, selectedHouse);
+						}
+						else
+							output.println(ControllerStrings.NO_HOUSE);
 					}
-					else
-						output.println(ControllerStrings.NO_HOUSE);
+					catch (Exception e) {
+						//TOLOG
+						output.println(ControllerStrings.DB_LOAD_HOUSING_UNIT_ERROR);
+					}
 					break;
 				case 2:
 					menuManager.clearOutput();
@@ -69,7 +82,7 @@ public class UserController {
 						output.println();
 
 						String selectedSensCategory = userInputHandler.safeInsertSensorCategory();
-						log.write(ControllerStrings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
+						log.write(Level.FINE, ControllerStrings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
 						output.println(renderer.render(dataFacade.getSensorCategory(selectedSensCategory)));
 					}
 					else
@@ -82,7 +95,7 @@ public class UserController {
 						output.println();
 						output.println();
 						String selectedActuCategory = userInputHandler.safeInsertActuatorCategory();
-						log.write(ControllerStrings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
+						log.write(Level.FINE, ControllerStrings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
 						output.println(renderer.render(dataFacade.getActuatorCategory(selectedActuCategory)));
 					}
 					else
@@ -97,7 +110,7 @@ public class UserController {
 				case 5:
 					// aggiorna ora
 					menuManager.clearOutput();
-					log.write(ControllerStrings.LOG_REFRESH_HOUR);
+					log.write(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
 					break;
 			}
 		}

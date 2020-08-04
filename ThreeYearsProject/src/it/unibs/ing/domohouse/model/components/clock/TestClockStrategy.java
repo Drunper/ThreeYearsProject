@@ -16,12 +16,7 @@ public class TestClockStrategy implements ClockStrategy {
 		minute = 0;
 		clock.scheduleAtFixedRate(new Runnable() {
 			public void run() {
-				try {
-					updateTime();
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
+				updateTime();
 			}
 		}, 0, 2, TimeUnit.SECONDS); // ogni 2 secondi passa 1 minuto nel sistema
 	}

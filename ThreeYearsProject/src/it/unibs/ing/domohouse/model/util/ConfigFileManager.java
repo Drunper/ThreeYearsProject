@@ -31,6 +31,8 @@ public class ConfigFileManager {
 				output.println(ModelStrings.ERROR_HELP_FILE);
 		}
 		catch (Exception e) {
+			//TOLOG
+			//Impossibile aprire il file, throware
 			e.printStackTrace();
 		}
 	}
@@ -87,7 +89,9 @@ public class ConfigFileManager {
 			writer.write("db.name=domohouse"+ModelStrings.LINE_SEPARATOR);
 			writer.write("db.allowMultiQueries=true"+ModelStrings.LINE_SEPARATOR);
 		}
-		catch (Exception ex) {
+		catch (IOException ex) {
+			//TOLOG
+			//Impossibile creare il file di configurazione, throware
 			ex.printStackTrace();
 		}
 	}

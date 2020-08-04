@@ -20,7 +20,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 		super(dataFacade, output, input);
 	}
 
-	public void readUser() {
+	public void readUser() throws Exception {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String user;
@@ -38,7 +38,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 			dataFacade.addUser(user);
 	}
 
-	public void readHouseFromUser() {
+	public void readHouseFromUser() throws Exception {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String user;
@@ -70,7 +70,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readSensorCategoryFromUser(MenuManager view) {
+	public void readSensorCategoryFromUser(MenuManager view) throws Exception {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String name;
@@ -100,7 +100,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 	}
 
 	private void readInfoStrategies(Map<String, InfoStrategy> infoDomainMap, Map<String, String> measurementUnitMap,
-			MenuManager view) {
+			MenuManager view) throws Exception {
 		boolean remain = true;
 
 		int dbID = dataFacade.getCurrentMaxID();
@@ -235,7 +235,7 @@ public class MaintainerInputHandler extends UserInputHandler {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public String safeInsertUser() {
+	public String safeInsertUser() throws Exception {
 		assert maintainerInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
 		String selectedUser = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);

@@ -274,4 +274,8 @@ public class ControllerStrings {
 	public static final String INSERT_RULE = "Inserisci il nome di una regola";
 	public static final String ERROR_NON_EXISTENT_RULE = "Il nome della regola inserita non esiste";
 	public static final String NO_RULE = "Non esistono regole nell'unità selezionata";
+	public static final String DB_SAVE_ERROR = "Errore durante il salvataggio delle modifiche, verificare lo stato del database";
+	public static final String DB_LOAD_HOUSING_UNIT_ERROR = "Errore durante il caricamento delle unità immobiliari dell'utente";
+	public static final String DB_LOAD_USER_ERROR = "Errore durante il caricamento dell'utente";
+	public static final String DB_AUTHENTICATION_ERROR = "Errore durante l'autenticazione, verificare lo stato della connessione al database";
 }

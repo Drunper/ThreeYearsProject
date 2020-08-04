@@ -26,7 +26,7 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	public void readRoomFromUser(String user, String selectedHouse, MenuManager view) {
+	public void readRoomFromUser(String user, String selectedHouse, MenuManager view) throws Exception {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
