@@ -22,7 +22,7 @@ public class RuleParser implements Serializable {
 	private static final String STRING_REGEX = "^(?=\\s*\\S).*$";
 	private static final String SENS_VALUE_REGEX = "^[^_]+_[^_]+\\.[^_]+$";
 	private static final String EOL = "";
-
+	
 	private Map<String, Operator> doubleOperatorsMap = new HashMap<>();
 	private StringOperator strOperator = new StringOperator() {
 

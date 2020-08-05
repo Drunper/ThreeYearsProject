@@ -33,10 +33,10 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 		String name;
 		do {
 			name = input.readNotVoidString(ControllerStrings.ROOM_INPUT_NAME);
-			if (dataFacade.hasRoomOrArtifact(user, selectedHouse, name))
+			if (dataFacade.hasRoom(user, selectedHouse, name))
 				output.println(ControllerStrings.NAME_ALREADY_EXISTENT);
 		}
-		while (dataFacade.hasRoomOrArtifact(user, selectedHouse, name));
+		while (dataFacade.hasRoom(user, selectedHouse, name));
 		String descr = input.readNotVoidString(ControllerStrings.ROOM_INPUT_DESCRIPTION);
 		output.println(ControllerStrings.LIST_OF_PROPERTIES);
 		view.printCollectionOfString(dataFacade.getPropertiesSet());
@@ -46,16 +46,16 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 		boolean remain = true;
 		String propertyName;
 		do {
-			propertyName = input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_NAME, 20);
+			propertyName = input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_NAME, 30);
 			if (!propertyName.equals(ControllerStrings.BACK_CHARACTER) && !propertiesMap.containsKey(propertyName)) {
 				String propertyValue;
 				if (dataFacade.hasProperty(propertyName)) {
 					propertyValue = (input.yesOrNo(ControllerStrings.PROPERTY_INPUT_VALUE_QUESTION))
-							? input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_VALUE, 20)
+							? input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_VALUE, 30)
 							: dataFacade.getPropertyDefaultValue(propertyName);
 				}
 				else {
-					propertyValue = input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_VALUE, 20);
+					propertyValue = input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_VALUE, 30);
 					dataFacade.addProperty(propertyName, propertyValue);
 				}
 				propertiesMap.put(propertyName, propertyValue);

@@ -2,116 +2,186 @@ package it.unibs.ing.domohouse.model.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
 
 public class AssociationManager implements Serializable {
 
 	private static final long serialVersionUID = 1194017378304880890L;
-	private ArrayList<Association> associationList;
-
+	private List<Association> artifactAssociationList;
+	private List<Association> roomAssociationList;
+	
 	public AssociationManager() {
-		associationList = new ArrayList<>();
+		artifactAssociationList = new ArrayList<>();
+		roomAssociationList = new ArrayList<>();
 	}
 
-	public int size() {
+	public int artifactsSize() {
 		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
-		return associationList.size();
+		return artifactAssociationList.size();
+	}
+	
+	public int roomsSize() {
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+		return roomAssociationList.size();
+	}
+	
+	public void addArtifactAssociation(Association toAdd) {
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+		int pre_size = artifactAssociationList.size();
+		
+		artifactAssociationList.add(toAdd);
+		
+		assert artifactAssociationList.size() >= pre_size;
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+	}
+	
+	public void addRoomAssociation(Association toAdd) {
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+		int pre_size = artifactAssociationList.size();
+		
+		roomAssociationList.add(toAdd);
+		
+		assert artifactAssociationList.size() >= pre_size;
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public void addAssociation(Association association) {
+	public Association getArtifactAssociation(String selectedAssociation) {
+		assert selectedAssociation != null;
 		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
-		int pre_size = associationList.size();
-
-		associationList.add(association);
-
-		assert associationList.size() >= pre_size;
-		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
-	}
-
-	public Association getAssociation(String toGet) {
-		assert toGet != null;
-		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
-		for (Association assoc : associationList) {
-			if (assoc.getElementName().equalsIgnoreCase(toGet))
+		for(Association assoc : artifactAssociationList) {
+			if (assoc.getElementName().equalsIgnoreCase(selectedAssociation))
 				return assoc;
 		}
 		return null;
 	}
-
-	public boolean hasAssociation(String name) {
-		assert name != null;
+	
+	public Association getRoomAssociation(String selectedAssociation) {
+		assert selectedAssociation != null;
 		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+		for(Association assoc : roomAssociationList) {
+			if(assoc.getElementName().equalsIgnoreCase(selectedAssociation))
+				return assoc;
+		}
+		return null;
+	}
+	
+	public void removeArtifactAssociation(String selectedArtifact) {
+		artifactAssociationList.remove(getArtifactAssociation(selectedArtifact));
+	}
 
-		for (Association assoc : associationList) {
-			if (assoc.getElementName().equalsIgnoreCase(name))
+	public void removeRoomAssociation(String selectedRoom) {
+		roomAssociationList.remove(getRoomAssociation(selectedRoom));
+	}
+
+	public void removeArtifactAssociationWithCategory(String artifact, String category) {
+		getArtifactAssociation(artifact).removeAssociationWithCategory(category);
+	}
+
+	public void removeRoomAssociationWithCategory(String room, String category) {
+		getRoomAssociation(room).removeAssociationWithCategory(category);
+	}
+
+	public int getNumberOfAssociableRooms(String category) {
+		int counter = 0;
+		for(Association assoc : roomAssociationList) {
+			if(!assoc.isAssociatedWith(category))
+				counter++;
+		}
+		return counter;
+	}
+
+	public int getNumberOfAssociableArtifacts(String category) {
+		int counter = 0;
+		for(Association assoc : artifactAssociationList) {
+			if(!assoc.isAssociatedWith(category))
+				counter++;
+		}
+		return counter;
+	}
+	
+	public boolean hasArtifactAssociation(String selectedAssociation) {
+		assert selectedAssociation != null;
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+		
+		for(Association assoc : artifactAssociationList) {
+			if(assoc.getElementName().equalsIgnoreCase(selectedAssociation))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean hasRoomAssociation(String selectedAssociation) {
+		assert selectedAssociation != null;
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+		
+		for(Association assoc : roomAssociationList) {
+			if(assoc.getElementName().equalsIgnoreCase(selectedAssociation))
 				return true;
 		}
 		return false;
 	}
 
-	public String[] associatedElementsList() {
-		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
-
-		String[] nameList = new String[associationList.size()];
-		for (int i = 0; i < nameList.length; i++) {
-			nameList[i] = associationList.get(i).getElementName();
-		}
-		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
-		return nameList;
-	}
-
-	public boolean isElementARoom(String name) {
-		assert name != null;
-
-		Association element = getAssociation(name);
-
-		assert element != null;
-		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
-
-		return element.isElementARoom();
-	}
-
-	public boolean isElementAssociatedWith(String name, String category) {
+	public boolean isArtifactAssociated(String name, String category) {
 		assert name != null && category != null;
 		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
-
-		Association element = getAssociation(name);
-
+		
+		Association element = getArtifactAssociation(name);
+		
+		assert element != null;
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+		return element.isAssociatedWith(category);
+	}
+	
+	public boolean isRoomAssociated(String name, String category) {
+		assert name != null && category != null;
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+		
+		Association element = getRoomAssociation(name);
+		
 		assert element != null;
 		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
 		return element.isAssociatedWith(category);
 	}
 
-	public void addAssociationBetween(String name, String category) {
+	public void addArtifactAssociationWith(String name, String category) {
 		assert name != null && category != null;
 		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
-
-		Association element = getAssociation(name);
-		assert element != null;
-		element.addAssociationWith(category);
-
+		
+		Association assoc = getArtifactAssociation(name);
+		assert assoc != null;
+		assoc.addAssociationWith(category);
+		
 		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+	}
+	
+	public void addRoomAssociationWith(String name, String category) {
+		assert name != null && category != null;
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+		
+		Association assoc = getRoomAssociation(name);
+		assert assoc != null;
+		assoc.addAssociationWith(category);
+		
+		assert associationHandlerInvariant() : ModelStrings.WRONG_INVARIANT;
+	}
+	
+	public boolean hasAssociableArtifacts(String category) {
+		for(Association assoc : artifactAssociationList)
+			if(!assoc.isAssociatedWith(category))
+				return true;
+		return false;
+	}
+	
+	public boolean hasAssociableRooms(String category) {
+		for(Association assoc : roomAssociationList)
+			if(!assoc.isAssociatedWith(category))
+				return true;
+		return false;
 	}
 
 	private boolean associationHandlerInvariant() {
-		boolean check = associationList != null;
-		return check;
-	}
-
-	public void removeArtifactAssociation(String selectedArtifact) {
-		associationList.remove(getAssociation(selectedArtifact));
-	}
-
-	public void removeRoomAssociation(String selectedRoom) {
-		associationList.remove(getAssociation(selectedRoom));
-	}
-
-	public void removeArtifactAssociationWithCategory(String artifact, String category) {
-		getAssociation(artifact).removeAssociationWithCategory(category);
-	}
-
-	public void removeRoomAssociationWithCategory(String room, String category) {
-		getAssociation(room).removeAssociationWithCategory(category);
+		return artifactAssociationList != null && roomAssociationList != null;
 	}
 }

@@ -233,7 +233,7 @@ public class DatabaseLoader {
 			query.setQuery(QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ROOM);
 			try (ResultSet set = connector.executeQuery(query)) {
 				while (set.next())
-					dataFacade.addAssociation(user, selectedHouse, room, set.getString("nome_categoria_sensori"));
+					dataFacade.addRoomAssociation(user, selectedHouse, room, set.getString("nome_categoria_sensori"));
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
@@ -241,7 +241,7 @@ public class DatabaseLoader {
 			query.setQuery(QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ROOM);
 			try (ResultSet set = connector.executeQuery(query)) {
 				while (set.next())
-					dataFacade.addAssociation(user, selectedHouse, room, set.getString("nome_categoria_attuatori"));
+					dataFacade.addRoomAssociation(user, selectedHouse, room, set.getString("nome_categoria_attuatori"));
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
@@ -253,7 +253,7 @@ public class DatabaseLoader {
 			query.setQuery(QueryStrings.GET_ASSOCIATED_SENSOR_CATEGORY_ARTIFACT);
 			try (ResultSet set = connector.executeQuery(query)) {
 				while (set.next())
-					dataFacade.addAssociation(user, selectedHouse, artifact, set.getString("nome_categoria_sensori"));
+					dataFacade.addArtifactAssociation(user, selectedHouse, artifact, set.getString("nome_categoria_sensori"));
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
@@ -261,7 +261,7 @@ public class DatabaseLoader {
 			query.setQuery(QueryStrings.GET_ASSOCIATED_ACTUATOR_CATEGORY_ARTIFACT);
 			try (ResultSet set = connector.executeQuery(query)) {
 				while (set.next())
-					dataFacade.addAssociation(user, selectedHouse, artifact, set.getString("nome_categoria_attuatori"));
+					dataFacade.addArtifactAssociation(user, selectedHouse, artifact, set.getString("nome_categoria_attuatori"));
 			}
 			catch (SQLException e) {
 				throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);

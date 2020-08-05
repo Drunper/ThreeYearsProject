@@ -98,16 +98,15 @@ public class HousingUnit implements Serializable, Manageable {
 	public void addRoom(Room toAdd) {
 		assert toAdd != null && toAdd.getName() != null && toAdd.getName().length() > 0;
 		int pre_size_roomManager = roomManager.size();
-		int pre_size_associationManager = associationManager.size();
+		int pre_size_associationManager = associationManager.roomsSize();
 
 		roomManager.addElement(toAdd);
 		Association assoc = new Association(toAdd.getName());
-		assoc.setRoomOrArtifact(true);
-		associationManager.addAssociation(assoc);
+		associationManager.addRoomAssociation(assoc);
 
 		assert roomManager.size() >= pre_size_roomManager;
-		assert associationManager.size() >= pre_size_associationManager;
-		assert assoc.isElementARoom() == true && associationManager.hasAssociation(assoc.getElementName());
+		assert associationManager.roomsSize() >= pre_size_associationManager;
+		assert associationManager.hasRoomAssociation(assoc.getElementName());
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
@@ -177,12 +176,6 @@ public class HousingUnit implements Serializable, Manageable {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public boolean hasRoomOrArtifact(String name) {
-		assert name != null && name.length() > 0;
-		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
-		return associationManager.hasAssociation(name);
-	}
-
 	public boolean hasSensor(String name) {
 		assert name != null && name.length() > 0;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -201,22 +194,28 @@ public class HousingUnit implements Serializable, Manageable {
 		return artifactManager.hasElement(name);
 	}
 
-	public boolean isElementARoom(String toAssoc) {
-		assert toAssoc != null;
+	public boolean isArtifactAssociatedWith(String artifact, String category) {
+		assert artifact != null && category != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
-		return associationManager.isElementARoom(toAssoc);
+		return associationManager.isArtifactAssociated(artifact, category);
+	}
+	
+	public boolean isRoomAssociatedWith(String room, String category) {
+		assert room != null && category != null;
+		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
+		return associationManager.isRoomAssociated(room, category);
 	}
 
-	public boolean isAssociatedWith(String toAssoc, String category) {
-		assert toAssoc != null && category != null;
+	public void addArtifactAssociationWith(String artifact, String category) {
+		assert artifact != null && category != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
-		return associationManager.isElementAssociatedWith(toAssoc, category);
+		associationManager.addArtifactAssociationWith(artifact, category);
 	}
-
-	public void addAssociationWith(String object, String category) {
-		assert object != null && category != null;
+	
+	public void addRoomAssociationWith(String room, String category) {
+		assert room != null && category != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
-		associationManager.addAssociationBetween(object, category);
+		associationManager.addRoomAssociationWith(room, category);
 	}
 
 	public void addArtifact(Artifact toAdd, String location) {
@@ -224,15 +223,15 @@ public class HousingUnit implements Serializable, Manageable {
 		assert location != null && location.length() > 0;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 		int pre_size_artifactManager = artifactManager.size();
-		int pre_size_associationManager = artifactManager.size();
+		int pre_size_associationManager = associationManager.artifactsSize();
 
 		Room room = (Room) roomManager.getElement(location);
 		room.addArtifact(toAdd);
 		artifactManager.addElement(toAdd);
-		associationManager.addAssociation(new Association(toAdd.getName()));
+		associationManager.addArtifactAssociation(new Association(toAdd.getName()));
 
 		assert artifactManager.size() >= pre_size_artifactManager;
-		assert associationManager.size() >= pre_size_associationManager;
+		assert associationManager.artifactsSize() >= pre_size_associationManager;
 		assert room.hasArtifact(toAdd.getName());
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
@@ -526,5 +525,13 @@ public class HousingUnit implements Serializable, Manageable {
 	public void removeArtifact(String selectedRoom, String selectedArtifact) {
 		getRoom(selectedRoom).removeArtifact(selectedArtifact);
 		artifactManager.removeElement(selectedArtifact);
+	}
+	
+	public boolean hasAssociableArtifacts(String category) {
+		return associationManager.hasAssociableArtifacts(category);
+	}
+	
+	public boolean hasAssociableRooms(String category) {
+		return associationManager.hasAssociableRooms(category);
 	}
 }

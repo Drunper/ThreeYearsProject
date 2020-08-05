@@ -278,4 +278,6 @@ public class ControllerStrings {
 	public static final String DB_LOAD_HOUSING_UNIT_ERROR = "Errore durante il caricamento delle unità immobiliari dell'utente";
 	public static final String DB_LOAD_USER_ERROR = "Errore durante il caricamento dell'utente";
 	public static final String DB_AUTHENTICATION_ERROR = "Errore durante l'autenticazione, verificare lo stato della connessione al database";
+	public static final String [] REL_OPERATORS = {">","<","<=",">=","==","!="};
+	public static final String ERROR_TEMPORAL_CONDITION_ALREADY_INSERTED = "Errore, una condizione temporale è già stata inserita";
 }

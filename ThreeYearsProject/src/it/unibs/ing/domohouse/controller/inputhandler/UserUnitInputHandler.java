@@ -2,6 +2,7 @@ package it.unibs.ing.domohouse.controller.inputhandler;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -17,11 +18,13 @@ public class UserUnitInputHandler {
 	protected DataFacade dataFacade;
 	protected PrintWriter output;
 	protected RawInputHandler input;
-
+	private List<String> operators;
+	
 	public UserUnitInputHandler(DataFacade dataFacade, PrintWriter output, RawInputHandler input) {
 		this.dataFacade = dataFacade;
 		this.output = output;
 		this.input = input;
+		operators = new ArrayList<>(Arrays.asList(ControllerStrings.REL_OPERATORS));
 	}
 
 	public String safeInsertRoom(String user, String selectedHouse) {
@@ -72,89 +75,27 @@ public class UserUnitInputHandler {
 		}
 		while (dataFacade.hasRule(user, selectedHouse, name));
 
-		String antString = ControllerStrings.NULL_CHARACTER;
-		String consString = ControllerStrings.NULL_CHARACTER;
-		boolean cont = false;
-
 		List<String> sensors = new ArrayList<>();
 		List<String> actuators = new ArrayList<>();
 
-		do {
-			String superOp;
-
-			if (input.yesOrNo(ControllerStrings.INPUT_RULE_CONDITION)) {
-				String sensor;
-				String info;
-
-				view.printCollectionOfString(dataFacade.getHousingUnit(user, selectedHouse).getSensorNames());
-				sensor = safeInsertSensor(user, selectedHouse);
-				sensors.add(sensor);
-
-				SensorCategory category = dataFacade
-						.getSensorCategory(dataFacade.getCategoryOfASensor(user, selectedHouse, sensor));
-				Set<String> infos = category.getInfoStrategySet();
-
-				view.printCollectionOfString(infos);
-
-				do {
-					info = input.readNotVoidString(ControllerStrings.INPUT_INFO_TO_DETECT);
-					if (!infos.contains(info))
-						output.println(ControllerStrings.ERROR_INFO_NAME);
-				}
-				while (!infos.contains(info));
-
-				String op;
-				do {
-					op = input.readNotVoidString(ControllerStrings.INPUT_OPERATOR);
-					if (!(op.equals(">=") || op.equals("<=") || op.equals("<") || op.equals(">") || op.equals("!=")
-							|| op.equals("==")))
-						output.println(ControllerStrings.ERROR_OPERATOR);
-				}
-				while (!(op.equals(">=") || op.equals("<=") || op.equals("<") || op.equals(">") || op.equals("!=")
-						|| op.equals("==")));
-
-				double value = input.readDouble(ControllerStrings.INPUT_DESIRED_VALUE);
-				antString = antString + sensor + "." + info + ControllerStrings.SPACE + op + ControllerStrings.SPACE
-						+ value;
-			}
-			else { // in teoria di condizione temporale dovrebbe essercene solo una per il momento
-					// lascio così
-					// condizione temporale
-				String op;
-				do {
-					op = input.readNotVoidString(ControllerStrings.INPUT_OPERATOR);
-					if (!(op.equals(">=") || op.equals("<=") || op.equals("<") || op.equals(">") || op.equals("!=")
-							|| op.equals("==")))
-						output.println(ControllerStrings.ERROR_OPERATOR);
-				}
-				while (!(op.equals(">=") || op.equals("<=") || op.equals("<") || op.equals(">") || op.equals("!=")
-						|| op.equals("==")));
-
-				String time = readTime();
-
-				antString = antString + "time" + ControllerStrings.SPACE + op + ControllerStrings.SPACE + time;
-			}
-			cont = input.yesOrNo(ControllerStrings.INPUT_NEW_COST);
-			if (cont) {
-				do {
-					superOp = input.readNotVoidString(ControllerStrings.INPUT_COST_OPERATOR);
-					if (!(superOp.equals("&&") || superOp.equals("||")))
-						output.println(ControllerStrings.ERROR_OPERATOR);
-				}
-				while (!(superOp.equals("&&") || superOp.equals("||")));
-
-				antString = antString + ControllerStrings.SPACE + superOp + ControllerStrings.SPACE;
-			}
+		try {
+			dataFacade.addRule(user, selectedHouse, name, readAntecedent(user, selectedHouse, view, sensors),
+					readConsequent(user, selectedHouse, view, actuators), sensors, actuators);
 		}
-		while (cont);
+		catch (Exception e) {
+			throw new Exception("Errore durante l'aggiunta della regola", e);
+		}
 
-		// costruzione consString
-		// b1_attCancelloBattente := apertura
-		cont = false;
+		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
+	}
 
+	private String readConsequent(String user, String selectedHouse, MenuManager view, List<String> actuators) {
+		String consString = ControllerStrings.NULL_CHARACTER;
+		boolean cont;
 		do {
 			view.printCollectionOfString(dataFacade.getHousingUnit(user, selectedHouse).getActuatorNames());
 			String actuator = safeInsertActuator(user, selectedHouse);
+			actuators.add(actuator);
 
 			view.printCollectionOfString(dataFacade.getActuatorOperatingModes(user, selectedHouse, actuator));
 
@@ -186,18 +127,77 @@ public class UserUnitInputHandler {
 		while (cont);
 
 		if (input.yesOrNo(ControllerStrings.ENABLE_ACTUATORS_SPECIFIC_TIME)) {
-			String time = readTime();
-			consString = "start :=" + time + "," + consString;
+			consString = "start :=" + readTime() + "," + consString;
 		}
+		return consString;
+	}
 
-		try {
-			dataFacade.addRule(user, selectedHouse, name, antString, consString, sensors, actuators);
-		}
-		catch (Exception e) {
-			throw new Exception("Errore durante l'aggiunta della regola", e);
-		}
+	private String readAntecedent(String user, String selectedHouse, MenuManager view,
+			List<String> sensors) {
+		boolean cont;
+		boolean temporalCondition = false;
+		String antString = ControllerStrings.NULL_CHARACTER;
+		do {
+			String superOp;
 
-		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
+			if (input.yesOrNo(ControllerStrings.INPUT_RULE_CONDITION)) {
+				String sensor;
+				String info;
+				view.printCollectionOfString(dataFacade.getHousingUnit(user, selectedHouse).getSensorNames());
+				sensor = safeInsertSensor(user, selectedHouse);
+				sensors.add(sensor);
+				SensorCategory category = dataFacade
+						.getSensorCategory(dataFacade.getCategoryOfASensor(user, selectedHouse, sensor));
+				Set<String> infos = category.getInfoStrategySet();
+				view.printCollectionOfString(infos);
+
+				do {
+					info = input.readNotVoidString(ControllerStrings.INPUT_INFO_TO_DETECT);
+					if (!infos.contains(info))
+						output.println(ControllerStrings.ERROR_INFO_NAME);
+				}
+				while (!infos.contains(info));
+
+				String op;
+				do {
+					op = input.readNotVoidString(ControllerStrings.INPUT_OPERATOR);
+					if (!operators.contains(op))
+						output.println(ControllerStrings.ERROR_OPERATOR);
+				}
+				while (!operators.contains(op));
+
+				double value = input.readDouble(ControllerStrings.INPUT_DESIRED_VALUE);
+				antString = antString + sensor + "." + info + ControllerStrings.SPACE + op + ControllerStrings.SPACE
+						+ value;
+			}
+			else if(!temporalCondition) { 
+				String op;
+				do {
+					op = input.readNotVoidString(ControllerStrings.INPUT_OPERATOR);
+					if (!operators.contains(op))
+						output.println(ControllerStrings.ERROR_OPERATOR);
+				}
+				while (!operators.contains(op));
+
+				antString = antString + "time" + ControllerStrings.SPACE + op + ControllerStrings.SPACE + readTime();
+			}
+			else
+				output.println(ControllerStrings.ERROR_TEMPORAL_CONDITION_ALREADY_INSERTED);
+			cont = input.yesOrNo(ControllerStrings.INPUT_NEW_COST);
+			if (cont) {
+				do {
+					superOp = input.readNotVoidString(ControllerStrings.INPUT_COST_OPERATOR);
+					if (!(superOp.equals("&&") || superOp.equals("||")))
+						output.println(ControllerStrings.ERROR_OPERATOR);
+				}
+				while (!(superOp.equals("&&") || superOp.equals("||")));
+
+				antString = antString + ControllerStrings.SPACE + superOp + ControllerStrings.SPACE;
+			}
+			temporalCondition = true;
+		}
+		while (cont);
+		return antString;
 	}
 
 	public void readRuleStateFromUser(String user, String selectedHouse, MenuManager view) {

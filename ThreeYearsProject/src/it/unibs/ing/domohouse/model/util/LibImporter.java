@@ -122,33 +122,11 @@ public class LibImporter {
 					&& dataFacade.hasActuatorCategory(category)
 					&& !dataFacade.hasActuator(user, selectedHouse, name + ModelStrings.UNDERSCORE + category)
 					&& isBoolean(bool)) {
-				if (bool.equalsIgnoreCase("true")) {
-					// controllare che esistano stanze da associare
-					for (String room : elements) {
-						if (!dataFacade.hasRoom(user, selectedHouse, room))
-							return false;
-						if (dataFacade.isAssociated(user, selectedHouse, room, category))
-							return false;
-					}
-
-					dataFacade.addActuator(user, selectedHouse, location, name + ModelStrings.UNDERSCORE + category, category, true, elements);
-					return true;
-
-				}
-				else {
-					// controllare che esistano artefatti da associare
-					for (String art : elements) {
-						if (!dataFacade.hasArtifact(user, selectedHouse, art))
-							return false;
-						if (dataFacade.isAssociated(user, selectedHouse, art, category))
-							return false;
-					}
-
-					for (String art : elements) {
-						dataFacade.addAssociation(user, selectedHouse, art, category);
-					}
-
-					dataFacade.addActuator(user, selectedHouse, location, name + ModelStrings.UNDERSCORE + category, category, false, elements);
+				boolean roomOrArtifact = Boolean.parseBoolean(bool);
+				
+				if (addElementsAssociations(user, selectedHouse, category, elements, roomOrArtifact)) {
+					dataFacade.addActuator(user, selectedHouse, location, name + ModelStrings.UNDERSCORE + category,
+							category, roomOrArtifact, elements);
 
 					assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 					return true;
@@ -325,7 +303,7 @@ public class LibImporter {
 
 							if (min > max)
 								return false;
-							if(!dataFacade.hasProperty(infoName))
+							if (!dataFacade.hasProperty(infoName))
 								dataFacade.addProperty(infoName, s_min);
 							DoubleInfoStrategy info = new DoubleInfoStrategy(min, max, ID, infoName);
 							dataFacade.addNumericInfoStrategy(ID, info);
@@ -348,7 +326,7 @@ public class LibImporter {
 							else
 								domainValues.add(temp);
 						}
-						if(!dataFacade.hasProperty(infoName))
+						if (!dataFacade.hasProperty(infoName))
 							dataFacade.addProperty(infoName, domainValues.get(ModelStrings.FIRST_TOKEN));
 						StringInfoStrategy info = new StringInfoStrategy(domainValues, ID, infoName);
 						dataFacade.addNonNumericInfoStrategy(ID, info);
@@ -397,25 +375,11 @@ public class LibImporter {
 			if (dataFacade.hasHousingUnit(user, selectedHouse) && dataFacade.hasRoom(user, selectedHouse, location)
 					&& !dataFacade.hasSensor(user, selectedHouse, name + ModelStrings.UNDERSCORE + category)
 					&& isBoolean(bool)) {
-				if (bool.equalsIgnoreCase("true")) {
-					for (String room : elements) {
-						if (!dataFacade.hasRoom(user, selectedHouse, room))
-							return false;
-						if (dataFacade.isAssociated(user, selectedHouse, room, category))
-							return false;
-					}
-					dataFacade.addSensor(user, selectedHouse, location, name + ModelStrings.UNDERSCORE + category, category, true, elements);
-					return true;
+				boolean roomOrArtifact = Boolean.parseBoolean(bool);
 
-				}
-				else {
-					for (String artifact : elements) {
-						if (!dataFacade.hasArtifact(user, selectedHouse, artifact))
-							return false;
-						if (dataFacade.isAssociated(user, selectedHouse, artifact, category))
-							return false;
-					}
-					dataFacade.addSensor(user, selectedHouse, location, name + ModelStrings.UNDERSCORE + category, category, false, elements);
+				if (addElementsAssociations(user, selectedHouse, category, elements, roomOrArtifact)) {
+					dataFacade.addSensor(user, selectedHouse, location, name + ModelStrings.UNDERSCORE + category,
+							category, roomOrArtifact, elements);
 					assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 					return true;
 				}
@@ -423,6 +387,35 @@ public class LibImporter {
 		}
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 		return false;
+	}
+
+	private boolean addElementsAssociations(String user, String selectedHouse, String category, List<String> elements,
+			boolean roomOrArtifact) {
+		if (roomOrArtifact) {
+			for (String room : elements) {
+				if (!dataFacade.hasRoom(user, selectedHouse, room))
+					return false;
+				if (dataFacade.isRoomAssociated(user, selectedHouse, room, category))
+					return false;
+			}
+
+			for (String room : elements) {
+				dataFacade.addRoomAssociation(user, selectedHouse, room, category);
+			}
+			return true;
+		}
+		else {
+			for (String artifact : elements) {
+				if (!dataFacade.hasArtifact(user, selectedHouse, artifact))
+					return false;
+				if (dataFacade.isArtifactAssociated(user, selectedHouse, artifact, category))
+					return false;
+			}
+			for (String art : elements) {
+				dataFacade.addRoomAssociation(user, selectedHouse, art, category);
+			}
+			return true;
+		}
 	}
 
 	// room:selectedHouse,name,descr,temp,umidita,pressione,vento,pres_pers
@@ -513,8 +506,7 @@ public class LibImporter {
 						return false;
 				}
 
-				toElaborate = antString;
-				sensors = getSensorFromAntString(toElaborate);
+				sensors = getSensorFromAntString(antString);
 
 				if (!verifyConsSyntax(user, selectedHouse, consString))
 					return false;

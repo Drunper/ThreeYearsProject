@@ -1,3 +1,2 @@
-2020-08-04T21:44:51.531+0200 [FINE] it.unibs.ing.domohouse.model.util.LogWriter write: Il manutentore prova ha effettuato l'accesso al sistema 
-2020-08-04T21:45:03.104+0200 [FINE] it.unibs.ing.domohouse.model.util.LogWriter write: Visualizzazione della categoria di sensore igrometri 
-2020-08-04T21:45:05.168+0200 [FINE] it.unibs.ing.domohouse.model.util.LogWriter write: Uscita dal menù corrente 
+2020-08-05T14:20:45.082+0200 [FINE] it.unibs.ing.domohouse.model.util.LogWriter log: Il manutentore prova ha effettuato l'accesso al sistema 
+2020-08-05T14:20:49.266+0200 [FINE] it.unibs.ing.domohouse.model.util.LogWriter log: Inserimento di una nuova categoria di sensori... 

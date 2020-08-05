@@ -361,13 +361,6 @@ public class DataFacade {
 		return gettableList;
 	}
 
-	public boolean hasRoomOrArtifact(String selectedUser, String selectedHouse, String name) {
-		assert name != null && selectedHouse != null;
-		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
-
-		return getUser(selectedUser).hasRoomOrArtifact(selectedHouse, name);
-	}
-
 	public boolean hasSensor(String selectedUser, String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -396,25 +389,34 @@ public class DataFacade {
 		return getUser(selectedUser).hasRule(selectedHouse, rule);
 	}
 
-	public boolean isElementARoom(String selectedUser, String selectedHouse, String toAssoc) {
-		assert toAssoc != null;
+	public boolean isArtifactAssociated(String selectedUser, String selectedHouse, String artifact, String category) {
+		assert artifact != null && category != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		return getUser(selectedUser).isElementARoom(selectedHouse, toAssoc);
+		return getUser(selectedUser).isArtifactAssociated(selectedHouse, artifact, category);
+	}
+	
+	public boolean isRoomAssociated(String selectedUser, String selectedHouse, String room, String category) {
+		assert room != null && category != null && selectedHouse != null;
+		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
+
+		return getUser(selectedUser).isRoomAssociated(selectedHouse, room, category);
 	}
 
-	public boolean isAssociated(String selectedUser, String selectedHouse, String toAssoc, String category) {
-		assert toAssoc != null && category != null && selectedHouse != null;
+	public void addArtifactAssociation(String selectedUser, String selectedHouse, String artifact, String category) {
+		assert artifact != null && category != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		return getUser(selectedUser).isAssociated(selectedHouse, toAssoc, category);
+		getUser(selectedUser).addArtifactAssociation(selectedHouse, artifact, category);
+
+		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
-
-	public void addAssociation(String selectedUser, String selectedHouse, String object, String category) {
-		assert object != null && category != null && selectedHouse != null;
+	
+	public void addRoomAssociation(String selectedUser, String selectedHouse, String room, String category) {
+		assert room != null && category != null && selectedHouse != null;
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		getUser(selectedUser).addAssociation(selectedHouse, object, category);
+		getUser(selectedUser).addRoomAssociation(selectedHouse, room, category);
 
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
@@ -768,5 +770,13 @@ public class DataFacade {
 
 	public void removeUser(String user) {
 		userManager.removeElement(user);
+	}
+	
+	public boolean hasAssociableArtifacts(String user, String house, String category) {
+		return getUser(user).hasAssociableArtifacts(house, category);
+	}
+	
+	public boolean hasAssociableRooms(String user, String house, String category) {
+		return getUser(user).hasAssociableRooms(house, category);
 	}
 }

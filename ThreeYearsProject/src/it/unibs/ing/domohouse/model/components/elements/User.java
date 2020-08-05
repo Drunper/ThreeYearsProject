@@ -218,14 +218,6 @@ public class User implements Manageable {
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public boolean hasRoomOrArtifact(String selectedHouse, String name) {
-		assert name != null && selectedHouse != null;
-		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
-
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
-		return _selectedHouse.hasRoomOrArtifact(name);
-	}
-
 	public boolean hasSensor(String selectedHouse, String name) {
 		assert name != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -261,29 +253,36 @@ public class User implements Manageable {
 		return _selectedHouse.hasRule(rule);
 	}
 
-	public boolean isElementARoom(String selectedHouse, String toAssoc) {
-		assert toAssoc != null;
+	public boolean isArtifactAssociated(String selectedHouse, String artifact, String category) {
+		assert artifact != null && category != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
-		return _selectedHouse.isElementARoom(toAssoc);
+		return getHousingUnit(selectedHouse).isArtifactAssociatedWith(artifact, category);
 	}
-
-	public boolean isAssociated(String selectedHouse, String toAssoc, String category) {
-		assert toAssoc != null && category != null && selectedHouse != null;
+	
+	public boolean isRoomAssociated(String selectedHouse, String room, String category) {
+		assert room != null && category != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
-		return _selectedHouse.isAssociatedWith(toAssoc, category);
+		return getHousingUnit(selectedHouse).isRoomAssociatedWith(room, category);
 	}
 
-	public void addAssociation(String selectedHouse, String object, String category) {
-		assert object != null && category != null && selectedHouse != null;
+	public void addArtifactAssociation(String selectedHouse, String artifact, String category) {
+		assert artifact != null && category != null && selectedHouse != null;
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 		assert housingUnitManager.getElement(selectedHouse) != null;
 
-		HousingUnit _selectedHouse = (HousingUnit) housingUnitManager.getElement(selectedHouse);
-		_selectedHouse.addAssociationWith(object, category);
+		getHousingUnit(selectedHouse).addArtifactAssociationWith(artifact, category);
+
+		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
+	}
+	
+	public void addRoomAssociation(String selectedHouse, String room, String category) {
+		assert room != null && category != null && selectedHouse != null;
+		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
+		assert housingUnitManager.getElement(selectedHouse) != null;
+
+		getHousingUnit(selectedHouse).addRoomAssociationWith(room, category);
 
 		assert userInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
@@ -535,5 +534,13 @@ public class User implements Manageable {
 
 	public Set<String> getMeasuredObjectSet(String selectedHouse, String selectedSensor) {
 		return getHousingUnit(selectedHouse).getMeasuredObjectSet(selectedSensor);
+	}
+	
+	public boolean hasAssociableArtifacts(String house, String category) {
+		return getHousingUnit(house).hasAssociableArtifacts(category);
+	}
+	
+	public boolean hasAssociableRooms(String house, String category) {
+		return getHousingUnit(house).hasAssociableRooms(category);
 	}
 }

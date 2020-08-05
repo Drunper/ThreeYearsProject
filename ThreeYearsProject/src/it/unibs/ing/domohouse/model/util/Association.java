@@ -2,6 +2,7 @@ package it.unibs.ing.domohouse.model.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
 
@@ -9,8 +10,7 @@ public class Association implements Serializable {
 
 	private static final long serialVersionUID = 844718073354532891L;
 	private String element; // nome della stanza o dell'artefatto
-	private boolean roomOrArtifact; // boolean per indicare se l'elemento è una stanza (true) o un artefatto (false)
-	private ArrayList<String> associatedCategories;
+	private List<String> associatedCategories;
 
 	/*
 	 * invariante element != null e size > 0 e associatedCategory != null;
@@ -51,25 +51,14 @@ public class Association implements Serializable {
 		assert associationInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
-	public boolean isElementARoom() {
-		assert associationInvariant() : ModelStrings.WRONG_INVARIANT;
-		return roomOrArtifact;
+	public void removeAssociationWithCategory(String category) {
+		associatedCategories.remove(category);
 	}
-
-	public void setRoomOrArtifact(boolean roomOrArtifact) {
-		assert associationInvariant() : ModelStrings.WRONG_INVARIANT;
-		this.roomOrArtifact = roomOrArtifact;
-		assert associationInvariant() : ModelStrings.WRONG_INVARIANT;
-	}
-
+	
 	private boolean associationInvariant() {
 		boolean checkElement = element != null;
 		boolean checkAssociatedCategory = associatedCategories != null;
 
 		return checkElement && checkAssociatedCategory;
-	}
-
-	public void removeAssociationWithCategory(String category) {
-		associatedCategories.remove(category);
 	}
 }
