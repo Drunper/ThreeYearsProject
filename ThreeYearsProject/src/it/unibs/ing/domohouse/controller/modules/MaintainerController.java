@@ -61,23 +61,24 @@ public class MaintainerController {
 			output.println();
 			selection = menuManager.doChoice();
 			String user;
+			String selectedHouse = null;
 			switch (selection) {
 				case 0:
 					try {
 						dataFacade.saveData();
 					}
 					catch (Exception e) {
-						//TOLOG
+						log.log(Level.SEVERE, ControllerStrings.DB_SAVE_ERROR, e);
 						output.println(ControllerStrings.DB_SAVE_ERROR);
 					}
-					log.write(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
+					log.log(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
 					break;
 				case 1:
 					try {
 						maintainerInputHandler.readUser();
 					}
-					catch (Exception e1) {
-						//TOLOG
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Errore durante l'inserimento di un utente", e);
 						output.println("Errore durante l'inserimento di un utente, non è possibile verificare la presenza di altri utenti nel database");
 					}
 					break;
@@ -91,8 +92,8 @@ public class MaintainerController {
 						else
 							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
-					catch (Exception e1) {
-						//TOLOG
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Errore durante la rimozione dell'utente " + user , e);
 						output.println("Errore durante la rimozione dell'utente, non è possibile verificare la presenza di altri utenti nel database");
 					}
 					break;
@@ -103,7 +104,7 @@ public class MaintainerController {
 						if (dataFacade.hasUser(user)) {
 							if (dataFacade.doesHousingUnitExist(user)) {
 								menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
-								String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
+								selectedHouse = maintainerInputHandler.safeInsertHouse(user);
 								maintainerUnitController.show(user, selectedHouse);
 							}
 							else
@@ -112,22 +113,22 @@ public class MaintainerController {
 						else
 							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
-					catch (Exception e1) {
-						//TOLOG
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Errore durante l'ottenimento della casa " + selectedHouse, e);
 						output.println("Errore durante l'ottenimento della casa selezionata dal database");
 					}
 					break;
 				case 4:
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_HOUSE);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_HOUSE);
 					try {
 						maintainerInputHandler.readHouseFromUser();
 					}
-					catch (Exception e1) {
-						//TOLOG
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Errore durante l'inserimento dell'unità immobiliare", e);
 						output.println("Errore durante l'inserimento dell'unità immobiliare, verificare la connessione al database");
 					}
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_HOUSE_SUCCESS);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_HOUSE_SUCCESS);
 					break;
 				case 5:
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
@@ -135,7 +136,7 @@ public class MaintainerController {
 						if (dataFacade.hasUser(user)) {
 							if (dataFacade.doesHousingUnitExist(user)) {
 								menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
-								String selectedHouse = maintainerInputHandler.safeInsertHouse(user);
+								selectedHouse = maintainerInputHandler.safeInsertHouse(user);
 								objectRemover.removeHousingUnit(user, selectedHouse);
 							}
 							else
@@ -144,8 +145,8 @@ public class MaintainerController {
 						else
 							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
-					catch (Exception e1) {
-						//TOLOG
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Errore durante la rimozione dell'unità immobiliare " + selectedHouse, e);
 						output.println("Errore durante la rimozione dell'unità immobiliare, verificare la connessione al database");
 					}
 					break;
@@ -158,7 +159,7 @@ public class MaintainerController {
 						output.println();
 
 						String selectedSensCategory = maintainerInputHandler.safeInsertSensorCategory();
-						log.write(Level.FINE, ControllerStrings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
+						log.log(Level.FINE, ControllerStrings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
 						output.println(renderer.render(dataFacade.getSensorCategory(selectedSensCategory)));
 					}
 					else
@@ -173,7 +174,7 @@ public class MaintainerController {
 						output.println();
 
 						String selectedActuCategory = maintainerInputHandler.safeInsertActuatorCategory();
-						log.write(Level.FINE, ControllerStrings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
+						log.log(Level.FINE, ControllerStrings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
 						output.println(renderer.render(dataFacade.getActuatorCategory(selectedActuCategory)));
 					}
 					else
@@ -181,21 +182,21 @@ public class MaintainerController {
 					break;
 				case 8:
 					// crea sensor category
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_SENSOR_CATEGORY);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_SENSOR_CATEGORY);
 					try {
 						maintainerInputHandler.readSensorCategoryFromUser(menuManager);
 					}
-					catch (Exception e1) {
-						//TOLOG
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Errore durante l'inserimento della categoria di sensori", e);
 						output.println("Errore durante l'inserimento della categoria di sensori, verificare la connessione al database");
 					}
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_SENSOR_CATEGORY_SUCCESS);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_SENSOR_CATEGORY_SUCCESS);
 					break;
 				case 9:
 					// crea actuator category
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY);
 					maintainerInputHandler.readActuatorCategoryFromUser();
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY_SUCCESS);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_ACTUATOR_CATEGORY_SUCCESS);
 					break;
 				case 10:
 					menuManager.clearOutput();
@@ -210,7 +211,7 @@ public class MaintainerController {
 							dataFacade.saveData();
 						}
 						catch (Exception e) {
-							//TOLOG
+							log.log(Level.SEVERE, "Errore durante la rimozione della categoria di sensori " + selectedSensCategory, e);
 							output.println(ControllerStrings.DB_SAVE_ERROR);
 						}
 					}
@@ -230,7 +231,7 @@ public class MaintainerController {
 							dataFacade.saveData();
 						}
 						catch (Exception e) {
-							//TOLOG
+							log.log(Level.SEVERE, "Errore durante la rimozione della categoria di attuatori " + selectedActuCategory, e);
 							output.println(ControllerStrings.DB_SAVE_ERROR);
 						}
 					}
@@ -240,42 +241,54 @@ public class MaintainerController {
 				case 12:
 					// importa file
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_IMPORTING_FILE);
+					log.log(Level.FINE, ControllerStrings.LOG_IMPORTING_FILE);
 					user = input.readNotVoidString(ControllerStrings.INSERT_USER_DB);
 					try {
 						if (dataFacade.hasUser(user)) {
 							dataFacade.loadHousingUnits(user);
 							if (libImporter.importFile(user)) {
-								log.write(Level.FINE, ControllerStrings.SUCCESS_IMPORT_FILE);
+								log.log(Level.FINE, ControllerStrings.SUCCESS_IMPORT_FILE);
 								output.println(ControllerStrings.SUCCESS_IMPORT_FILE);
 							}
 							else {
 								String error = libImporter.getErrorsString();
 								output.println(error);
-								log.write(Level.FINE, ControllerStrings.LOG_ERROR_IMPORT + error);
+								log.log(Level.FINE, ControllerStrings.LOG_ERROR_IMPORT + error);
 							}
 						}
 						else
 							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
 					catch (Exception e) {
-						//TOLOG
-						output.println(ControllerStrings.DB_LOAD_USER_ERROR);
+						log.log(Level.SEVERE, "Errore durante l'importazione del file di libreria", e);
+						output.println("Errore durante l'importazione del file di libreria");
 					}
 
 					break;
 				case 13:
 					// mostra file di help
-					configFileManager.runFileFromSource(
-							ControllerStrings.HELP_PATH + ControllerStrings.MAINTAINER_HELP_FILE_NAME);
+					try {
+						configFileManager
+								.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.USER_HELP_FILE_NAME);
+					}
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Impossibile aprire il file di help", e);
+						output.println("Impossibile aprire il file di help");
+					};
 					break;
 				case 14:
 					// visualizza log
-					configFileManager.runFileFromSource(ControllerStrings.LOG_PATH + ControllerStrings.LOG_NAME_FILE);
+					try {
+						configFileManager.runFileFromSource(ControllerStrings.LOG_PATH + ControllerStrings.LOG_NAME_FILE);
+					}
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Impossibile aprire il file di log", e);
+						output.println("Impossibile aprire il file di log");
+					}
 					break;
 				case 15:
 					// aggiorna ora
-					log.write(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
+					log.log(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
 					menuManager.clearOutput();
 					break;
 			}

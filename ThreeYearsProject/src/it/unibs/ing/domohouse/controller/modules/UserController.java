@@ -53,24 +53,25 @@ public class UserController {
 						dataFacade.saveData();
 					}
 					catch (Exception e) {
-						//TOLOG
+						log.log(Level.SEVERE, ControllerStrings.DB_SAVE_ERROR, e);
 						output.println(ControllerStrings.DB_SAVE_ERROR);
 					}
-					log.write(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
+					log.log(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
 					break;
 				case 1:
+					String selectedHouse;
 					menuManager.clearOutput();
 					try {
 						if (dataFacade.doesHousingUnitExist(user)) {
 							menuManager.printCollectionOfString(dataFacade.getHousingUnitSet(user));
-							String selectedHouse = userInputHandler.safeInsertHouse(user);
+							selectedHouse = userInputHandler.safeInsertHouse(user);
 							userUnitController.show(user, selectedHouse);
 						}
 						else
 							output.println(ControllerStrings.NO_HOUSE);
 					}
 					catch (Exception e) {
-						//TOLOG
+						log.log(Level.SEVERE, ControllerStrings.DB_LOAD_HOUSING_UNIT_ERROR, e);
 						output.println(ControllerStrings.DB_LOAD_HOUSING_UNIT_ERROR);
 					}
 					break;
@@ -82,7 +83,7 @@ public class UserController {
 						output.println();
 
 						String selectedSensCategory = userInputHandler.safeInsertSensorCategory();
-						log.write(Level.FINE, ControllerStrings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
+						log.log(Level.FINE, ControllerStrings.LOG_SHOW_SENSOR_CATEGORY + selectedSensCategory);
 						output.println(renderer.render(dataFacade.getSensorCategory(selectedSensCategory)));
 					}
 					else
@@ -95,7 +96,7 @@ public class UserController {
 						output.println();
 						output.println();
 						String selectedActuCategory = userInputHandler.safeInsertActuatorCategory();
-						log.write(Level.FINE, ControllerStrings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
+						log.log(Level.FINE, ControllerStrings.LOG_SHOW_ACTUATOR_CATEGORY + selectedActuCategory);
 						output.println(renderer.render(dataFacade.getActuatorCategory(selectedActuCategory)));
 					}
 					else
@@ -104,13 +105,19 @@ public class UserController {
 				case 4:
 					// mostra file di help
 					menuManager.clearOutput();
-					configFileManager
-							.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.USER_HELP_FILE_NAME);
+					try {
+						configFileManager
+								.runFileFromSource(ControllerStrings.HELP_PATH + ControllerStrings.USER_HELP_FILE_NAME);
+					}
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Impossibile aprire il file di help", e);
+						output.println("Impossibile aprire il file di help");
+					}
 					break;
 				case 5:
 					// aggiorna ora
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
+					log.log(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
 					break;
 			}
 		}

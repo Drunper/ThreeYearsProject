@@ -28,11 +28,11 @@ public class LogWriter {
 		logger.setLevel(Level.FINE);
 	}
 
-	public void write(Level severity, String logMessage) {
+	public void log(Level severity, String logMessage) {
 		logger.log(severity, logMessage);
 	}
 
-	public void write(Level severity, String logMessage, Throwable thrown) {
+	public void log(Level severity, String logMessage, Throwable thrown) {
 		logger.log(severity, logMessage, thrown);
 	}
 }

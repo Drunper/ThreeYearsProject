@@ -27,7 +27,6 @@ public class DoubleInfoStrategy implements InfoStrategy, Serializable {
 				value = Double.parseDouble(values.get(i));
 			}
 			catch (NumberFormatException e) {
-				//TOLOG
 				value = 0;
 			}
 			if (value < lowerBound)

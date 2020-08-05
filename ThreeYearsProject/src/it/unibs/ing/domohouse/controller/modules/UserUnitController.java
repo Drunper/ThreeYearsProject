@@ -46,12 +46,12 @@ public class UserUnitController {
 			selection = menuManager.doChoice();
 			switch (selection) {
 				case 0:
-					log.write(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
+					log.log(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
 					break;
 				case 1:
 					// visualizza descrizione unita immobiliare
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_DESCR_HOUSE);
+					log.log(Level.FINE, ControllerStrings.LOG_DESCR_HOUSE);
 					output.println(renderer.render(dataFacade.getHousingUnit(user, selectedHouse)));
 					break;
 				case 2:
@@ -70,31 +70,37 @@ public class UserUnitController {
 				case 3:
 					// aggiungi regola
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_NEW_RULE);
-					userUnitInputHandler.readRuleFromUser(user, selectedHouse, menuManager);
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_NEW_RULE_SUCCESS);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_NEW_RULE);
+					try {
+						userUnitInputHandler.readRuleFromUser(user, selectedHouse, menuManager);
+					}
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Errore durante l'inserimento della regola", e);
+						output.println("Errore durante l'inserimento della regola");
+					}
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_NEW_RULE_SUCCESS);
 					break;
 				case 4:
 					// visualizza regole attive
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_SHOW_ENABLED_RULES);
+					log.log(Level.FINE, ControllerStrings.LOG_SHOW_ENABLED_RULES);
 					menuManager.printCollectionOfString(dataFacade.getEnabledRulesStrings(user, selectedHouse));
 					break;
 				case 5:
 					// visualizza tutte le regole
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_SHOW_ALL_RULES);
+					log.log(Level.FINE, ControllerStrings.LOG_SHOW_ALL_RULES);
 					menuManager.printCollectionOfString(dataFacade.getRulesStrings(user, selectedHouse));
 					break;
 				case 6:
 					// attiva/disattiva regola
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_ENABLE_DISABLE_RULE);
+					log.log(Level.FINE, ControllerStrings.LOG_ENABLE_DISABLE_RULE);
 					userUnitInputHandler.readRuleStateFromUser(user, selectedHouse, menuManager);
 					break;
 				case 7:
 					// aggiorna ora
-					log.write(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
+					log.log(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
 					menuManager.clearOutput();
 					break;
 			}

@@ -11,17 +11,10 @@ public class HashCalculator {
 
 	private MessageDigest md;
 	SecureRandom sr;
-	
-	public HashCalculator() {
-		try {
-			md = MessageDigest.getInstance(ModelStrings.SHA_256);
-			sr = SecureRandom.getInstance(ModelStrings.SHA1PRNG);
-		}
-		catch (NoSuchAlgorithmException e) {
-			//TOLOG
-			//throware
-			e.printStackTrace();
-		}
+
+	public HashCalculator() throws NoSuchAlgorithmException {
+		md = MessageDigest.getInstance(ModelStrings.SHA_256);
+		sr = SecureRandom.getInstance(ModelStrings.SHA1PRNG);
 	}
 
 	public String hash(String toHash, byte[] salt) {
@@ -29,13 +22,13 @@ public class HashCalculator {
 		md.update(salt);
 		return bytesToHex(md.digest(toHash.getBytes(StandardCharsets.UTF_8)));
 	}
-	
+
 	public byte[] getSalt() {
-        byte[] salt = new byte[16];
-        sr.nextBytes(salt);
-        return salt;
+		byte[] salt = new byte[16];
+		sr.nextBytes(salt);
+		return salt;
 	}
-	
+
 	public String bytesToHex(byte[] hash) {
 		assert hash != null;
 
@@ -52,14 +45,13 @@ public class HashCalculator {
 		assert result != null;
 		return result;
 	}
-	
+
 	public byte[] hexToBytes(String s) {
-	    int length = s.length();
-	    byte[] result = new byte[length / 2];
-	    for (int i = 0; i < length; i += 2) {
-	        result[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-	                             + Character.digit(s.charAt(i+1), 16));
-	    }
-	    return result;
+		int length = s.length();
+		byte[] result = new byte[length / 2];
+		for (int i = 0; i < length; i += 2) {
+			result[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
+		}
+		return result;
 	}
 }

@@ -49,12 +49,12 @@ public class MaintainerRoomController {
 			selection = menuManager.doChoice();
 			switch (selection) {
 				case 0:
-					log.write(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
+					log.log(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
 					break;
 				case 1:
 					// visualizza descrizione stanza
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_SHOW_DESCR_ROOM + selectedRoom);
+					log.log(Level.FINE, ControllerStrings.LOG_SHOW_DESCR_ROOM + selectedRoom);
 					output.println(renderer.render(dataFacade.getRoom(user, selectedHouse, selectedRoom)));
 					break;
 				case 2:
@@ -67,7 +67,7 @@ public class MaintainerRoomController {
 						output.println();
 						String selectedSensor = maintainerRoomInputHandler.safeInsertSensor(user, selectedHouse,
 								selectedRoom);
-						log.write(Level.FINE, ControllerStrings.LOG_SHOW_SENSOR + selectedSensor);
+						log.log(Level.FINE, ControllerStrings.LOG_SHOW_SENSOR + selectedSensor);
 						output.println(renderer.render(dataFacade.getSensor(user, selectedHouse, selectedSensor)));
 					}
 					else
@@ -83,7 +83,7 @@ public class MaintainerRoomController {
 						output.println();
 						String selectedActuator = maintainerRoomInputHandler.safeInsertActuator(user, selectedHouse,
 								selectedRoom);
-						log.write(Level.FINE, ControllerStrings.LOG_SHOW_ACTUATOR + selectedActuator);
+						log.log(Level.FINE, ControllerStrings.LOG_SHOW_ACTUATOR + selectedActuator);
 						output.println(renderer.render(dataFacade.getActuator(user, selectedHouse, selectedActuator)));
 					}
 					else
@@ -99,7 +99,7 @@ public class MaintainerRoomController {
 								selectedRoom);
 						maintainerRoomInputHandler.setOperatingMode(user, selectedHouse, selectedRoom, selectedAct,
 								menuManager);
-						log.write(Level.FINE, ControllerStrings.LOG_ACTUATOR_ACTION + selectedAct);
+						log.log(Level.FINE, ControllerStrings.LOG_ACTUATOR_ACTION + selectedAct);
 						dataFacade.updateRulesState(user, selectedHouse);
 					}
 					else
@@ -115,7 +115,7 @@ public class MaintainerRoomController {
 						output.println();
 						String selectedArtifact = maintainerRoomInputHandler.safeInsertArtifact(user, selectedHouse,
 								selectedRoom);
-						log.write(Level.FINE, ControllerStrings.LOG_SHOW_ARTIFACT);
+						log.log(Level.FINE, ControllerStrings.LOG_SHOW_ARTIFACT);
 						output.println(renderer.render(dataFacade.getArtifact(user, selectedHouse, selectedArtifact)));
 					}
 					else
@@ -123,32 +123,32 @@ public class MaintainerRoomController {
 					break;
 				case 6:
 					// modifica descrizione stanza
-					log.write(Level.FINE, ControllerStrings.LOG_CHANGE_ROOM_DESCR);
+					log.log(Level.FINE, ControllerStrings.LOG_CHANGE_ROOM_DESCR);
 					maintainerRoomInputHandler.changeRoomDescription(user, selectedHouse, selectedRoom);
 					break;
 				case 7:
 					// inserisci sensore
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_SENSOR);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_SENSOR);
 					maintainerRoomInputHandler.readSensorFromUser(user, selectedHouse, selectedRoom);
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_SENSOR_SUCCESS);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_SENSOR_SUCCESS);
 					break;
 				case 8:
 					// inserisci attuatore
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_ACTUATOR);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_ACTUATOR);
 					maintainerRoomInputHandler.readActuatorFromUser(user, selectedHouse, selectedRoom);
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_ACTUATOR_SUCCESS);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_ACTUATOR_SUCCESS);
 					break;
 				case 9:
 					// inserisci artefatto
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_ARTIFACT);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_ARTIFACT);
 					try {
 						maintainerRoomInputHandler.readArtifactFromUser(user, selectedHouse, selectedRoom, menuManager);
 					}
 					catch (Exception e) {
-						//TOLOG
+						log.log(Level.SEVERE, "Errore durante l'inserimento dell'artefatto", e);
 						output.println("Errore durante l'inserimento dell'artefatto, verificare la connessione al database");
 					}
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_ARTIFACT_SUCCESS);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_ARTIFACT_SUCCESS);
 					break;
 				case 10:
 					// rimozione sensore
@@ -198,12 +198,12 @@ public class MaintainerRoomController {
 				case 13:
 					// attiva/dis disp
 					maintainerRoomInputHandler.readDeviceStateFromUser(user, selectedHouse, selectedRoom, menuManager);
-					log.write(Level.FINE, ControllerStrings.LOG_ENABLE_DISABLE_DISP);
+					log.log(Level.FINE, ControllerStrings.LOG_ENABLE_DISABLE_DISP);
 					dataFacade.updateRulesState(user, selectedHouse);
 					break;
 				case 14:
 					// aggiorna ora
-					log.write(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
+					log.log(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
 					menuManager.clearOutput();
 					break;
 			}

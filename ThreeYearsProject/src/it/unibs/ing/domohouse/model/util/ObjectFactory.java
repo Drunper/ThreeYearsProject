@@ -80,7 +80,7 @@ public class ObjectFactory {
 	}
 
 	public Rule createRule(String name, String antString, String consString, List<Sensor> involvedSensors,
-			List<Actuator> involvedActuators) {
+			List<Actuator> involvedActuators) throws Exception {
 		assert name != null && name.length() > 0;
 		State state = new ActiveState();
 		for (Sensor sensor : involvedSensors)
@@ -93,21 +93,14 @@ public class ObjectFactory {
 	}
 
 	public Rule createRule(String name, String antString, String consString, List<Sensor> involvedSensors,
-			List<Actuator> involvedActuators, State state) {
+			List<Actuator> involvedActuators, State state) throws Exception {
 		Rule rule = null;
-		try {
-			rule = new Rule(name, ruleParser.parseAnt(antString, involvedSensors),
-					ruleParser.parseCons(consString, involvedActuators),
-					involvedSensors.stream().map(s -> s.getName()).collect(Collectors.toList()),
-					involvedActuators.stream().map(a -> a.getName()).collect(Collectors.toList()), state);
-			if (consString.contains("start"))
-				rule.setTime(ruleParser.getTime(consString));
-		}
-		catch (Exception e) {
-			//TOLOG
-			//Impossibile creare la regola richiesta
-			e.printStackTrace();
-		}
+		rule = new Rule(name, ruleParser.parseAnt(antString, involvedSensors),
+				ruleParser.parseCons(consString, involvedActuators),
+				involvedSensors.stream().map(s -> s.getName()).collect(Collectors.toList()),
+				involvedActuators.stream().map(a -> a.getName()).collect(Collectors.toList()), state);
+		if (consString.contains("start"))
+			rule.setTime(ruleParser.getTime(consString));
 		return rule;
 	}
 

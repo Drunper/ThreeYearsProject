@@ -22,7 +22,7 @@ public class LibImporter {
 		this.dataFacade = dataFacade;
 	}
 
-	public boolean importFile(String user) {
+	public boolean importFile(String user) throws Exception {
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		String filePath = ModelStrings.LIB_PATH + ModelStrings.LIB_NAME;
@@ -45,10 +45,8 @@ public class LibImporter {
 			}
 			errorString = errorString.substring(0, errorString.length() - 1);
 		}
-		catch (Exception ex) {
-			//TOLOG
-			//Impossibile importare il file corettamente, necessario throware a livello superiore
-			ex.printStackTrace();
+		catch (IOException e) {
+			throw new Exception("Errore I/O durante la lettura del file", e);
 		}
 
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -470,7 +468,7 @@ public class LibImporter {
 	 * name, antString, consString, sensors, act, state); Chiamare metodo
 	 * dataFacade.getHousingUnit(user, selectedHouse).addRule(r)
 	 */
-	private boolean importRule(String user, String importedText) {
+	private boolean importRule(String user, String importedText) throws Exception {
 		assert importedText != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
@@ -613,9 +611,7 @@ public class LibImporter {
 				test = condition.split("\\.")[1].split("<|>|>=|<=|==|!=")[1];
 			}
 		}
-		catch (Exception ex) {
-			//TOLOG
-			//Non funziona così!
+		catch (Exception e) {
 			return false;
 		}
 
@@ -651,7 +647,7 @@ public class LibImporter {
 					hour = Integer.parseInt(time.split("\\.")[0]);
 					minute = Integer.parseInt(time.split("\\.")[1]);
 				}
-				catch (Exception ex) {
+				catch (Exception e) {
 					hour = -1;
 					minute = -1;
 				}

@@ -44,12 +44,12 @@ public class UserRoomController {
 			selection = menuManager.doChoice();
 			switch (selection) {
 				case 0:
-					log.write(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
+					log.log(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
 					break;
 				case 1:
 					// visualizza descrizione stanza
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_SHOW_DESCR_ROOM + selectedRoom);
+					log.log(Level.FINE, ControllerStrings.LOG_SHOW_DESCR_ROOM + selectedRoom);
 					output.println(renderer.render(dataFacade.getRoom(user, selectedHouse, selectedRoom)));
 					break;
 				case 2:
@@ -62,7 +62,7 @@ public class UserRoomController {
 						output.println();
 						String selectedSensor = userRoomInputHandler.safeInsertSensor(user, selectedHouse,
 								selectedRoom);
-						log.write(Level.FINE, ControllerStrings.LOG_SHOW_SENSOR + selectedSensor);
+						log.log(Level.FINE, ControllerStrings.LOG_SHOW_SENSOR + selectedSensor);
 						output.println(renderer.render(dataFacade.getSensor(user, selectedHouse, selectedSensor)));
 					}
 					else
@@ -78,7 +78,7 @@ public class UserRoomController {
 						output.println();
 						String selectedActuator = userRoomInputHandler.safeInsertActuator(user, selectedHouse,
 								selectedRoom);
-						log.write(Level.FINE, ControllerStrings.LOG_SHOW_ACTUATOR + selectedActuator);
+						log.log(Level.FINE, ControllerStrings.LOG_SHOW_ACTUATOR + selectedActuator);
 						output.println(renderer.render(dataFacade.getActuator(user, selectedHouse, selectedActuator)));
 					}
 					else
@@ -93,7 +93,7 @@ public class UserRoomController {
 						String selectedAct = userRoomInputHandler.safeInsertActuator(user, selectedHouse, selectedRoom);
 						userRoomInputHandler.setOperatingMode(user, selectedHouse, selectedRoom, selectedAct,
 								menuManager);
-						log.write(Level.FINE, ControllerStrings.LOG_ACTUATOR_ACTION + selectedAct);
+						log.log(Level.FINE, ControllerStrings.LOG_ACTUATOR_ACTION + selectedAct);
 					}
 					else
 						output.println(ControllerStrings.NO_ACTUATOR);
@@ -108,7 +108,7 @@ public class UserRoomController {
 						output.println();
 						String selectedArtifact = userRoomInputHandler.safeInsertArtifact(user, selectedHouse,
 								selectedRoom);
-						log.write(Level.FINE, ControllerStrings.LOG_SHOW_ARTIFACT);
+						log.log(Level.FINE, ControllerStrings.LOG_SHOW_ARTIFACT);
 						output.println(renderer.render(dataFacade.getArtifact(user, selectedHouse, selectedArtifact)));
 					}
 					else
@@ -117,12 +117,12 @@ public class UserRoomController {
 				case 6:
 					// attiva/disattiva dispositivo
 					userRoomInputHandler.readDeviceStateFromUser(user, selectedHouse, selectedRoom, menuManager);
-					log.write(Level.FINE, ControllerStrings.LOG_ENABLE_DISABLE_DISP);
+					log.log(Level.FINE, ControllerStrings.LOG_ENABLE_DISABLE_DISP);
 					dataFacade.updateRulesState(user, selectedHouse);
 					break;
 				case 7:
 					// aggiorna ora
-					log.write(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
+					log.log(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
 					menuManager.clearOutput();
 					break;
 			}

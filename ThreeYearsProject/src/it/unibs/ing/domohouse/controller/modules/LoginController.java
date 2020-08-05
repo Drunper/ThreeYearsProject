@@ -61,7 +61,7 @@ public class LoginController {
 							output.println(ControllerStrings.ERROR_NON_EXISTENT_USER);
 					}
 					catch (Exception e) {
-						//TOLOG
+						log.log(Level.SEVERE, ControllerStrings.DB_LOAD_USER_ERROR, e);
 						output.println(ControllerStrings.DB_LOAD_USER_ERROR);
 					}
 					break;
@@ -80,11 +80,11 @@ public class LoginController {
 									output.println(ControllerStrings.USER_OR_PASSWORD_ERROR);
 							}
 							catch (Exception e) {
-								//TOLOG
+								log.log(Level.SEVERE, ControllerStrings.DB_AUTHENTICATION_ERROR, e);
 								output.println(ControllerStrings.DB_AUTHENTICATION_ERROR);
 							}
 						}
-						log.write(Level.FINE, ControllerStrings.MAINTAINER + maintainer + ControllerStrings.LOG_SYSTEM_ACCESS);
+						log.log(Level.FINE, ControllerStrings.MAINTAINER + maintainer + ControllerStrings.LOG_SYSTEM_ACCESS);
 					}
 					while (!maintainer.equalsIgnoreCase(ControllerStrings.BACK_CHARACTER) && !ok);
 					if (ok)

@@ -511,7 +511,7 @@ public class DataFacade {
 	}
 
 	public void addRule(String selectedUser, String selectedHouse, String name, String antString, String consString,
-			List<String> involvedSensors, List<String> involvedActuators, State state) {
+			List<String> involvedSensors, List<String> involvedActuators, State state) throws Exception {
 		Rule rule = objectFactory.createRule(name, antString, consString,
 				getRuleSensorsList(selectedUser, selectedHouse, involvedSensors),
 				getRuleActuatorsList(selectedUser, selectedHouse, involvedActuators), state);
@@ -522,7 +522,7 @@ public class DataFacade {
 	}
 
 	public void addRule(String selectedUser, String selectedHouse, String name, String antString, String consString,
-			List<String> involvedSensors, List<String> involvedActuators) {
+			List<String> involvedSensors, List<String> involvedActuators) throws Exception {
 		Rule rule = objectFactory.createRule(name, antString, consString,
 				getRuleSensorsList(selectedUser, selectedHouse, involvedSensors),
 				getRuleActuatorsList(selectedUser, selectedHouse, involvedActuators));

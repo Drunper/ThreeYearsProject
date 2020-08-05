@@ -11,6 +11,7 @@ import it.unibs.ing.domohouse.view.*;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.logging.Level;
 
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 
@@ -66,7 +67,7 @@ public class MasterController {
 			dataFacade.loadCategories();
 		}
 		catch (Exception e) {
-			//TOLOG
+			log.log(Level.SEVERE, "Errore durante l'inizializzazione del programma", e);
 			output.println("Errore durante l'inizializzazione del programma, verificare lo stato della configurazione");
 		}
 		rulesWorker.startRulesWorker();
@@ -117,23 +118,34 @@ public class MasterController {
 	private void checkConfigFileExistence(PrintWriter output) {
 		if (!configFileManager.loadConfigFile()) {
 			output.println(ControllerStrings.CONFIG_FILE_LOADING_FAILED);
-			configFileManager.createConfigFile();
-			output.println(ControllerStrings.CONFIG_FILE_CREATED);
-			configFileManager.loadConfigFile();
+			try {
+				configFileManager.createConfigFile();
+				output.println(ControllerStrings.CONFIG_FILE_CREATED);
+				configFileManager.loadConfigFile();
+			}
+			catch (Exception e) {
+				log.log(Level.SEVERE, "Errore durante la creazione del file di configurazione", e);
+				output.println("Errore durante la creazione del file di configurazione");
+			}
 		}
-		loadClockType();
+		try {
+			loadClockType();
+		}
+		catch (Exception e) {
+			log.log(Level.SEVERE, "Errore durante la configurazione dell'orologio di sistema", e);
+			output.println("Errore durante la configurazione dell'orologio di sistema");
+		}
 		output.println(ControllerStrings.LOADED_CLOCK_STRATEGY);
 	}
 
-	private void loadClockType() {
+	private void loadClockType() throws Exception {
 		String className = System.getProperty("clock.type.class.name");
 		try {
 			clock = (ClockStrategy) Class.forName(className).getDeclaredConstructor().newInstance();
 			clock.startClock();
 		}
 		catch (Exception e) {
-			//TOLOG
-			//Messaggio di errore impossibile caricare l'applicazione verificare che tutto sia a posto
+			throw new Exception("Errore durante la configurazione dell'orologio di sistema");
 		}
 	}
 

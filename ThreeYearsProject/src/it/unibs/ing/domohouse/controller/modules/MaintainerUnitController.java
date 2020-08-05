@@ -51,17 +51,17 @@ public class MaintainerUnitController {
 			switch (selection) {
 				case 0:
 					// uscita menu
-					log.write(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
+					log.log(Level.FINE, ControllerStrings.LOG_EXIT_MENU);
 					break;
 				case 1:
 					// visualizza descrizione unità immobiliare
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_DESCR_HOUSE);
+					log.log(Level.FINE, ControllerStrings.LOG_DESCR_HOUSE);
 					output.println(renderer.render(dataFacade.getHousingUnit(user, selectedHouse)));
 					break;
 				case 2:
 					// cambia descrizione casa
-					log.write(Level.FINE, ControllerStrings.LOG_CHANGE_DESCR_HOUSE);
+					log.log(Level.FINE, ControllerStrings.LOG_CHANGE_DESCR_HOUSE);
 					maintainedUnitInputHandler.changeHouseDescription(user, selectedHouse);
 					break;
 				case 3:
@@ -79,15 +79,15 @@ public class MaintainerUnitController {
 					break;
 				case 4:
 					// Inserisci stanza
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_ROOM);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_ROOM);
 					try {
 						maintainedUnitInputHandler.readRoomFromUser(user, selectedHouse, menuManager);
 					}
 					catch (Exception e) {
-						// TOLOG
+						// 
 						output.println("Errore durante l'inserimento della stanza, verificare la connessione al database");
 					}
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_ROOM_SUCCESS);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_ROOM_SUCCESS);
 					break;
 				case 5:
 					// Rimozione stanza
@@ -105,26 +105,32 @@ public class MaintainerUnitController {
 				case 6:
 					// aggiungi regola
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_NEW_RULE);
-					maintainedUnitInputHandler.readRuleFromUser(user, selectedHouse, menuManager);
-					log.write(Level.FINE, ControllerStrings.LOG_INSERT_NEW_RULE_SUCCESS);
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_NEW_RULE);
+					try {
+						maintainedUnitInputHandler.readRuleFromUser(user, selectedHouse, menuManager);
+					}
+					catch (Exception e) {
+						log.log(Level.SEVERE, "Errore durante l'inserimento della regola", e);
+						output.println("Errore durante l'inserimento della regola");
+					}
+					log.log(Level.FINE, ControllerStrings.LOG_INSERT_NEW_RULE_SUCCESS);
 					break;
 				case 7:
 					// visualizza regole attive
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_SHOW_ENABLED_RULES);
+					log.log(Level.FINE, ControllerStrings.LOG_SHOW_ENABLED_RULES);
 					menuManager.printCollectionOfString(dataFacade.getEnabledRulesStrings(user, selectedHouse));
 					break;
 				case 8:
 					// visualizza tutte le regole
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_SHOW_ALL_RULES);
+					log.log(Level.FINE, ControllerStrings.LOG_SHOW_ALL_RULES);
 					menuManager.printCollectionOfString(dataFacade.getRulesStrings(user, selectedHouse));
 					break;
 				case 9:
 					// attiva/disattiva regola
 					menuManager.clearOutput();
-					log.write(Level.FINE, ControllerStrings.LOG_ENABLE_DISABLE_RULE);
+					log.log(Level.FINE, ControllerStrings.LOG_ENABLE_DISABLE_RULE);
 					maintainedUnitInputHandler.readRuleStateFromUser(user, selectedHouse, menuManager);
 					break;
 				case 10:
@@ -139,7 +145,7 @@ public class MaintainerUnitController {
 					break;
 				case 11:
 					// aggiorna ora
-					log.write(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
+					log.log(Level.FINE, ControllerStrings.LOG_REFRESH_HOUR);
 					menuManager.clearOutput();
 					break;
 			}

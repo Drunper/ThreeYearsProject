@@ -62,7 +62,7 @@ public class UserUnitInputHandler {
 		return selectedRule;
 	}
 
-	public void readRuleFromUser(String user, String selectedHouse, MenuManager view) {
+	public void readRuleFromUser(String user, String selectedHouse, MenuManager view) throws Exception {
 		assert selectedHouse != null;
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 
@@ -190,7 +190,12 @@ public class UserUnitInputHandler {
 			consString = "start :=" + time + "," + consString;
 		}
 
-		dataFacade.addRule(user, selectedHouse, name, antString, consString, sensors, actuators);
+		try {
+			dataFacade.addRule(user, selectedHouse, name, antString, consString, sensors, actuators);
+		}
+		catch (Exception e) {
+			throw new Exception("Errore durante l'aggiunta della regola", e);
+		}
 
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}

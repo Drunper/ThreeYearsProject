@@ -18,7 +18,7 @@ public class ConfigFileManager {
 		this.output = output;
 	}
 
-	public void runFileFromSource(String sourceName) {
+	public void runFileFromSource(String sourceName) throws Exception {
 		try {
 			File f = new File(sourceName);
 			if (f.exists()) {
@@ -31,9 +31,7 @@ public class ConfigFileManager {
 				output.println(ModelStrings.ERROR_HELP_FILE);
 		}
 		catch (Exception e) {
-			//TOLOG
-			//Impossibile aprire il file, throware
-			e.printStackTrace();
+			throw new Exception("Impossibile aprire il file richiesto", e);
 		}
 	}
 
@@ -75,7 +73,7 @@ public class ConfigFileManager {
 		assert file.isDirectory() : "Errore nella creazione della directory" + file.getAbsolutePath();
 	}
 
-	public void createConfigFile() {
+	public void createConfigFile() throws Exception {
 		String configFile = ModelStrings.CONFIG_FILE_PATH + ModelStrings.CONFIG_FILE_NAME;
 		createDirs(ModelStrings.CONFIG_FILE_PATH);
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
@@ -89,10 +87,8 @@ public class ConfigFileManager {
 			writer.write("db.name=domohouse"+ModelStrings.LINE_SEPARATOR);
 			writer.write("db.allowMultiQueries=true"+ModelStrings.LINE_SEPARATOR);
 		}
-		catch (IOException ex) {
-			//TOLOG
-			//Impossibile creare il file di configurazione, throware
-			ex.printStackTrace();
+		catch (IOException e) {
+			throw new Exception("Impossibile creare il file di configurazione" ,e);
 		}
 	}
 }
