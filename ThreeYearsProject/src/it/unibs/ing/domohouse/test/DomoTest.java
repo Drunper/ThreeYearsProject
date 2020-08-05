@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 import org.junit.Test;
@@ -134,26 +135,56 @@ public class DomoTest {
 	@Test
 	public void testCheckPassword() {
 		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
-		Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
-		assertTrue(authenticator.checkMaintainerPassword("prova", "pippo123456"));
+		try {
+			Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
+			assertTrue(authenticator.checkMaintainerPassword("prova", "pippo123456"));
+		}
+		catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
 	public void testCheckWrongPassword() {
 		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
-		Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
-		assertFalse(authenticator.checkMaintainerPassword("prova", "pippo12346"));
+		try {
+			Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
+			assertFalse(authenticator.checkMaintainerPassword("prova", "pippo12346"));
+		}
+		catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
 	public void testAddMaintainer() {
 		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
-		Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
-		if(authenticator.checkMaintainerPassword("prova3", "paperino"))
-			fail("prova3 già presente");
-		else {
-			authenticator.addMaintainer("prova3", "paperino");
-			assertTrue(authenticator.checkMaintainerPassword("prova3", "paperino"));
+		try {
+			Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
+			if(authenticator.checkMaintainerPassword("prova3", "paperino"))
+				fail("prova3 già presente");
+			else {
+				authenticator.addMaintainer("prova3", "paperino");
+				assertTrue(authenticator.checkMaintainerPassword("prova3", "paperino"));
+			}
+		}
+		catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
