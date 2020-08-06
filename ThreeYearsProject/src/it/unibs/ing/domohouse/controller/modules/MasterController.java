@@ -65,12 +65,12 @@ public class MasterController {
 			rulesWorker = new RulesWorker(dataFacade, clock);
 			libImporter = new LibImporter(dataFacade);
 			dataFacade.loadCategories();
+			rulesWorker.startRulesWorker();
 		}
 		catch (Exception e) {
 			log.log(Level.SEVERE, "Errore durante l'inizializzazione del programma", e);
 			output.println("Errore durante l'inizializzazione del programma, verificare lo stato della configurazione");
 		}
-		rulesWorker.startRulesWorker();
 
 		RawInputHandler input = new RawInputHandler(in, output);
 		buildInputHandlers(output, input);
@@ -79,7 +79,8 @@ public class MasterController {
 
 	public void start() {
 		loginController.show();
-		rulesWorker.stopCheckRules();
+		if(rulesWorker != null)
+			rulesWorker.stopCheckRules();
 		connector.closeConnection();
 	}
 

@@ -138,7 +138,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		while (remain);
 
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			dataFacade.addArtifact(user, selectedHouse, name, descr, location, propertyMap);
+			dataFacade.addArtifact(user, selectedHouse, location, name, descr, propertyMap);
 
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}

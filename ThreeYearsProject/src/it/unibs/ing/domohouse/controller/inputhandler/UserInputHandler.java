@@ -46,7 +46,7 @@ public class UserInputHandler {
 		else
 			do {
 				selectedActuCategory = input.readNotVoidString(ControllerStrings.ERROR_NON_EXISTENT_ACTUATOR_CATEGORY
-						+ ControllerStrings.SPACE + ControllerStrings.INSERT_SENSOR_CATEGORY);
+						+ ControllerStrings.SPACE + ControllerStrings.INSERT_ACTUATOR_CATEGORY);
 			}
 			while (!dataFacade.hasActuatorCategory(selectedActuCategory));
 
