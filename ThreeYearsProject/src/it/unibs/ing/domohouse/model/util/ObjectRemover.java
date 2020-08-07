@@ -83,7 +83,6 @@ public class ObjectRemover {
 			
 			for(String selectedArtifact : dataFacade.getArtifactNames(user, selectedHouse, selectedRoom))
 				removeArtifact(user, selectedHouse, selectedRoom, selectedArtifact);
-		
 			for(String selectedSensor : dataFacade.getSensorNames(user, selectedHouse, selectedRoom))
 				removeSensor(user, selectedHouse, selectedRoom, selectedSensor);
 			for(String selectedActuator : dataFacade.getActuatorNames(user, selectedHouse, selectedRoom))

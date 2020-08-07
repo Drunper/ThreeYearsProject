@@ -484,7 +484,7 @@ public class DatabaseLoader {
 			while (set.next()) {
 				map.put(set.getInt("id_informazione"),
 						new StringInfoStrategy(
-								getDomainValues(set.getInt("id_informazione"), set.getString("nome_proprietà")),
+								getStringInfoDomainValues(set.getInt("id_informazione"), set.getString("nome_proprietà")),
 								set.getInt("id_informazione"), set.getString("nome_proprietà")));
 			}
 		}
@@ -493,24 +493,5 @@ public class DatabaseLoader {
 		}
 
 		return map;
-	}
-
-	private List<String> getDomainValues(int ID, String propertyName) throws Exception {
-		List<String> domain = new ArrayList<>();
-
-		Query query = new Query(QueryStrings.GET_NON_NUMERIC_DOMAIN_VALUE);
-		query.setIntegerParameter(1, ID);
-		query.setStringParameter(2, propertyName);
-
-		try (ResultSet set = connector.executeQuery(query)) {
-			while (set.next()) {
-				domain.add(set.getString("nome_valore"));
-			}
-		}
-		catch (SQLException e) {
-			throw new Exception(ModelStrings.DB_QUERY_RESULT_EXCEPTION, e);
-		}
-
-		return domain;
 	}
 }

@@ -127,7 +127,7 @@ public class DataFacade {
 		return getUser(selectedUser).getRoomsList(selectedHouse);
 	}
 
-	public Set<String> getSensorCategoryList() {
+	public Set<String> getSensorCategorySet() {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 		return sensorCategoryManager.getSetOfElements();
 	}
@@ -154,7 +154,7 @@ public class DataFacade {
 		return catList;
 	}
 
-	public Set<String> getActuatorCategoryList() {
+	public Set<String> getActuatorCategorySet() {
 		assert dataFacadeInvariant() : ModelStrings.WRONG_INVARIANT;
 		return actuatorCategoryManager.getSetOfElements();
 	}

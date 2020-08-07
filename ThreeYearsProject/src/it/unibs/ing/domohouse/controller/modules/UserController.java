@@ -78,7 +78,7 @@ public class UserController {
 				case 2:
 					menuManager.clearOutput();
 					if (dataFacade.doesSensorCategoryExist()) {
-						menuManager.printCollectionOfString(dataFacade.getSensorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getSensorCategorySet());
 						output.println();
 						output.println();
 
@@ -92,7 +92,7 @@ public class UserController {
 				case 3:
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorCategoryExist()) {
-						menuManager.printCollectionOfString(dataFacade.getActuatorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getActuatorCategorySet());
 						output.println();
 						output.println();
 						String selectedActuCategory = userInputHandler.safeInsertActuatorCategory();

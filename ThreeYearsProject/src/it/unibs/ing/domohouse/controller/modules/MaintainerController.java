@@ -154,7 +154,7 @@ public class MaintainerController {
 					// visualizza categorie di sensori
 					menuManager.clearOutput();
 					if (dataFacade.doesSensorCategoryExist()) {
-						menuManager.printCollectionOfString(dataFacade.getSensorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getSensorCategorySet());
 						output.println();
 						output.println();
 
@@ -169,7 +169,7 @@ public class MaintainerController {
 					// visualizza categoria di attuatore
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorCategoryExist()) {
-						menuManager.printCollectionOfString(dataFacade.getActuatorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getActuatorCategorySet());
 						output.println();
 						output.println();
 
@@ -201,7 +201,7 @@ public class MaintainerController {
 				case 10:
 					menuManager.clearOutput();
 					if (dataFacade.doesSensorCategoryExist()) {
-						menuManager.printCollectionOfString(dataFacade.getSensorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getSensorCategorySet());
 						output.println();
 						output.println();
 
@@ -221,7 +221,7 @@ public class MaintainerController {
 				case 11:
 					menuManager.clearOutput();
 					if (dataFacade.doesActuatorCategoryExist()) {
-						menuManager.printCollectionOfString(dataFacade.getActuatorCategoryList());
+						menuManager.printCollectionOfString(dataFacade.getActuatorCategorySet());
 						output.println();
 						output.println();
 

@@ -3,29 +3,21 @@ package it.unibs.ing.domohouse.test;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 import org.junit.Test;
 
 import it.unibs.ing.domohouse.controller.ControllerStrings;
 import it.unibs.ing.domohouse.controller.modules.MasterController;
-import it.unibs.ing.domohouse.model.db.Connector;
-import it.unibs.ing.domohouse.model.db.DatabaseAuthenticator;
-import it.unibs.ing.domohouse.model.util.Authenticator;
-import it.unibs.ing.domohouse.model.util.HashCalculator;
 import it.unibs.ing.domohouse.view.ViewStrings;
 
-public class DomoTest {
+public class FunctionalityTesting {
 
 	private ByteArrayOutputStream output = new ByteArrayOutputStream();
 	private PrintWriter writer = new PrintWriter(output, true);
-
-	// Blackbox section
 
 	@Test(timeout = 800)
 	public void shouldExit() {
@@ -385,58 +377,6 @@ public class DomoTest {
 				"Cucina\r\n" + 
 				"Ultimo valore rilevato: 25.0 %\r\n" + 
 				"Stato: spento"));
-	}
-	
-	// Whitebox section
-
-	@Test
-	public void testCheckPassword() {
-		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
-		try {
-			Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
-			assertTrue(authenticator.checkMaintainerPassword("prova", "pippo123456"));
-		}
-		catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Test
-	public void testCheckWrongPassword() {
-		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
-		try {
-			Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
-			assertFalse(authenticator.checkMaintainerPassword("prova", "pippo12346"));
-		}
-		catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Test
-	public void testAddMaintainer() {
-		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse", "domohouse", "^v1Iz1rFOnqx");
-		try {
-			Authenticator authenticator = new DatabaseAuthenticator(new HashCalculator(), connector);
-			if (authenticator.checkMaintainerPassword("prova3", "paperino"))
-				fail("prova3 già presente");
-			else {
-				authenticator.addMaintainer("prova3", "paperino");
-				assertTrue(authenticator.checkMaintainerPassword("prova3", "paperino"));
-			}
-		}
-		catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	private Scanner buildInput(String... inputs) {
