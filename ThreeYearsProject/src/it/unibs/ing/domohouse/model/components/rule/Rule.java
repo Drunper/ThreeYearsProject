@@ -97,6 +97,7 @@ public class Rule implements Serializable, Stateable, Manageable {
 
 	public void trigger() {
 		state.trigger(this);
+		modify();
 	}
 
 	public boolean getAntecedentValue(String actualTime) {

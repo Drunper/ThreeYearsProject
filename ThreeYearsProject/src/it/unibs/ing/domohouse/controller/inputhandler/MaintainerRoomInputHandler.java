@@ -77,7 +77,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		boolean ok = false;
 		if (roomOrArtifact) {
 			if (!dataFacade.doesRoomExist(user, selectedHouse))
-				output.println(ControllerStrings.NO_ASSOCIABLE_ELEMENT);
+				output.println(ControllerStrings.NO_ROOMS);
 			else if (!dataFacade.hasAssociableRooms(user, selectedHouse, category))
 				output.println(ControllerStrings.NO_ROOM_TO_ASSOC);
 			else
@@ -85,7 +85,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		}
 		else {
 			if (!dataFacade.doesArtifactExist(user, selectedHouse))
-				output.println(ControllerStrings.NO_ASSOCIABLE_ELEMENT);
+				output.println(ControllerStrings.NO_ARTIFACTS);
 			else if (!dataFacade.hasAssociableArtifacts(user, selectedHouse, category))
 				output.println(ControllerStrings.NO_ARTIFACT_TO_ASSOC);
 			else

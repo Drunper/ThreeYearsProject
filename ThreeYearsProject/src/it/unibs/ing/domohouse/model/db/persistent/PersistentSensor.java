@@ -25,14 +25,21 @@ public class PersistentSensor extends PersistentObject {
 	@Override
 	public Query getModifyQuery() {
 		Query query = new Query("");
-		query.setStringParameter(1, sensor.getName());
-		query.setStringParameter(2, housingUnit);
-		query.setStringParameter(3, user);
-		int pos = 4;
+		int pos = 1;
 		String queryString = sensor.isMeasuringRoom() ? QueryStrings.DELETE_MEASURED_ROOM : QueryStrings.DELETE_MEASURED_ARTIFACT;
-		for(String object : sensor.getNotAssociatedObjects())
-			query.setStringParameter(pos++,object);
+		for(String object : sensor.getNotAssociatedObjects()) {
+			query.setStringParameter(pos++, sensor.getName());
+			query.setStringParameter(pos++, housingUnit);
+			query.setStringParameter(pos++, user);
+			query.setStringParameter(pos++, object);
+		}
 		queryString = String.join(" ", Collections.nCopies(sensor.getNotAssociatedObjects().size(), queryString));
+		
+		queryString += " " + QueryStrings.UPDATE_SENSOR_STATE;
+		query.setIntegerParameter(pos++, sensor.getState().isActive() ? 1 : 0);
+		query.setStringParameter(pos++, sensor.getName());
+		query.setStringParameter(pos++, housingUnit);
+		query.setStringParameter(pos++, user);
 		query.setQuery(queryString);
 		return query;
 	}

@@ -20,7 +20,12 @@ public class PersistentRule extends PersistentObject {
 
 	@Override
 	public Query getModifyQuery() {
-		return null;
+		Query query = new Query(QueryStrings.UPDATE_RULE_STATE);
+		query.setIntegerParameter(1, rule.getState().isActive() ? 1 : 0);
+		query.setStringParameter(1, rule.getName());
+		query.setStringParameter(2, housingUnit);
+		query.setStringParameter(3, user);
+		return query;
 	}
 	
 	@Override

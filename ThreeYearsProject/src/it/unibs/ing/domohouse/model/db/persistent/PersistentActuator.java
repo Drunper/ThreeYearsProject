@@ -25,14 +25,21 @@ public class PersistentActuator extends PersistentObject {
 	@Override
 	public Query getModifyQuery() {
 		Query query = new Query("");
-		query.setStringParameter(1, actuator.getName());
-		query.setStringParameter(2, housingUnit);
-		query.setStringParameter(3, user);
-		int pos = 4;
+		int pos = 1;
 		String queryString = actuator.isControllingRoom() ? QueryStrings.DELETE_CONTROLLED_ROOM : QueryStrings.DELETE_CONTROLLED_ARTIFACT;
-		for(String object : actuator.getNotAssociatedObjects())
-			query.setStringParameter(pos++,object);
+		for(String object : actuator.getNotAssociatedObjects()) {
+			query.setStringParameter(pos++, actuator.getName());
+			query.setStringParameter(pos++, housingUnit);
+			query.setStringParameter(pos++, user);
+			query.setStringParameter(pos++, object);
+		}
 		queryString = String.join(" ", Collections.nCopies(actuator.getNotAssociatedObjects().size(), queryString));
+		
+		queryString += " " + QueryStrings.UPDATE_SENSOR_STATE;
+		query.setIntegerParameter(pos++, actuator.getState().isActive() ? 1 : 0);
+		query.setStringParameter(pos++, actuator.getName());
+		query.setStringParameter(pos++, housingUnit);
+		query.setStringParameter(pos++, user);
 		query.setQuery(queryString);
 		return query;
 	}

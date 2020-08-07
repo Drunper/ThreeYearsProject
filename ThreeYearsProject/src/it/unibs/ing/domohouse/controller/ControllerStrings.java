@@ -101,7 +101,7 @@ public class ControllerStrings {
 	public static final String PROCEED_WITH_CREATION = "Procedere con la creazione e salvataggio?";
 	public static final String NAME_ALREADY_EXISTENT = "Nome già inserito, prego reinserire altro nome";
 	public static final String PROCEED_WITH_SAVING = "Salvare le modifiche?";
-	public static final String INSERT_CATEGORY = "Inserisci il nome della categoria (\"^\" per fermarti)";
+	public static final String INSERT_CATEGORY = "Inserisci il nome della categoria";
 	public static final String CATEGORY_NON_EXISTENT = "Categoria non esistente, prego reinserire altro nome";
 	public static final String INPUT_CATEGORY_ABBREVIATION = "Inserisci la sigla della categoria";
 	public static final String INPUT_CATEGORY_MANUFACTURER = "Inserisci il costruttore";
@@ -263,7 +263,7 @@ public class ControllerStrings {
 	public static final String WRONG_INVARIANT = "Invariante della classe non soddisfatto";
 	public static final String USER_INPUT_NAME = "Inserisci il nome dell'utente";
 	public static final String ERROR_USER_ALREADY_EXISTENT = "Un nome utente con lo stesso nome esiste già";
-	public static final String PROPERTY_INPUT_NAME = "Inserisci il nome di una proprietà";
+	public static final String PROPERTY_INPUT_NAME = "Inserisci il nome di una proprietà (^ per terminare l'inserimento)";
 	public static final String PROPERTY_INPUT_VALUE_QUESTION = "Vuoi inserire un valore per la proprietà? (NO inserirà il valore di default)";
 	public static final String PROPERTY_INPUT_VALUE = "Inserisci il valore della proprietà";
 	public static final String LIST_OF_PROPERTIES = "Lista delle proprietà già presenti nel sistema:";
@@ -280,4 +280,6 @@ public class ControllerStrings {
 	public static final String DB_AUTHENTICATION_ERROR = "Errore durante l'autenticazione, verificare lo stato della connessione al database";
 	public static final String [] REL_OPERATORS = {">","<","<=",">=","==","!="};
 	public static final String ERROR_TEMPORAL_CONDITION_ALREADY_INSERTED = "Errore, una condizione temporale è già stata inserita";
+	public static final String NO_ROOMS = "Non sono presenti stanze nell'unità immobiliare";
+	public static final String NO_ARTIFACTS = "Nono sono presenti artefatti nell'unità immobiliare";
 }

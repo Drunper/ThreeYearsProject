@@ -120,6 +120,11 @@ public class QueryStrings {
 
 	public static final String UPDATE_ARTIFACT = "UPDATE artefatto SET descrizione = ? WHERE nome_artefatto = ? AND nome_unità = ? AND nome_utente = ?";
 
+	public static final String UPDATE_RULE_STATE = "UPDATE regola SET stato = ? WHERE nome_regola = ? AND nome_unità = ? AND nome_utente = ?;";
+	
+	public static final String UPDATE_SENSOR_STATE = "UPDATE sensore SET stato = ? WHERE nome_sensore = ? AND nome_unità = ? AND nome_utente = ?;";
+			
+	public static final String UPDATE_ACTUATOR_STATE = "UPDATE attuatore SET stato = ? WHERE nome_attuatore = ? AND nome_unità = ? AND nome_utente = ?;";
 	// Query di eliminazione
 
 	public static final String DELETE_ROOM = "DELETE FROM stanza WHERE nome_stanza = ? AND nome_unità = ? AND nome_utente = ?";
