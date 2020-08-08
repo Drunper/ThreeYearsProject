@@ -124,7 +124,7 @@ public class ObjectRemover {
 				if(dataFacade.isActuatorAssociatedWith(user, selectedHouse, selectedActuator, selectedArtifact))
 					dataFacade.removeActuatorAssociation(user, selectedHouse, selectedActuator, selectedArtifact);
 				if(dataFacade.isActuatorNotAssociated(user, selectedHouse, selectedActuator)) {
-					String location = dataFacade.getRoomOfActuator(user, selectedHouse, selectedArtifact);
+					String location = dataFacade.getRoomOfActuator(user, selectedHouse, selectedActuator);
 					removeActuator(user, selectedHouse, location, selectedActuator);
 				}
 			}

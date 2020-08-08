@@ -125,7 +125,7 @@ public class ObjectRemoverTesting {
 			ObjectRemover objectRemover = new ObjectRemover(dataFacade);
 			objectRemover.removeUser(user);
 
-			assertTrue(dataFacade.hasUser(user));
+			assertTrue(!dataFacade.hasUser(user));
 		}
 		catch (Exception e) {
 			fail();
@@ -165,9 +165,11 @@ public class ObjectRemoverTesting {
 			dataFacade.loadCategories();
 			String user = "pluto";
 			String selectedHouse = "casa";
+			dataFacade.addUser(user);
+			dataFacade.addHousingUnit(user, selectedHouse, "casina", "residenziale");
 			ObjectRemover objectRemover = new ObjectRemover(dataFacade);
 			objectRemover.removeHousingUnit(user, selectedHouse);
-			assertTrue(dataFacade.hasHousingUnit(user, selectedHouse));
+			assertTrue(!dataFacade.hasHousingUnit(user, selectedHouse));
 		}
 		catch (Exception e) {
 			fail();
@@ -285,8 +287,8 @@ public class ObjectRemoverTesting {
 			dataFacade.addArtifact(user, selectedHouse, selectedRoom, selectedArtifact, "descr", new HashMap<>());
 			List<String> objectList = new ArrayList<>();
 			objectList.add(selectedArtifact);
-			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", true, objectList);
-			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", true,
+			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", false, objectList);
+			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", false,
 					objectList);
 			List<String> involvedSensors = new ArrayList<>();
 			involvedSensors.add("i1_igrometri");
@@ -418,7 +420,8 @@ public class ObjectRemoverTesting {
 			dataFacade.addArtifact(user, selectedHouse, selectedRoom, selectedArtifact, "descr", new HashMap<>());
 			List<String> objectList = new ArrayList<>();
 			objectList.add(selectedArtifact);
-			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", true,
+			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", false, objectList);
+			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", false,
 					objectList);
 			List<String> involvedSensors = new ArrayList<>();
 			involvedSensors.add("i1_igrometri");
@@ -797,14 +800,14 @@ public class ObjectRemoverTesting {
 			List<String> objectList1 = new ArrayList<>();
 			objectList1.add("cucina");
 			objectList1.add("soggiorno");
-			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", true,
+			dataFacade.addActuator(user, selectedHouse, "cucina", "deum1_deumidificatori", "deumidificatori", true,
 					objectList1);
 
 			ObjectRemover objectRemover = new ObjectRemover(dataFacade);
 			objectRemover.removeRoom(user, selectedHouse, selectedRoom);
 			assertTrue(!dataFacade.hasRoom(user, selectedHouse, selectedRoom)
 					&& dataFacade.hasActuator(user, selectedHouse, "deum1_deumidificatori")
-					&& !dataFacade.getActuator(user, selectedHouse, "i1_igrometri").isControllingObject("soggiorno"));
+					&& !dataFacade.getActuator(user, selectedHouse, "deum1_deumidificatori").isControllingObject("soggiorno"));
 		}
 		catch (Exception e) {
 			fail();
@@ -901,7 +904,7 @@ public class ObjectRemoverTesting {
 			ObjectRemover objectRemover = new ObjectRemover(dataFacade);
 			objectRemover.removeArtifact(user, selectedHouse, selectedRoom, "artefatto1");
 
-			assertTrue(!dataFacade.hasArtifact(user, selectedHouse, "artefatto1"));
+			assertTrue(!dataFacade.hasArtifact(user, selectedHouse, "artefatto1") && dataFacade.hasSensor(user, selectedHouse, "i1_igrometri") && dataFacade.hasActuator(user, selectedHouse, "deum1_deumidificatori"));
 		}
 		catch (Exception e) {
 			fail();
@@ -925,12 +928,12 @@ public class ObjectRemoverTesting {
 			dataFacade.addHousingUnit(user, selectedHouse, "casina", "residenziale");
 			dataFacade.addRoom(user, selectedHouse, selectedRoom, "soggiorno", new HashMap<>());
 			dataFacade.addArtifact(user, selectedHouse, selectedRoom, "artefatto1", "descr", new HashMap<>());
-			dataFacade.addArtifact(user, selectedHouse, selectedRoom, "artefatto2", "descr", new HashMap<>());
-
+			dataFacade.addArtifact(user, selectedHouse, selectedRoom, "artefatto2", "descr", new HashMap<>());			
+			
 			List<String> objectList1 = new ArrayList<>();
 			objectList1.add("artefatto1");
 			objectList1.add("artefatto2");
-			dataFacade.addSensor(user, selectedHouse, "cucina", "i1_igrometri", "igrometri", true, objectList1);
+			dataFacade.addSensor(user, selectedHouse, "soggiorno", "i1_igrometri", "igrometri", false, objectList1);
 
 			ObjectRemover objectRemover = new ObjectRemover(dataFacade);
 			objectRemover.removeArtifact(user, selectedHouse, selectedRoom, "artefatto1");
@@ -963,7 +966,7 @@ public class ObjectRemoverTesting {
 
 			List<String> objectList1 = new ArrayList<>();
 			objectList1.add("artefatto1");
-			dataFacade.addSensor(user, selectedHouse, "cucina", "i1_igrometri", "igrometri", true, objectList1);
+			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", false, objectList1);
 
 			ObjectRemover objectRemover = new ObjectRemover(dataFacade);
 			objectRemover.removeArtifact(user, selectedHouse, selectedRoom, "artefatto1");
@@ -997,14 +1000,14 @@ public class ObjectRemoverTesting {
 			List<String> objectList1 = new ArrayList<>();
 			objectList1.add("artefatto1");
 			objectList1.add("artefatto2");
-			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", true,
+			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", false,
 					objectList1);
 
 			ObjectRemover objectRemover = new ObjectRemover(dataFacade);
 			objectRemover.removeArtifact(user, selectedHouse, selectedRoom, "artefatto1");
 			assertTrue(!dataFacade.hasArtifact(user, selectedHouse, "artefatto1")
 					&& dataFacade.hasActuator(user, selectedHouse, "deum1_deumidificatori")
-					&& !dataFacade.getActuator(user, selectedHouse, "i1_igrometri").isControllingObject("artefatto1"));
+					&& !dataFacade.getActuator(user, selectedHouse, "deum1_deumidificatori").isControllingObject("artefatto1"));
 		}
 		catch (Exception e) {
 			fail();
@@ -1027,10 +1030,11 @@ public class ObjectRemoverTesting {
 			dataFacade.addUser(user);
 			dataFacade.addHousingUnit(user, selectedHouse, "casina", "residenziale");
 			dataFacade.addRoom(user, selectedHouse, selectedRoom, "soggiorno", new HashMap<>());
+			dataFacade.addArtifact(user, selectedHouse, selectedRoom, "artefatto1", "descr", new HashMap<>());
 
 			List<String> objectList1 = new ArrayList<>();
 			objectList1.add("artefatto1");
-			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", true,
+			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", false,
 					objectList1);
 
 			ObjectRemover objectRemover = new ObjectRemover(dataFacade);

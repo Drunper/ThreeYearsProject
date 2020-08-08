@@ -279,7 +279,8 @@ public class ControllerStrings {
 	public static final String DB_LOAD_USER_ERROR = "Errore durante il caricamento dell'utente";
 	public static final String DB_AUTHENTICATION_ERROR = "Errore durante l'autenticazione, verificare lo stato della connessione al database";
 	public static final String [] REL_OPERATORS = {">","<","<=",">=","==","!="};
-	public static final String ERROR_TEMPORAL_CONDITION_ALREADY_INSERTED = "Errore, una condizione temporale è già stata inserita";
+	public static final String ERROR_CONDITION_ALREADY_INSERTED = "Errore, un'altra condizione è stata inserita prima";
 	public static final String NO_ROOMS = "Non sono presenti stanze nell'unità immobiliare";
 	public static final String NO_ARTIFACTS = "Nono sono presenti artefatti nell'unità immobiliare";
+	public static final String ERROR_PROPERTY_ALREADY_INSERTED = "Errore, proprietà già inserita";
 }
