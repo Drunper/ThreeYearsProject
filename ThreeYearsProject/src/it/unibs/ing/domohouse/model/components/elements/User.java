@@ -543,4 +543,12 @@ public class User implements Manageable {
 	public boolean hasAssociableRooms(String house, String category) {
 		return getHousingUnit(house).hasAssociableRooms(category);
 	}
+
+	public int getNumberOfAssociableRooms(String selectedHouse, String category) {
+		return getHousingUnit(selectedHouse).getNumberOfAssociableRooms(category);
+	}
+
+	public int getNumberOfAssociableArtifacts(String selectedHouse, String category) {
+		return getHousingUnit(selectedHouse).getNumberOfAssociableArtifacts(category);
+	}
 }

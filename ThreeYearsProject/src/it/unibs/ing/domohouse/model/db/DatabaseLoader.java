@@ -58,7 +58,7 @@ public class DatabaseLoader {
 		return sensorCategories;
 	}
 
-	private Map<String, InfoStrategy> getSensorCategoryInfos(String categoryName,
+	public Map<String, InfoStrategy> getSensorCategoryInfos(String categoryName,
 			Map<String, String> measurementUnitMap) throws Exception {
 		Map<String, InfoStrategy> infoDomainMap = new HashMap<>();
 
@@ -91,7 +91,7 @@ public class DatabaseLoader {
 		return infoDomainMap;
 	}
 
-	private List<String> getStringInfoDomainValues(int infoID, String propertyName) throws Exception {
+	public List<String> getStringInfoDomainValues(int infoID, String propertyName) throws Exception {
 		List<String> domain = new ArrayList<>();
 
 		Query query = new Query(QueryStrings.GET_NON_NUMERIC_DOMAIN_VALUE);
@@ -129,7 +129,7 @@ public class DatabaseLoader {
 		return actuatorCategories;
 	}
 
-	private List<String> getListOfModes(String categoryName) throws Exception {
+	public List<String> getListOfModes(String categoryName) throws Exception {
 		List<String> listOfModes = new ArrayList<>();
 
 		Query query = new Query(QueryStrings.GET_OPERATING_MODES_OF_A_CATEGORY);
@@ -203,7 +203,7 @@ public class DatabaseLoader {
 		return housingUnits;
 	}
 
-	private List<Room> loadRooms(String user, String selectedHouse) throws Exception {
+	public List<Room> loadRooms(String user, String selectedHouse) throws Exception {
 		List<Room> rooms = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_ROOMS);
 		query.setStringParameter(1, user);
@@ -282,7 +282,7 @@ public class DatabaseLoader {
 		return propertyMap;
 	}
 
-	private Map<String, String> getProperties(String user, String selectedHouse, String object,
+	public Map<String, String> getProperties(String user, String selectedHouse, String object,
 			boolean roomOrArtifact) throws Exception {
 		Map<String, String> propertyMap = new HashMap<>();
 
@@ -307,7 +307,7 @@ public class DatabaseLoader {
 		return propertyMap;
 	}
 
-	private List<Artifact> loadArtifacts(String user, String selectedHouse, String location) throws Exception {
+	public List<Artifact> loadArtifacts(String user, String selectedHouse, String location) throws Exception {
 		List<Artifact> artifacts = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_ARTIFACTS);
 		query.setStringParameter(1, user);
@@ -330,7 +330,7 @@ public class DatabaseLoader {
 		return artifacts;
 	}
 
-	private List<Sensor> loadSensors(String user, HousingUnit selectedHouse, String location) throws Exception {
+	public List<Sensor> loadSensors(String user, HousingUnit selectedHouse, String location) throws Exception {
 		List<Sensor> sensors = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_SENSORS);
 		query.setStringParameter(1, user);
@@ -356,7 +356,7 @@ public class DatabaseLoader {
 		return sensors;
 	}
 
-	private List<Actuator> loadActuators(String user, HousingUnit selectedHouse, String location) throws Exception {
+	public List<Actuator> loadActuators(String user, HousingUnit selectedHouse, String location) throws Exception {
 		List<Actuator> actuators = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_ACTUATORS);
 		query.setStringParameter(1, user);
@@ -381,7 +381,7 @@ public class DatabaseLoader {
 		return actuators;
 	}
 
-	private List<Gettable> getDeviceObjects(String user, HousingUnit selectedHouse, String device, boolean sensOrAct,
+	public List<Gettable> getDeviceObjects(String user, HousingUnit selectedHouse, String device, boolean sensOrAct,
 			boolean roomOrArtifact) throws Exception {
 		List<Gettable> deviceObjects = new ArrayList<>();
 
@@ -407,7 +407,7 @@ public class DatabaseLoader {
 		return deviceObjects;
 	}
 
-	private List<Rule> loadRules(String user, HousingUnit selectedHouse) throws Exception {
+	public List<Rule> loadRules(String user, HousingUnit selectedHouse) throws Exception {
 		List<Rule> rules = new ArrayList<>();
 		Query query = new Query(QueryStrings.GET_RULES);
 		query.setStringParameter(1, user);
@@ -432,7 +432,7 @@ public class DatabaseLoader {
 		return rules;
 	}
 
-	private List<Sensor> getSensorFromAntString(String user, HousingUnit selectedHouse, String antString) {
+	public List<Sensor> getSensorFromAntString(String user, HousingUnit selectedHouse, String antString) {
 		List<Sensor> sensors = new ArrayList<>();
 		while (antString.contains("&&") || antString.contains("||")) {
 			String condition = antString.split("\\&\\&|\\|\\|")[0];
@@ -449,7 +449,7 @@ public class DatabaseLoader {
 		return sensors;
 	}
 
-	private List<Actuator> getActuatorsFromConsString(String user, HousingUnit selectedHouse, String consString) {
+	public List<Actuator> getActuatorsFromConsString(String user, HousingUnit selectedHouse, String consString) {
 		List<Actuator> actuators = new ArrayList<>();
 		String[] actions = consString.split(";");
 		for (String action : actions) {

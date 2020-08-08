@@ -135,7 +135,7 @@ public class ControllerStrings {
 	public static final String SENSOR_WRONG_ASSOCIATION_ROOM = "L'elemento a cui si vuole associare il sensore non è una stanza!";
 	public static final String SENSOR_WRONG_ASSOCIATION_ARTIFACT = "L'elemento a cui si vuole associare il sensore non è un artefatto!";
 	public static final String SENSOR_WRONG_ASSOCIATION_CATEGORY = "Un sensore di questa categoria è già associato all'artefatto/stanza in questione";
-	public static final String SENSOR_ANOTHER_ASSOCIATION = "Associare sensore ad altro oggetto?";
+	public static final String ANOTHER_ASSOCIATION = "Associare il dispositivo ad un altro oggetto?";
 	public static final String NO_ASSOCIABLE_ELEMENT = "Non ci sono oggetti associabili di questo tipo";
 	public static final String NO_SENSOR_ROOM_OR_ARTIFACT_ERROR = "Impossibile creare il sensore perchè non ci sono stanze o artefatti associabili ad esso";
 	public static final String NO_SENSOR_CATEGORY_ERROR = "Impossibile creare il sensore perchè non sono presenti categorie di quel tipo nel sistema";

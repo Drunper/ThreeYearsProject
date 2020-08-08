@@ -183,6 +183,9 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 	private List<String> readDeviceAssociationObjects(String user, String selectedHouse, String category,
 			boolean roomOrArtifact) {
 		List<String> objectList = new ArrayList<>();
+		int associableRooms = dataFacade.getNumberOfAssociableRooms(user, selectedHouse, category);
+		int associableArtifacts = dataFacade.getNumberOfAssociableArtifacts(user, selectedHouse, category);
+		boolean cont = true;
 		do {
 			boolean remain = true;
 			String toAssoc;
@@ -213,12 +216,22 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 					else
 						output.println(ControllerStrings.INPUT_ERROR_ALREADY_INSERTED);
 				}
-
 			}
 			while (remain);
 			objectList.add(toAssoc);
+			
+			if(roomOrArtifact) {
+				associableRooms--;
+				cont = associableRooms != 0;
+			}
+			else {
+				associableArtifacts--;
+				cont = associableArtifacts != 0;
+			}
+			if(cont)
+				cont = input.yesOrNo(ControllerStrings.ANOTHER_ASSOCIATION);
 		}
-		while (input.yesOrNo(ControllerStrings.SENSOR_ANOTHER_ASSOCIATION));
+		while (cont);
 		return objectList;
 	}
 }

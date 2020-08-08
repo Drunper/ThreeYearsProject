@@ -534,4 +534,12 @@ public class HousingUnit implements Serializable, Manageable {
 	public boolean hasAssociableRooms(String category) {
 		return associationManager.hasAssociableRooms(category);
 	}
+
+	public int getNumberOfAssociableRooms(String category) {
+		return associationManager.getNumberOfAssociableRooms(category);
+	}
+
+	public int getNumberOfAssociableArtifacts(String category) {
+		return associationManager.getNumberOfAssociableArtifacts(category);
+	}
 }

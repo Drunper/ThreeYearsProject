@@ -779,4 +779,12 @@ public class DataFacade {
 	public boolean hasAssociableRooms(String user, String house, String category) {
 		return getUser(user).hasAssociableRooms(house, category);
 	}
+
+	public int getNumberOfAssociableRooms(String user, String selectedHouse, String category) {
+		return getUser(user).getNumberOfAssociableRooms(selectedHouse, category);
+	}
+	
+	public int getNumberOfAssociableArtifacts(String user, String selectedHouse, String category) {
+		return getUser(user).getNumberOfAssociableArtifacts(selectedHouse, category);
+	}
 }
