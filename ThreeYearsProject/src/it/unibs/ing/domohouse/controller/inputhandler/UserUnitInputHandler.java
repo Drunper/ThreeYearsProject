@@ -132,7 +132,7 @@ public class UserUnitInputHandler {
 		return consString;
 	}
 
-	private String readAntecedent(String user, String selectedHouse, MenuManager view,
+	public String readAntecedent(String user, String selectedHouse, MenuManager view,
 			List<String> sensors) {
 		boolean cont;
 		boolean temporalCondition = false;
@@ -141,34 +141,7 @@ public class UserUnitInputHandler {
 			String superOp;
 
 			if (input.yesOrNo(ControllerStrings.INPUT_RULE_CONDITION)) {
-				String sensor;
-				String info;
-				view.printCollectionOfString(dataFacade.getHousingUnit(user, selectedHouse).getSensorNames());
-				sensor = safeInsertSensor(user, selectedHouse);
-				sensors.add(sensor);
-				SensorCategory category = dataFacade
-						.getSensorCategory(dataFacade.getCategoryOfASensor(user, selectedHouse, sensor));
-				Set<String> infos = category.getInfoStrategySet();
-				view.printCollectionOfString(infos);
-
-				do {
-					info = input.readNotVoidString(ControllerStrings.INPUT_INFO_TO_DETECT);
-					if (!infos.contains(info))
-						output.println(ControllerStrings.ERROR_INFO_NAME);
-				}
-				while (!infos.contains(info));
-
-				String op;
-				do {
-					op = input.readNotVoidString(ControllerStrings.INPUT_OPERATOR);
-					if (!operators.contains(op))
-						output.println(ControllerStrings.ERROR_OPERATOR);
-				}
-				while (!operators.contains(op));
-
-				double value = input.readDouble(ControllerStrings.INPUT_DESIRED_VALUE);
-				antString = antString + sensor + "." + info + ControllerStrings.SPACE + op + ControllerStrings.SPACE
-						+ value;
+				antString = readNonTemporalCondition(user, selectedHouse, view, sensors, antString);
 			}
 			else if(!temporalCondition) { 
 				String op;
@@ -181,8 +154,10 @@ public class UserUnitInputHandler {
 
 				antString = antString + "time" + ControllerStrings.SPACE + op + ControllerStrings.SPACE + readTime();
 			}
-			else
-				output.println(ControllerStrings.ERROR_TEMPORAL_CONDITION_ALREADY_INSERTED);
+			else {
+				output.println(ControllerStrings.ERROR_CONDITION_ALREADY_INSERTED);
+				antString = antString.substring(0, antString.length()-4);
+			}
 			cont = input.yesOrNo(ControllerStrings.INPUT_NEW_COST);
 			if (cont) {
 				do {
@@ -198,6 +173,39 @@ public class UserUnitInputHandler {
 		}
 		while (cont);
 		return antString;
+	}
+
+	private String readNonTemporalCondition(String user, String selectedHouse, MenuManager view, List<String> sensors,
+			String antString) {
+		String sensor;
+		String info;
+		view.printCollectionOfString(dataFacade.getHousingUnit(user, selectedHouse).getSensorNames());
+		sensor = safeInsertSensor(user, selectedHouse);
+		sensors.add(sensor);
+		SensorCategory category = dataFacade
+				.getSensorCategory(dataFacade.getCategoryOfASensor(user, selectedHouse, sensor));
+		Set<String> infos = category.getInfoStrategySet();
+		view.printCollectionOfString(infos);
+
+		do {
+			info = input.readNotVoidString(ControllerStrings.INPUT_INFO_TO_DETECT);
+			if (!infos.contains(info))
+				output.println(ControllerStrings.ERROR_INFO_NAME);
+		}
+		while (!infos.contains(info));
+
+		String op;
+		do {
+			op = input.readNotVoidString(ControllerStrings.INPUT_OPERATOR);
+			if (!operators.contains(op))
+				output.println(ControllerStrings.ERROR_OPERATOR);
+		}
+		while (!operators.contains(op));
+
+		String value = input.readNotVoidString(ControllerStrings.INPUT_DESIRED_VALUE);
+		String result = antString + sensor + "." + info + ControllerStrings.SPACE + op + ControllerStrings.SPACE
+				+ value;
+		return result;
 	}
 
 	public void readRuleStateFromUser(String user, String selectedHouse, MenuManager view) {

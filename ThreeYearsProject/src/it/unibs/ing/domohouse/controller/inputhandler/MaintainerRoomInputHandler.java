@@ -72,7 +72,7 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	private boolean checkCategoryAssociations(String user, String selectedHouse, String category,
+	public boolean checkCategoryAssociations(String user, String selectedHouse, String category,
 			boolean roomOrArtifact) {
 		boolean ok = false;
 		if (roomOrArtifact) {
@@ -113,13 +113,13 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 		output.println(ControllerStrings.LIST_OF_PROPERTIES);
 		view.printCollectionOfString(dataFacade.getPropertiesSet());
 
-		Map<String, String> propertyMap = new HashMap<>();
+		Map<String, String> propertiesMap = new HashMap<>();
 
 		boolean remain = true;
 		String propertyName;
 		do {
 			propertyName = input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_NAME, 30);
-			if (!propertyName.equals(ControllerStrings.BACK_CHARACTER) && !propertyMap.containsKey(propertyName)) {
+			if (!propertyName.equals(ControllerStrings.BACK_CHARACTER) && !propertiesMap.containsKey(propertyName)) {
 				String propertyValue;
 				if (dataFacade.hasProperty(propertyName)) {
 					propertyValue = (input.yesOrNo(ControllerStrings.PROPERTY_INPUT_VALUE_QUESTION))
@@ -130,15 +130,17 @@ public class MaintainerRoomInputHandler extends UserRoomInputHandler {
 					propertyValue = input.readStringWithMaximumLength(ControllerStrings.PROPERTY_INPUT_VALUE, 30);
 					dataFacade.addProperty(propertyName, propertyValue);
 				}
-				propertyMap.put(propertyName, propertyValue);
+				propertiesMap.put(propertyName, propertyValue);
 			}
-			else if (propertyName.equals(ControllerStrings.BACK_CHARACTER))
+			else if (propertiesMap.containsKey(propertyName))
+				output.println(ControllerStrings.ERROR_PROPERTY_ALREADY_INSERTED);
+			else
 				remain = false;
 		}
 		while (remain);
 
 		if (input.yesOrNo(ControllerStrings.PROCEED_WITH_CREATION))
-			dataFacade.addArtifact(user, selectedHouse, location, name, descr, propertyMap);
+			dataFacade.addArtifact(user, selectedHouse, location, name, descr, propertiesMap);
 
 		assert userRoomInputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}

@@ -60,7 +60,9 @@ public class MaintainerUnitInputHandler extends UserUnitInputHandler {
 				}
 				propertiesMap.put(propertyName, propertyValue);
 			}
-			else if (propertyName.equals(ControllerStrings.BACK_CHARACTER))
+			else if (propertiesMap.containsKey(propertyName))
+				output.println(ControllerStrings.ERROR_PROPERTY_ALREADY_INSERTED);
+			else
 				remain = false;
 		}
 		while (remain);
