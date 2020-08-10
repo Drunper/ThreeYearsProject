@@ -160,8 +160,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public void setRoomDescription(String selectedRoom, String descr) {
 		assert selectedRoom != null && selectedRoom.length() > 0 && descr != null;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
-		Room room = (Room) roomManager.getElement(selectedRoom);
-		room.setDescr(descr);
+		getRoom(selectedRoom).setDescr(descr);
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
@@ -169,8 +168,7 @@ public class HousingUnit implements Serializable, Manageable {
 		assert location != null && location.length() > 0;
 		assert toAdd != null;
 		int pre_size = sensorManager.size();
-		Room room = (Room) roomManager.getElement(location);
-		room.addSensor(toAdd);
+		getRoom(location).addSensor(toAdd);
 		sensorManager.addElement(toAdd);
 		assert sensorManager.size() >= pre_size;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
@@ -225,14 +223,12 @@ public class HousingUnit implements Serializable, Manageable {
 		int pre_size_artifactManager = artifactManager.size();
 		int pre_size_associationManager = associationManager.artifactsSize();
 
-		Room room = (Room) roomManager.getElement(location);
-		room.addArtifact(toAdd);
+		getRoom(location).addArtifact(toAdd);
 		artifactManager.addElement(toAdd);
 		associationManager.addArtifactAssociation(new Association(toAdd.getName()));
 
 		assert artifactManager.size() >= pre_size_artifactManager;
 		assert associationManager.artifactsSize() >= pre_size_associationManager;
-		assert room.hasArtifact(toAdd.getName());
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
 
@@ -242,12 +238,10 @@ public class HousingUnit implements Serializable, Manageable {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 		int pre_size = actuatorManager.size();
 
-		Room room = (Room) roomManager.getElement(location);
-		room.addActuator(toAdd);
+		getRoom(location).addActuator(toAdd);
 		actuatorManager.addElement(toAdd);
 
 		assert actuatorManager.size() >= pre_size;
-		assert room.hasActuator(toAdd.getName());
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 	}
@@ -277,15 +271,13 @@ public class HousingUnit implements Serializable, Manageable {
 	public boolean doesArtifactExist(String selectedRoom) {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Room room = (Room) roomManager.getElement(selectedRoom);
-		return room.doesArtifactExist();
+		return getRoom(selectedRoom).doesArtifactExist();
 	}
 
 	public boolean doesSensorExist(String selectedRoom) {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Room room = (Room) roomManager.getElement(selectedRoom);
-		return room.doesSensorExist();
+		return getRoom(selectedRoom).doesSensorExist();
 	}
 
 	public Set<String> getSensorNames() {
@@ -301,8 +293,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public boolean doesActuatorExist(String selectedRoom) {
 		assert housingUnitInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		Room room = (Room) roomManager.getElement(selectedRoom);
-		return room.doesActuatorExist();
+		return getRoom(selectedRoom).doesActuatorExist();
 	}
 
 	public String getCategoryOfASensor(String selectedSensor) {
@@ -317,7 +308,7 @@ public class HousingUnit implements Serializable, Manageable {
 
 		State rule_state = new ActiveState();
 		for (String ruleName : rulesManager.getSetOfElements()) {
-			Rule rule = (Rule) rulesManager.getElement(ruleName);
+			Rule rule = getRule(ruleName);
 			for (String involved_sensor : rule.getInvolvedSensors()) {
 				Sensor sens = getSensor(involved_sensor);
 				if (!sens.getState().isActive())
@@ -325,7 +316,7 @@ public class HousingUnit implements Serializable, Manageable {
 			}
 
 			for (String involved_actuator : rule.getInvolvedActuators()) {
-				Actuator act = (Actuator) actuatorManager.getElement(involved_actuator);
+				Actuator act = getActuator(involved_actuator);
 				if (!act.getState().isActive())
 					rule_state = new InactiveState();
 			}
@@ -349,7 +340,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public List<Rule> getEnabledRulesList() {
 		List<Rule> enabledRulesList = new ArrayList<>();
 		for (String ruleName : rulesManager.getSetOfElements()) {
-			Rule rule = (Rule) rulesManager.getElement(ruleName);
+			Rule rule = getRule(ruleName);
 			if (rule.getState().isActive())
 				enabledRulesList.add(rule);
 		}
@@ -363,7 +354,7 @@ public class HousingUnit implements Serializable, Manageable {
 	public List<String> getEnabledRulesNamesList() {
 		List<String> enabledRulesNamesList = new ArrayList<>();
 		for (String ruleName : rulesManager.getSetOfElements()) {
-			if (((Rule) rulesManager.getElement(ruleName)).getState().isActive())
+			if (getRule(ruleName).getState().isActive())
 				enabledRulesNamesList.add(ruleName);
 		}
 		return enabledRulesNamesList;
@@ -372,8 +363,8 @@ public class HousingUnit implements Serializable, Manageable {
 	public List<String> getEnabledRulesStrings() {
 		List<String> enabledRulesString = new ArrayList<>();
 		for (String ruleName : rulesManager.getSetOfElements()) {
-			if (((Rule) rulesManager.getElement(ruleName)).getState().isActive())
-				enabledRulesString.add(((Rule) rulesManager.getElement(ruleName)).toString());
+			if (getRule(ruleName).getState().isActive())
+				enabledRulesString.add(getRule(ruleName).toString());
 		}
 		return enabledRulesString;
 	}
@@ -381,13 +372,12 @@ public class HousingUnit implements Serializable, Manageable {
 	public List<String> getRulesStrings() {
 		List<String> enabledRulesString = new ArrayList<>();
 		for (String ruleName : rulesManager.getSetOfElements())
-			enabledRulesString.add(((Rule) rulesManager.getElement(ruleName)).toString());
+			enabledRulesString.add(getRule(ruleName).toString());
 		return enabledRulesString;
 	}
 
 	public void changeRuleState(String selectedRule) {
-		Rule rule = (Rule) rulesManager.getElement(selectedRule);
-		rule.trigger();
+		getRule(selectedRule).trigger();
 	}
 
 	private boolean housingUnitInvariant() {
