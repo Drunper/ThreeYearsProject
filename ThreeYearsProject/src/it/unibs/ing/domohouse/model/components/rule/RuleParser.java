@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
@@ -77,7 +77,7 @@ public class RuleParser implements Serializable {
 			throw new Exception("Error " + lookahead + " does not match regex: " + regex);
 	}
 
-	public AntecedentNode parseAnt(String antString, List<Sensor> involvedSensors) throws Exception {
+	public AntecedentNode parseAnt(String antString, Set<Sensor> involvedSensors) throws Exception {
 		setStringToParse(antString);
 		AntecedentNode tree = null;
 		AntecedentNode left;
@@ -140,7 +140,7 @@ public class RuleParser implements Serializable {
 			throw new Exception("Error unexpected token");
 	}
 
-	private AntecedentNode logicNode(List<Sensor> involvedSensors) throws Exception {
+	private AntecedentNode logicNode(Set<Sensor> involvedSensors) throws Exception {
 		AntecedentNode left;
 		AntecedentNode logicNode;
 		AntecedentNode right;
@@ -159,7 +159,7 @@ public class RuleParser implements Serializable {
 			throw new Exception("Error unexpected token");
 	}
 
-	private AntecedentNode condNode(List<Sensor> involvedSensors) throws Exception {
+	private AntecedentNode condNode(Set<Sensor> involvedSensors) throws Exception {
 		String sensorValue = lookahead;
 		matchRegex(SENS_VALUE_REGEX);
 		Sensor sens = getSensorFromList(sensorValue.split("\\.")[ModelStrings.FIRST_TOKEN], involvedSensors);
@@ -228,7 +228,7 @@ public class RuleParser implements Serializable {
 		return Double.parseDouble(start.split(":=")[ModelStrings.SECOND_TOKEN]);
 	}
 
-	public Action parseCons(String consString, List<Actuator> involvedActuators) {
+	public Action parseCons(String consString, Set<Actuator> involvedActuators) {
 		String[] tokenArray = consString.split(", ");
 		int start = consString.contains("start") ? ModelStrings.SECOND_TOKEN : ModelStrings.FIRST_TOKEN;
 
@@ -242,7 +242,7 @@ public class RuleParser implements Serializable {
 		return firstAction;
 	}
 
-	private Action parseAction(String actionString, List<Actuator> involvedActuators) {
+	private Action parseAction(String actionString, Set<Actuator> involvedActuators) {
 		String[] tokens = actionString.split(" := ");
 		Actuator act = getActuatorFromList(tokens[ModelStrings.FIRST_TOKEN], involvedActuators);
 		String modop;
@@ -255,7 +255,7 @@ public class RuleParser implements Serializable {
 			return new Action(act, tokens[ModelStrings.SECOND_TOKEN], new ArrayList<String>());
 	}
 
-	private Sensor getSensorFromList(String sensorName, List<Sensor> sensors) {
+	private Sensor getSensorFromList(String sensorName, Set<Sensor> sensors) {
 		for(Sensor sensor : sensors) {
 			if(sensor.getName().equalsIgnoreCase(sensorName)) {
 				return sensor;
@@ -264,7 +264,7 @@ public class RuleParser implements Serializable {
 		return null;
 	}
 	
-	private Actuator getActuatorFromList(String actuatorName, List<Actuator> actuators) {
+	private Actuator getActuatorFromList(String actuatorName, Set<Actuator> actuators) {
 		for(Actuator sensor : actuators) {
 			if(sensor.getName().equalsIgnoreCase(actuatorName)) {
 				return sensor;

@@ -227,7 +227,7 @@ public class FunctionalityTesting {
 	@Test
 	public void addRule() {
 		Scanner input = buildInput("2", "prova", "pippo123456", "3", "signor Rossi", "Casa1", "6", "regola1", "s",
-				"i1_igrometri", "umidita", ">", "30", "n", "deum1_deumidificatori", "diminuzioneUmidita", "n", "n", "7",
+				"i1_igrometri", "umidita", ">", "n", "30", "n", "deum1_deumidificatori", "diminuzioneUmidita", "n", "n", "7",
 				"0", "0", "0");
 		MasterController controller = new MasterController(input, writer);
 		controller.start();

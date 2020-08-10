@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -38,9 +40,9 @@ public class ObjectRemoverTesting {
 			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", true, objectList);
 			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", true,
 					objectList);
-			List<String> involvedSensors = new ArrayList<>();
+			Set<String> involvedSensors = new HashSet<>();
 			involvedSensors.add("i1_igrometri");
-			List<String> involvedActuators = new ArrayList<>();
+			Set<String> involvedActuators = new HashSet<>();
 			involvedActuators.add("deum1_deumidificatori");
 			dataFacade.addRule(user, selectedHouse, "regola1", "i1_igrometri.umidita > 30",
 					"deum1_deumidificatori := idle", involvedSensors, involvedActuators);
@@ -73,9 +75,9 @@ public class ObjectRemoverTesting {
 			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", true, objectList);
 			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", true,
 					objectList);
-			List<String> involvedSensors = new ArrayList<>();
+			Set<String> involvedSensors = new HashSet<>();
 			involvedSensors.add("i1_igrometri");
-			List<String> involvedActuators = new ArrayList<>();
+			Set<String> involvedActuators = new HashSet<>();
 			involvedActuators.add("deum1_deumidificatori");
 			dataFacade.addRule(user, selectedHouse, "regola1", "i1_igrometri.umidita > 30",
 					"deum1_deumidificatori := idle", involvedSensors, involvedActuators);
@@ -251,9 +253,9 @@ public class ObjectRemoverTesting {
 			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", true, objectList);
 			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", true,
 					objectList);
-			List<String> involvedSensors = new ArrayList<>();
+			Set<String> involvedSensors = new HashSet<>();
 			involvedSensors.add("i1_igrometri");
-			List<String> involvedActuators = new ArrayList<>();
+			Set<String> involvedActuators = new HashSet<>();
 			involvedActuators.add("deum1_deumidificatori");
 			dataFacade.addRule(user, selectedHouse, "regola1", "i1_igrometri.umidita > 30",
 					"deum1_deumidificatori := idle", involvedSensors, involvedActuators);
@@ -290,9 +292,9 @@ public class ObjectRemoverTesting {
 			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", false, objectList);
 			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", false,
 					objectList);
-			List<String> involvedSensors = new ArrayList<>();
+			Set<String> involvedSensors = new HashSet<>();
 			involvedSensors.add("i1_igrometri");
-			List<String> involvedActuators = new ArrayList<>();
+			Set<String> involvedActuators = new HashSet<>();
 			involvedActuators.add("deum1_deumidificatori");
 			dataFacade.addRule(user, selectedHouse, "regola1", "i1_igrometri.umidita > 30",
 					"deum1_deumidificatori := idle", involvedSensors, involvedActuators);
@@ -384,9 +386,9 @@ public class ObjectRemoverTesting {
 			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", true, objectList);
 			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", true,
 					objectList);
-			List<String> involvedSensors = new ArrayList<>();
+			Set<String> involvedSensors = new HashSet<>();
 			involvedSensors.add("i1_igrometri");
-			List<String> involvedActuators = new ArrayList<>();
+			Set<String> involvedActuators = new HashSet<>();
 			involvedActuators.add("deum1_deumidificatori");
 			dataFacade.addRule(user, selectedHouse, "regola1", "i1_igrometri.umidita > 30",
 					"deum1_deumidificatori := idle", involvedSensors, involvedActuators);
@@ -423,9 +425,9 @@ public class ObjectRemoverTesting {
 			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", false, objectList);
 			dataFacade.addActuator(user, selectedHouse, selectedRoom, "deum1_deumidificatori", "deumidificatori", false,
 					objectList);
-			List<String> involvedSensors = new ArrayList<>();
+			Set<String> involvedSensors = new HashSet<>();
 			involvedSensors.add("i1_igrometri");
-			List<String> involvedActuators = new ArrayList<>();
+			Set<String> involvedActuators = new HashSet<>();
 			involvedActuators.add("deum1_deumidificatori");
 			dataFacade.addRule(user, selectedHouse, "regola1", "i1_igrometri.umidita > 30",
 					"deum1_deumidificatori := idle", involvedSensors, involvedActuators);

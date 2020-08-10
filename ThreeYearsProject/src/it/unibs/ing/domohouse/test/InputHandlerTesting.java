@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -365,7 +365,7 @@ public class InputHandlerTesting {
 					rawInputHandler);
 			String[] voices = {};
 			MenuManager view = new MenuManager("", voices, writer, rawInputHandler);
-			ArrayList<String> sensors = new ArrayList<>();
+			Set<String> sensors = new HashSet<>();
 			String antString = maintainerUnitInputHandler.readAntecedent(selectedUser, "Casa", view, sensors);
 			assertTrue(sensors.isEmpty() && antString.equalsIgnoreCase("time > 3.00"));
 		}
@@ -391,7 +391,7 @@ public class InputHandlerTesting {
 					rawInputHandler);
 			String[] voices = {};
 			MenuManager view = new MenuManager("", voices, writer, rawInputHandler);
-			ArrayList<String> sensors = new ArrayList<>();
+			Set<String> sensors = new HashSet<>();
 			String antString = maintainerUnitInputHandler.readAntecedent(selectedUser, "Casa", view, sensors);
 			assertTrue(sensors.isEmpty() && antString.equalsIgnoreCase("time > 3.00")
 					&& getOutput().contains(ControllerStrings.ERROR_OPERATOR));
@@ -418,7 +418,7 @@ public class InputHandlerTesting {
 					rawInputHandler);
 			String[] voices = {};
 			MenuManager view = new MenuManager("", voices, writer, rawInputHandler);
-			List<String> sensors = new ArrayList<>();
+			Set<String> sensors = new HashSet<>();
 			String antString = maintainerUnitInputHandler.readAntecedent(selectedUser, "Casa", view, sensors);
 			assertTrue(sensors.contains("i1_igrometri") && antString.equalsIgnoreCase("i1_igrometri.umidita > 30"));
 		}
@@ -445,7 +445,7 @@ public class InputHandlerTesting {
 					rawInputHandler);
 			String[] voices = {};
 			MenuManager view = new MenuManager("", voices, writer, rawInputHandler);
-			List<String> sensors = new ArrayList<>();
+			Set<String> sensors = new HashSet<>();
 			String antString = maintainerUnitInputHandler.readAntecedent(selectedUser, "Casa", view, sensors);
 			assertTrue(sensors.contains("i1_igrometri") && sensors.contains("t1_termometri")
 					&& antString.equalsIgnoreCase("i1_igrometri.umidita > 30 && t1_termometri.temperatura > 20"));
@@ -473,7 +473,7 @@ public class InputHandlerTesting {
 					rawInputHandler);
 			String[] voices = {};
 			MenuManager view = new MenuManager("", voices, writer, rawInputHandler);
-			List<String> sensors = new ArrayList<>();
+			Set<String> sensors = new HashSet<>();
 			String antString = maintainerUnitInputHandler.readAntecedent(selectedUser, "Casa", view, sensors);
 			assertTrue(sensors.contains("i1_igrometri") && sensors.contains("t1_termometri")
 					&& antString.equalsIgnoreCase("i1_igrometri.umidita > 30 || t1_termometri.temperatura > 20"));
@@ -501,7 +501,7 @@ public class InputHandlerTesting {
 					rawInputHandler);
 			String[] voices = {};
 			MenuManager view = new MenuManager("", voices, writer, rawInputHandler);
-			List<String> sensors = new ArrayList<>();
+			Set<String> sensors = new HashSet<>();
 			String antString = maintainerUnitInputHandler.readAntecedent(selectedUser, "Casa", view, sensors);
 			assertTrue(sensors.contains("i1_igrometri") && sensors.contains("t1_termometri")
 					&& antString.equalsIgnoreCase("i1_igrometri.umidita > 30 && t1_termometri.temperatura > 20"));
@@ -528,7 +528,7 @@ public class InputHandlerTesting {
 					rawInputHandler);
 			String[] voices = {};
 			MenuManager view = new MenuManager("", voices, writer, rawInputHandler);
-			List<String> sensors = new ArrayList<>();
+			Set<String> sensors = new HashSet<>();
 			String antString = maintainerUnitInputHandler.readAntecedent(selectedUser, "Casa", view, sensors);
 			assertTrue(sensors.isEmpty() && getOutput().contains(ControllerStrings.ERROR_CONDITION_ALREADY_INSERTED)
 					&& antString.equalsIgnoreCase("time > 3.00"));

@@ -513,7 +513,7 @@ public class DataFacade {
 	}
 
 	public void addRule(String selectedUser, String selectedHouse, String name, String antString, String consString,
-			List<String> involvedSensors, List<String> involvedActuators, State state) throws Exception {
+			Set<String> involvedSensors, Set<String> involvedActuators, State state) throws Exception {
 		Rule rule = objectFactory.createRule(name, antString, consString,
 				getRuleSensorsList(selectedUser, selectedHouse, involvedSensors),
 				getRuleActuatorsList(selectedUser, selectedHouse, involvedActuators), state);
@@ -524,7 +524,7 @@ public class DataFacade {
 	}
 
 	public void addRule(String selectedUser, String selectedHouse, String name, String antString, String consString,
-			List<String> involvedSensors, List<String> involvedActuators) throws Exception {
+			Set<String> involvedSensors, Set<String> involvedActuators) throws Exception {
 		Rule rule = objectFactory.createRule(name, antString, consString,
 				getRuleSensorsList(selectedUser, selectedHouse, involvedSensors),
 				getRuleActuatorsList(selectedUser, selectedHouse, involvedActuators));
@@ -534,16 +534,16 @@ public class DataFacade {
 		getUser(selectedUser).addRule(selectedHouse, rule);
 	}
 
-	private List<Actuator> getRuleActuatorsList(String selectedUser, String selectedHouse,
-			List<String> involvedActuators) {
-		List<Actuator> actuators = involvedActuators.stream().map(s -> getActuator(selectedUser, selectedHouse, s))
-				.collect(Collectors.toList());
+	private Set<Actuator> getRuleActuatorsList(String selectedUser, String selectedHouse,
+			Set<String> involvedActuators) {
+		Set<Actuator> actuators = involvedActuators.stream().map(s -> getActuator(selectedUser, selectedHouse, s))
+				.collect(Collectors.toSet());
 		return actuators;
 	}
 
-	private List<Sensor> getRuleSensorsList(String selectedUser, String selectedHouse, List<String> involvedSensors) {
-		List<Sensor> sensors = involvedSensors.stream().map(s -> getSensor(selectedUser, selectedHouse, s))
-				.collect(Collectors.toList());
+	private Set<Sensor> getRuleSensorsList(String selectedUser, String selectedHouse, Set<String> involvedSensors) {
+		Set<Sensor> sensors = involvedSensors.stream().map(s -> getSensor(selectedUser, selectedHouse, s))
+				.collect(Collectors.toSet());
 		return sensors;
 	}
 

@@ -543,7 +543,7 @@ public class DatabaseLoaderTesting {
 			dataFacade.addHousingUnit(user, selectedHouse, "Casa del signor Bianchi", "residenziale");
 			DatabaseLoader databaseLoader = new DatabaseLoader(connector, new ObjectFactory(new RuleParser()),
 					dataFacade);
-			List<Sensor> sensors = databaseLoader.getSensorFromAntString(user,
+			Set<Sensor> sensors = databaseLoader.getSensorFromAntString(user,
 					dataFacade.getHousingUnit(user, selectedHouse), "time > 3.00");
 			assertTrue(sensors.isEmpty());
 		}
@@ -572,9 +572,9 @@ public class DatabaseLoaderTesting {
 			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", true, objectList);
 			DatabaseLoader databaseLoader = new DatabaseLoader(connector, new ObjectFactory(new RuleParser()),
 					dataFacade);
-			List<Sensor> sensors = databaseLoader.getSensorFromAntString(user,
+			Set<Sensor> sensors = databaseLoader.getSensorFromAntString(user,
 					dataFacade.getHousingUnit(user, selectedHouse), "i1_igrometri.umidita > 30 || time > 3.00");
-			assertTrue(sensors.get(0).getName().equalsIgnoreCase("i1_igrometri"));
+			assertTrue(sensors.toArray(new Sensor[0])[0].getName().equalsIgnoreCase("i1_igrometri"));
 		}
 		catch (Exception e) {
 			fail();
@@ -601,9 +601,9 @@ public class DatabaseLoaderTesting {
 			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", true, objectList);
 			DatabaseLoader databaseLoader = new DatabaseLoader(connector, new ObjectFactory(new RuleParser()),
 					dataFacade);
-			List<Sensor> sensors = databaseLoader.getSensorFromAntString(user,
+			Set<Sensor> sensors = databaseLoader.getSensorFromAntString(user,
 					dataFacade.getHousingUnit(user, selectedHouse), "time > 3.00 && i1_igrometri.umidita > 30");
-			assertTrue(sensors.get(0).getName().equalsIgnoreCase("i1_igrometri"));
+			assertTrue(sensors.toArray(new Sensor[0])[0].getName().equalsIgnoreCase("i1_igrometri"));
 		}
 		catch (Exception e) {
 			fail();
@@ -630,9 +630,9 @@ public class DatabaseLoaderTesting {
 			dataFacade.addSensor(user, selectedHouse, selectedRoom, "i1_igrometri", "igrometri", true, objectList);
 			DatabaseLoader databaseLoader = new DatabaseLoader(connector, new ObjectFactory(new RuleParser()),
 					dataFacade);
-			List<Sensor> sensors = databaseLoader.getSensorFromAntString(user,
+			Set<Sensor> sensors = databaseLoader.getSensorFromAntString(user,
 					dataFacade.getHousingUnit(user, selectedHouse), "i1_igrometri.umidita > 30");
-			assertTrue(sensors.get(0).getName().equalsIgnoreCase("i1_igrometri"));
+			assertTrue(sensors.toArray(new Sensor[0])[0].getName().equalsIgnoreCase("i1_igrometri"));
 		}
 		catch (Exception e) {
 			fail();
@@ -662,10 +662,10 @@ public class DatabaseLoaderTesting {
 					objectList);
 			DatabaseLoader databaseLoader = new DatabaseLoader(connector, new ObjectFactory(new RuleParser()),
 					dataFacade);
-			List<Actuator> actuators = databaseLoader.getActuatorsFromConsString(user,
+			Set<Actuator> actuators = databaseLoader.getActuatorsFromConsString(user,
 					dataFacade.getHousingUnit(user, selectedHouse),
 					"deum1_deumidificatori := aumentoUmidita; trmg1_termoregolatori := mantenimentoTemperatura(5)");
-			List<String> names = actuators.stream().map(s -> s.getName()).collect(Collectors.toList());
+			Set<String> names = actuators.stream().map(s -> s.getName()).collect(Collectors.toSet());
 			assertTrue(names.contains("deum1_deumidificatori") && names.contains("trmg1_termoregolatori"));
 		}
 		catch (Exception e) {
@@ -696,10 +696,10 @@ public class DatabaseLoaderTesting {
 					objectList);
 			DatabaseLoader databaseLoader = new DatabaseLoader(connector, new ObjectFactory(new RuleParser()),
 					dataFacade);
-			List<Actuator> actuators = databaseLoader.getActuatorsFromConsString(user,
+			Set<Actuator> actuators = databaseLoader.getActuatorsFromConsString(user,
 					dataFacade.getHousingUnit(user, selectedHouse),
 					"start := 3.00; deum1_deumidificatori := aumentoUmidita; trmg1_termoregolatori := mantenimentoTemperatura(5)");
-			List<String> names = actuators.stream().map(s -> s.getName()).collect(Collectors.toList());
+			Set<String> names = actuators.stream().map(s -> s.getName()).collect(Collectors.toSet());
 			assertTrue(names.contains("deum1_deumidificatori") && names.contains("trmg1_termoregolatori"));
 		}
 		catch (Exception e) {

@@ -283,4 +283,5 @@ public class ControllerStrings {
 	public static final String NO_ROOMS = "Non sono presenti stanze nell'unità immobiliare";
 	public static final String NO_ARTIFACTS = "Nono sono presenti artefatti nell'unità immobiliare";
 	public static final String ERROR_PROPERTY_ALREADY_INSERTED = "Errore, proprietà già inserita";
+	public static final String INPUT_ANOTHER_SENSORY_VARIABLE = "Inserire un'altra variabile sensoriale (NO per inserire un valore semplice)";
 }

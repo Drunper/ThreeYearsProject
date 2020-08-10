@@ -3,6 +3,7 @@ package it.unibs.ing.domohouse.controller.inputhandler;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -75,8 +76,8 @@ public class UserUnitInputHandler {
 		}
 		while (dataFacade.hasRule(user, selectedHouse, name));
 
-		List<String> sensors = new ArrayList<>();
-		List<String> actuators = new ArrayList<>();
+		Set<String> sensors = new HashSet<>();
+		Set<String> actuators = new HashSet<>();
 
 		try {
 			dataFacade.addRule(user, selectedHouse, name, readAntecedent(user, selectedHouse, view, sensors),
@@ -89,7 +90,7 @@ public class UserUnitInputHandler {
 		assert inputHandlerInvariant() : ControllerStrings.WRONG_INVARIANT;
 	}
 
-	private String readConsequent(String user, String selectedHouse, MenuManager view, List<String> actuators) {
+	private String readConsequent(String user, String selectedHouse, MenuManager view, Set<String> actuators) {
 		String consString = ControllerStrings.NULL_CHARACTER;
 		boolean cont;
 		do {
@@ -133,7 +134,7 @@ public class UserUnitInputHandler {
 	}
 
 	public String readAntecedent(String user, String selectedHouse, MenuManager view,
-			List<String> sensors) {
+			Set<String> sensors) {
 		boolean cont;
 		boolean temporalCondition = false;
 		String antString = ControllerStrings.NULL_CHARACTER;
@@ -175,7 +176,7 @@ public class UserUnitInputHandler {
 		return antString;
 	}
 
-	private String readNonTemporalCondition(String user, String selectedHouse, MenuManager view, List<String> sensors,
+	private String readNonTemporalCondition(String user, String selectedHouse, MenuManager view, Set<String> sensors,
 			String antString) {
 		String sensor;
 		String info;
@@ -202,9 +203,34 @@ public class UserUnitInputHandler {
 		}
 		while (!operators.contains(op));
 
-		String value = input.readNotVoidString(ControllerStrings.INPUT_DESIRED_VALUE);
-		String result = antString + sensor + "." + info + ControllerStrings.SPACE + op + ControllerStrings.SPACE
-				+ value;
+		String result;
+		
+		if(input.yesOrNo(ControllerStrings.INPUT_ANOTHER_SENSORY_VARIABLE)) {
+			String sensor2;
+			String info2;
+			view.printCollectionOfString(dataFacade.getHousingUnit(user, selectedHouse).getSensorNames());
+			sensor2 = safeInsertSensor(user, selectedHouse);
+			sensors.add(sensor2);
+			SensorCategory category2 = dataFacade
+					.getSensorCategory(dataFacade.getCategoryOfASensor(user, selectedHouse, sensor2));
+			Set<String> infos2 = category2.getInfoStrategySet();
+			view.printCollectionOfString(infos2);
+
+			do {
+				info2 = input.readNotVoidString(ControllerStrings.INPUT_INFO_TO_DETECT);
+				if (!infos2.contains(info2))
+					output.println(ControllerStrings.ERROR_INFO_NAME);
+			}
+			while (!infos2.contains(info2));
+			result = antString + sensor + "." + info + ControllerStrings.SPACE + op + ControllerStrings.SPACE
+					+ sensor2 + "." + info2;
+		}
+		else {
+			String value;
+			value = input.readNotVoidString(ControllerStrings.INPUT_DESIRED_VALUE);
+			result = antString + sensor + "." + info + ControllerStrings.SPACE + op + ControllerStrings.SPACE
+					+ value;
+		}
 		return result;
 	}
 

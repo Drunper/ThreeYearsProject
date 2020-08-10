@@ -4,8 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import it.unibs.ing.domohouse.model.components.properties.*;
 import it.unibs.ing.domohouse.model.components.rule.Rule;
@@ -432,8 +434,8 @@ public class DatabaseLoader {
 		return rules;
 	}
 
-	public List<Sensor> getSensorFromAntString(String user, HousingUnit selectedHouse, String antString) {
-		List<Sensor> sensors = new ArrayList<>();
+	public Set<Sensor> getSensorFromAntString(String user, HousingUnit selectedHouse, String antString) {
+		Set<Sensor> sensors = new HashSet<>();
 		while (antString.contains("&&") || antString.contains("||")) {
 			String condition = antString.split("\\&\\&|\\|\\|")[0];
 			if (!condition.contains("time")) {
@@ -449,8 +451,8 @@ public class DatabaseLoader {
 		return sensors;
 	}
 
-	public List<Actuator> getActuatorsFromConsString(String user, HousingUnit selectedHouse, String consString) {
-		List<Actuator> actuators = new ArrayList<>();
+	public Set<Actuator> getActuatorsFromConsString(String user, HousingUnit selectedHouse, String consString) {
+		Set<Actuator> actuators = new HashSet<>();
 		String[] actions = consString.split(";");
 		for (String action : actions) {
 			String act = action.split(":=")[0].trim();

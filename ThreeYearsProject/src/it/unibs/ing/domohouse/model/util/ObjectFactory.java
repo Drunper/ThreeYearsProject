@@ -3,6 +3,7 @@ package it.unibs.ing.domohouse.model.util;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import it.unibs.ing.domohouse.model.components.elements.*;
@@ -79,8 +80,8 @@ public class ObjectFactory {
 		return cat;
 	}
 
-	public Rule createRule(String name, String antString, String consString, List<Sensor> involvedSensors,
-			List<Actuator> involvedActuators) throws Exception {
+	public Rule createRule(String name, String antString, String consString, Set<Sensor> involvedSensors,
+			Set<Actuator> involvedActuators) throws Exception {
 		assert name != null && name.length() > 0;
 		State state = new ActiveState();
 		for (Sensor sensor : involvedSensors)
@@ -92,13 +93,13 @@ public class ObjectFactory {
 		return createRule(name, antString, consString, involvedSensors, involvedActuators, state);
 	}
 
-	public Rule createRule(String name, String antString, String consString, List<Sensor> involvedSensors,
-			List<Actuator> involvedActuators, State state) throws Exception {
+	public Rule createRule(String name, String antString, String consString, Set<Sensor> involvedSensors,
+			Set<Actuator> involvedActuators, State state) throws Exception {
 		Rule rule = null;
 		rule = new Rule(name, ruleParser.parseAnt(antString, involvedSensors),
 				ruleParser.parseCons(consString, involvedActuators),
-				involvedSensors.stream().map(s -> s.getName()).collect(Collectors.toList()),
-				involvedActuators.stream().map(a -> a.getName()).collect(Collectors.toList()), state);
+				involvedSensors.stream().map(s -> s.getName()).collect(Collectors.toSet()),
+				involvedActuators.stream().map(a -> a.getName()).collect(Collectors.toSet()), state);
 		if (consString.contains("start"))
 			rule.setTime(ruleParser.getTime(consString));
 		return rule;

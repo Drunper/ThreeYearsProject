@@ -488,8 +488,8 @@ public class LibImporter {
 			consString = tokens[3];
 			state = tokens[4];
 			State rule_state;
-			List<String> sensors = new ArrayList<>();
-			List<String> actuators = new ArrayList<>();
+			Set<String> sensors = new HashSet<>();
+			Set<String> actuators = new HashSet<>();
 
 			if (dataFacade.hasHousingUnit(user, selectedHouse) && !dataFacade.hasRule(user, selectedHouse, rule_name)) {
 				// procedo a controllare antString, consString e costruire ArrayList<String>
@@ -717,11 +717,11 @@ public class LibImporter {
 		return true;
 	}
 
-	private List<String> getSensorFromAntString(String antString) {
+	private Set<String> getSensorFromAntString(String antString) {
 		assert antString != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		List<String> sensors = new ArrayList<>();
+		Set<String> sensors = new HashSet<>();
 		// sens1_termometri.temperatura > 10 && time < 10 || s1.colore == verde
 		while (antString.contains("&&") || antString.contains("||")) {
 			String condition = antString.split("\\&\\&|\\|\\|")[0];
@@ -740,11 +740,11 @@ public class LibImporter {
 		return sensors;
 	}
 
-	private List<String> getActuatorsFromConsString(String consString) {
+	private Set<String> getActuatorsFromConsString(String consString) {
 		assert consString != null;
 		assert libImporterInvariant() : ModelStrings.WRONG_INVARIANT;
 
-		List<String> actuators = new ArrayList<>();
+		Set<String> actuators = new HashSet<>();
 		// sens1_termometri.temperatura > 10 && time < 10 || s1.colore == verde
 		String[] actions = consString.split(";");
 		for (String action : actions) {

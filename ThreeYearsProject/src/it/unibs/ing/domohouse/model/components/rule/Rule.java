@@ -1,7 +1,7 @@
 package it.unibs.ing.domohouse.model.components.rule;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import it.unibs.ing.domohouse.model.components.elements.Manageable;
 import it.unibs.ing.domohouse.model.components.elements.Stateable;
@@ -18,8 +18,8 @@ public class Rule implements Serializable, Stateable, Manageable {
 	private double time;
 
 	// dispositivi coinvolti nella regola
-	private List<String> involvedSensors;
-	private List<String> involvedActuators;
+	private Set<String> involvedSensors;
+	private Set<String> involvedActuators;
 
 	private State state;
 	private boolean hasStartConsequent;
@@ -29,8 +29,8 @@ public class Rule implements Serializable, Stateable, Manageable {
 	 * invariante name != null, antString !=null, consequentRuleString != null,
 	 * numericOperatingModeMap != null, nonNumericOperatingModeMap != null
 	 */
-	public Rule(String name, AntecedentNode antecedentRoot, Action firstAction, List<String> involvedSensors,
-			List<String> involvedActuators, State ruleState) {
+	public Rule(String name, AntecedentNode antecedentRoot, Action firstAction, Set<String> involvedSensors,
+			Set<String> involvedActuators, State ruleState) {
 		this.name = name;
 		this.state = ruleState;
 		this.antecedentRoot = antecedentRoot;
@@ -84,13 +84,13 @@ public class Rule implements Serializable, Stateable, Manageable {
 		this.name = newName;
 	}
 
-	public List<String> getInvolvedSensors() {
+	public Set<String> getInvolvedSensors() {
 		assert ruleInvariant() : ModelStrings.WRONG_INVARIANT;
 
 		return involvedSensors;
 	}
 
-	public List<String> getInvolvedActuators() {
+	public Set<String> getInvolvedActuators() {
 		assert ruleInvariant() : ModelStrings.WRONG_INVARIANT;
 		return involvedActuators;
 	}
