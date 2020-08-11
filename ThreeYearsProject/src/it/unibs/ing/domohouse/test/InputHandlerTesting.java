@@ -240,7 +240,7 @@ public class InputHandlerTesting {
 
 	@Test
 	public void testReadRoomFromUserCase4() {
-		Scanner input = buildInput("Cucina", "Cucina", "pressione", "900", "^", "s");
+		Scanner input = buildInput("Cucina", "Cucina", "pressione","s", "900", "^", "s");
 		RawInputHandler rawInputHandler = new RawInputHandler(input, writer);
 		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse_test", "root", "");
 		try {
@@ -403,7 +403,7 @@ public class InputHandlerTesting {
 
 	@Test
 	public void testReadAntecedentCase3() {
-		Scanner input = buildInput("s", "i1_igrometri", "umidita", ">", "30", "n");
+		Scanner input = buildInput("s", "i1_igrometri", "umidita", ">", "n", "30", "n");
 		RawInputHandler rawInputHandler = new RawInputHandler(input, writer);
 		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse_test", "root", "");
 		try {
@@ -429,8 +429,8 @@ public class InputHandlerTesting {
 
 	@Test
 	public void testReadAntecedentCase4() {
-		Scanner input = buildInput("s", "i1_igrometri", "umidita", ">", "30", "s", "&&", "s", "t1_termometri",
-				"temperatura", ">", "20", "n");
+		Scanner input = buildInput("s", "i1_igrometri", "umidita", ">", "n", "30", "s", "&&", "s", "t1_termometri",
+				"temperatura", ">", "n", "20", "n");
 		RawInputHandler rawInputHandler = new RawInputHandler(input, writer);
 		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse_test", "root", "");
 		try {
@@ -457,8 +457,8 @@ public class InputHandlerTesting {
 	
 	@Test
 	public void testReadAntecedentCase5() {
-		Scanner input = buildInput("s", "i1_igrometri", "umidita", ">", "30", "s", "||", "s", "t1_termometri",
-				"temperatura", ">", "20", "n");
+		Scanner input = buildInput("s", "i1_igrometri", "umidita", ">", "n", "30", "s", "||", "s", "t1_termometri",
+				"temperatura", ">", "n", "20", "n");
 		RawInputHandler rawInputHandler = new RawInputHandler(input, writer);
 		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse_test", "root", "");
 		try {
@@ -485,8 +485,8 @@ public class InputHandlerTesting {
 	
 	@Test
 	public void testReadAntecedentCase6() {
-		Scanner input = buildInput("s", "i1_igrometri", "umidita", ">", "30", "s", "adsa", "&&", "s", "t1_termometri",
-				"temperatura", ">", "20", "n");
+		Scanner input = buildInput("s", "i1_igrometri", "umidita", ">", "n", "30", "s", "adsa", "&&", "s", "t1_termometri",
+				"temperatura", ">", "n", "20", "n");
 		RawInputHandler rawInputHandler = new RawInputHandler(input, writer);
 		Connector connector = new Connector("jdbc:mysql://localhost:3306/domohouse_test", "root", "");
 		try {

@@ -1,15 +1,13 @@
 package it.unibs.ing.domohouse.model.components.elements;
 
-import java.io.Serializable;
 import java.util.*;
 
 import it.unibs.ing.domohouse.model.util.Manager;
 import it.unibs.ing.domohouse.model.ModelStrings;
 import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 
-public class Room implements Gettable, Serializable {
+public class Room implements Gettable  {
 
-	private static final long serialVersionUID = -2234559747971441506L;
 	private String name;
 	private String descr;
 	private Manager sensorManager;

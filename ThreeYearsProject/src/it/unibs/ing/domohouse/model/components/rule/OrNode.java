@@ -2,7 +2,6 @@ package it.unibs.ing.domohouse.model.components.rule;
 
 public class OrNode implements AntecedentNode {
 
-	private static final long serialVersionUID = -3416629280270143943L;
 	private AntecedentNode left;
 	private AntecedentNode right;
 

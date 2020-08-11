@@ -1,14 +1,12 @@
 package it.unibs.ing.domohouse.model.components.properties;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.unibs.ing.domohouse.model.components.elements.Gettable;
 
-public abstract class OperatingMode implements Serializable {
+public abstract class OperatingMode  {
 
-	private static final long serialVersionUID = -6356537231662333077L;
 	private List<String> parametersNames;
 	private List<String> parametersValues;
 

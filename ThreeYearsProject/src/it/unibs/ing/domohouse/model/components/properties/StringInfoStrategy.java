@@ -1,13 +1,11 @@
 package it.unibs.ing.domohouse.model.components.properties;
 
-import java.io.Serializable;
 import java.util.List;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
 
-public class StringInfoStrategy implements InfoStrategy, Serializable {
+public class StringInfoStrategy implements InfoStrategy {
 
-	private static final long serialVersionUID = 8997364281663305737L;
 	private int ID;
 	private List<String> domain;
 	private String measuredProperty;

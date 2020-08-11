@@ -1,6 +1,5 @@
 package it.unibs.ing.domohouse.model.components.rule;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import it.unibs.ing.domohouse.model.components.elements.Manageable;
@@ -9,9 +8,8 @@ import it.unibs.ing.domohouse.model.components.properties.State;
 import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
-public class Rule implements Serializable, Stateable, Manageable {
+public class Rule implements Stateable, Manageable {
 
-	private static final long serialVersionUID = -3835080225181052479L;
 	private String name;
 	private AntecedentNode antecedentRoot;
 	private Action firstAction;

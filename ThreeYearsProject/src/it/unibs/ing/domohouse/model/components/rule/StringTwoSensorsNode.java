@@ -4,7 +4,6 @@ import it.unibs.ing.domohouse.model.components.elements.Sensor;
 
 public class StringTwoSensorsNode implements AntecedentNode {
 
-	private static final long serialVersionUID = -8580715572742901086L;
 	private Sensor sens1;
 	private Sensor sens2;
 	private String info1;

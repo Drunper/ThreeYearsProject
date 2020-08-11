@@ -1,6 +1,5 @@
 package it.unibs.ing.domohouse.model.components.properties;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -9,9 +8,8 @@ import it.unibs.ing.domohouse.model.components.elements.Manageable;
 import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
-public class SensorCategory implements Manageable, Serializable {
+public class SensorCategory implements Manageable {
 
-	private static final long serialVersionUID = 3198680539714650299L;
 	private String name;
 	private String descr;
 	private Map<String, InfoStrategy> infoDomainMap;

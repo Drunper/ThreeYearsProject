@@ -5,13 +5,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import it.unibs.ing.domohouse.model.components.elements.Manageable;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
+import java.util.Map;
 import java.util.Set;
-import java.io.Serializable;
 
-public class Manager implements Serializable {
+public class Manager {
 
-	private static final long serialVersionUID = -5803882506409735012L;
-	private ConcurrentHashMap<String, Manageable> elementMap;
+	private Map<String, Manageable> elementMap;
 
 	/*
 	 * invariante elementMap != null;

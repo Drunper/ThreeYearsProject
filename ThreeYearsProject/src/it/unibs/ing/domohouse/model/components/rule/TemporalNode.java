@@ -2,7 +2,6 @@ package it.unibs.ing.domohouse.model.components.rule;
 
 public class TemporalNode implements AntecedentNode {
 
-	private static final long serialVersionUID = -654991166853103438L;
 	private double time;
 	private Operator relop;
 

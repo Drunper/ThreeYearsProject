@@ -1,6 +1,5 @@
 package it.unibs.ing.domohouse.model.components.rule;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
@@ -13,9 +12,8 @@ import it.unibs.ing.domohouse.model.ModelStrings;
 import it.unibs.ing.domohouse.model.components.elements.Actuator;
 import it.unibs.ing.domohouse.model.components.elements.Sensor;
 
-public class RuleParser implements Serializable {
+public class RuleParser {
 
-	private static final long serialVersionUID = -3437535853622849347L;
 	private static final String DRELOP_REGEX = ">|<|<=|>=|!=";
 	private static final String SRELOP_REGEX = "==";
 	private static final String DOUBLE_REGEX = "^[-+]?\\d+(\\.{0,1}(\\d+?))?$";
@@ -25,8 +23,6 @@ public class RuleParser implements Serializable {
 	
 	private Map<String, Operator> doubleOperatorsMap = new HashMap<>();
 	private StringOperator strOperator = new StringOperator() {
-
-		private static final long serialVersionUID = 2506064165581591427L;
 
 		@Override
 		public boolean compare(String a, String b) {
@@ -83,8 +79,6 @@ public class RuleParser implements Serializable {
 		AntecedentNode left;
 		if (lookahead.equals("true")) {
 			tree = new AntecedentNode() {
-
-				private static final long serialVersionUID = 4301569602512457678L;
 
 				@Override
 				public boolean getConditionValue(String time) {
@@ -276,8 +270,6 @@ public class RuleParser implements Serializable {
 	private void fillMap() {
 		doubleOperatorsMap.put(">", new Operator() {
 
-			private static final long serialVersionUID = 9067942704960379655L;
-
 			@Override
 			public boolean compare(double a, double b) {
 				return a > b;
@@ -289,8 +281,6 @@ public class RuleParser implements Serializable {
 			}
 		});
 		doubleOperatorsMap.put("<", new Operator() {
-
-			private static final long serialVersionUID = 6159795260740347252L;
 
 			@Override
 			public boolean compare(double a, double b) {
@@ -304,8 +294,6 @@ public class RuleParser implements Serializable {
 		});
 		doubleOperatorsMap.put("==", new Operator() {
 
-			private static final long serialVersionUID = -5084554106505110737L;
-
 			@Override
 			public boolean compare(double a, double b) {
 				return a == b;
@@ -317,8 +305,6 @@ public class RuleParser implements Serializable {
 			}
 		});
 		doubleOperatorsMap.put(">=", new Operator() {
-
-			private static final long serialVersionUID = 20334773074397736L;
 
 			@Override
 			public boolean compare(double a, double b) {
@@ -332,8 +318,6 @@ public class RuleParser implements Serializable {
 		});
 		doubleOperatorsMap.put("<=", new Operator() {
 
-			private static final long serialVersionUID = 6842298864404739131L;
-
 			@Override
 			public boolean compare(double a, double b) {
 				return a <= b;
@@ -345,8 +329,6 @@ public class RuleParser implements Serializable {
 			}
 		});
 		doubleOperatorsMap.put("!=", new Operator() {
-
-			private static final long serialVersionUID = -6787163850193407555L;
 
 			@Override
 			public boolean compare(double a, double b) {

@@ -1,29 +1,25 @@
 package it.unibs.ing.domohouse.model.components.properties;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
 import it.unibs.ing.domohouse.model.components.elements.Gettable;
 
-public class OperatingModesManager implements Serializable {
+public class OperatingModesManager  {
 
-	private static final long serialVersionUID = -7032900220446234368L;
 	private static Map<String, OperatingMode> operatingModesMap = new HashMap<>();
 
 	public static void fillOperatingModes() {
 
 		OperatingMode idle = new OperatingMode() {
-			private static final long serialVersionUID = -5769310144511586954L;
-
+			
 			@Override
 			public void operate(Gettable object) {
 			}
 		};
 
 		OperatingMode aumentoTemperatura10gradi = new OperatingMode() {
-			private static final long serialVersionUID = 1878837158320578129L;
 
 			@Override
 			public void operate(Gettable object) {
@@ -33,7 +29,6 @@ public class OperatingModesManager implements Serializable {
 		};
 
 		OperatingMode diminuzioneTemperatura10gradi = new OperatingMode() {
-			private static final long serialVersionUID = 2258350174039534211L;
 
 			@Override
 			public void operate(Gettable object) {
@@ -43,7 +38,6 @@ public class OperatingModesManager implements Serializable {
 		};
 
 		OperatingMode aumentoTemperatura5gradi = new OperatingMode() {
-			private static final long serialVersionUID = 2713001726971994419L;
 
 			@Override
 			public void operate(Gettable object) {
@@ -53,7 +47,6 @@ public class OperatingModesManager implements Serializable {
 		};
 
 		OperatingMode diminuzioneTemperatura5gradi = new OperatingMode() {
-			private static final long serialVersionUID = 7385667586097572913L;
 
 			@Override
 			public void operate(Gettable object) {
@@ -63,7 +56,6 @@ public class OperatingModesManager implements Serializable {
 		};
 
 		OperatingMode aumentoTemperatura1gradi = new OperatingMode() {
-			private static final long serialVersionUID = 109351630737603284L;
 
 			@Override
 			public void operate(Gettable object) {
@@ -73,7 +65,6 @@ public class OperatingModesManager implements Serializable {
 		};
 
 		OperatingMode diminuzioneTemperatura1gradi = new OperatingMode() {
-			private static final long serialVersionUID = -1294656652412203490L;
 
 			@Override
 			public void operate(Gettable object) {
@@ -83,7 +74,6 @@ public class OperatingModesManager implements Serializable {
 		};
 
 		OperatingMode diminuzioneUmidita = new OperatingMode() {
-			private static final long serialVersionUID = 6072623877189941153L;
 
 			@Override
 			public void operate(Gettable object) {
@@ -93,7 +83,6 @@ public class OperatingModesManager implements Serializable {
 		};
 
 		OperatingMode aumentoUmidita = new OperatingMode() {
-			private static final long serialVersionUID = -1052775698055305723L;
 
 			@Override
 			public void operate(Gettable object) {
@@ -103,7 +92,6 @@ public class OperatingModesManager implements Serializable {
 		};
 
 		OperatingMode mantenimentoTemperatura = new OperatingMode() {
-			private static final long serialVersionUID = 5625520723117039165L;
 
 			@Override
 			public void operate(Gettable object) {
@@ -115,7 +103,6 @@ public class OperatingModesManager implements Serializable {
 		mantenimentoTemperatura.setParameterName("temperatura");
 
 		OperatingMode coloreLuci = new OperatingMode() {
-			private static final long serialVersionUID = -7002837800776914351L;
 
 			@Override
 			public void operate(Gettable object) {
