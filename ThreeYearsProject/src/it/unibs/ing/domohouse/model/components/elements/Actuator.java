@@ -1,6 +1,5 @@
 package it.unibs.ing.domohouse.model.components.elements;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -13,9 +12,8 @@ import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 import it.unibs.ing.domohouse.model.util.Manager;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
-public class Actuator implements Manageable, Serializable, Stateable {
+public class Actuator implements Manageable, Stateable {
 
-	private static final long serialVersionUID = 8133324316964731994L;
 	private String name;
 	private Manager controlledObjects;
 	private List<String> notAssociatedObjects;

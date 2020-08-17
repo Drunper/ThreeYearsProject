@@ -4,7 +4,6 @@ import it.unibs.ing.domohouse.model.components.elements.Sensor;
 
 public class DoubleOneSensorNode implements AntecedentNode {
 
-	private static final long serialVersionUID = -6057436113897731711L;
 	private Sensor sens;
 	private String info;
 	private double value;

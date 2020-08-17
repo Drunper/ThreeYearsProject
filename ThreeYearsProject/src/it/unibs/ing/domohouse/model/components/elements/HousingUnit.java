@@ -1,6 +1,5 @@
 package it.unibs.ing.domohouse.model.components.elements;
 
-import java.io.Serializable;
 import java.util.*;
 
 import it.unibs.ing.domohouse.model.components.properties.ActiveState;
@@ -13,9 +12,8 @@ import it.unibs.ing.domohouse.model.util.AssociationManager;
 import it.unibs.ing.domohouse.model.util.Manager;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
-public class HousingUnit implements Serializable, Manageable {
+public class HousingUnit implements Manageable {
 
-	private static final long serialVersionUID = -4272512019548783815L;
 	private String name;
 	private String descr;
 	private String type;

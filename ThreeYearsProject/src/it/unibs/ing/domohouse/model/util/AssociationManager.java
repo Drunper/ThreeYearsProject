@@ -1,14 +1,12 @@
 package it.unibs.ing.domohouse.model.util;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
 
-public class AssociationManager implements Serializable {
+public class AssociationManager  {
 
-	private static final long serialVersionUID = 1194017378304880890L;
 	private List<Association> artifactAssociationList;
 	private List<Association> roomAssociationList;
 	

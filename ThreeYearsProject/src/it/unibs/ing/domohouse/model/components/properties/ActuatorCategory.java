@@ -1,6 +1,5 @@
 package it.unibs.ing.domohouse.model.components.properties;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -9,9 +8,8 @@ import it.unibs.ing.domohouse.model.components.elements.Manageable;
 import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 import it.unibs.ing.domohouse.model.ModelStrings;
 
-public class ActuatorCategory implements Manageable, Serializable {
+public class ActuatorCategory implements Manageable {
 
-	private static final long serialVersionUID = 3544838050806873679L;
 	private String name;
 	private String descr;
 	private Map<String, OperatingMode> operatingModesMap;

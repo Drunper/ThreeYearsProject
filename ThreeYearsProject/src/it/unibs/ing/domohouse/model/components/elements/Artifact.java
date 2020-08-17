@@ -1,15 +1,13 @@
 package it.unibs.ing.domohouse.model.components.elements;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
 import it.unibs.ing.domohouse.model.ModelStrings;
 import it.unibs.ing.domohouse.model.db.persistent.PersistentObject;
 
-public class Artifact implements Gettable, Serializable {
+public class Artifact implements Gettable  {
 
-	private static final long serialVersionUID = 643544508558962880L;
 	private String name;
 	private String text;
 	private Map<String, String> propertiesMap;

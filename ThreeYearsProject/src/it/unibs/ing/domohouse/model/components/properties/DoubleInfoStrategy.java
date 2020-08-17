@@ -1,11 +1,9 @@
 package it.unibs.ing.domohouse.model.components.properties;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class DoubleInfoStrategy implements InfoStrategy, Serializable {
+public class DoubleInfoStrategy implements InfoStrategy {
 
-	private static final long serialVersionUID = -2688053215017124980L;
 	private double lowerBound;
 	private double upperBound;
 	private int ID;

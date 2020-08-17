@@ -1,13 +1,11 @@
 package it.unibs.ing.domohouse.model.components.rule;
 
-import java.io.Serializable;
 import java.util.List;
 
 import it.unibs.ing.domohouse.model.components.elements.Actuator;
 
-public class Action implements Serializable {
+public class Action {
 
-	private static final long serialVersionUID = 8652717414506860502L;
 	private Actuator actuator;
 	private String operatingMode;
 	private List<String> parameters;
