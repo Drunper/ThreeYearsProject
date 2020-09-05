@@ -20,6 +20,10 @@ public abstract class PersistentObject {
 		return persistentObjectState.getUpdateQuery(this);
 	}
 	
+	public PersistentObjectState getObjectState() {
+		return persistentObjectState;
+	}
+	
 	public void setObjectState(PersistentObjectState persistentObjectState) {
 		this.persistentObjectState = persistentObjectState;
 	}
